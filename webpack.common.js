@@ -1,27 +1,34 @@
 const path = require('path');
+/* eslint-disable */
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+/* eslint-enable */
 
 module.exports = {
   entry: {
-    app: './src/index.js'
+    app: './src/index.js',
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.html$/,
-        use: ['html-loader']
-      }]
+        use: ['html-loader'],
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        use: ['file-loader'],
+      },
+    ],
   },
+  resolve: { extensions: ['*', '.js', '.jsx'] },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'Production',
       template: path.resolve(__dirname, 'src', 'index.html'),
     }),
     new webpack.HotModuleReplacementPlugin(),
@@ -29,6 +36,6 @@ module.exports = {
   ],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist')
-  }
+    path: path.resolve(__dirname, 'dist'),
+  },
 };

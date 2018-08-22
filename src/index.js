@@ -1,26 +1,83 @@
-import printMe from './print.js';
+/* eslint-env browser */
 import './styles.css';
 import './index.html';
+import mugImg from './img/mug1.png';
+import LifeCircle from './lifecircle';
+import { waitEvent } from './eventswork';
 
-function component() {
-  var element = document.createElement('div');
-  var btn = document.createElement('button');
+const scene = document.querySelector('#scene');
 
-  element.innerHTML = 'Hello webpack';
-
-  btn.innerHTML = 'Click me and check the console!';
-  btn.onclick = printMe;
-
-  element.appendChild(btn);
-
-  return element;
+function moveAlong() {
+  console.log('moved');
 }
 
-document.body.appendChild(component());
-
-if (module.hot) {
-  module.hot.accept('./print.js', function() {
-    console.log('Accepting the updated printMe module!');
-    printMe();
-  })
+function takeABear() {
+  console.log('mouse down');
 }
+
+const actors = {
+  beerMugs: {
+    spec: {
+      tag: 'img',
+    },
+
+    style: {
+      'image-rendering': 'pixelated',
+    },
+
+    species: {
+      onLine: {
+        behavior: {
+          // onTick: moveAlong,
+
+          onEvent: [
+            {
+              type: 'mousedown',
+              action: takeABear,
+            },
+          ],
+        },
+
+        specimens: new Set([
+          {
+            attributes: {
+              src: mugImg,
+            },
+            style: {
+              width: '90px',
+              height: '120px',
+              left: '500px',
+              top: '200px',
+            },
+          },
+          {
+            attributes: {
+              src: mugImg,
+            },
+            style: {
+              width: '90px',
+              height: '120px',
+              left: '400px',
+              top: '200px',
+            },
+          },
+          {
+            attributes: {
+              src: mugImg,
+            },
+            style: {
+              width: '90px',
+              height: '120px',
+              left: '300px',
+              top: '200px',
+            },
+          },
+        ]),
+      },
+    },
+  },
+};
+
+const mainLoop = new LifeCircle(scene, actors);
+
+mainLoop();
