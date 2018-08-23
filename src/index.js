@@ -15,14 +15,10 @@ function takeABear() {
   console.log('mouse down');
 }
 
-const actors = {
+const initState = {
   beerMugs: {
     spec: {
       tag: 'img',
-    },
-
-    style: {
-      'image-rendering': 'pixelated',
     },
 
     species: {
@@ -78,6 +74,6 @@ const actors = {
   },
 };
 
-const mainLoop = new LifeCircle(scene, actors);
+const mainLoop = new LifeCircle(scene, initState);
 
 mainLoop();

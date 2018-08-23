@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { waitEvent } from './eventswork';
+import { waitGroupEvent } from './eventswork';
 
 function initScene(scene, state) {
   const { attributes: attrTopLevel, style: styleTopLevel } = state;
@@ -56,7 +56,7 @@ export default class Lifecicle {
       },
     } = state;
     console.log(specimens);
-    const p = waitEvent([...specimens].map(s => s.node), { type: 'mousedown' });
+    const p = waitGroupEvent([...specimens].map(s => s.node), { type: 'mousedown', id: 1 });
     console.log('p: ', p);
     p.then(console.log);
     // debug-block-end
