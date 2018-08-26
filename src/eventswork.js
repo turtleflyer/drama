@@ -1,70 +1,176 @@
-const eventsStore = new Map();
-const customEventTypes = new Map();
-
-// function waitEvent(arg, { type }) {
-//   let nodes = arg;
-//   if (!Array.isArray(arg)) {
-//     nodes = [arg];
-//   }
-
-//   const proms = nodes.map((n) => {
-//     let nodeData = eventsStore.get(n);
-//     if (!nodeData) {
-//       nodeData = new Map();
-//       eventsStore.set(n, nodeData);
-//     }
-//     let entry = nodeData.get(type);
-//     if (!entry) {
-//       entry = {};
-//       nodeData.set(type, entry);
-//     }
-//     const { promise, handle } = entry;
-//     if (!promise) {
-//       entry.promise = new Promise((resolve) => {
-//         entry.handle = resolve;
-//       });
-//       if (!handle) {
-//         const callback = (e) => {
-//           nodeData.get(type).handle({ node: n, event: e });
-//         };
-//         n.addEventListener(type, callback);
-//       }
-//     }
-//     return entry.promise;
-//   });
-//   return Promise.race(proms);
-// }
-
-function waitGroupEvent(arg, { id, type }) {
-  let nodes = arg;
-  if (!Array.isArray(arg)) {
-    nodes = [arg];
+function getSome(obj, key, create) {
+  let toGet;
+  if (obj instanceof Map) {
+    toGet = obj.get(key);
+  } else {
+    toGet = obj[key];
   }
-
-  let newPromiseHandle;
-  const promiseToGet = new Promise((resolve) => {
-    newPromiseHandle = resolve;
-  });
-
-  nodes.forEach((n) => {
-    let nodeData = eventsStore.get(n);
-    if (!nodeData) {
-      nodeData = new Map();
-      eventsStore.set(n, nodeData);
+  if (!toGet) {
+    toGet = create();
+    if (obj instanceof Map) {
+      obj.set(key, toGet);
+    } else {
+      // eslint-disable-next-line
+      obj[key] = toGet;
     }
-
-    let handles = nodeData.get(type);
-    if (!handles) {
-      handles = new Map();
-      nodeData.set(type, handles);
-      n.addEventListener(type, (e) => {
-        [...nodeData.get(type).values()].forEach(handle => handle({ node: n, event: e, id }));
-      });
-    }
-    handles.set(id, newPromiseHandle);
-  });
-
-  return promiseToGet;
+  }
+  return toGet;
 }
 
-export { waitGroupEvent };
+function getFromDeepMap(map, key) {
+  const deepMap = getSome(map, key, () => new Map());
+  return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
+}
+
+function stageCallback(context, type, target, eventObj, parent) {
+  let getParent = parent;
+  if (!parent) {
+    getParent = context.elementsMap.get(target).belong;
+  }
+  const mapOfTypes = context.eventsStore.get(getParent);
+  if (mapOfTypes.has(type)) {
+    [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
+      if (typeEntry) {
+        const [id, handle] = typeEntry;
+        handle({ target, event: eventObj, id });
+      }
+    });
+  }
+  const grandEntry = context.elementsMap.get(getParent);
+  if (grandEntry) {
+    stageCallback(context, type, target, eventObj, grandEntry.belong);
+  }
+}
+
+function getCallback(context, type, target) {
+  return function callback(eventObj) {
+    stageCallback(context, type, target, eventObj);
+  };
+}
+
+function addCallback(context, target, type) {
+  const elementEntry = context.elementsMap.get(target);
+  const setOfTypes = getSome(elementEntry, 'types', () => new Set());
+  if (!setOfTypes.has(type)) {
+    target.addEventListener(type, getCallback(context, type, target));
+    setOfTypes.add(type);
+  }
+}
+
+function combineTypes(context, unit, types) {
+  let getTypes = types;
+  if (!getTypes) {
+    getTypes = [];
+  }
+  getTypes = getTypes.concat([...getFromDeepMap(context.eventsStore, unit).map.keys()]);
+  const parentEntry = context.elementsMap.get(unit);
+  if (parentEntry) {
+    combineTypes(context, parentEntry.belong, getTypes);
+  }
+  return getTypes;
+}
+
+class Unit extends Set {
+  constructor(context, list) {
+    const elements = [...list];
+    super(elements);
+    this.context = context;
+    elements.forEach((element) => {
+      context.elementsMap.set(element, { belong: this });
+    });
+  }
+
+  addElement(element) {
+    this.add(element);
+    const elementEntry = getSome(
+      this.context.elementsMap,
+      element,
+      () => (element instanceof Unit ? {} : { types: new Set() }),
+    );
+    elementEntry.belong = this;
+    combineTypes(this.context, this).forEach(type => addCallback(this.context, element, type));
+  }
+
+  deleteElement(element) {
+    this.delete(element);
+    const elementEntry = this.context.elementsMap.get(element);
+    if (elementEntry && elementEntry.belong === this) {
+      elementEntry.belong = null;
+    }
+  }
+}
+
+class EventsWork {
+  constructor() {
+    Object.defineProperties(this, {
+      /*
+       eventsStore structure:
+      Map(
+        [unit, Map(
+          [type, Map(
+            [id, [...resolve]]
+          )]
+        )]
+      )
+      */
+      eventsStore: {
+        value: new Map(),
+      },
+
+      /*
+      elementsMap structure:
+      Map(
+        [element, { unit, types: Set of types }]
+      )
+      */
+      elementsMap: {
+        value: new Map(),
+      },
+      customEventTypes: {
+        value: new Map(),
+      },
+    });
+
+    this.makeUnit = this.makeUnit.bind(this);
+    this.waitGroupEvent = this.waitGroupEvent.bind(this);
+    this.eventChain = this.eventChain.bind(this);
+  }
+
+  makeUnit(list) {
+    return new Unit(this, list);
+  }
+
+  waitGroupEvent(unit, { type, id }) {
+    let promiseHandle;
+    const promiseToGet = new Promise((resolve) => {
+      promiseHandle = resolve;
+    });
+
+    const mapOfIDs = getFromDeepMap(this.eventsStore, unit).next(type).map;
+    if (mapOfIDs.size === 0) {
+      [...unit].forEach((element) => {
+        addCallback(this, element, type);
+      });
+    }
+    mapOfIDs.set(id, promiseHandle);
+
+    return promiseToGet;
+  }
+
+  eventChain(description, id) {
+    const { unit, type, action } = description;
+    const terminate = description.terminate ? description.terminate : () => false;
+    let getId = id;
+    if (!id) {
+      getId = Symbol(JSON.stringify(description));
+    }
+    this.waitGroupEvent(unit, { type, id: getId }).then((data) => {
+      if (!terminate(data, description)) {
+        action(data, description);
+        this.eventChain(description, data.id);
+      }
+    });
+  }
+}
+
+export default EventsWork;

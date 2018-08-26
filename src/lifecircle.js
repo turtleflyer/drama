@@ -1,5 +1,7 @@
 /* eslint-env browser */
-import { waitGroupEvent } from './eventswork';
+import EventsWork from './eventswork';
+
+const { makeUnit, eventChain } = new EventsWork();
 
 function initScene(scene, state) {
   const { attributes: attrTopLevel, style: styleTopLevel } = state;
@@ -56,9 +58,31 @@ export default class Lifecicle {
       },
     } = state;
     console.log(specimens);
-    const p = waitGroupEvent([...specimens].map(s => s.node), { type: 'mousedown', id: 1 });
-    console.log('p: ', p);
-    p.then(console.log);
+    const b1 = {
+      unit: makeUnit([...specimens].map(s => s.node)),
+      type: 'mousedown',
+      action: (data, description) => {
+        const { target } = data;
+        const { unit } = description;
+        console.log(data);
+        target.style.top = `${Number(target.style.top.replace(/px/, '')) + 10}px`;
+        unit.deleteElement(target);
+        b2.unit.addElement(target);
+        console.log('b2: ', b2);
+      },
+    };
+    eventChain(b1);
+    const b2 = {
+      unit: makeUnit([]),
+      type: 'mousemove',
+      action: (data, description) => {
+        const { target, event } = data;
+        console.log(target.x, target.y);
+        console.log(data);
+        console.log(event);
+      },
+    };
+    eventChain(b2);
     // debug-block-end
 
     return function () {
