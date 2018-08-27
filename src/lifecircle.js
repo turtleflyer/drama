@@ -1,5 +1,7 @@
 /* eslint-env browser */
+import { setPosition } from './helperslib';
 import EventsWork from './eventswork';
+import mugImg from './img/mug1.png';
 
 const { makeUnit, eventChain } = new EventsWork();
 
@@ -57,37 +59,82 @@ export default class Lifecicle {
         },
       },
     } = state;
-    console.log(specimens);
+    // console.log(specimens);
+    // const b1 = {
+    //   unit: makeUnit([...specimens].map(s => s.node)),
+    //   type: 'mousedown',
+    //   action: (data, description) => {
+    //     const { target } = data;
+    //     const { unit } = description;
+    //     // console.log(data);
+    //     target.style.top = `${Number(target.style.top.replace(/px/, '')) + 10}px`;
+    //     b2.unit.addElement(target);
+    //     // console.log('b2: ', b2);
+    //   },
+    // };
+    [...specimens][0].node.alt = 'parent';
+    [...specimens][1].node.alt = 'child';
     const b1 = {
-      unit: makeUnit([...specimens].map(s => s.node)),
+      unit: makeUnit([[...specimens][0].node]),
       type: 'mousedown',
       action: (data, description) => {
         const { target } = data;
         const { unit } = description;
-        console.log(data);
+        // console.log(data);
         target.style.top = `${Number(target.style.top.replace(/px/, '')) + 10}px`;
-        unit.deleteElement(target);
         b2.unit.addElement(target);
-        console.log('b2: ', b2);
+        // console.log('b2: ', b2);
       },
     };
+    const u = makeUnit([[...specimens][1].node]);
     eventChain(b1);
+    b1.unit.addElement(u);
     const b2 = {
       unit: makeUnit([]),
       type: 'mousemove',
       action: (data, description) => {
         const { target, event } = data;
-        console.log(target.x, target.y);
-        console.log(data);
-        console.log(event);
+        // console.log(target.x, target.y);
+        // console.log('event.clientX: ', event.clientX, 'event.clientY: ', event.clientY);
+        // console.log(
+        //   'target.getBoundingClientRect().x: ',
+        //   target.getBoundingClientRect().x,
+        //   'target.getBoundingClientRect().y: ',
+        //   target.getBoundingClientRect().y,
+        // );
+        // console.log(
+        //   'target.offsetLeft: ',
+        //   target.offsetLeft,
+        //   'target.offsetTop: ',
+        //   target.offsetTop,
+        // );
+        // console.log(
+        //   'target.style.left: ',
+        //   target.style.left,
+        //   'target.style.top: ',
+        //   target.style.top,
+        // );
+        // console.log(data);
+        // console.log(event);
+        setPosition(target, { x: event.clientX, y: event.clientY });
       },
     };
     eventChain(b2);
+    // const i = document.createElement('img');
+    // i.src = mugImg;
+    // i.style.position = 'absolute';
+    // i.style.width = '90px';
+    // i.style.top = '100px';
+    // i.style.left = '200px';
+    // scene.appendChild(i);
+    // i.addEventListener('mousemove', (e) => {
+    //   setPosition(i, { x: e.clientX, y: e.clientY });
+    // });
     // debug-block-end
 
     return function () {
-      console.log(scene);
-      console.log(state);
+      // console.log(scene);
+      // console.log(state);
     };
   }
 }

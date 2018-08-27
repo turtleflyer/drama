@@ -22,27 +22,28 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
-function stageCallback(context, type, target, eventObj, parent) {
-  let getParent = parent;
-  if (!parent) {
-    getParent = context.elementsMap.get(target).belong;
-  }
-  const mapOfTypes = context.eventsStore.get(getParent);
-  if (mapOfTypes.has(type)) {
-    [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
-      if (typeEntry) {
-        const [id, handle] = typeEntry;
-        handle({ target, event: eventObj, id });
-      }
-    });
-  }
-  const grandEntry = context.elementsMap.get(getParent);
-  if (grandEntry) {
-    stageCallback(context, type, target, eventObj, grandEntry.belong);
-  }
-}
-
 function getCallback(context, type, target) {
+  // eslint-disable-next-line no-shadow
+  function stageCallback(context, type, target, eventObj, parent) {
+    let getParent = parent;
+    if (!parent) {
+      getParent = context.elementsMap.get(target).belong;
+    }
+    const mapOfTypes = context.eventsStore.get(getParent);
+    if (mapOfTypes.has(type)) {
+      [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
+        if (typeEntry) {
+          const [id, handle] = typeEntry;
+          handle({ target, event: eventObj, id });
+        }
+      });
+    }
+    const grandEntry = context.elementsMap.get(getParent);
+    if (grandEntry) {
+      stageCallback(context, type, target, eventObj, grandEntry.belong);
+    }
+  }
+
   return function callback(eventObj) {
     stageCallback(context, type, target, eventObj);
   };
@@ -54,6 +55,19 @@ function addCallback(context, target, type) {
   if (!setOfTypes.has(type)) {
     target.addEventListener(type, getCallback(context, type, target));
     setOfTypes.add(type);
+  }
+}
+
+function addCallbackToChildren(context, parent, type) {
+  const mapOfIDs = getFromDeepMap(context.eventsStore, parent).next(type).map;
+  if (mapOfIDs.size === 0) {
+    [...parent].forEach((element) => {
+      if (element instanceof Unit) {
+        addCallbackToChildren(context, element, type);
+      } else {
+        addCallback(context, element, type);
+      }
+    });
   }
 }
 
@@ -87,8 +101,15 @@ class Unit extends Set {
       element,
       () => (element instanceof Unit ? {} : { types: new Set() }),
     );
+    if (elementEntry.belong) {
+      elementEntry.belong.delete(element);
+    }
     elementEntry.belong = this;
-    combineTypes(this.context, this).forEach(type => addCallback(this.context, element, type));
+    if (element instanceof Unit) {
+      combineTypes(this.context, this).forEach(type => addCallbackToChildren(this.context, element, type));
+    } else {
+      combineTypes(this.context, this).forEach(type => addCallback(this.context, element, type));
+    }
   }
 
   deleteElement(element) {
@@ -146,14 +167,12 @@ class EventsWork {
       promiseHandle = resolve;
     });
 
-    const mapOfIDs = getFromDeepMap(this.eventsStore, unit).next(type).map;
-    if (mapOfIDs.size === 0) {
-      [...unit].forEach((element) => {
-        addCallback(this, element, type);
-      });
+    if (!this.customEventTypes.has(type)) {
+      addCallbackToChildren(this, unit, type);
     }
-    mapOfIDs.set(id, promiseHandle);
-
+    getFromDeepMap(this.eventsStore, unit)
+      .next(type)
+      .map.set(id, promiseHandle);
     return promiseToGet;
   }
 
