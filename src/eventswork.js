@@ -112,13 +112,13 @@ class Unit extends Set {
     }
   }
 
-  deleteElement(element) {
-    this.delete(element);
-    const elementEntry = this.context.elementsMap.get(element);
-    if (elementEntry && elementEntry.belong === this) {
-      elementEntry.belong = null;
-    }
-  }
+  // deleteElement(element) {
+  //   this.delete(element);
+  //   const elementEntry = this.context.elementsMap.get(element);
+  //   if (elementEntry && elementEntry.belong === this) {
+  //     elementEntry.belong = null;
+  //   }
+  // }
 }
 
 class EventsWork {
@@ -178,17 +178,22 @@ class EventsWork {
 
   eventChain(description, id) {
     const { unit, type, action } = description;
+    let getUnit = unit;
+    if (!(unit instanceof Unit)) {
+      getUnit = this.makeUnit(unit);
+    }
     const terminate = description.terminate ? description.terminate : () => false;
     let getId = id;
     if (!id) {
       getId = Symbol(JSON.stringify(description));
     }
-    this.waitGroupEvent(unit, { type, id: getId }).then((data) => {
+    this.waitGroupEvent(getUnit, { type, id: getId }).then((data) => {
       if (!terminate(data, description)) {
         action(data, description);
         this.eventChain(description, data.id);
       }
     });
+    return getUnit;
   }
 }
 
