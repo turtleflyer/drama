@@ -365,7 +365,7 @@ class EventsWork {
       }
     });
     if (id === true) {
-      [...unit].forEach(target => this.fireEvent(target, type));
+      this.fireEvent(unit, type);
     }
     return getUnit;
   }
