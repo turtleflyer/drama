@@ -65,7 +65,7 @@ fireEvent(target, type, eventObj);
 
 /**
  * @param {ChainInit} description
- * @param {Symbol} id
+ * @param {?Symbol} id
  * @returns {Unit}
  * @memberof EventsWork
  */

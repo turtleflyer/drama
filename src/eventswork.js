@@ -343,7 +343,7 @@ class EventsWork {
 
   /**
    * @param {ChainInit} description
-   * @param {Symbol} id
+   * @param {?Symbol} id
    * @returns {Unit}
    * @memberof EventsWork
    */
@@ -355,7 +355,7 @@ class EventsWork {
     }
     const terminate = description.terminate ? description.terminate : () => false;
     let getId = id;
-    if (!id) {
+    if (id === true || !id) {
       getId = Symbol(JSON.stringify(description));
     }
     this.waitGroupEvent(getUnit, type, getId).then((data) => {
@@ -364,6 +364,9 @@ class EventsWork {
         this.eventChain(description, data.id);
       }
     });
+    if (id === true) {
+      [...unit].forEach(target => this.fireEvent(target, type));
+    }
     return getUnit;
   }
 }

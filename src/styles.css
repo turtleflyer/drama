@@ -5,6 +5,10 @@
   background-color: rgb(56, 56, 92);
 }
 
+#scene * {
+  position: absolute;
+}
+
 img {
   image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
   image-rendering: -moz-crisp-edges; /* Firefox                        */
@@ -13,4 +17,8 @@ img {
   image-rendering: pixelated; /* Chrome */
   image-rendering: optimize-contrast; /* CSS3 Proposed                  */
   -ms-interpolation-mode: nearest-neighbor;
+}
+
+.beer-mug {
+  width: 50px;
 }

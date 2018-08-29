@@ -1,79 +1,78 @@
 /* eslint-env browser */
 import './styles.css';
 import './index.html';
-import mugImg from './img/mug1.png';
-import LifeCircle from './lifecircle';
-import { waitEvent } from './eventswork';
+import { setPosition } from './helperslib';
+import {
+  scene, beerBar, mechanism, eventWorker,
+} from './maindescription';
 
-const scene = document.querySelector('#scene');
+const {
+  makeUnit, registerEventType, fireEvent, eventChain,
+} = eventWorker;
 
-function moveAlong() {
-  console.log('moved');
+function parseMainDescription(toParse, placeToAdd) {
+  const units = {};
+  function parseDeep(part) {
+    const {
+      tag, attributes, nested, className,
+    } = part;
+    if (tag) {
+      const newElement = document.createElement(part.tag);
+      newElement.className = 'default';
+      if (attributes) {
+        Object.keys(attributes).forEach((attr) => {
+          newElement[attr] = attributes[attr];
+        });
+      }
+      placeToAdd.appendChild(newElement);
+      return newElement;
+    }
+    if (nested) {
+      const unit = makeUnit(new Set());
+      units[className] = unit;
+      part.nested.forEach((element) => {
+        const elementToAdd = parseDeep(element);
+        if (elementToAdd.className) {
+          elementToAdd.className = className;
+        }
+        unit.addElement(elementToAdd);
+      });
+      return unit;
+    }
+    part.className = 'default';
+    return part;
+  }
+  parseDeep(toParse);
+  return units;
 }
 
-function takeABear() {
-  console.log('mouse down');
-}
+const allUnits = parseMainDescription(beerBar, scene);
 
-const initState = {
-  beerMugs: {
-    spec: {
-      tag: 'img',
-    },
-
-    species: {
-      onLine: {
-        behavior: {
-          // onTick: moveAlong,
-
-          onEvent: [
-            {
-              type: 'mousedown',
-              action: takeABear,
-            },
-          ],
-        },
-
-        specimens: new Set([
-          {
-            attributes: {
-              src: mugImg,
-            },
-            style: {
-              width: '90px',
-              height: '120px',
-              left: '500px',
-              top: '200px',
-            },
-          },
-          {
-            attributes: {
-              src: mugImg,
-            },
-            style: {
-              width: '90px',
-              height: '120px',
-              left: '400px',
-              top: '200px',
-            },
-          },
-          {
-            attributes: {
-              src: mugImg,
-            },
-            style: {
-              width: '90px',
-              height: '120px',
-              left: '300px',
-              top: '200px',
-            },
-          },
-        ]),
-      },
-    },
+// console.log('scene, beerBar, mechanism: ', scene, beerBar, mechanism);
+// const f = mechanism.registerEvents.tick50.createAction;
+// console.log('f: ', f);
+Object.keys(mechanism.registerEvents).forEach(type => registerEventType(type));
+let x = 10;
+eventChain(
+  {
+    unit: allUnits['beer-mug'],
+    type: 'tick50',
+    action: mechanism.registerEvents.tick50.createAction((data) => {
+      // console.log(data);
+      const { target, event } = data;
+      let timeout = 0;
+      if (event) {
+        timeout = event.timeout;
+        // console.log('timeout: ', timeout);
+      }
+      x += timeout * 100 / 1000;
+      // console.log('x: ', x);
+      setPosition(target, { x });
+      if (x > 600) {
+        allUnits.main.addElement(target);
+      }
+    }),
   },
-};
-
-const mainLoop = new LifeCircle(scene, initState);
-
-mainLoop();
+  true,
+);
+// fireEvent([...allUnits['beer-mug']][0], 'tick50', {});
