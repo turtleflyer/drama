@@ -3,7 +3,9 @@ import { setPosition } from './helperslib';
 import EventsWork from './eventswork';
 import mugImg from './img/mug1.png';
 
-const { makeUnit, eventChain } = new EventsWork();
+const {
+  makeUnit, registerEventType, fireEvent, eventChain,
+} = new EventsWork();
 
 function initScene(scene, state) {
   const { attributes: attrTopLevel, style: styleTopLevel } = state;
@@ -77,9 +79,8 @@ export default class Lifecicle {
     const b1 = {
       unit: makeUnit([[...specimens][0].node]),
       type: 'mousedown',
-      action: (data, description) => {
+      action: (data) => {
         const { target } = data;
-        const { unit } = description;
         // console.log(data);
         target.style.top = `${Number(target.style.top.replace(/px/, '')) + 10}px`;
         b2.unit.addElement(target);
@@ -92,7 +93,7 @@ export default class Lifecicle {
     const b2 = {
       unit: makeUnit([]),
       type: 'mousemove',
-      action: (data, description) => {
+      action: (data) => {
         const { target, event } = data;
         // console.log(target.x, target.y);
         // console.log('event.clientX: ', event.clientX, 'event.clientY: ', event.clientY);
@@ -120,6 +121,19 @@ export default class Lifecicle {
       },
     };
     eventChain(b2);
+    registerEventType('ccc');
+    const b3 = {
+      unit: makeUnit([[...specimens][2].node]),
+      type: 'ccc',
+      action: (data) => {
+        console.log(data);
+      },
+    };
+
+    eventChain(b3);
+    window.setTimeout(() => {
+      fireEvent(b3.unit, 'a', { wtf: 'wtf' });
+    }, 5000);
     // const i = document.createElement('img');
     // i.src = mugImg;
     // i.style.position = 'absolute';
