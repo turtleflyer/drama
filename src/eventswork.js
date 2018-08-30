@@ -367,7 +367,7 @@ class EventsWork {
     if (id === true) {
       this.fireEvent(unit, type);
     }
-    return getUnit;
+    return id;
   }
 }
 
