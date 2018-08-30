@@ -73,8 +73,8 @@ function getCallback(context, target, type) {
     if (mapOfTypes.has(type)) {
       [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
         if (typeEntry) {
-          const [id, handle] = typeEntry;
-          handle({ target, event: eventObj, id });
+          const [eventID, handle] = typeEntry;
+          handle({ target, event: eventObj, eventID });
         }
       });
     }
@@ -218,7 +218,7 @@ class EventsWork {
        *  Map(
        *    [unit, Map(
        *      [type, Map(
-       *        [id, [...resolve]]
+       *        [eventID, [...resolve]]
        *      )]
        *    )]
        *  )
@@ -291,11 +291,11 @@ class EventsWork {
    *
    * @param {Unit} unit
    * @param {string} type
-   * @param {Symbol} id
+   * @param {Symbol} eventID
    * @returns
    * @memberof EventsWork
    */
-  waitGroupEvent(unit, type, id) {
+  waitGroupEvent(unit, type, eventID) {
     let promiseHandle;
     const promiseToGet = new Promise((resolve) => {
       promiseHandle = resolve;
@@ -306,7 +306,7 @@ class EventsWork {
     }
     getFromDeepMap(this.eventsStore, unit)
       .next(type)
-      .map.set(id, promiseHandle);
+      .map.set(eventID, promiseHandle);
     return promiseToGet;
   }
 
@@ -316,7 +316,7 @@ class EventsWork {
    * @typedef {Onject} DataToAction
    * @property {Element} target
    * @property {Object} event
-   * @property {Symbol} id
+   * @property {Symbol} eventID
    * @property {Unit} unit
    * @property {string} type
    */
@@ -343,31 +343,31 @@ class EventsWork {
 
   /**
    * @param {ChainInit} description
-   * @param {?Symbol} id
+   * @param {?Symbol} eventID
    * @returns {Unit}
    * @memberof EventsWork
    */
-  eventChain(description, id) {
+  eventChain(description, eventID) {
     const { unit, type, action } = description;
     let getUnit = unit;
     if (!(unit instanceof Unit)) {
       getUnit = this.makeUnit(unit);
     }
     const terminate = description.terminate ? description.terminate : () => false;
-    let getId = id;
-    if (id === true || !id) {
+    let getId = eventID;
+    if (eventID === true || !eventID) {
       getId = Symbol(JSON.stringify(description));
     }
     this.waitGroupEvent(getUnit, type, getId).then((data) => {
       if (!terminate({ ...data, unit, type })) {
         action({ ...data, unit, type });
-        this.eventChain(description, data.id);
+        this.eventChain(description, data.eventID);
       }
     });
-    if (id === true) {
+    if (eventID === true) {
       this.fireEvent(unit, type);
     }
-    return id;
+    return eventID;
   }
 }
 
