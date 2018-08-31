@@ -57,175 +57,6 @@ function getFromDeepMap(map, key) {
 /**
  *
  *
- * @param {EventsWork} context
- * @param {Element} target
- * @param {*} type
- * @returns {callback}
- */
-function getCallback(context, target, type) {
-  // eslint-disable-next-line no-shadow
-  function stageCallback(context, target, type, eventObj, parent) {
-    let getParent = parent;
-    if (!parent) {
-      getParent = context.elementsMap.get(target).belong;
-    }
-    const mapOfTypes = context.eventsStore.get(getParent);
-    if (mapOfTypes.has(type)) {
-      [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
-        if (typeEntry) {
-          const [eventID, handle] = typeEntry;
-          handle({ target, event: eventObj, eventID });
-        }
-      });
-    }
-    const grandEntry = context.elementsMap.get(getParent);
-    if (grandEntry) {
-      stageCallback(context, target, type, eventObj, grandEntry.belong);
-    }
-  }
-
-  return function callback(eventObj) {
-    stageCallback(context, target, type, eventObj);
-  };
-}
-
-/**
- *
- *
- * @param {EventsWork} context
- * @param {Element} target
- * @param {string} type
- */
-function addCallback(context, target, type) {
-  const elementEntry = context.elementsMap.get(target);
-  const setOfTypes = getSome(elementEntry, 'types', () => new Set());
-  if (!setOfTypes.has(type)) {
-    target.addEventListener(type, getCallback(context, target, type));
-    setOfTypes.add(type);
-  }
-}
-
-/**
- *
- *
- * @param {EventsWork} context
- * @param {Unit} parent
- * @param {string} type
- */
-function addCallbackToChildren(context, parent, type) {
-  const mapOfIDs = getFromDeepMap(context.eventsStore, parent).next(type).map;
-  if (mapOfIDs.size === 0) {
-    [...parent].forEach((element) => {
-      if (element instanceof Unit) {
-        addCallbackToChildren(context, element, type);
-      } else {
-        if (context.customEventTypes.has(type)) {
-          const toSet = context.customEventTypes.get(type);
-          if (toSet) {
-            toSet(context.context, element, type);
-          }
-          return;
-        }
-        addCallback(context, element, type);
-      }
-    });
-  }
-}
-
-/**
- *
- *
- * @param {EventsWork} context
- * @param {Unit} unit
- * @param {*[]} types
- * @returns {*[]}
- */
-function combineTypes(context, unit, types) {
-  let getTypes = types;
-  if (!getTypes) {
-    getTypes = [];
-  }
-  getTypes = getTypes.concat([...getFromDeepMap(context.eventsStore, unit).map.keys()]);
-  const parentEntry = context.elementsMap.get(unit);
-  if (parentEntry) {
-    combineTypes(context, parentEntry.belong, getTypes);
-  }
-  return getTypes;
-}
-
-/**
- *
- *
- * @class Unit
- * @extends {Set}
- */
-class Unit extends Set {
-  /**
-   *Creates an instance of Unit.
-   * @param {EventsWork} context
-   * @param {Set} list
-   * @memberof Unit
-   */
-  constructor(context, list) {
-    const elements = [...list];
-    super(elements);
-    this.context = context;
-    elements.forEach((element) => {
-      context.elementsMap.set(element, { belong: this });
-    });
-  }
-
-  /**
-   *
-   *
-   * @param {Element} element
-   * @memberof Unit
-   */
-  addElement(element) {
-    this.add(element);
-    const elementEntry = getSome(
-      this.context.elementsMap,
-      element,
-      () => (element instanceof Unit ? {} : { types: new Set() }),
-    );
-    if (elementEntry.belong) {
-      elementEntry.belong.delete(element);
-    }
-    elementEntry.belong = this;
-    const types = combineTypes(this.context, this);
-    if (element instanceof Unit) {
-      types.forEach((type) => {
-        if (this.customEventTypes.has(type) && !this.customEventTypes.get(type)) {
-          return;
-        }
-        addCallbackToChildren(this.context, element, type);
-      });
-    } else {
-      types.forEach((type) => {
-        if (this.customEventTypes.has(type)) {
-          const toSet = this.customEventTypes.get(type);
-          if (toSet) {
-            toSet(this.context, element, type);
-          }
-          return;
-        }
-        addCallback(this.context, element, type);
-      });
-    }
-  }
-
-  // deleteElement(element) {
-  //   this.delete(element);
-  //   const elementEntry = this.context.elementsMap.get(element);
-  //   if (elementEntry && elementEntry.belong === this) {
-  //     elementEntry.belong = null;
-  //   }
-  // }
-}
-
-/**
- *
- *
  * @class EventsWork
  */
 class EventsWork {
@@ -234,6 +65,88 @@ class EventsWork {
    * @memberof EventsWork
    */
   constructor() {
+    this.UnitClass = (() => {
+      const upperThis = this;
+      /**
+       *
+       *
+       * @class Unit
+       * @extends {Set}
+       */
+      return class Unit extends Set {
+        /**
+         *Creates an instance of Unit.
+         * @param {Set} list
+         */
+        constructor(list) {
+          const elements = [...list];
+          super(elements);
+          elements.forEach((element) => {
+            upperThis.elementsMap.set(element, { belong: this });
+          });
+        }
+
+        /**
+         *
+         *
+         * @param {EventsWork} context
+         * @param {Unit} unit
+         * @param {*[]} types
+         * @returns {*[]}
+         */
+        static combineTypes(unit, types) {
+          let getTypes = types;
+          if (!getTypes) {
+            getTypes = [];
+          }
+          getTypes = getTypes.concat([...getFromDeepMap(upperThis.eventsStore, unit).map.keys()]);
+          const parentEntry = upperThis.elementsMap.get(unit);
+          if (parentEntry) {
+            Unit.combineTypes(parentEntry.belong, getTypes);
+          }
+          return getTypes;
+        }
+
+        /**
+         *
+         *
+         * @param {Element} element
+         */
+        addElement(element) {
+          this.add(element);
+          const elementEntry = getSome(
+            upperThis.elementsMap,
+            element,
+            () => (element instanceof Unit ? {} : { types: new Set() }),
+          );
+          if (elementEntry.belong) {
+            elementEntry.belong.delete(element);
+          }
+          elementEntry.belong = this;
+          const types = Unit.combineTypes(this);
+          if (element instanceof Unit) {
+            types.forEach((type) => {
+              if (upperThis.customEventTypes.has(type) && !upperThis.customEventTypes.get(type)) {
+                return;
+              }
+              upperThis.addCallbackToChildren(element, type);
+            });
+          } else {
+            types.forEach((type) => {
+              if (this.customEventTypes.has(type)) {
+                const toSet = this.customEventTypes.get(type);
+                if (toSet) {
+                  toSet(upperThis, element, type);
+                }
+                return;
+              }
+              upperThis.addCallback(element, type);
+            });
+          }
+        }
+      };
+    })();
+
     Object.defineProperties(this, {
       /**
        *   eventsStore structure:
@@ -274,12 +187,89 @@ class EventsWork {
   /**
    *
    *
+   * @param {EventsWork} context
+   * @param {Element} target
+   * @param {*} type
+   * @returns {callback}
+   */
+  getCallback(target, type) {
+    // eslint-disable-next-line no-shadow
+    const stageCallback = (target, type, eventObj, parent) => {
+      let getParent = parent;
+      if (!parent) {
+        getParent = this.elementsMap.get(target).belong;
+      }
+      const mapOfTypes = this.eventsStore.get(getParent);
+      if (mapOfTypes.has(type)) {
+        [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
+          if (typeEntry) {
+            const [eventID, handle] = typeEntry;
+            handle({ target, event: eventObj, eventID });
+          }
+        });
+      }
+      const grandEntry = this.elementsMap.get(getParent);
+      if (grandEntry) {
+        stageCallback(target, type, eventObj, grandEntry.belong);
+      }
+    };
+
+    return function callback(eventObj) {
+      stageCallback(target, type, eventObj);
+    };
+  }
+
+  /**
+   *
+   *
+   * @param {EventsWork} this
+   * @param {Element} target
+   * @param {string} type
+   */
+  addCallback(target, type) {
+    const elementEntry = this.elementsMap.get(target);
+    const setOfTypes = getSome(elementEntry, 'types', () => new Set());
+    if (!setOfTypes.has(type)) {
+      target.addEventListener(type, this.getCallback(target, type));
+      setOfTypes.add(type);
+    }
+  }
+
+  /**
+   *
+   *
+   * @param {UnitClass} parent
+   * @param {string} type
+   */
+  addCallbackToChildren(parent, type) {
+    const mapOfIDs = getFromDeepMap(this.eventsStore, parent).next(type).map;
+    if (mapOfIDs.size === 0) {
+      [...parent].forEach((element) => {
+        if (element instanceof this.UnitClass) {
+          this.addCallbackToChildren(element, type);
+        } else {
+          if (this.customEventTypes.has(type)) {
+            const toSet = this.customEventTypes.get(type);
+            if (toSet) {
+              toSet(this.this, element, type);
+            }
+            return;
+          }
+          this.addCallback(element, type);
+        }
+      });
+    }
+  }
+
+  /**
+   *
+   *
    * @param {Set} list
-   * @returns {Unit}
+   * @returns {UnitClass}
    * @memberof EventsWork
    */
   makeUnit(list) {
-    return new Unit(this, list);
+    return new this.UnitClass(list);
   }
 
   /**
@@ -296,23 +286,23 @@ class EventsWork {
   /**
    *
    *
-   * @param {(Element|Unit)} target
+   * @param {(Element|UnitClass)} target
    * @param {string} type
    * @param {Object} eventObj
    * @memberof EventsWork
    */
   fireEvent(target, type, eventObj) {
-    if (target instanceof Unit) {
+    if (target instanceof this.UnitClass) {
       [...target].forEach(e => this.fireEvent(e, type, eventObj));
     } else {
-      getCallback(this, target, type)(eventObj);
+      this.getCallback(target, type)(eventObj);
     }
   }
 
   /**
    *
    *
-   * @param {Unit} unit
+   * @param {UnitClass} unit
    * @param {string} type
    * @param {Symbol} eventID
    * @returns
@@ -324,7 +314,7 @@ class EventsWork {
       promiseHandle = resolve;
     });
 
-    addCallbackToChildren(this, unit, type);
+    this.addCallbackToChildren(unit, type);
     getFromDeepMap(this.eventsStore, unit)
       .next(type)
       .map.set(eventID, promiseHandle);
@@ -338,7 +328,7 @@ class EventsWork {
    * @property {Element} target
    * @property {Object} event
    * @property {Symbol} eventID
-   * @property {Unit} unit
+   * @property {UnitClass} unit
    * @property {string} type
    */
 
@@ -356,7 +346,7 @@ class EventsWork {
 
   /**
    * @typedef {Onject} ChainInit
-   * @property {Unit|Set} unit
+   * @property {UnitClass|Set} unit
    * @property {string} type
    * @property {ToDoIfFired} action
    * @property {?IfTerminate} terminate
@@ -365,13 +355,13 @@ class EventsWork {
   /**
    * @param {ChainInit} description
    * @param {?Symbol} eventID
-   * @returns {Unit}
+   * @returns {UnitClass}
    * @memberof EventsWork
    */
   eventChain(description, eventID) {
     const { unit, type, action } = description;
     let getUnit = unit;
-    if (!(unit instanceof Unit)) {
+    if (!(unit instanceof this.UnitClass)) {
       getUnit = this.makeUnit(unit);
     }
     const terminate = description.terminate ? description.terminate : () => false;
