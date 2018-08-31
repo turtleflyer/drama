@@ -59,7 +59,7 @@ function getFromDeepMap(map, key) {
  *
  * @param {EventsWork} context
  * @param {Element} target
- * @param {string} type
+ * @param {*} type
  * @returns {callback}
  */
 function getCallback(context, target, type) {
@@ -119,6 +119,13 @@ function addCallbackToChildren(context, parent, type) {
       if (element instanceof Unit) {
         addCallbackToChildren(context, element, type);
       } else {
+        if (context.customEventTypes.has(type)) {
+          const toSet = context.customEventTypes.get(type);
+          if (toSet) {
+            toSet(context.context, element, type);
+          }
+          return;
+        }
         addCallback(context, element, type);
       }
     });
@@ -130,8 +137,8 @@ function addCallbackToChildren(context, parent, type) {
  *
  * @param {EventsWork} context
  * @param {Unit} unit
- * @param {string} types
- * @returns {string[]}
+ * @param {*[]} types
+ * @returns {*[]}
  */
 function combineTypes(context, unit, types) {
   let getTypes = types;
@@ -185,10 +192,25 @@ class Unit extends Set {
       elementEntry.belong.delete(element);
     }
     elementEntry.belong = this;
+    const types = combineTypes(this.context, this);
     if (element instanceof Unit) {
-      combineTypes(this.context, this).forEach(type => addCallbackToChildren(this.context, element, type));
+      types.forEach((type) => {
+        if (this.customEventTypes.has(type) && !this.customEventTypes.get(type)) {
+          return;
+        }
+        addCallbackToChildren(this.context, element, type);
+      });
     } else {
-      combineTypes(this.context, this).forEach(type => addCallback(this.context, element, type));
+      types.forEach((type) => {
+        if (this.customEventTypes.has(type)) {
+          const toSet = this.customEventTypes.get(type);
+          if (toSet) {
+            toSet(this.context, element, type);
+          }
+          return;
+        }
+        addCallback(this.context, element, type);
+      });
     }
   }
 
@@ -238,7 +260,7 @@ class EventsWork {
         value: new Map(),
       },
       customEventTypes: {
-        value: new Set(),
+        value: new Map(),
       },
     });
 
@@ -263,11 +285,12 @@ class EventsWork {
   /**
    *
    *
-   * @param {string} type
+   * @param {*} type
+   * @param {Function} insetedSetListener
    * @memberof EventsWork
    */
-  registerEventType(type) {
-    this.customEventTypes.add(type);
+  registerEventType(type, insetedSetListener) {
+    this.customEventTypes.set(type, insetedSetListener);
   }
 
   /**
@@ -301,9 +324,7 @@ class EventsWork {
       promiseHandle = resolve;
     });
 
-    if (!this.customEventTypes.has(type)) {
-      addCallbackToChildren(this, unit, type);
-    }
+    addCallbackToChildren(this, unit, type);
     getFromDeepMap(this.eventsStore, unit)
       .next(type)
       .map.set(eventID, promiseHandle);
