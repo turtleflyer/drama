@@ -133,14 +133,9 @@ class EventsWork {
             });
           } else {
             types.forEach((type) => {
-              if (this.customEventTypes.has(type)) {
-                const toSet = this.customEventTypes.get(type);
-                if (toSet) {
-                  toSet(upperThis, element, type);
-                }
-                return;
+              if (!this.customEventTypes.has(type)) {
+                upperThis.addCallback(element, type);
               }
-              upperThis.addCallback(element, type);
             });
           }
         }
@@ -173,7 +168,7 @@ class EventsWork {
         value: new Map(),
       },
       customEventTypes: {
-        value: new Map(),
+        value: new Set(),
       },
     });
 
@@ -247,14 +242,7 @@ class EventsWork {
       [...parent].forEach((element) => {
         if (element instanceof this.UnitClass) {
           this.addCallbackToChildren(element, type);
-        } else {
-          if (this.customEventTypes.has(type)) {
-            const toSet = this.customEventTypes.get(type);
-            if (toSet) {
-              toSet(this.this, element, type);
-            }
-            return;
-          }
+        } else if (!this.customEventTypes.has(type)) {
           this.addCallback(element, type);
         }
       });
@@ -279,8 +267,8 @@ class EventsWork {
    * @param {Function} insetedSetListener
    * @memberof EventsWork
    */
-  registerEventType(type, insetedSetListener) {
-    this.customEventTypes.set(type, insetedSetListener);
+  registerEventType(type) {
+    this.customEventTypes.add(type);
   }
 
   /**
