@@ -7,7 +7,68 @@ const {
   makeUnit, registerEventType, fireEvent, eventChain,
 } = eventWorker;
 
+function appendPx(n) {
+  return `${n}px`;
+}
+
+function makeScalable(element, s = 1) {
+  element.scaleFactor = s;
+  element.setSizePos = function ({
+    left, top, width, height,
+  }) {
+    if (typeof left === 'number') {
+      this.leftN = left;
+      this.style.left = appendPx(left * this.scaleFactor);
+    }
+    if (typeof top === 'number') {
+      this.topN = top;
+      this.style.top = appendPx(top * this.scaleFactor);
+    }
+    if (typeof width === 'number') {
+      this.widthN = width;
+      this.style.width = appendPx(width * this.scaleFactor);
+    }
+    if (typeof height === 'number') {
+      this.heightN = height;
+      this.style.height = appendPx(height * this.scaleFactor);
+    }
+  };
+
+  element.refreshScaleFactor = function (newScale) {
+    if (this.style.left) {
+      this.style.left = appendPx(this.leftN * newScale);
+    }
+    if (this.style.top) {
+      this.style.top = appendPx(this.topN * newScale);
+    }
+    this.scaleFactor = s;
+    if (this.style.width) {
+      this.style.width = appendPx(this.widthN * newScale);
+    }
+    if (this.style.height) {
+      this.style.height = appendPx(this.heightN * newScale);
+    }
+  };
+  return element;
+}
+
+function BeerMug(left, top, width, height, scaleF) {
+  const div = makeScalable(document.createElement('div'));
+  div.setSizePos({
+    left,
+    top,
+    width,
+    height,
+  });
+  const img = document.createElement('img');
+  img.src = mugImg;
+  img.style.width = '100%';
+  div.appendChild(img);
+  return div;
+}
+
 const scene = document.querySelector('#scene');
+const firstMug = BeerMug(0, 0, 50, null);
 
 const beerBar = {
   className: 'main',
@@ -15,14 +76,7 @@ const beerBar = {
     scene,
     {
       className: 'beer-mug',
-      nested: [
-        {
-          tag: 'img',
-          attributes: {
-            src: mugImg,
-          },
-        },
-      ],
+      nested: [firstMug],
     },
   ],
 };

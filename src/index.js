@@ -13,33 +13,20 @@ const {
 function parseMainDescription(toParse, placeToAdd) {
   const units = {};
   function parseDeep(part) {
-    const {
-      tag, attributes, nested, className,
-    } = part;
-    if (tag) {
-      const newElement = document.createElement(part.tag);
-      newElement.className = 'default';
-      if (attributes) {
-        Object.keys(attributes).forEach((attr) => {
-          newElement[attr] = attributes[attr];
-        });
-      }
-      placeToAdd.appendChild(newElement);
-      return newElement;
-    }
+    const { nested, className } = part;
     if (nested) {
       const unit = makeUnit(new Set());
       units[className] = unit;
       part.nested.forEach((element) => {
         const elementToAdd = parseDeep(element);
-        if (elementToAdd.className) {
-          elementToAdd.className = className;
-        }
+        elementToAdd.className = className;
         unit.addElement(elementToAdd);
       });
       return unit;
     }
-    part.className = 'default';
+    if (part !== placeToAdd) {
+      placeToAdd.appendChild(part);
+    }
     return part;
   }
   parseDeep(toParse);
@@ -65,7 +52,7 @@ eventChain(
         timeout = event.timeout;
         // console.log('timeout: ', timeout);
       }
-      x += timeout * 100 / 1000;
+      x += (timeout * 100) / 1000;
       // console.log('x: ', x);
       setPosition(target, { x });
       if (x > 600) {
