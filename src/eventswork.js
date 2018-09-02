@@ -19,6 +19,7 @@ const eventsStore = new Map();
  */
 const elementsMap = new Map();
 const customEventTypes = new Set();
+const registeredUnites = new Map();
 
 /**
  *
@@ -225,11 +226,23 @@ function makeUnit(list) {
   return new Unit(list);
 }
 
+function registerUnit(unit, name) {
+  let getUnit = unit;
+  if (!(unit instanceof Unit)) {
+    getUnit = new Unit(unit);
+  }
+  registeredUnites.set(name, getUnit);
+  return getUnit;
+}
+
+function getRegisteredUnit(name) {
+  return registeredUnites.get(name);
+}
+
 /**
  *
  *
  * @param {*} type
- * @param {Function} insetedSetListener
  * @memberof EventsWork
  */
 function registerEventType(type) {
@@ -335,5 +348,5 @@ function eventChain(description, eventID) {
 }
 
 export {
-  makeUnit, registerEventType, fireEvent, eventChain,
+  makeUnit, registerUnit, getRegisteredUnit, registerEventType, fireEvent, eventChain,
 };

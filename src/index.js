@@ -2,18 +2,22 @@
 import './styles.css';
 import './index.html';
 import {
-  makeUnit, registerEventType, fireEvent, eventChain,
+  makeUnit,
+  registerUnit,
+  getRegisteredUnit,
+  registerEventType,
+  fireEvent,
+  eventChain,
 } from './eventswork';
 import { setPosition } from './helperslib';
 import { scene, beerBar, mechanism } from './maindescription';
 
 function parseMainDescription(toParse, placeToAdd) {
-  const units = {};
   function parseDeep(part) {
     const { nested, className } = part;
     if (nested) {
       const unit = makeUnit(new Set());
-      units[className] = unit;
+      registerUnit(unit, className);
       part.nested.forEach((element) => {
         const elementToAdd = parseDeep(element);
         elementToAdd.className = className;
@@ -27,10 +31,9 @@ function parseMainDescription(toParse, placeToAdd) {
     return part;
   }
   parseDeep(toParse);
-  return units;
 }
 
-const allUnits = parseMainDescription(beerBar, scene);
+parseMainDescription(beerBar, scene);
 
 // console.log('scene, beerBar, mechanism: ', scene, beerBar, mechanism);
 // const f = mechanism.registerEvents.tick50.createAction;
@@ -39,7 +42,7 @@ Object.keys(mechanism.registerEvents).forEach(type => registerEventType(type));
 let x = 10;
 eventChain(
   {
-    unit: allUnits['beer-mug'],
+    unit: getRegisteredUnit('beer-mug'),
     type: 'tick50',
     action: mechanism.registerEvents.tick50.createAction((data) => {
       // console.log(data);
@@ -53,7 +56,7 @@ eventChain(
       // console.log('x: ', x);
       setPosition(target, { x });
       if (x > 600) {
-        allUnits.main.addElement(target);
+        getRegiseredUnit('main').addElement(target);
       }
     }),
   },
