@@ -1,4 +1,26 @@
 /**
+ *   eventsStore structure:
+ *  Map(
+ *    [unit, Map(
+ *      [type, Map(
+ *        [eventID, [...resolve]]
+ *      )]
+ *    )]
+ *  )
+ */
+const eventsStore = new Map();
+
+/**
+ *  elementsMap structure:
+ *  Map(
+ *    [element, { unit, types: Set of types }]
+ *  )
+ *
+ */
+const elementsMap = new Map();
+const customEventTypes = new Set();
+
+/**
  *
  *
  * @function
@@ -54,320 +76,264 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
-/**
- *
- *
- * @class EventsWork
- */
-class EventsWork {
+class Unit extends Set {
   /**
-   *Creates an instance of EventsWork.
-   * @memberof EventsWork
+   *Creates an instance of Unit.
+   * @param {Set} list
    */
-  constructor() {
-    this.UnitClass = (() => {
-      const upperThis = this;
-      /**
-       *
-       *
-       * @class Unit
-       * @extends {Set}
-       */
-      return class Unit extends Set {
-        /**
-         *Creates an instance of Unit.
-         * @param {Set} list
-         */
-        constructor(list) {
-          const elements = [...list];
-          super(elements);
-          elements.forEach((element) => {
-            upperThis.elementsMap.set(element, { belong: this });
-          });
-        }
-
-        /**
-         *
-         *
-         * @param {EventsWork} context
-         * @param {Unit} unit
-         * @param {*[]} types
-         * @returns {*[]}
-         */
-        static combineTypes(unit, types) {
-          let getTypes = types;
-          if (!getTypes) {
-            getTypes = [];
-          }
-          getTypes = getTypes.concat([...getFromDeepMap(upperThis.eventsStore, unit).map.keys()]);
-          const parentEntry = upperThis.elementsMap.get(unit);
-          if (parentEntry) {
-            Unit.combineTypes(parentEntry.belong, getTypes);
-          }
-          return getTypes;
-        }
-
-        /**
-         *
-         *
-         * @param {Element} element
-         */
-        addElement(element) {
-          this.add(element);
-          const elementEntry = getSome(
-            upperThis.elementsMap,
-            element,
-            () => (element instanceof Unit ? {} : { types: new Set() }),
-          );
-          if (elementEntry.belong) {
-            elementEntry.belong.delete(element);
-          }
-          elementEntry.belong = this;
-          const types = Unit.combineTypes(this);
-          if (element instanceof Unit) {
-            types.forEach((type) => {
-              if (upperThis.customEventTypes.has(type) && !upperThis.customEventTypes.get(type)) {
-                return;
-              }
-              upperThis.addCallbackToChildren(element, type);
-            });
-          } else {
-            types.forEach((type) => {
-              if (!this.customEventTypes.has(type)) {
-                upperThis.addCallback(element, type);
-              }
-            });
-          }
-        }
-      };
-    })();
-
-    Object.defineProperties(this, {
-      /**
-       *   eventsStore structure:
-       *  Map(
-       *    [unit, Map(
-       *      [type, Map(
-       *        [eventID, [...resolve]]
-       *      )]
-       *    )]
-       *  )
-       */
-      eventsStore: {
-        value: new Map(),
-      },
-
-      /**
-       *  elementsMap structure:
-       *  Map(
-       *    [element, { unit, types: Set of types }]
-       *  )
-       *
-       */
-      elementsMap: {
-        value: new Map(),
-      },
-      customEventTypes: {
-        value: new Set(),
-      },
+  constructor(list) {
+    const elements = [...list];
+    super(elements);
+    elements.forEach((element) => {
+      elementsMap.set(element, { belong: this });
     });
-
-    this.makeUnit = this.makeUnit.bind(this);
-    this.registerEventType = this.registerEventType.bind(this);
-    this.fireEvent = this.fireEvent.bind(this);
-    this.waitGroupEvent = this.waitGroupEvent.bind(this);
-    this.eventChain = this.eventChain.bind(this);
   }
 
   /**
    *
    *
    * @param {EventsWork} context
-   * @param {Element} target
-   * @param {*} type
-   * @returns {callback}
+   * @param {Unit} unit
+   * @param {*[]} types
+   * @returns {*[]}
    */
-  getCallback(target, type) {
-    // eslint-disable-next-line no-shadow
-    const stageCallback = (target, type, eventObj, parent) => {
-      let getParent = parent;
-      if (!parent) {
-        getParent = this.elementsMap.get(target).belong;
-      }
-      const mapOfTypes = this.eventsStore.get(getParent);
-      if (mapOfTypes.has(type)) {
-        [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
-          if (typeEntry) {
-            const [eventID, handle] = typeEntry;
-            handle({ target, event: eventObj, eventID });
-          }
-        });
-      }
-      const grandEntry = this.elementsMap.get(getParent);
-      if (grandEntry) {
-        stageCallback(target, type, eventObj, grandEntry.belong);
-      }
-    };
-
-    return function callback(eventObj) {
-      stageCallback(target, type, eventObj);
-    };
-  }
-
-  /**
-   *
-   *
-   * @param {EventsWork} this
-   * @param {Element} target
-   * @param {string} type
-   */
-  addCallback(target, type) {
-    const elementEntry = this.elementsMap.get(target);
-    const setOfTypes = getSome(elementEntry, 'types', () => new Set());
-    if (!setOfTypes.has(type)) {
-      target.addEventListener(type, this.getCallback(target, type));
-      setOfTypes.add(type);
+  static combineTypes(unit, types) {
+    let getTypes = types;
+    if (!getTypes) {
+      getTypes = [];
     }
+    getTypes = getTypes.concat([...getFromDeepMap(eventsStore, unit).map.keys()]);
+    const parentEntry = elementsMap.get(unit);
+    if (parentEntry) {
+      Unit.combineTypes(parentEntry.belong, getTypes);
+    }
+    return getTypes;
   }
 
   /**
    *
    *
-   * @param {UnitClass} parent
-   * @param {string} type
+   * @param {Element} element
    */
-  addCallbackToChildren(parent, type) {
-    const mapOfIDs = getFromDeepMap(this.eventsStore, parent).next(type).map;
-    if (mapOfIDs.size === 0) {
-      [...parent].forEach((element) => {
-        if (element instanceof this.UnitClass) {
-          this.addCallbackToChildren(element, type);
-        } else if (!this.customEventTypes.has(type)) {
-          this.addCallback(element, type);
+  addElement(element) {
+    this.add(element);
+    const elementEntry = getSome(
+      elementsMap,
+      element,
+      () => (element instanceof Unit ? {} : { types: new Set() }),
+    );
+    if (elementEntry.belong) {
+      elementEntry.belong.delete(element);
+    }
+    elementEntry.belong = this;
+    const types = Unit.combineTypes(this);
+    if (element instanceof Unit) {
+      types.forEach((type) => {
+        if (customEventTypes.has(type) && !customEventTypes.get(type)) {
+          return;
+        }
+        addCallbackToChildren(element, type);
+      });
+    } else {
+      types.forEach((type) => {
+        if (!this.customEventTypes.has(type)) {
+          addCallback(element, type);
         }
       });
     }
   }
+}
 
-  /**
-   *
-   *
-   * @param {Set} list
-   * @returns {UnitClass}
-   * @memberof EventsWork
-   */
-  makeUnit(list) {
-    return new this.UnitClass(list);
-  }
-
-  /**
-   *
-   *
-   * @param {*} type
-   * @param {Function} insetedSetListener
-   * @memberof EventsWork
-   */
-  registerEventType(type) {
-    this.customEventTypes.add(type);
-  }
-
-  /**
-   *
-   *
-   * @param {(Element|UnitClass)} target
-   * @param {string} type
-   * @param {Object} eventObj
-   * @memberof EventsWork
-   */
-  fireEvent(target, type, eventObj) {
-    if (target instanceof this.UnitClass) {
-      [...target].forEach(e => this.fireEvent(e, type, eventObj));
-    } else {
-      this.getCallback(target, type)(eventObj);
+/**
+ *
+ *
+ * @param {EventsWork} context
+ * @param {Element} target
+ * @param {*} type
+ * @returns {callback}
+ */
+function getCallback(target, type) {
+  // eslint-disable-next-line no-shadow
+  const stageCallback = (target, type, eventObj, parent) => {
+    let getParent = parent;
+    if (!parent) {
+      getParent = elementsMap.get(target).belong;
     }
-  }
-
-  /**
-   *
-   *
-   * @param {UnitClass} unit
-   * @param {string} type
-   * @param {Symbol} eventID
-   * @returns
-   * @memberof EventsWork
-   */
-  waitGroupEvent(unit, type, eventID) {
-    let promiseHandle;
-    const promiseToGet = new Promise((resolve) => {
-      promiseHandle = resolve;
-    });
-
-    this.addCallbackToChildren(unit, type);
-    getFromDeepMap(this.eventsStore, unit)
-      .next(type)
-      .map.set(eventID, promiseHandle);
-    return promiseToGet;
-  }
-
-  /**
-   *
-   *
-   * @typedef {Onject} DataToAction
-   * @property {Element} target
-   * @property {Object} event
-   * @property {Symbol} eventID
-   * @property {UnitClass} unit
-   * @property {string} type
-   */
-
-  /**
-   * @function
-   * @name ToDoIfFired
-   * @param {DataToAction} sendToAct
-   */
-
-  /**
-   * @function
-   * @name IfTerminate
-   * @param {DataToAction} analyzeIt
-   */
-
-  /**
-   * @typedef {Onject} ChainInit
-   * @property {UnitClass|Set} unit
-   * @property {string} type
-   * @property {ToDoIfFired} action
-   * @property {?IfTerminate} terminate
-   */
-
-  /**
-   * @param {ChainInit} description
-   * @param {?Symbol} eventID
-   * @returns {UnitClass}
-   * @memberof EventsWork
-   */
-  eventChain(description, eventID) {
-    const { unit, type, action } = description;
-    let getUnit = unit;
-    if (!(unit instanceof this.UnitClass)) {
-      getUnit = this.makeUnit(unit);
+    const mapOfTypes = eventsStore.get(getParent);
+    if (mapOfTypes.has(type)) {
+      [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
+        if (typeEntry) {
+          const [eventID, handle] = typeEntry;
+          handle({ target, event: eventObj, eventID });
+        }
+      });
     }
-    const terminate = description.terminate ? description.terminate : () => false;
-    let getId = eventID;
-    if (eventID === true || !eventID) {
-      getId = Symbol(JSON.stringify(description));
+    const grandEntry = elementsMap.get(getParent);
+    if (grandEntry) {
+      stageCallback(target, type, eventObj, grandEntry.belong);
     }
-    this.waitGroupEvent(getUnit, type, getId).then((data) => {
-      if (!terminate({ ...data, unit, type })) {
-        action({ ...data, unit, type });
-        this.eventChain(description, data.eventID);
-      }
-    });
-    if (eventID === true) {
-      this.fireEvent(unit, type);
-    }
-    return eventID;
+  };
+
+  return function callback(eventObj) {
+    stageCallback(target, type, eventObj);
+  };
+}
+
+/**
+ *
+ *
+ * @param {EventsWork} this
+ * @param {Element} target
+ * @param {string} type
+ */
+function addCallback(target, type) {
+  const elementEntry = elementsMap.get(target);
+  const setOfTypes = getSome(elementEntry, 'types', () => new Set());
+  if (!setOfTypes.has(type)) {
+    target.addEventListener(type, getCallback(target, type));
+    setOfTypes.add(type);
   }
 }
 
-export default EventsWork;
+/**
+ *
+ *
+ * @param {UnitClass} parent
+ * @param {string} type
+ */
+function addCallbackToChildren(parent, type) {
+  const mapOfIDs = getFromDeepMap(eventsStore, parent).next(type).map;
+  if (mapOfIDs.size === 0) {
+    [...parent].forEach((element) => {
+      if (element instanceof Unit) {
+        addCallbackToChildren(element, type);
+      } else if (!customEventTypes.has(type)) {
+        addCallback(element, type);
+      }
+    });
+  }
+}
+
+/**
+ *
+ *
+ * @param {Set} list
+ * @returns {UnitClass}
+ * @memberof EventsWork
+ */
+function makeUnit(list) {
+  return new Unit(list);
+}
+
+/**
+ *
+ *
+ * @param {*} type
+ * @param {Function} insetedSetListener
+ * @memberof EventsWork
+ */
+function registerEventType(type) {
+  customEventTypes.add(type);
+}
+
+/**
+ *
+ *
+ * @param {(Element|UnitClass)} target
+ * @param {string} type
+ * @param {Object} eventObj
+ * @memberof EventsWork
+ */
+function fireEvent(target, type, eventObj) {
+  if (target instanceof Unit) {
+    [...target].forEach(e => fireEvent(e, type, eventObj));
+  } else {
+    getCallback(target, type)(eventObj);
+  }
+}
+
+/**
+ *
+ *
+ * @param {UnitClass} unit
+ * @param {string} type
+ * @param {Symbol} eventID
+ * @returns
+ * @memberof EventsWork
+ */
+function waitGroupEvent(unit, type, eventID) {
+  let promiseHandle;
+  const promiseToGet = new Promise((resolve) => {
+    promiseHandle = resolve;
+  });
+
+  addCallbackToChildren(unit, type);
+  getFromDeepMap(eventsStore, unit)
+    .next(type)
+    .map.set(eventID, promiseHandle);
+  return promiseToGet;
+}
+
+/**
+ *
+ *
+ * @typedef {Onject} DataToAction
+ * @property {Element} target
+ * @property {Object} event
+ * @property {Symbol} eventID
+ * @property {UnitClass} unit
+ * @property {string} type
+ */
+
+/**
+ * @function
+ * @name ToDoIfFired
+ * @param {DataToAction} sendToAct
+ */
+
+/**
+ * @function
+ * @name IfTerminate
+ * @param {DataToAction} analyzeIt
+ */
+
+/**
+ * @typedef {Onject} ChainInit
+ * @property {UnitClass|Set} unit
+ * @property {string} type
+ * @property {ToDoIfFired} action
+ * @property {?IfTerminate} terminate
+ */
+
+/**
+ * @param {ChainInit} description
+ * @param {?Symbol} eventID
+ * @returns {UnitClass}
+ * @memberof EventsWork
+ */
+function eventChain(description, eventID) {
+  const { unit, type, action } = description;
+  let getUnit = unit;
+  if (!(unit instanceof Unit)) {
+    getUnit = makeUnit(unit);
+  }
+  const terminate = description.terminate ? description.terminate : () => false;
+  let getId = eventID;
+  if (eventID === true || !eventID) {
+    getId = Symbol(JSON.stringify(description));
+  }
+  waitGroupEvent(getUnit, type, getId).then((data) => {
+    if (!terminate({ ...data, unit, type })) {
+      action({ ...data, unit, type });
+      eventChain(description, data.eventID);
+    }
+  });
+  if (eventID === true) {
+    fireEvent(unit, type);
+  }
+  return eventID;
+}
+
+export {
+  makeUnit, registerEventType, fireEvent, eventChain,
+};

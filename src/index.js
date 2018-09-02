@@ -1,14 +1,11 @@
 /* eslint-env browser */
 import './styles.css';
 import './index.html';
-import { setPosition } from './helperslib';
 import {
-  scene, beerBar, mechanism, eventWorker,
-} from './maindescription';
-
-const {
   makeUnit, registerEventType, fireEvent, eventChain,
-} = eventWorker;
+} from './eventswork';
+import { setPosition } from './helperslib';
+import { scene, beerBar, mechanism } from './maindescription';
 
 function parseMainDescription(toParse, placeToAdd) {
   const units = {};

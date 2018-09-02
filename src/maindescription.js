@@ -1,11 +1,8 @@
 /* eslint-env browser */
 import mugImg from './img/mug1.png';
-import EventsWork from './eventswork';
-
-const eventWorker = new EventsWork();
-const {
+import {
   makeUnit, registerEventType, fireEvent, eventChain,
-} = eventWorker;
+} from './eventswork';
 
 function appendPx(n) {
   return `${n}px`;
