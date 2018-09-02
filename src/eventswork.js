@@ -325,6 +325,7 @@ function waitGroupEvent(unit, type, eventID) {
  * @memberof EventsWork
  */
 function eventChain(description, eventID) {
+  const memory = {};
   const { unit, type, action } = description;
   let getUnit = unit;
   if (!(unit instanceof Unit)) {
@@ -337,7 +338,7 @@ function eventChain(description, eventID) {
   }
   waitGroupEvent(getUnit, type, getId).then((data) => {
     if (!terminate({ ...data, unit, type })) {
-      action({ ...data, unit, type });
+      action({ ...data, unit, type, memory });
       eventChain(description, data.eventID);
     }
   });
