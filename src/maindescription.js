@@ -26,18 +26,23 @@ const beerBar = {
 
 const mechanism = {
   registerEvents: {
-    tick50: {
-      createAction: (action) => {
-        let time = Date.now();
-        return (data) => {
-          const { target, type } = data;
-          action(data);
-          window.setTimeout(() => {
-            const prevTime = time;
-            time = Date.now();
-            fireEvent(target, type, { timeout: time - prevTime });
-          }, 10);
-        };
+    tick10: {
+      // createAction: (action) => {
+      //   let time = Date.now();
+      //   return (data) => {
+      //     const { target, type } = data;
+      //     action(data);
+      //     window.setTimeout(() => {
+      //       const prevTime = time;
+      //       time = Date.now();
+      //       fireEvent(target, type, { timeout: time - prevTime });
+      //     }, 10);
+      //   };
+      // },
+      action: (data) => {
+        window.setTimeout(() => {
+          fireEvent(getRegisteredUnit('main'), 'ontick10');
+        });
       },
     },
   },

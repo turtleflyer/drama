@@ -37,7 +37,7 @@ fireEvent(target, type, eventObj);
 /**
  * @typedef {Onject} DataToAction
  * @property {Element} target
- * @property {Object} event
+ * @property {Object} eventObj
  * @property {Symbol} id
  * @property {Unit} unit
  * @property {string} type

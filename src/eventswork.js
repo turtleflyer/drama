@@ -19,7 +19,9 @@ const eventsStore = new Map();
  */
 const elementsMap = new Map();
 const customEventTypes = new Set();
-const registeredUnites = new Map();
+const fireFromQueueType = Symbol('@@fireFromQueue');
+const queueToFire = new Set();
+const queueData = new Map();
 
 /**
  *
@@ -77,6 +79,76 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
+/**
+ *
+ *
+ * @param {EventsWork} context
+ * @param {Element} target
+ * @param {*} type
+ * @returns {callback}
+ */
+function getCallback(target, type, parent) {
+  // eslint-disable-next-line no-shadow
+  function stageCallback(target, type, eventObj, parent) {
+    let getParent = parent;
+    if (!parent) {
+      getParent = elementsMap.get(target).belong;
+    }
+    const mapOfTypes = getFromDeepMap(eventsStore, getParent).map;
+    if (mapOfTypes.has(type)) {
+      [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
+        const [eventID, handle] = typeEntry;
+        handle({ target, eventObj, eventID });
+      });
+    }
+    const grandEntry = elementsMap.get(getParent);
+    if (grandEntry) {
+      stageCallback(target, type, eventObj, grandEntry.belong);
+    }
+  }
+
+  return function callback(eventObj) {
+    stageCallback(target, type, eventObj, parent);
+  };
+}
+
+/**
+ *
+ *
+ * @param {EventsWork} this
+ * @param {Element} target
+ * @param {string} type
+ */
+function addCallback(target, type) {
+  const elementEntry = elementsMap.get(target);
+  const setOfTypes = getSome(elementEntry, 'types', () => new Set());
+  if (!setOfTypes.has(type)) {
+    target.addEventListener(type, getCallback(target, type));
+    setOfTypes.add(type);
+  }
+}
+
+/**
+ *
+ *
+ * @param {UnitClass} parent
+ * @param {string} type
+ */
+function addCallbackToChildren(parent, type) {
+  if (!customEventTypes.has(type)) {
+    const mapOfIDs = getFromDeepMap(eventsStore, parent).next(type).map;
+    if (mapOfIDs.size === 0) {
+      [...parent].forEach((element) => {
+        if (element instanceof Unit) {
+          addCallbackToChildren(element, type);
+        } else {
+          addCallback(element, type);
+        }
+      });
+    }
+  }
+}
+
 class Unit extends Set {
   /**
    *Creates an instance of Unit.
@@ -130,88 +202,15 @@ class Unit extends Set {
     const types = Unit.combineTypes(this);
     if (element instanceof Unit) {
       types.forEach((type) => {
-        if (customEventTypes.has(type) && !customEventTypes.get(type)) {
-          return;
-        }
         addCallbackToChildren(element, type);
       });
     } else {
       types.forEach((type) => {
-        if (!this.customEventTypes.has(type)) {
+        if (!customEventTypes.has(type)) {
           addCallback(element, type);
         }
       });
     }
-  }
-}
-
-/**
- *
- *
- * @param {EventsWork} context
- * @param {Element} target
- * @param {*} type
- * @returns {callback}
- */
-function getCallback(target, type) {
-  // eslint-disable-next-line no-shadow
-  const stageCallback = (target, type, eventObj, parent) => {
-    let getParent = parent;
-    if (!parent) {
-      getParent = elementsMap.get(target).belong;
-    }
-    const mapOfTypes = eventsStore.get(getParent);
-    if (mapOfTypes.has(type)) {
-      [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
-        if (typeEntry) {
-          const [eventID, handle] = typeEntry;
-          handle({ target, event: eventObj, eventID });
-        }
-      });
-    }
-    const grandEntry = elementsMap.get(getParent);
-    if (grandEntry) {
-      stageCallback(target, type, eventObj, grandEntry.belong);
-    }
-  };
-
-  return function callback(eventObj) {
-    stageCallback(target, type, eventObj);
-  };
-}
-
-/**
- *
- *
- * @param {EventsWork} this
- * @param {Element} target
- * @param {string} type
- */
-function addCallback(target, type) {
-  const elementEntry = elementsMap.get(target);
-  const setOfTypes = getSome(elementEntry, 'types', () => new Set());
-  if (!setOfTypes.has(type)) {
-    target.addEventListener(type, getCallback(target, type));
-    setOfTypes.add(type);
-  }
-}
-
-/**
- *
- *
- * @param {UnitClass} parent
- * @param {string} type
- */
-function addCallbackToChildren(parent, type) {
-  const mapOfIDs = getFromDeepMap(eventsStore, parent).next(type).map;
-  if (mapOfIDs.size === 0) {
-    [...parent].forEach((element) => {
-      if (element instanceof Unit) {
-        addCallbackToChildren(element, type);
-      } else if (!customEventTypes.has(type)) {
-        addCallback(element, type);
-      }
-    });
   }
 }
 
@@ -226,18 +225,8 @@ function makeUnit(list) {
   return new Unit(list);
 }
 
-function registerUnit(unit, name) {
-  let getUnit = unit;
-  if (!(unit instanceof Unit)) {
-    getUnit = new Unit(unit);
-  }
-  registeredUnites.set(name, getUnit);
-  return getUnit;
-}
+const worker = makeUnit([]);
 
-function getRegisteredUnit(name) {
-  return registeredUnites.get(name);
-}
 
 /**
  *
@@ -247,22 +236,6 @@ function getRegisteredUnit(name) {
  */
 function registerEventType(type) {
   customEventTypes.add(type);
-}
-
-/**
- *
- *
- * @param {(Element|UnitClass)} target
- * @param {string} type
- * @param {Object} eventObj
- * @memberof EventsWork
- */
-function fireEvent(target, type, eventObj) {
-  if (target instanceof Unit) {
-    [...target].forEach(e => fireEvent(e, type, eventObj));
-  } else {
-    getCallback(target, type)(eventObj);
-  }
 }
 
 /**
@@ -290,9 +263,34 @@ function waitGroupEvent(unit, type, eventID) {
 /**
  *
  *
+ * @param {(Element|UnitClass)} target
+ * @param {string} type
+ * @param {Object} eventObj
+ * @memberof EventsWork
+ */
+function fireEvent(target, type, eventObj) {
+  if (target instanceof Unit) {
+    if (target.size > 0) {
+      [...target].forEach((e) => {
+        queueToFire.add(e);
+        const mapOfTypes = getFromDeepMap(queueData, e).map;
+        mapOfTypes.set(type, eventObj);
+      });
+      fireEvent(worker, fireFromQueueType);
+    } else {
+      getCallback(null, type, target)(eventObj);
+    }
+  } else {
+    getCallback(target, type)(eventObj);
+  }
+}
+
+/**
+ *
+ *
  * @typedef {Onject} DataToAction
  * @property {Element} target
- * @property {Object} event
+ * @property {Object} eventObj
  * @property {Symbol} eventID
  * @property {UnitClass} unit
  * @property {string} type
@@ -327,18 +325,19 @@ function waitGroupEvent(unit, type, eventID) {
 function eventChain(description, eventID) {
   const memory = {};
   const { unit, type, action } = description;
-  let getUnit = unit;
-  if (!(unit instanceof Unit)) {
-    getUnit = makeUnit(unit);
-  }
   const terminate = description.terminate ? description.terminate : () => false;
   let getId = eventID;
   if (eventID === true || !eventID) {
-    getId = Symbol(JSON.stringify(description));
+    getId = Symbol('@@event');
   }
-  waitGroupEvent(getUnit, type, getId).then((data) => {
+  waitGroupEvent(unit, type, getId).then((data) => {
     if (!terminate({ ...data, unit, type })) {
-      action({ ...data, unit, type, memory });
+      action({
+        ...data,
+        unit,
+        type,
+        memory,
+      });
       eventChain(description, data.eventID);
     }
   });
@@ -348,6 +347,26 @@ function eventChain(description, eventID) {
   return eventID;
 }
 
+registerEventType(fireFromQueueType);
+eventChain({
+  unit: worker,
+  type: fireFromQueueType,
+  action: function fire() {
+    const nextE = [...queueToFire][0];
+    if (nextE) {
+      queueToFire.delete(nextE);
+      const mapOfTypes = queueData.get(nextE);
+      [...mapOfTypes.entries()].forEach(([type, eventObj]) => {
+        if (eventObj !== null) {
+          mapOfTypes.set(type, null);
+          fireEvent(nextE, type, eventObj);
+        }
+      });
+      Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
+    }
+  },
+});
+
 export {
-  makeUnit, registerUnit, getRegisteredUnit, registerEventType, fireEvent, eventChain,
+  makeUnit, registerEventType, fireEvent, eventChain,
 };
