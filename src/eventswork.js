@@ -22,6 +22,7 @@ const customEventTypes = new Set();
 const fireFromQueueType = Symbol('@@fireFromQueue');
 const queueToFire = new Set();
 const queueData = new Map();
+let interpretTarget = (t) => t;
 
 /**
  *
@@ -79,6 +80,10 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
+function defineWhereIsNode(interpreter) {
+  interpretTarget = interpreter;
+}
+
 /**
  *
  *
@@ -123,7 +128,7 @@ function addCallback(target, type) {
   const elementEntry = elementsMap.get(target);
   const setOfTypes = getSome(elementEntry, 'types', () => new Set());
   if (!setOfTypes.has(type)) {
-    target.addEventListener(type, getCallback(target, type));
+    interpretTarget(target).addEventListener(type, getCallback(target, type));
     setOfTypes.add(type);
   }
 }
@@ -368,5 +373,5 @@ eventChain({
 });
 
 export {
-  makeUnit, registerEventType, fireEvent, eventChain,
+  defineWhereIsNode, makeUnit, registerEventType, fireEvent, eventChain,
 };
