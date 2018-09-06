@@ -22,7 +22,7 @@ const customEventTypes = new Set();
 const fireFromQueueType = Symbol('@@fireFromQueue');
 const queueToFire = new Set();
 const queueData = new Map();
-let interpretTarget = (t) => t;
+const routine = { interpretTarget: t => t, whenAddToUnit: () => {} };
 
 /**
  *
@@ -80,8 +80,13 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
-function defineWhereIsNode(interpreter) {
-  interpretTarget = interpreter;
+function defineRoutine(interpretTarget, whenAddToUnit) {
+  if (interpretTarget) {
+    routine.interpretTarget = interpretTarget;
+  }
+  if (whenAddToUnit) {
+    routine.whenAddToUnit = whenAddToUnit;
+  }
 }
 
 /**
@@ -128,7 +133,7 @@ function addCallback(target, type) {
   const elementEntry = elementsMap.get(target);
   const setOfTypes = getSome(elementEntry, 'types', () => new Set());
   if (!setOfTypes.has(type)) {
-    interpretTarget(target).addEventListener(type, getCallback(target, type));
+    routine.interpretTarget(target).addEventListener(type, getCallback(target, type));
     setOfTypes.add(type);
   }
 }
@@ -163,6 +168,7 @@ class Unit extends Set {
     const elements = [...list];
     super(elements);
     elements.forEach((element) => {
+      routine.whenAddToUnit.bind(this)(element);
       elementsMap.set(element, { belong: this });
     });
   }
@@ -194,6 +200,7 @@ class Unit extends Set {
    * @param {Element} element
    */
   addElement(element) {
+    routine.whenAddToUnit.bind(this)(element);
     this.add(element);
     const elementEntry = getSome(
       elementsMap,
@@ -231,7 +238,6 @@ function makeUnit(list) {
 }
 
 const worker = makeUnit([]);
-
 
 /**
  *
@@ -373,5 +379,5 @@ eventChain({
 });
 
 export {
-  defineWhereIsNode, makeUnit, registerEventType, fireEvent, eventChain,
+  defineRoutine, makeUnit, registerEventType, fireEvent, eventChain,
 };

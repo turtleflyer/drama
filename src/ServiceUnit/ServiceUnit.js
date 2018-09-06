@@ -1,35 +1,24 @@
 /* eslint-env browser */
 import {
-  registeredUnites,
-  appendPx,
-  makeScalable,
-  setOrigin,
-  parseDescription,
+  GameActor, appendPx, makeScalable, setOrigin, parseDescription,
 } from '../gamelabrary';
 import {
-  makeUnit,
-  registerUnit,
-  getRegisteredUnit,
-  registerEventType,
-  fireEvent,
-  eventChain,
+  makeUnit, registerEventType, fireEvent, eventChain,
 } from '../eventswork';
 
-const ServiceUnit = {
-  name: 'ServiceUnit',
-
-  mechanism: {
-    tick10: {
-      regAsCustom: true,
-      action: () => {
-        fireEvent(registeredUnites.Scene, 'ontick10');
-        window.setTimeout(() => {
-          fireEvent(registeredUnites.ServiceUnit, 'tick10');
-        }, 1000);
+export default parseDescription({
+  ServiceUnit: {
+    mechanism: {
+      tick: {
+        regAsCustom: true,
+        action: toolkit => () => {
+          fireEvent(toolkit.getUnit('Scene'), 'ontick');
+          window.setTimeout(() => {
+            fireEvent(toolkit.getUnit('ServiceUnit'), 'tick');
+          }, 17);
+        },
+        fireImmediately: true,
       },
-      fireImmediately: true,
     },
   },
-};
-
-export default ServiceUnit;
+});

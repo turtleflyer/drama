@@ -1,93 +1,123 @@
 import {
-  makeUnit,
-  registerUnit,
-  getRegisteredUnit,
-  registerEventType,
-  fireEvent,
-  eventChain,
+  defineRoutine, makeUnit, registerEventType, fireEvent, eventChain,
 } from './eventswork';
+
+defineRoutine(e => e.node, function (e) {
+  if (e.node) {
+    e.node.className = this.name;
+  }
+});
 
 let origin;
 
-const registeredUnites = {};
+const registeredUnits = {};
 
 function appendPx(n) {
   return `${n}px`;
 }
 
-function makeScalable(element, s = 1) {
-  const mappedProps = new Map([
-    ['left', 'leftN'],
-    ['top', 'topN'],
-    ['width', 'widthN'],
-    ['height', 'heightN'],
-  ]);
-  element.scaleFactor = s;
-  element.setSizePos = function (data) {
-    // eslint-disable-next-line
-    for (const e of mappedProps.entries()) {
-      const [out, inside] = e;
-      if (typeof data[out] === 'number') {
-        this[inside] = data[out];
-        this.style[out] = appendPx(data[out] * this.scaleFactor);
-      }
-    }
-  };
+class GameActor {
+  constructor(node, scaleFactor = 1, position) {
+    this.node = node;
+    this.scaleFactor = scaleFactor;
+    this.setPosition(position);
+  }
 
-  element.refreshScaleFactor = function (newScale) {
-    // eslint-disable-next-line
-    for (const e of mappedProps.entries()) {
-      const [out, inside] = e;
-      if (this.style[out]) {
-        this.style[out] = appendPx(this[inside] * newScale);
+  setPosition(position) {
+    if (position) {
+      // eslint-disable-next-line
+      for (const prop of GameActor.props) {
+        if (typeof position[prop] === 'number') {
+          this[prop] = position[prop];
+          this.node.style[prop] = appendPx(position[prop] * this.scaleFactor);
+        }
       }
     }
-  };
-  return element;
+  }
+
+  refreshScale(newScale) {
+    this.scaleFactor = newScale;
+    this.setPosition(this);
+  }
 }
+GameActor.props = ['left', 'top', 'width', 'height'];
 
 function setOrigin(element) {
   origin = element;
 }
 
+function getUnit(name) {
+  return registeredUnits[name];
+}
+
 function parseDescription(description) {
-  const {
-    name, render, nested, mechanism,
-  } = description;
-  if (render) {
-    description.render = render.bind(description, origin);
-  }
-  let list;
-  if (nested) {
-    if (typeof nested === 'function') {
-      list = nested();
-    } else {
-      list = nested;
+  const seeds = [];
+  Object.entries(description).forEach(([nameOfUnit, unitDescription]) => {
+    seeds.push(
+      new class {
+        constructor() {
+          const toolkit = {
+            name: nameOfUnit,
+            get origin() {
+              return origin;
+            },
+            getUnit,
+          };
+          const { nested, mechanism } = unitDescription;
+          Object.entries(unitDescription).forEach(([key, body]) => {
+            if (typeof body === 'function' && key !== 'nested') {
+              this[key] = body(toolkit).bind(this);
+            }
+          });
+
+          let list = [];
+          if (nested) {
+            if (typeof nested === 'function') {
+              list = nested.bind(this)(toolkit) || list;
+            } else {
+              list = nested;
+            }
+            list.forEach((e) => {
+              if (e.node) {
+                e.node.className = nameOfUnit;
+              }
+            });
+          }
+          this.unit = makeUnit(list);
+          registeredUnits[nameOfUnit] = this.unit;
+          this.unit.name = nameOfUnit;
+          if (mechanism) {
+            Object.entries(mechanism).forEach(([type, behave]) => {
+              this.mechanism = { [type]: behave };
+              const { action } = behave;
+              if (action) {
+                this.mechanism[type].action = action(toolkit).bind(this);
+              }
+            });
+          }
+        }
+      }(description),
+    );
+  });
+  return seeds;
+}
+
+function startModules(...modules) {
+  const combinedModules = [].concat(...modules);
+  combinedModules.forEach(({ unit, mechanism }) => {
+    if (mechanism) {
+      Object.entries(mechanism).forEach(([type, { regAsCustom, action, fireImmediately }]) => {
+        if (regAsCustom) {
+          registerEventType(type);
+        }
+        if (action) {
+          eventChain({ unit, type, action }, fireImmediately);
+        }
+      });
     }
-    list = list.map((e) => {
-      if (!(typeof e.has === 'function')) {
-        e.className = name;
-      }
-      return e;
-    });
-  } else {
-    list = [];
-  }
-  const unit = makeUnit(list);
-  registeredUnites[description.name] = unit;
-  if (mechanism) {
-    Object.entries(mechanism).forEach(([type, { regAsCustom, action, fireImmediately }]) => {
-      if (regAsCustom) {
-        registerEventType(type);
-      }
-      if (action) {
-        action = action.bind(description);
-        eventChain({ unit, type, action }, fireImmediately);
-      }
-    });
-  }
+  });
 }
 
 export {
-  registeredUnites, appendPx, makeScalable, setOrigin, parseDescription,
+  appendPx, GameActor, setOrigin, parseDescription, startModules, makeScalable,
 };

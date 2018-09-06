@@ -1,26 +1,16 @@
 /* eslint-env browser */
-import BeerMug from '../BeerMug/BeerMug';
 import {
-  registeredUnites,
-  appendPx,
-  makeScalable,
-  setOrigin,
-  parseDescription,
+  GameActor, appendPx, makeScalable, setOrigin, parseDescription,
 } from '../../gamelabrary';
 import {
-  makeUnit,
-  registerUnit,
-  getRegisteredUnit,
-  registerEventType,
-  fireEvent,
-  eventChain,
+  makeUnit, registerEventType, fireEvent, eventChain,
 } from '../../eventswork';
 
-const Scene = {
-  name: 'Scene',
-  render: () => document.querySelector('#scene'),
-  nested: () => [Scene.render(), registeredUnites.BeerMug],
-
-};
-
-export default Scene;
+export default parseDescription({
+  Scene: {
+    name: 'Scene',
+    nested(toolkit) {
+      return [new GameActor(document.querySelector('#scene')), toolkit.getUnit('BeerMug')];
+    },
+  },
+});

@@ -1,10 +1,6 @@
 /* eslint-env browser */
 import {
-  registeredUnites,
-  appendPx,
-  makeScalable,
-  setOrigin,
-  parseDescription,
+  appendPx, makeScalable, setOrigin, parseDescription, GameActor,
 } from '../../gamelabrary';
 // import {
 //   makeUnit,
@@ -18,59 +14,53 @@ import mugIPA from './mug1.png';
 import { BEER_IPA } from '../../types';
 
 let c = 0;
+export default parseDescription({
+  BeerMug: {
+    render: toolkit => function (type, left, top, scaleF) {
+      const div = document.createElement('div');
+      const element = new GameActor(div, scaleF, { left, top });
+      switch (type) {
+        case BEER_IPA: {
+          element.setPosition({ width: 50 });
+          const img = document.createElement('img');
+          img.src = mugIPA;
+          img.style.width = '100%';
+          div.appendChild(img);
+          toolkit.origin.appendChild(div);
+          return element;
+        }
 
-const BeerMug = {
-  name: 'BeerMug',
-  render(origin, type, left, top, scaleF) {
-    const div = makeScalable(document.createElement('div'), scaleF);
-    div.className = 'BeerMug';
-    switch (type) {
-      case BEER_IPA: {
-        div.setSizePos({
-          left,
-          top,
-          width: 50,
-        });
-        const img = document.createElement('img');
-        img.src = mugIPA;
-        img.style.width = '100%';
-        div.appendChild(img);
-        origin.appendChild(div);
-        return div;
+        default:
+          return null;
       }
+    },
 
-      default:
-        return null;
-    }
-  },
-
-  mechanism: {
-    ontick10: {
-      regAsCustom: true,
-      action({ target }) {
-        if (!target) {
-          const newB = this.render(BEER_IPA, 0, 0);
-          newB.AAA = c;
-          c++;
-          registeredUnites.BeerMug.addElement(newB);
-        } else {
-          const curX = target.leftN;
-          target.setSizePos({ left: curX + 20 });
-          if (curX > 580) {
-            registeredUnites.BeerMug.delete(target);
-          }
-          if (target === [...registeredUnites.BeerMug][registeredUnites.BeerMug.size - 1]) {
-            if (curX > 5) {
-              const newB = this.render(BEER_IPA, curX - 35, 0);
-              newB.AAA = c;
-              c++;
-              registeredUnites.BeerMug.addElement(newB);
+    mechanism: {
+      ontick: {
+        regAsCustom: true,
+        action: () => function ({ target }) {
+          if (!target) {
+            const newB = this.render(BEER_IPA, 0, 0);
+            newB.AAA = c;
+            c++;
+            this.unit.addElement(newB);
+          } else {
+            const curX = target.left;
+            target.setPosition({ left: curX + 2 });
+            if (curX > 598) {
+              this.unit.delete(target);
+            }
+            if (target === [...this.unit][this.unit.size - 1]) {
+              if (curX > 5) {
+                const newB = this.render(BEER_IPA, curX - 53, 0);
+                newB.AAA = c;
+                c++;
+                this.unit.addElement(newB);
+              }
             }
           }
-        }
+        },
       },
     },
   },
-};
-
-export default BeerMug;
+});
