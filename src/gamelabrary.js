@@ -23,6 +23,7 @@ class GameActor {
   constructor(node, scaleFactor = 1, position) {
     this.node = node;
     this.scaleFactor = scaleFactor;
+    this.linked = [];
     this.setPosition(position);
   }
 
@@ -39,8 +40,18 @@ class GameActor {
   }
 
   refreshScale(newScale) {
-    this.scaleFactor = newScale;
-    this.setPosition(this);
+    // eslint-disable-next-line
+    for (const actor of [this].concat(this.linked)) {
+      actor.scaleFactor = newScale;
+      actor.setPosition(actor);
+    }
+  }
+
+  linkActors(actor) {
+    if (!(actor instanceof GameActor)) {
+      throw new Error('Parameter should be an instance of GameActor class');
+    }
+    this.linked.push(actor);
   }
 }
 GameActor.props = ['left', 'top', 'width', 'height'];
