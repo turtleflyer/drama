@@ -54,6 +54,7 @@ function getUnit(name) {
 }
 
 function parseDescription(description) {
+  const reservedPropNames = new Set(['nested', 'mechanism']);
   const seeds = [];
   Object.entries(description).forEach(([nameOfUnit, unitDescription]) => {
     seeds.push(
@@ -68,8 +69,12 @@ function parseDescription(description) {
           };
           const { nested, mechanism } = unitDescription;
           Object.entries(unitDescription).forEach(([key, body]) => {
-            if (typeof body === 'function' && key !== 'nested') {
-              this[key] = body(toolkit).bind(this);
+            if (!reservedPropNames.has(key)) {
+              if (typeof body === 'function') {
+                this[key] = body(toolkit).bind(this);
+              }
+            } else {
+              this[key] = body;
             }
           });
 
