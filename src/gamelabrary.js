@@ -2,9 +2,12 @@ import {
   defineRoutine, makeUnit, registerEventType, fireEvent, eventChain,
 } from './eventswork';
 
-defineRoutine(e => e.node, function (e) {
+defineRoutine(e => e.node, function (e, unit) {
   if (e.node) {
-    e.node.className = this.name;
+    e.node.classList.add(this.name);
+    if (unit) {
+      e.node.classList.remove(unit.name);
+    }
   }
 });
 
@@ -79,7 +82,7 @@ function parseDescription(description) {
             }
             list.forEach((e) => {
               if (e.node) {
-                e.node.className = nameOfUnit;
+                e.node.classList.add(nameOfUnit);
               }
             });
           }

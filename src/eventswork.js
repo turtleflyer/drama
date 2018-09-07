@@ -168,7 +168,6 @@ class Unit extends Set {
     const elements = [...list];
     super(elements);
     elements.forEach((element) => {
-      routine.whenAddToUnit.bind(this)(element);
       elementsMap.set(element, { belong: this });
     });
   }
@@ -200,13 +199,13 @@ class Unit extends Set {
    * @param {Element} element
    */
   addElement(element) {
-    routine.whenAddToUnit.bind(this)(element);
     this.add(element);
     const elementEntry = getSome(
       elementsMap,
       element,
       () => (element instanceof Unit ? {} : { types: new Set() }),
     );
+    routine.whenAddToUnit.bind(this)(element, elementEntry.belong);
     if (elementEntry.belong) {
       elementEntry.belong.delete(element);
     }
