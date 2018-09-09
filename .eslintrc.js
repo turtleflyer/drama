@@ -5,5 +5,6 @@ module.exports = {
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-param-reassign': 'off',
     'func-names': 'off',
+    'no-multi-assign': 'off',
   },
 };

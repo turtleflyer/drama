@@ -11,16 +11,20 @@ defineRoutine(e => e.node, function (e, unit) {
   }
 });
 
-let origin;
+const registeredUnits = new Map();
 
-const registeredUnits = {};
+const commonParams = {};
 
 function appendPx(n) {
   return `${n}px`;
 }
 
+// function storeParam(toStore) {
+//   Object.assign(commonParams, toStore);
+// }
+
 class GameActor {
-  constructor(node, scaleFactor = 1, position) {
+  constructor(node, position, scaleFactor = 1) {
     this.node = node;
     this.scaleFactor = scaleFactor;
     this.linked = [];
@@ -47,73 +51,65 @@ class GameActor {
     }
   }
 
-  linkActors(actor) {
+  linkActor(actor) {
     if (!(actor instanceof GameActor)) {
       throw new Error('Parameter should be an instance of GameActor class');
     }
+    actor.refreshScale(this.scaleFactor);
     this.linked.push(actor);
   }
 }
 GameActor.props = ['left', 'top', 'width', 'height'];
-
-function setOrigin(element) {
-  origin = element;
-}
 
 function getUnit(name) {
   return registeredUnits[name];
 }
 
 function parseDescription(description) {
-  const reservedPropNames = new Set(['nested', 'mechanism']);
   const seeds = [];
   Object.entries(description).forEach(([nameOfUnit, unitDescription]) => {
     seeds.push(
       new class {
         constructor() {
-          const toolkit = {
-            name: nameOfUnit,
-            get origin() {
-              return origin;
-            },
-            getUnit,
-          };
-          const { nested, mechanism } = unitDescription;
           Object.entries(unitDescription).forEach(([key, body]) => {
-            if (!reservedPropNames.has(key)) {
-              if (typeof body === 'function') {
-                this[key] = body(toolkit).bind(this);
-              }
-            } else {
-              this[key] = body;
-            }
-          });
+            let list = [];
+            switch (key) {
+              case 'nested':
+                if (typeof body === 'function') {
+                  this.init = body.bind(this);
+                } else {
+                  list = body.map((e) => {
+                    if (e.node) {
+                      e.node.classList.add(nameOfUnit);
+                    }
+                    return e;
+                  });
+                }
+                break;
 
-          let list = [];
-          if (nested) {
-            if (typeof nested === 'function') {
-              list = nested.bind(this)(toolkit) || list;
-            } else {
-              list = nested;
+              case 'mechanism':
+                this.mechanism = {};
+                Object.entries(body).forEach(([type, behave]) => {
+                  this.mechanism = { ...this.mechanism, [type]: behave };
+                  const { action } = behave;
+                  if (action) {
+                    this.mechanism[type].action = action.bind(this);
+                  }
+                });
+                break;
+
+              default:
+                if (typeof body === 'function') {
+                  this[key] = body.bind(this);
+                } else {
+                  this[key] = body;
+                }
+                break;
             }
-            list.forEach((e) => {
-              if (e.node) {
-                e.node.classList.add(nameOfUnit);
-              }
-            });
-          }
-          this.unit = makeUnit(list);
-          registeredUnits[nameOfUnit] = this.unit;
-          this.unit.name = nameOfUnit;
-          if (mechanism) {
-            Object.entries(mechanism).forEach(([type, behave]) => {
-              this.mechanism = { [type]: behave };
-              const { action } = behave;
-              if (action) {
-                this.mechanism[type].action = action(toolkit).bind(this);
-              }
-            });
-          }
+            this.unit = makeUnit(list);
+            registeredUnits[nameOfUnit] = this.unit;
+            this.unit.name = nameOfUnit;
+          });
         }
       }(description),
     );
@@ -123,7 +119,16 @@ function parseDescription(description) {
 
 function startModules(...modules) {
   const combinedModules = [].concat(...modules);
-  combinedModules.forEach(({ unit, mechanism }) => {
+  combinedModules.forEach(({ init, unit, mechanism }) => {
+    if (init) {
+      init().map((e) => {
+        if (e.node) {
+          e.node.classList.add(unit.name);
+        }
+        unit.addElement(e);
+        return e;
+      });
+    }
     if (mechanism) {
       Object.entries(mechanism).forEach(([type, { regAsCustom, action, fireImmediately }]) => {
         if (regAsCustom) {
@@ -138,5 +143,5 @@ function startModules(...modules) {
 }
 
 export {
-  appendPx, GameActor, setOrigin, parseDescription, startModules, makeScalable,
+  commonParams, getUnit, appendPx, GameActor, parseDescription, startModules,
 };

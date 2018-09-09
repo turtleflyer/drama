@@ -332,8 +332,7 @@ function fireEvent(target, type, eventObj) {
  * @returns {UnitClass}
  * @memberof EventsWork
  */
-function eventChain(description, eventID) {
-  const memory = {};
+function eventChain(description, eventID, memory = {}) {
   const { unit, type, action } = description;
   const terminate = description.terminate ? description.terminate : () => false;
   let getId = eventID;
@@ -341,14 +340,16 @@ function eventChain(description, eventID) {
     getId = Symbol('@@event');
   }
   waitGroupEvent(unit, type, getId).then((data) => {
-    if (!terminate({ ...data, unit, type })) {
+    if (!terminate({
+      ...data, unit, type, memory,
+    })) {
       action({
         ...data,
         unit,
         type,
         memory,
       });
-      eventChain(description, data.eventID);
+      eventChain(description, data.eventID, memory);
     }
   });
   if (eventID === true) {

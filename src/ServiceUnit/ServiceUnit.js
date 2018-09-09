@@ -1,7 +1,12 @@
 /* eslint-env browser */
 import {
-  GameActor, appendPx, makeScalable, setOrigin, parseDescription,
-} from '../gamelabrary';
+  commonParams,
+  getUnit,
+  appendPx,
+  GameActor,
+  parseDescription,
+  startModules,
+} from '../gamelibrary';
 import {
   makeUnit, registerEventType, fireEvent, eventChain,
 } from '../eventswork';
@@ -11,11 +16,11 @@ export default parseDescription({
     mechanism: {
       tick: {
         regAsCustom: true,
-        action: toolkit => () => {
-          fireEvent(toolkit.getUnit('Scene'), 'ontick');
+        action() {
+          fireEvent(getUnit('Scene'), 'ontick');
           window.setTimeout(() => {
-            fireEvent(toolkit.getUnit('ServiceUnit'), 'tick');
-          }, 17);
+            fireEvent(this.unit, 'tick');
+          }, commonParams.tickTimeout);
         },
         fireImmediately: true,
       },

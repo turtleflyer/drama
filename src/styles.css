@@ -1,7 +1,5 @@
 #scene {
   position: relative;
-  width: 600px;
-  height: 500px;
   background-color: rgb(56, 56, 92);
   overflow: hidden;
 }
