@@ -108,7 +108,12 @@ function getCallback(target, type, parent) {
     if (mapOfTypes.has(type)) {
       [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
         const [eventID, handle] = typeEntry;
-        handle({ target, eventObj, eventID });
+        handle({
+          target,
+          unit: target ? elementsMap.get(target).belong : parent,
+          eventObj,
+          eventID,
+        });
       });
     }
     const grandEntry = elementsMap.get(getParent);
@@ -341,16 +346,19 @@ function eventChain(description, eventID, memory = {}) {
   }
   waitGroupEvent(unit, type, getId).then((data) => {
     if (
-      !terminate({
+      terminate({
         ...data,
-        unit,
         type,
         memory,
       })
     ) {
+      eventsStore
+        .get(unit)
+        .get(type)
+        .delete(getId);
+    } else {
       action({
         ...data,
-        unit,
         type,
         memory,
       });
@@ -361,24 +369,27 @@ function eventChain(description, eventID, memory = {}) {
 }
 
 registerEventType(fireFromQueueType);
-eventChain({
-  unit: worker,
-  type: fireFromQueueType,
-  action: function fire() {
-    const nextE = [...queueToFire][0];
-    if (nextE) {
-      queueToFire.delete(nextE);
-      const mapOfTypes = queueData.get(nextE);
-      [...mapOfTypes.entries()].forEach(([type, eventObj]) => {
-        if (eventObj !== null) {
-          mapOfTypes.set(type, null);
-          fireEvent(nextE, type, eventObj);
-        }
-      });
-      Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
-    }
+eventChain(
+  {
+    unit: worker,
+    type: fireFromQueueType,
+    action: function fire() {
+      const nextE = [...queueToFire][0];
+      if (nextE) {
+        queueToFire.delete(nextE);
+        const mapOfTypes = queueData.get(nextE);
+        [...mapOfTypes.entries()].forEach(([type, eventObj]) => {
+          if (eventObj !== null) {
+            mapOfTypes.set(type, null);
+            fireEvent(nextE, type, eventObj);
+          }
+        });
+        Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
+      }
+    },
   },
-}, Symbol('@@queue'));
+  Symbol('@@queue'),
+);
 
 export {
   defineRoutine, makeUnit, registerEventType, fireEvent, eventChain,

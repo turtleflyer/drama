@@ -19,10 +19,6 @@ function appendPx(n) {
   return `${n}px`;
 }
 
-// function storeParam(toStore) {
-//   Object.assign(commonParams, toStore);
-// }
-
 class GameActor {
   constructor(node, position, scaleFactor = 1) {
     this.node = node;
@@ -88,9 +84,16 @@ function parseDescription(description) {
                 this.mechanism = {};
                 Object.entries(body).forEach(([name, behave]) => {
                   this.mechanism = { ...this.mechanism, [name]: behave };
-                  const { action, regAsCustom, type } = behave;
+                  const {
+                    action, regAsCustom, type, terminate,
+                  } = behave;
                   if (action) {
                     this.mechanism[name].action = action.bind(this);
+                  }
+                  if (terminate) {
+                    this.mechanism[name].terminate = (...arg) => (() => this.toTerminate) || terminate.apply(this, arg);
+                  } else {
+                    this.mechanism[name].terminate = () => this.toTerminate;
                   }
                   if (regAsCustom) {
                     registerEventType(type);
@@ -125,7 +128,9 @@ function parseDescription(description) {
             );
             registeredUnits[nameOfUnit] = this.unit;
             this.unit.name = nameOfUnit;
+            this.unit.description = this;
           });
+          this.toTerminate = false;
         }
 
         startChain(...names) {
@@ -134,10 +139,20 @@ function parseDescription(description) {
             getList = Object.keys(this.mechanism);
           }
           getList.forEach((a) => {
-            const { type, action, fireImmediately } = this.mechanism[a];
+            const {
+              type, action, terminate, fireImmediately,
+            } = this.mechanism[a];
             const { unit } = this;
             if (action) {
-              eventChain({ unit, type, action }, Symbol(a));
+              eventChain(
+                {
+                  unit,
+                  type,
+                  action,
+                  terminate,
+                },
+                Symbol(a),
+              );
               if (fireImmediately) {
                 fireEvent(unit, type);
               }

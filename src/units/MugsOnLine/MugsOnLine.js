@@ -17,6 +17,7 @@ import {
 // } from '../../eventswork';
 import mugIPA from '../../img/mug1.png';
 import { BEER_IPA } from '../../types';
+import { fireEvent } from '../../eventswork';
 
 let a = 0;
 export default parseDescription({
@@ -96,6 +97,9 @@ export default parseDescription({
                 }
               }
             }
+          }
+          if (curTime - a > 5000) {
+            fireEvent(getUnit('Scene'), 'stop');
           }
         },
       },

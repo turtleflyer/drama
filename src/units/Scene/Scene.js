@@ -30,10 +30,26 @@ export default parseDescription({
     },
 
     mechanism: {
+      stop: {
+        type: 'stop',
+        regAsCustom: true,
+        action({ unit, target }) {
+          if (unit !== this.unit) {
+            unit.description.toTerminate = true;
+            target.node.remove();
+            unit.clear();
+          }
+          setTimeout(() => {
+            this.toTerminate = true;
+          }, 500);
+        },
+      },
+
       dragND: {
         type: 'mousemove',
         action({ eventObj }) {
           const { clientX, clientY } = eventObj;
+          console.log('clientX, clientY: ', clientX, clientY);
           eventObj.preventDefault();
           const dragMug = getUnit('DragMug');
           if (dragMug.size === 1) {
