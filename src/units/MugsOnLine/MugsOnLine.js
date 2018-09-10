@@ -48,7 +48,8 @@ export default parseDescription({
     },
 
     mechanism: {
-      ontick: {
+      onTick: {
+        type: 'onTick',
         regAsCustom: true,
         action({ target, memory }) {
           const curTime = Date.now();
@@ -99,7 +100,8 @@ export default parseDescription({
         },
       },
 
-      mousedown: {
+      startDnD: {
+        type: 'mousedown',
         action({ target, eventObj: { clientX, clientY } }) {
           const { scaleFactor } = target;
           const { offsetLeft: targetX, offsetTop: targetY } = target.node;

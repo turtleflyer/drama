@@ -336,13 +336,18 @@ function eventChain(description, eventID, memory = {}) {
   const { unit, type, action } = description;
   const terminate = description.terminate ? description.terminate : () => false;
   let getId = eventID;
-  if (eventID === true || !eventID) {
-    getId = Symbol('@@event');
+  if (!eventID) {
+    getId = Symbol(`@@${type}-event`);
   }
   waitGroupEvent(unit, type, getId).then((data) => {
-    if (!terminate({
-      ...data, unit, type, memory,
-    })) {
+    if (
+      !terminate({
+        ...data,
+        unit,
+        type,
+        memory,
+      })
+    ) {
       action({
         ...data,
         unit,
@@ -352,9 +357,6 @@ function eventChain(description, eventID, memory = {}) {
       eventChain(description, data.eventID, memory);
     }
   });
-  if (eventID === true) {
-    fireEvent(unit, type);
-  }
   return eventID;
 }
 
@@ -376,7 +378,7 @@ eventChain({
       Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
     }
   },
-});
+}, Symbol('@@queue'));
 
 export {
   defineRoutine, makeUnit, registerEventType, fireEvent, eventChain,

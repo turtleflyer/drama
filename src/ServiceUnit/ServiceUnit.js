@@ -14,12 +14,13 @@ import {
 export default parseDescription({
   ServiceUnit: {
     mechanism: {
-      tick: {
+      tickAnimation: {
+        type: 'tickAnimation',
         regAsCustom: true,
         action() {
-          fireEvent(getUnit('Scene'), 'ontick');
+          fireEvent(getUnit('Scene'), 'onTick');
           window.setTimeout(() => {
-            fireEvent(this.unit, 'tick');
+            fireEvent(this.unit, 'tickAnimation');
           }, commonParams.tickTimeout);
         },
         fireImmediately: true,

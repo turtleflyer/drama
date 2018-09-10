@@ -12,14 +12,16 @@ export default parseDescription({
   DragMug: {
     nested: [],
     mechanism: {
-      followmouse: {
+      followMouse: {
+        type: 'followMouse',
         regAsCustom: true,
         action({ target, eventObj: { x, y } }) {
           target.setPosition({ left: x - target.mouseX, top: y - target.mouseY });
         },
       },
 
-      leaveunit: {
+      leaveUnit: {
+        type: 'leaveUnit',
         regAsCustom: true,
         action({ target }) {
           this.unit.delete(target);

@@ -30,13 +30,14 @@ export default parseDescription({
     },
 
     mechanism: {
-      mousemove: {
+      dragND: {
+        type: 'mousemove',
         action({ eventObj }) {
           const { clientX, clientY } = eventObj;
           eventObj.preventDefault();
           const dragMug = getUnit('DragMug');
           if (dragMug.size === 1) {
-            fireEvent(dragMug, 'followmouse', {
+            fireEvent(dragMug, 'followMouse', {
               x: clientX - this.position.x,
               y: clientY - this.position.y,
             });
@@ -44,17 +45,18 @@ export default parseDescription({
         },
       },
 
-      mouseup: {
+      stopDnD: {
+        type: 'mouseup',
         action({ eventObj }) {
           const { clientX, clientY } = eventObj;
           // eventObj.preventDefault();
           const dragMug = getUnit('DragMug');
           if (dragMug.size === 1) {
-            fireEvent(dragMug, 'followmouse', {
+            fireEvent(dragMug, 'followMouse', {
               x: clientX - this.position.x,
               y: clientY - this.position.y,
             });
-            fireEvent(dragMug, 'leaveunit');
+            fireEvent(dragMug, 'leaveUnit');
           }
         },
       },

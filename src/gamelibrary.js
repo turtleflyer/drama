@@ -69,33 +69,37 @@ function parseDescription(description) {
   const seeds = [];
   Object.entries(description).forEach(([nameOfUnit, unitDescription]) => {
     seeds.push(
-      new class {
+      new class UnitDescriptor {
         constructor() {
+          this.startChain = this.startChain.bind(this);
+          let getList = () => [];
           Object.entries(unitDescription).forEach(([key, body]) => {
-            let list = [];
             switch (key) {
-              case 'nested':
+              case 'nested': {
                 if (typeof body === 'function') {
-                  this.init = body.bind(this);
+                  getList = body.bind(this);
                 } else {
-                  list = body.map((e) => {
-                    if (e.node) {
-                      e.node.classList.add(nameOfUnit);
-                    }
-                    return e;
-                  });
+                  getList = () => body;
                 }
                 break;
+              }
 
               case 'mechanism':
                 this.mechanism = {};
-                Object.entries(body).forEach(([type, behave]) => {
-                  this.mechanism = { ...this.mechanism, [type]: behave };
-                  const { action } = behave;
+                Object.entries(body).forEach(([name, behave]) => {
+                  this.mechanism = { ...this.mechanism, [name]: behave };
+                  const { action, regAsCustom, type } = behave;
                   if (action) {
-                    this.mechanism[type].action = action.bind(this);
+                    this.mechanism[name].action = action.bind(this);
+                  }
+                  if (regAsCustom) {
+                    registerEventType(type);
                   }
                 });
+                break;
+
+              case 'init':
+                this.unit = [body.bind(this)];
                 break;
 
               default:
@@ -106,9 +110,38 @@ function parseDescription(description) {
                 }
                 break;
             }
-            this.unit = makeUnit(list);
+          });
+          if (!this.initialize) {
+            this.initialize = [this.startChain];
+          }
+          this.initialize.unshift(() => {
+            this.unit = makeUnit(
+              getList().map((e) => {
+                if (e.node) {
+                  e.node.classList.add(nameOfUnit);
+                }
+                return e;
+              }),
+            );
             registeredUnits[nameOfUnit] = this.unit;
             this.unit.name = nameOfUnit;
+          });
+        }
+
+        startChain(...names) {
+          let getList = names;
+          if (names.length === 0) {
+            getList = Object.keys(this.mechanism);
+          }
+          getList.forEach((a) => {
+            const { type, action, fireImmediately } = this.mechanism[a];
+            const { unit } = this;
+            if (action) {
+              eventChain({ unit, type, action }, Symbol(a));
+              if (fireImmediately) {
+                fireEvent(unit, type);
+              }
+            }
           });
         }
       }(description),
@@ -118,28 +151,15 @@ function parseDescription(description) {
 }
 
 function startModules(...modules) {
-  const combinedModules = [].concat(...modules);
-  combinedModules.forEach(({ init, unit, mechanism }) => {
-    if (init) {
-      init().map((e) => {
-        if (e.node) {
-          e.node.classList.add(unit.name);
-        }
-        unit.addElement(e);
-        return e;
-      });
-    }
-    if (mechanism) {
-      Object.entries(mechanism).forEach(([type, { regAsCustom, action, fireImmediately }]) => {
-        if (regAsCustom) {
-          registerEventType(type);
-        }
-        if (action) {
-          eventChain({ unit, type, action }, fireImmediately);
-        }
-      });
-    }
-  });
+  const allModules = [].concat(...modules);
+  function lunchFromInit(i) {
+    allModules.forEach((m) => {
+      const { initialize } = m;
+      initialize[i]();
+    });
+  }
+  lunchFromInit(0);
+  lunchFromInit(1);
 }
 
 export {
