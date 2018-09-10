@@ -14,8 +14,9 @@ import {
 } from './gamelibrary';
 
 import ServiceUnit from './ServiceUnit/ServiceUnit';
-import BeerMug from './units/BeerMug/BeerMug';
+import MugsOnLine from './units/MugsOnLine/MugsOnLine';
 import Scene from './units/Scene/Scene';
+import DragMug from './units/DragMug/DragMug';
 
 // import mugIPA from './elements/BeerMug/mug1.png';
 
@@ -27,7 +28,7 @@ Object.assign(commonParams, {
   sceneHeight: 640,
 });
 
-startModules(ServiceUnit, BeerMug, Scene);
+startModules(ServiceUnit, MugsOnLine, DragMug, Scene);
 
 // const scene = document.querySelector('#scene').cloneNode();
 // document.body.appendChild(scene);

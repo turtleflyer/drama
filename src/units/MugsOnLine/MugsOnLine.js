@@ -15,12 +15,12 @@ import {
 //   fireEvent,
 //   eventChain,
 // } from '../../eventswork';
-import mugIPA from './mug1.png';
+import mugIPA from '../../img/mug1.png';
 import { BEER_IPA } from '../../types';
 
 let a = 0;
 export default parseDescription({
-  BeerMug: {
+  MugsOnLine: {
     render(type, left, top, scaleF) {
       const element = new GameActor(document.createElement('div'), { left, top }, scaleF);
       switch (type) {
@@ -99,9 +99,14 @@ export default parseDescription({
         },
       },
 
-      click: {
-        action({ target }) {
-          target.refreshScale(1.5);
+      mousedown: {
+        action({ target, eventObj: { clientX, clientY } }) {
+          const { scaleFactor } = target;
+          const { offsetLeft: targetX, offsetTop: targetY } = target.node;
+          const { offsetLeft: sceneX, offsetTop: sceneY } = commonParams.origin;
+          target.mouseX = (clientX - (targetX + sceneX - 2)) / scaleFactor;
+          target.mouseY = (clientY - (targetY + sceneY - 2)) / scaleFactor;
+          getUnit('DragMug').addElement(target);
         },
       },
     },
