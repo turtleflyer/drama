@@ -31,6 +31,7 @@ export default parseDescription({
           img.src = mugIPA;
           img.style.width = '100%';
           element.node.appendChild(img);
+          element.img = img;
           commonParams.origin.appendChild(element.node);
           return element;
         }
@@ -56,9 +57,9 @@ export default parseDescription({
           const curTime = Date.now();
           if (!target) {
             a = curTime;
-            const newB = this.render(this.getType(), commonParams.sceneWidth, this.startPoint.top);
+            const newB = this.render(this.getType(), commonParams.sceneWidth, this.startPoint.top, 0.5);
             memory.newborn = memory.foremost = newB;
-            // newB.lastMove = curTime;
+            newB.lastMove = curTime;
             this.unit.addElement(newB);
             // memory.times = [];
             // memory.getAverageInterval = () => memory.times.reduce((s, t) => s + t) / memory.times.length;
@@ -82,36 +83,38 @@ export default parseDescription({
               memory.foremost = target.next;
               this.unit.delete(target);
             } else {
-              // const newL = curL + ((curTime - target.lastMove) * memory.speed) / 1000;
+              const newL = curL + ((curTime - target.lastMove) * memory.speed) / 1000;
               // const newL = curL + (timeout * memory.speed) / 1000;
-              const newL = curL + (commonParams.tickTimeout * memory.speed) / 1000;
+              // const newL = curL + (commonParams.tickTimeout * memory.speed) / 1000;
               target.setPosition({ left: newL });
               target.lastMove = curTime;
               if (target === memory.newborn) {
                 const possibleP = newL + target.width + this.gap;
                 if (possibleP < commonParams.sceneWidth) {
-                  const newB = this.render(this.getType(), possibleP, this.startPoint.top);
+                  const newB = this.render(this.getType(), possibleP, this.startPoint.top, 0.5);
                   target.next = memory.newborn = newB;
-                  // newB.lastMove = curTime;
+                  newB.lastMove = curTime;
                   this.unit.addElement(newB);
                 }
               }
             }
           }
-          if (curTime - a > 5000) {
-            fireEvent(getUnit('Scene'), 'stop');
-          }
+          // if (curTime - a > 5000) {
+          //   fireEvent(getUnit('Scene'), 'stop');
+          // }
         },
       },
 
       startDnD: {
         type: 'mousedown',
-        action({ target, eventObj: { clientX, clientY } }) {
-          const { scaleFactor } = target;
-          const { offsetLeft: targetX, offsetTop: targetY } = target.node;
-          const { offsetLeft: sceneX, offsetTop: sceneY } = commonParams.origin;
-          target.mouseX = (clientX - (targetX + sceneX - 2)) / scaleFactor;
-          target.mouseY = (clientY - (targetY + sceneY - 2)) / scaleFactor;
+        action({ target, eventObj }) {
+          const { clientX, clientY } = eventObj;
+          eventObj.preventDefault();
+          // const { scaleFactor } = target;
+          // const { offsetLeft: targetX, offsetTop: targetY } = target.node;
+          // const { offsetLeft: sceneX, offsetTop: sceneY } = commonParams.origin;
+          // target.mouseX = (clientX - (targetX + sceneX - 2)) / scaleFactor;
+          // target.mouseY = (clientY - (targetY + sceneY - 2)) / scaleFactor;
           getUnit('DragMug').addElement(target);
         },
       },

@@ -16,7 +16,13 @@ export default parseDescription({
         type: 'followMouse',
         regAsCustom: true,
         action({ target, eventObj: { x, y } }) {
-          target.setPosition({ left: x - target.mouseX, top: y - target.mouseY });
+          // target.setPosition({ left: x - target.mouseX, top: y - target.mouseY });
+          const { width, height } = target.img.getBoundingClientRect();
+          const { scaleFactor } = target;
+          target.setPosition({
+            left: x - width / scaleFactor / 2,
+            top: y - height / scaleFactor / 2,
+          });
         },
       },
 

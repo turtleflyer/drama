@@ -14,19 +14,34 @@ import {
 export default parseDescription({
   Scene: {
     nested() {
-      this.position = {
-        x: commonParams.origin.offsetLeft - 1,
-        y: commonParams.origin.offsetTop - 1,
-      };
+      const { left, top } = commonParams.origin.getBoundingClientRect();
+      this.position = { x: left, y: top };
       const { sceneWidth, sceneHeight } = commonParams;
       return [
-        new GameActor(commonParams.origin, {
-          width: sceneWidth,
-          height: sceneHeight,
-        }),
+        new GameActor(
+          commonParams.origin,
+          {
+            width: sceneWidth,
+            height: sceneHeight,
+          },
+          0.5,
+        ),
         getUnit('MugsOnLine'),
         getUnit('DragMug'),
       ];
+    },
+
+    mouseWork(target, eventObj, afterwork = () => {}) {
+      const { clientX, clientY } = eventObj;
+      const { scaleFactor } = target;
+      const dragMug = getUnit('DragMug');
+      if (dragMug.size === 1) {
+        fireEvent(dragMug, 'followMouse', {
+          x: (clientX - this.position.x) / scaleFactor,
+          y: (clientY - this.position.y) / scaleFactor,
+        });
+        afterwork();
+      }
     },
 
     mechanism: {
@@ -47,33 +62,17 @@ export default parseDescription({
 
       dragND: {
         type: 'mousemove',
-        action({ eventObj }) {
-          const { clientX, clientY } = eventObj;
-          console.log('clientX, clientY: ', clientX, clientY);
+        action({ target, eventObj }) {
           eventObj.preventDefault();
-          const dragMug = getUnit('DragMug');
-          if (dragMug.size === 1) {
-            fireEvent(dragMug, 'followMouse', {
-              x: clientX - this.position.x,
-              y: clientY - this.position.y,
-            });
-          }
+          this.mouseWork(target, eventObj);
         },
       },
 
       stopDnD: {
         type: 'mouseup',
-        action({ eventObj }) {
-          const { clientX, clientY } = eventObj;
-          // eventObj.preventDefault();
+        action({ target, eventObj }) {
           const dragMug = getUnit('DragMug');
-          if (dragMug.size === 1) {
-            fireEvent(dragMug, 'followMouse', {
-              x: clientX - this.position.x,
-              y: clientY - this.position.y,
-            });
-            fireEvent(dragMug, 'leaveUnit');
-          }
+          this.mouseWork(target, eventObj, () => fireEvent(dragMug, 'leaveUnit'));
         },
       },
     },
