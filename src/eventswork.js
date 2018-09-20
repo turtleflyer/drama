@@ -99,7 +99,7 @@ function defineRoutine(interpretTarget, whenAddToUnit) {
  */
 function getCallback(target, type, parent) {
   // eslint-disable-next-line no-shadow
-  function stageCallback(target, type, eventObj, parent) {
+  function stageCallback(target, type, event, parent) {
     let getParent = parent;
     if (!parent) {
       getParent = elementsMap.get(target).belong;
@@ -111,19 +111,19 @@ function getCallback(target, type, parent) {
         handle({
           target,
           unit: target ? elementsMap.get(target).belong : parent,
-          eventObj,
+          event,
           eventID,
         });
       });
     }
     const grandEntry = elementsMap.get(getParent);
     if (grandEntry) {
-      stageCallback(target, type, eventObj, grandEntry.belong);
+      stageCallback(target, type, event, grandEntry.belong);
     }
   }
 
-  return function callback(eventObj) {
-    stageCallback(target, type, eventObj, parent);
+  return function callback(event) {
+    stageCallback(target, type, event, parent);
   };
 }
 
@@ -280,23 +280,23 @@ function waitGroupEvent(unit, type, eventID) {
  *
  * @param {(Element|UnitClass)} target
  * @param {string} type
- * @param {Object} eventObj
+ * @param {Object} event
  * @memberof EventsWork
  */
-function fireEvent(target, type, eventObj) {
+function fireEvent(target, type, event) {
   if (target instanceof Unit) {
     if (target.size > 0) {
       [...target].forEach((e) => {
         queueToFire.add(e);
         const mapOfTypes = getFromDeepMap(queueData, e).map;
-        mapOfTypes.set(type, eventObj);
+        mapOfTypes.set(type, event);
       });
       fireEvent(worker, fireFromQueueType);
     } else {
-      getCallback(null, type, target)(eventObj);
+      getCallback(null, type, target)(event);
     }
   } else {
-    getCallback(target, type)(eventObj);
+    getCallback(target, type)(event);
   }
 }
 
@@ -305,7 +305,7 @@ function fireEvent(target, type, eventObj) {
  *
  * @typedef {Onject} DataToAction
  * @property {Element} target
- * @property {Object} eventObj
+ * @property {Object} event
  * @property {Symbol} eventID
  * @property {UnitClass} unit
  * @property {string} type
@@ -378,10 +378,10 @@ eventChain(
       if (nextE) {
         queueToFire.delete(nextE);
         const mapOfTypes = queueData.get(nextE);
-        [...mapOfTypes.entries()].forEach(([type, eventObj]) => {
-          if (eventObj !== null) {
+        [...mapOfTypes.entries()].forEach(([type, event]) => {
+          if (event !== null) {
             mapOfTypes.set(type, null);
-            fireEvent(nextE, type, eventObj);
+            fireEvent(nextE, type, event);
           }
         });
         Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));

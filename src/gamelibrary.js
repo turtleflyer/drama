@@ -19,6 +19,10 @@ function appendPx(n) {
   return `${n}px`;
 }
 
+function updateStyle(node, style) {
+  Object.assign(node.style, style);
+}
+
 class GameActor {
   constructor(node, position, scaleFactor = 1) {
     this.node = node;
@@ -31,9 +35,10 @@ class GameActor {
     if (position) {
       // eslint-disable-next-line
       for (const prop of GameActor.props) {
-        if (typeof position[prop] === 'number') {
-          this[prop] = position[prop];
-          this.node.style[prop] = appendPx(position[prop] * this.scaleFactor);
+        const style = position[prop];
+        if (typeof style === 'number' || style === null) {
+          this[prop] = style;
+          this.node.style[prop] = style === null ? null : appendPx(position[prop] * this.scaleFactor);
         }
       }
     }
@@ -55,7 +60,7 @@ class GameActor {
     this.linked.push(actor);
   }
 }
-GameActor.props = ['left', 'top', 'width', 'height'];
+GameActor.props = ['left', 'top', 'width', 'height', 'bottom', 'right'];
 
 function getUnit(name) {
   return registeredUnits[name];
@@ -66,10 +71,10 @@ function parseDescription(description) {
   Object.entries(description).forEach(([nameOfUnit, unitDescription]) => {
     seeds.push(
       new class UnitDescriptor {
-        constructor() {
+        constructor(toParse) {
           this.startChain = this.startChain.bind(this);
           let getList = () => [];
-          Object.entries(unitDescription).forEach(([key, body]) => {
+          Object.entries(toParse).forEach(([key, body]) => {
             switch (key) {
               case 'nested': {
                 if (typeof body === 'function') {
@@ -85,7 +90,7 @@ function parseDescription(description) {
                 Object.entries(body).forEach(([name, behave]) => {
                   this.mechanism = { ...this.mechanism, [name]: behave };
                   const {
-                    action, regAsCustom, type, terminate,
+                    action, customType, type, terminate,
                   } = behave;
                   if (action) {
                     this.mechanism[name].action = action.bind(this);
@@ -95,15 +100,15 @@ function parseDescription(description) {
                   } else {
                     this.mechanism[name].terminate = () => this.toTerminate;
                   }
-                  if (regAsCustom) {
+                  if (customType) {
                     registerEventType(type);
                   }
                 });
                 break;
 
-              case 'init':
-                this.unit = [body.bind(this)];
-                break;
+                // case 'init':
+                //   this.unit = [body.bind(this)];
+                //   break;
 
               default:
                 if (typeof body === 'function') {
@@ -116,6 +121,8 @@ function parseDescription(description) {
           });
           if (!this.initialize) {
             this.initialize = [this.startChain];
+          } else {
+            this.initialize = [this.initialize];
           }
           this.initialize.unshift(() => {
             this.unit = makeUnit(
@@ -134,32 +141,34 @@ function parseDescription(description) {
         }
 
         startChain(...names) {
-          let getList = names;
-          if (names.length === 0) {
-            getList = Object.keys(this.mechanism);
-          }
-          getList.forEach((a) => {
-            const {
-              type, action, terminate, fireImmediately,
-            } = this.mechanism[a];
-            const { unit } = this;
-            if (action) {
-              eventChain(
-                {
-                  unit,
-                  type,
-                  action,
-                  terminate,
-                },
-                Symbol(a),
-              );
-              if (fireImmediately) {
-                fireEvent(unit, type);
-              }
+          if (this.mechanism) {
+            let getList = names;
+            if (names.length === 0) {
+              getList = Object.keys(this.mechanism);
             }
-          });
+            getList.forEach((a) => {
+              const {
+                type, action, terminate, fireImmediately,
+              } = this.mechanism[a];
+              const { unit } = this;
+              if (action) {
+                eventChain(
+                  {
+                    unit,
+                    type,
+                    action,
+                    terminate,
+                  },
+                  Symbol(a),
+                );
+                if (fireImmediately) {
+                  fireEvent(unit, type);
+                }
+              }
+            });
+          }
         }
-      }(description),
+      }(unitDescription),
     );
   });
   return seeds;
@@ -178,5 +187,5 @@ function startModules(...modules) {
 }
 
 export {
-  commonParams, getUnit, appendPx, GameActor, parseDescription, startModules,
+  commonParams, getUnit, appendPx, updateStyle, GameActor, parseDescription, startModules,
 };

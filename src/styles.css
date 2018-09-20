@@ -18,6 +18,27 @@ img {
   -ms-interpolation-mode: nearest-neighbor;
 }
 
-/* .beer-mug {
-  width: 50px;
-} */
+.MugsOnLine {
+  z-index: 50;
+}
+
+.Bar {
+  z-index: 60;
+}
+
+.DragMug {
+  z-index: 80;
+}
+
+.MugPlaces {
+  z-index: 70;
+  background-color: antiquewhite;
+}
+
+.FallenMug {
+  z-index: 90;
+}
+
+.MugFilling {
+  z-index: 75;
+}

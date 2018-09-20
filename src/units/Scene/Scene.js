@@ -1,78 +1,100 @@
 /* eslint-env browser */
 import {
-  commonParams,
-  getUnit,
-  appendPx,
-  GameActor,
-  parseDescription,
-  startModules,
+  commonParams, getUnit, GameActor, parseDescription,
 } from '../../gamelibrary';
-import {
-  makeUnit, registerEventType, fireEvent, eventChain,
-} from '../../eventswork';
+import { fireEvent } from '../../eventswork';
+
+let sceneTarget;
 
 export default parseDescription({
   Scene: {
+    initialize() {
+      switch (commonParams.level) {
+        case 0:
+          commonParams.mugSpeed = -50;
+          break;
+
+        default:
+          break;
+      }
+      this.startChain();
+    },
+
     nested() {
       const { left, top } = commonParams.origin.getBoundingClientRect();
       this.position = { x: left, y: top };
       const { sceneWidth, sceneHeight } = commonParams;
-      return [
-        new GameActor(
-          commonParams.origin,
-          {
-            width: sceneWidth,
-            height: sceneHeight,
-          },
-          0.5,
-        ),
-        getUnit('MugsOnLine'),
-        getUnit('DragMug'),
-      ];
-    },
-
-    mouseWork(target, eventObj, afterwork = () => {}) {
-      const { clientX, clientY } = eventObj;
-      const { scaleFactor } = target;
-      const dragMug = getUnit('DragMug');
-      if (dragMug.size === 1) {
-        fireEvent(dragMug, 'followMouse', {
-          x: (clientX - this.position.x) / scaleFactor,
-          y: (clientY - this.position.y) / scaleFactor,
-        });
-        afterwork();
-      }
+      sceneTarget = new GameActor(commonParams.origin, {
+        width: sceneWidth,
+        height: sceneHeight,
+      });
+      return [sceneTarget];
     },
 
     mechanism: {
-      stop: {
-        type: 'stop',
-        regAsCustom: true,
-        action({ unit, target }) {
-          if (unit !== this.unit) {
-            unit.description.toTerminate = true;
-            target.node.remove();
-            unit.clear();
-          }
-          setTimeout(() => {
-            this.toTerminate = true;
-          }, 500);
+      dragND: {
+        type: 'mousemove',
+        action({ target, event }) {
+          event.preventDefault();
+          event.stopPropagation();
+          const { clientX, clientY } = event;
+          const { scaleFactor } = target;
+          fireEvent(getUnit('DragMug'), 'followMouse', {
+            x: (clientX - this.position.x) / scaleFactor,
+            y: (clientY - this.position.y) / scaleFactor,
+          });
         },
       },
 
-      dragND: {
-        type: 'mousemove',
-        action({ target, eventObj }) {
-          eventObj.preventDefault();
-          this.mouseWork(target, eventObj);
+      dropMug: {
+        type: 'mouseleave',
+        action() {
+          const DragMug = getUnit('DragMug');
+          if (DragMug.size === 1) {
+            const FallenMug = getUnit('FallenMug');
+            FallenMug.addElement([...DragMug][0]);
+            fireEvent(FallenMug, 'fallDown');
+          }
         },
       },
 
       stopDnD: {
         type: 'mouseup',
-        action({ target, eventObj }) {
-          const dragMug = getUnit('DragMug');
-          this.mouseWork(target, eventObj, () => fireEvent(dragMug, 'leaveUnit'));
+        action({ event }) {
+          event.stopPropagation();
+          fireEvent(getUnit('DragMug'), 'stopDrag');
+        },
+      },
+    },
+  },
+
+  AllUnits: {
+    nested: () => [
+      getUnit('Scene'),
+      getUnit('MugsOnLine'),
+      getUnit('DragMug'),
+      getUnit('FallenMug'),
+      getUnit('Bar'),
+      getUnit('Faucets'),
+      getUnit('FaucetSwitches'),
+      getUnit('MugPlaces'),
+    ],
+
+    mechanism: {
+      stop: {
+        type: 'stop',
+        customType: true,
+        action({ unit, target }) {
+          if (unit !== this.unit) {
+            unit.description.toTerminate = true;
+            if (target !== sceneTarget) {
+              target.node.remove();
+              unit.clear();
+            }
+          }
+          setTimeout(() => {
+            this.toTerminate = true;
+          }, 500);
         },
       },
     },

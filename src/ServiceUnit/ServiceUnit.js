@@ -18,7 +18,7 @@ export default parseDescription({
         type: 'tickAnimation',
         regAsCustom: true,
         action() {
-          fireEvent(getUnit('Scene'), 'onTick');
+          fireEvent(getUnit('AllUnits'), 'onTick');
           window.setTimeout(() => {
             fireEvent(this.unit, 'tickAnimation');
           }, commonParams.tickTimeout);

@@ -1,36 +1,55 @@
 /* eslint-env browser */
-import {
-  commonParams,
-  getUnit,
-  appendPx,
-  GameActor,
-  parseDescription,
-  startModules,
-} from '../../gamelibrary';
+import { getUnit, parseDescription, updateStyle } from '../../gamelibrary';
+import { fireEvent } from '../../eventswork';
 
 export default parseDescription({
   DragMug: {
-    nested: [],
     mechanism: {
       followMouse: {
         type: 'followMouse',
-        regAsCustom: true,
-        action({ target, eventObj: { x, y } }) {
-          // target.setPosition({ left: x - target.mouseX, top: y - target.mouseY });
-          const { width, height } = target.img.getBoundingClientRect();
-          const { scaleFactor } = target;
-          target.setPosition({
-            left: x - width / scaleFactor / 2,
-            top: y - height / scaleFactor / 2,
-          });
+        customType: true,
+        action({ target, event: { x, y } }) {
+          if (target) {
+            const { width, height } = target.img.getBoundingClientRect();
+            const { scaleFactor } = target;
+            target.setPosition({
+              left: x - width / scaleFactor / 2,
+              top: y - height / scaleFactor / 2,
+            });
+            fireEvent(getUnit('MugPlaces'), 'checkEnter', {
+              mug: target,
+              tryToPlace: false,
+            });
+          }
         },
       },
 
-      leaveUnit: {
-        type: 'leaveUnit',
-        regAsCustom: true,
+      stopDrag: {
+        type: 'stopDrag',
+        customType: true,
         action({ target }) {
-          this.unit.delete(target);
+          if (target) {
+            fireEvent(getUnit('MugPlaces'), 'checkEnter', {
+              mug: target,
+              tryToPlace: true,
+            });
+          }
+        },
+      },
+    },
+  },
+
+  FallenMug: {
+    mechanism: {
+      fallDown: {
+        type: 'fallDown',
+        customType: true,
+        action({ target }) {
+          updateStyle(target.node, { transform: 'scale(0.5)' });
+          window.setTimeout(() => {
+            target.node.remove();
+            this.unit.delete(target);
+          }, 1000);
         },
       },
     },

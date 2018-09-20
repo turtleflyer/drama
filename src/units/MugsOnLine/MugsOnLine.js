@@ -6,30 +6,22 @@ import {
   GameActor,
   parseDescription,
   startModules,
+  updateStyle,
 } from '../../gamelibrary';
-// import {
-//   makeUnit,
-//   registerUnit,
-//   getRegisteredUnit,
-//   registerEventType,
-//   fireEvent,
-//   eventChain,
-// } from '../../eventswork';
 import mugIPA from '../../img/mug1.png';
 import { BEER_IPA } from '../../types';
 import { fireEvent } from '../../eventswork';
 
-let a = 0;
 export default parseDescription({
   MugsOnLine: {
-    render(type, left, top, scaleF) {
+    render(type, { left, top }, scaleF) {
       const element = new GameActor(document.createElement('div'), { left, top }, scaleF);
       switch (type) {
         case BEER_IPA: {
           element.setPosition({ width: 50 });
           const img = document.createElement('img');
           img.src = mugIPA;
-          img.style.width = '100%';
+          updateStyle(img, { width: '100%' });
           element.node.appendChild(img);
           element.img = img;
           commonParams.origin.appendChild(element.node);
@@ -41,7 +33,7 @@ export default parseDescription({
       }
     },
 
-    startPoint: { top: 200 },
+    startPoint: { top: 220 },
 
     gap: 5,
 
@@ -52,31 +44,25 @@ export default parseDescription({
     mechanism: {
       onTick: {
         type: 'onTick',
-        regAsCustom: true,
+        customType: true,
         action({ target, memory }) {
           const curTime = Date.now();
           if (!target) {
-            a = curTime;
-            const newB = this.render(this.getType(), commonParams.sceneWidth, this.startPoint.top, 0.5);
+            const newB = this.render(
+              this.getType(),
+              {
+                left: commonParams.sceneWidth,
+                top: this.startPoint.top,
+              },
+              commonParams.scaleFactor,
+            );
             memory.newborn = memory.foremost = newB;
             newB.lastMove = curTime;
             this.unit.addElement(newB);
-            // memory.times = [];
-            // memory.getAverageInterval = () => memory.times.reduce((s, t) => s + t) / memory.times.length;
           } else {
-            // let timeout;
-            // if (!memory.averageTimeout) {
-            //   memory.times.push(curTime - target.lastMove);
-            //   timeout = memory.getAverageInterval();
-            //   if (memory.times.length === 100) {
-            //     memory.averageTimeout = timeout;
-            //   }
-            // } else {
-            //   timeout = memory.averageTimeout;
-            // }
             const curL = target.left;
             if (target === memory.foremost) {
-              memory.speed = commonParams.mugSpeed - ((curTime - a) * 1) / 1000;
+              memory.speed = commonParams.mugSpeed;
             }
             if (curL <= -target.width) {
               target.node.remove();
@@ -84,14 +70,19 @@ export default parseDescription({
               this.unit.delete(target);
             } else {
               const newL = curL + ((curTime - target.lastMove) * memory.speed) / 1000;
-              // const newL = curL + (timeout * memory.speed) / 1000;
-              // const newL = curL + (commonParams.tickTimeout * memory.speed) / 1000;
               target.setPosition({ left: newL });
               target.lastMove = curTime;
               if (target === memory.newborn) {
                 const possibleP = newL + target.width + this.gap;
                 if (possibleP < commonParams.sceneWidth) {
-                  const newB = this.render(this.getType(), possibleP, this.startPoint.top, 0.5);
+                  const newB = this.render(
+                    this.getType(),
+                    {
+                      left: possibleP,
+                      top: this.startPoint.top,
+                    },
+                    commonParams.scaleFactor,
+                  );
                   target.next = memory.newborn = newB;
                   newB.lastMove = curTime;
                   this.unit.addElement(newB);
@@ -99,22 +90,13 @@ export default parseDescription({
               }
             }
           }
-          // if (curTime - a > 5000) {
-          //   fireEvent(getUnit('Scene'), 'stop');
-          // }
         },
       },
 
       startDnD: {
         type: 'mousedown',
-        action({ target, eventObj }) {
-          const { clientX, clientY } = eventObj;
-          eventObj.preventDefault();
-          // const { scaleFactor } = target;
-          // const { offsetLeft: targetX, offsetTop: targetY } = target.node;
-          // const { offsetLeft: sceneX, offsetTop: sceneY } = commonParams.origin;
-          // target.mouseX = (clientX - (targetX + sceneX - 2)) / scaleFactor;
-          // target.mouseY = (clientY - (targetY + sceneY - 2)) / scaleFactor;
+        action({ target, event }) {
+          event.preventDefault();
           getUnit('DragMug').addElement(target);
         },
       },
