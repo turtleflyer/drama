@@ -106,10 +106,6 @@ function parseDescription(description) {
                 });
                 break;
 
-                // case 'init':
-                //   this.unit = [body.bind(this)];
-                //   break;
-
               default:
                 if (typeof body === 'function') {
                   this[key] = body.bind(this);

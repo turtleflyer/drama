@@ -6,6 +6,13 @@ import faucetImg1 from '../../img/faucet-s1.png';
 import faucetImg2 from '../../img/faucet-s2.png';
 import barImg from '../../img/bar.png';
 import { fireEvent } from '../../eventswork';
+import { BEER_IPA } from '../../types';
+
+const switchTypes = {
+  NORMAL: '@@switchType/NORMAL',
+  BROKEN: '@@switchType/BROKEN',
+  DUAL: '@@switchType/DUAL',
+};
 
 const toPlaceBar = {
   left: 75,
@@ -14,37 +21,61 @@ const toPlaceBar = {
   height: 285,
 };
 
-const places = [
+const faucetsProps = [
   {
-    left: 10,
-    top: 10,
-    width: 110,
-    height: 275,
-    imgs: [faucetImg1, faucetImg2],
+    place: {
+      left: 100,
+      top: 10,
+      width: 110,
+      height: 275,
+    },
+    imgPhases: [faucetImg1, faucetImg2],
+    beerTypes: [BEER_IPA],
+    switchType: switchTypes.NORMAL,
+    placeMug: {
+      width: 90,
+      height: 90,
+      bottom: 0,
+      left: -20,
+    },
   },
   {
-    left: 130,
-    top: 10,
-    width: 110,
-    height: 275,
-    imgs: [faucetImg1, faucetImg2],
+    place: {
+      left: 10,
+      top: 10,
+      width: 110,
+      height: 275,
+    },
+    imgPhases: [faucetImg1, faucetImg2],
+    beerTypes: [BEER_IPA],
+    switchType: switchTypes.NORMAL,
+    placeMug: {
+      width: 90,
+      height: 90,
+      bottom: 0,
+      left: -20,
+    },
   },
   {
-    left: 100,
-    top: 10,
-    width: 110,
-    height: 275,
-    imgs: [faucetImg1, faucetImg2],
+    place: {
+      left: 130,
+      top: 10,
+      width: 110,
+      height: 275,
+    },
+    imgPhases: [faucetImg1, faucetImg2],
+    beerTypes: [BEER_IPA],
+    switchType: switchTypes.NORMAL,
+    placeMug: {
+      width: 90,
+      height: 90,
+      bottom: 0,
+      left: -20,
+    },
   },
 ];
 
-const placeMug = {
-  width: 90,
-  height: 90,
-};
-
-// let dropZones;
-let faucets;
+let bar;
 
 function percentOverlap(targetBound, dragBound) {
   function linearOverlap(s1, e1, s2, e2) {
@@ -65,25 +96,9 @@ function percentOverlap(targetBound, dragBound) {
 
 export default parseDescription({
   Bar: {
-    getPlaces() {
-      switch (commonParams.level) {
-        case 0:
-          this.toPlaceFaucets = [2].map(e => places[e]);
-          break;
-
-        default:
-          break;
-      }
-    },
-
     nested() {
-      const fillUnit = [];
-      const bar = this.renderBar(commonParams.scaleFactor);
-      this.getPlaces();
-      faucets = this.toPlaceFaucets.map(p => this.renderFaucet(p, commonParams.scaleFactor));
-      faucets.forEach(f => bar.node.appendChild(f.node));
-      fillUnit.push(bar, ...faucets);
-      return fillUnit;
+      bar = this.renderBar(commonParams.scaleFactor);
+      return [bar];
     },
 
     renderBar(scaleF) {
@@ -95,13 +110,35 @@ export default parseDescription({
       commonParams.origin.appendChild(div);
       return new GameActor(div, toPlaceBar, scaleF);
     },
+  },
 
-    renderFaucet({
-      left, top, width, height, imgs,
-    }, scaleF) {
+  Faucets: {
+    getPlaces() {
+      switch (commonParams.level) {
+        case 0:
+          this.faucetsProps = [0].map(e => faucetsProps[e]);
+          break;
+
+        default:
+          break;
+      }
+    },
+
+    renderFaucet(
+      {
+        place: {
+          left, top, width, height,
+        },
+        imgPhases,
+        beerTypes,
+        switchType,
+        placeMug,
+      },
+      scaleF,
+    ) {
       const div = document.createElement('div');
       const img = document.createElement('img');
-      [img.src] = imgs;
+      [img.src] = imgPhases;
       updateStyle(img, {
         height: '100%',
         width: '100%',
@@ -120,33 +157,42 @@ export default parseDescription({
         },
         scaleF,
       );
-      faucet.imgPhases = imgs;
+      Object.assign(faucet, {
+        imgPhases,
+        beerTypes,
+        switchType,
+        placeMug,
+      });
       return faucet;
     },
 
+    nested() {
+      this.getPlaces();
+      const faucets = this.faucetsProps.map(f => this.renderFaucet(f, commonParams.scaleFactor));
+      faucets.forEach(f => bar.node.appendChild(f.node));
+      return faucets;
+    },
   },
-
-  Faucets: {},
 
   FaucetSwitches: {},
 
   MugPlaces: {
     nested() {
-      return faucets.map((f) => {
+      return [...getUnit('Faucets')].map((f) => {
         const div = document.createElement('div');
         f.node.appendChild(div);
         updateStyle(div, {
           margin: 'auto',
-          left: '0',
-          right: '0',
-          bottom: '0',
+          // left: '0',
+          // right: '0',
+          // bottom: '0',
         });
-        return new GameActor(div, { ...placeMug }, commonParams.scaleFactor);
+        console.log('f.placeMug: ', f.placeMug);
+        return new GameActor(div, f.placeMug, commonParams.scaleFactor);
       });
     },
 
     mechanism: {
-
       checkEnter: {
         type: 'checkEnter',
         customType: true,
@@ -159,7 +205,11 @@ export default parseDescription({
               const MugFilling = getUnit('MugFilling');
               MugFilling.addElement(mug);
               target.node.appendChild(mug.node);
-              mug.setPosition({ top: null, bottom: mugRect.height, left: (placeMug.width - mugRect.width) / 2 });
+              mug.setPosition({
+                top: null,
+                bottom: mugRect.height,
+                left: (placeRect.width - mugRect.width) / 2,
+              });
             }
           } else {
             updateStyle(target.node, { 'background-color': 'white' });
