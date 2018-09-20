@@ -183,9 +183,6 @@ export default parseDescription({
         f.node.appendChild(div);
         updateStyle(div, {
           margin: 'auto',
-          // left: '0',
-          // right: '0',
-          // bottom: '0',
         });
         console.log('f.placeMug: ', f.placeMug);
         return new GameActor(div, f.placeMug, commonParams.scaleFactor);
