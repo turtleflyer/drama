@@ -1,15 +1,6 @@
 /* eslint-env browser */
-import {
-  commonParams,
-  getUnit,
-  appendPx,
-  GameActor,
-  parseDescription,
-  startModules,
-} from '../gamelibrary';
-import {
-  makeUnit, registerEventType, fireEvent, eventChain,
-} from '../eventswork';
+import { commonParams, getUnit, parseDescription } from '../gamelibrary';
+import { fireEvent } from '../eventswork';
 
 export default parseDescription({
   ServiceUnit: {

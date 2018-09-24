@@ -1,13 +1,13 @@
 /* eslint-env browser */
 import {
   commonParams, GameActor, parseDescription, updateStyle, getUnit,
-} from '../../gamelibrary';
-import faucetImg1 from '../../img/faucet-s1.png';
-import faucetImg2 from '../../img/faucet-s2.png';
-import barImg from '../../img/bar.png';
-import jetIPAImg from '../../img/jet.gif';
-import { fireEvent } from '../../eventswork';
-import { BEER_IPA } from '../../types';
+} from '../gamelibrary';
+import faucetImg1 from '../img/faucet-s1.png';
+import faucetImg2 from '../img/faucet-s2.png';
+import barImg from '../img/bar.png';
+import jetIPAImg from '../img/jet.gif';
+import { fireEvent } from '../eventswork';
+import { BEER_IPA } from '../types';
 
 const switchTypes = {
   NORMAL: '@@switchType/NORMAL',
@@ -182,16 +182,6 @@ export default parseDescription({
       scaleF,
     ) {
       const div = document.createElement('div');
-      // const img = document.createElement('img');
-      // [img.src] = imgPhases;
-      // updateStyle(img, {
-      //   height: '100%',
-      //   width: '100%',
-      //   left: '0',
-      //   right: '0',
-      //   'object-fit': 'contain',
-      // });
-      // div.appendChild(img);
       const faucet = new GameActor(
         div,
         {
@@ -336,10 +326,10 @@ export default parseDescription({
           const placeRect = target.node.getBoundingClientRect();
           const mugRect = mug.img.getBoundingClientRect();
           if (percentOverlap(placeRect, mugRect) > 0.75) {
-            updateStyle(target.node, { 'background-color': 'red' });
+            updateStyle(target.node, { 'background-color': 'rgba(255, 0, 0, 0.2)' });
             if (tryToPlace) {
               const MugFilling = getUnit('MugFilling');
-              updateStyle(target.node, { 'background-color': 'white' });
+              updateStyle(target.node, { 'background-color': 'rgba(255, 255, 255, 0.2)' });
               if (MugFilling.size === 0) {
                 MugFilling.addElement(mug);
                 target.node.appendChild(mug.node);
@@ -352,7 +342,7 @@ export default parseDescription({
               }
             }
           } else {
-            updateStyle(target.node, { 'background-color': 'white' });
+            updateStyle(target.node, { 'background-color': 'rgba(255, 255, 255, 0.2)' });
           }
           if (tryToPlace) {
             const FallenMug = getUnit('FallenMug');
@@ -363,6 +353,4 @@ export default parseDescription({
       },
     },
   },
-
-  MugFilling: {},
 });

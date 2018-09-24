@@ -3,11 +3,12 @@ import './styles.css';
 import './index.html';
 import { commonParams, startModules } from './gamelibrary';
 
-import ServiceUnit from './ServiceUnit/ServiceUnit';
-import MugsOnLine from './units/MugsOnLine/MugsOnLine';
-import Scene from './units/Scene/Scene';
-import DragMug from './units/DragMug/DragMug';
-import Faucets from './units/Faucets/Faucets';
+import ServiceUnit from './units/ServiceUnit';
+import MugsOnLine from './units/MugsOnLine';
+import Scene from './units/Scene';
+import DragMug from './units/DragMug';
+import Faucets from './units/Faucets';
+import MugFilling from './units/MugFilling';
 
 Object.assign(commonParams, {
   origin: document.querySelector('#scene'),
@@ -18,4 +19,4 @@ Object.assign(commonParams, {
   level: 0,
 });
 
-startModules(ServiceUnit, MugsOnLine, DragMug, Faucets, Scene);
+startModules(ServiceUnit, MugsOnLine, DragMug, Faucets, MugFilling, Scene);

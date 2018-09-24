@@ -1,8 +1,8 @@
 /* eslint-env browser */
 import {
   commonParams, getUnit, GameActor, parseDescription,
-} from '../../gamelibrary';
-import { fireEvent } from '../../eventswork';
+} from '../gamelibrary';
+import { fireEvent } from '../eventswork';
 
 let sceneTarget;
 

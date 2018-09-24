@@ -1,16 +1,9 @@
 /* eslint-env browser */
 import {
-  commonParams,
-  getUnit,
-  appendPx,
-  GameActor,
-  parseDescription,
-  startModules,
-  updateStyle,
-} from '../../gamelibrary';
-import mugIPA from '../../img/mug1.png';
-import { BEER_IPA } from '../../types';
-import { fireEvent } from '../../eventswork';
+  commonParams, getUnit, GameActor, parseDescription, updateStyle,
+} from '../gamelibrary';
+import mugIPA from '../img/IPA_mug_empty.png';
+import { BEER_IPA } from '../types';
 
 export default parseDescription({
   MugsOnLine: {
