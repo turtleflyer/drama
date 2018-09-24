@@ -5,6 +5,7 @@ import {
 import faucetImg1 from '../../img/faucet-s1.png';
 import faucetImg2 from '../../img/faucet-s2.png';
 import barImg from '../../img/bar.png';
+import jetIPAImg from '../../img/jet.gif';
 import { fireEvent } from '../../eventswork';
 import { BEER_IPA } from '../../types';
 
@@ -13,6 +14,8 @@ const switchTypes = {
   BROKEN: '@@switchType/BROKEN',
   DUAL: '@@switchType/DUAL',
 };
+
+const jetsMap = new Map([[BEER_IPA, jetIPAImg]]);
 
 const toPlaceBar = {
   left: 75,
@@ -32,11 +35,22 @@ const faucetsProps = [
     imgPhases: [faucetImg1, faucetImg2],
     beerTypes: [BEER_IPA],
     switchType: switchTypes.NORMAL,
-    placeMug: {
+    mugPlace: {
       width: 90,
       height: 90,
       bottom: 0,
       left: -20,
+    },
+    switchPlace: {
+      width: 50,
+      height: 40,
+      top: 0,
+      left: 40,
+    },
+    jetPlace: {
+      height: 80,
+      top: 130,
+      left: 17,
     },
   },
   {
@@ -49,11 +63,17 @@ const faucetsProps = [
     imgPhases: [faucetImg1, faucetImg2],
     beerTypes: [BEER_IPA],
     switchType: switchTypes.NORMAL,
-    placeMug: {
+    mugPlace: {
       width: 90,
       height: 90,
       bottom: 0,
       left: -20,
+    },
+    switchPlace: {
+      width: 50,
+      height: 40,
+      top: 0,
+      left: 40,
     },
   },
   {
@@ -66,11 +86,17 @@ const faucetsProps = [
     imgPhases: [faucetImg1, faucetImg2],
     beerTypes: [BEER_IPA],
     switchType: switchTypes.NORMAL,
-    placeMug: {
+    mugPlace: {
       width: 90,
       height: 90,
       bottom: 0,
       left: -20,
+    },
+    switchPlace: {
+      width: 50,
+      height: 40,
+      top: 0,
+      left: 40,
     },
   },
 ];
@@ -124,6 +150,23 @@ export default parseDescription({
       }
     },
 
+    setImg(element, index) {
+      const img = document.createElement('img');
+      img.src = element.imgPhases[index];
+      updateStyle(img, {
+        height: '100%',
+        width: '100%',
+        left: '0',
+        right: '0',
+        'object-fit': 'contain',
+      });
+      element.node.appendChild(img);
+      if (element.img) {
+        element.img.remove();
+      }
+      element.img = img;
+    },
+
     renderFaucet(
       {
         place: {
@@ -132,21 +175,23 @@ export default parseDescription({
         imgPhases,
         beerTypes,
         switchType,
-        placeMug,
+        mugPlace,
+        switchPlace,
+        jetPlace,
       },
       scaleF,
     ) {
       const div = document.createElement('div');
-      const img = document.createElement('img');
-      [img.src] = imgPhases;
-      updateStyle(img, {
-        height: '100%',
-        width: '100%',
-        left: '0',
-        right: '0',
-        'object-fit': 'contain',
-      });
-      div.appendChild(img);
+      // const img = document.createElement('img');
+      // [img.src] = imgPhases;
+      // updateStyle(img, {
+      //   height: '100%',
+      //   width: '100%',
+      //   left: '0',
+      //   right: '0',
+      //   'object-fit': 'contain',
+      // });
+      // div.appendChild(img);
       const faucet = new GameActor(
         div,
         {
@@ -161,8 +206,18 @@ export default parseDescription({
         imgPhases,
         beerTypes,
         switchType,
-        placeMug,
+        mugPlace,
+        switchPlace,
+        jetPlace,
+        activeState: { beer: beerTypes[0], phase: 0 },
       });
+
+      if (switchType === switchTypes.BROKEN || switchType === switchTypes.DUAL) {
+        faucet.activeState.switchOpened = true;
+      } else {
+        faucet.activeState.switchOpened = false;
+      }
+      this.setImg(faucet, 0);
       return faucet;
     },
 
@@ -172,20 +227,104 @@ export default parseDescription({
       faucets.forEach(f => bar.node.appendChild(f.node));
       return faucets;
     },
+
+    mechanism: {
+      switchImg: {
+        type: 'switchImg',
+        customType: true,
+        action({ target, event: { affected } }) {
+          if (target === affected) {
+            const newPhase = 1 - target.activeState.phase;
+            this.setImg(target, newPhase);
+            target.activeState.phase = newPhase;
+          }
+        },
+      },
+    },
   },
 
-  FaucetSwitches: {},
+  FaucetSwitches: {
+    nested() {
+      return [...getUnit('Faucets')].map((f) => {
+        const div = document.createElement('div');
+        f.node.appendChild(div);
+        const faucetSwitch = new GameActor(div, f.switchPlace, commonParams.scaleFactor);
+        faucetSwitch.faucet = f;
+        f.switch = faucetSwitch;
+        return faucetSwitch;
+      });
+    },
+
+    mechanism: {
+      switchState: {
+        type: 'click',
+        action({ target, event }) {
+          event.preventDefault();
+          event.stopPropagation();
+          const { faucet } = target;
+          const { switchType, beerTypes, activeState } = faucet;
+          const Faucets = getUnit('Faucets');
+          switch (switchType) {
+            case switchTypes.NORMAL:
+              activeState.switchOpened = !activeState.switchOpened;
+              fireEvent(Faucets, 'switchImg', { affected: faucet });
+              break;
+
+            case switchTypes.DUAL:
+              [activeState.beer] = beerTypes.filter(b => b !== activeState.beer);
+              fireEvent(Faucets, 'switchImg', { affected: faucet });
+              break;
+
+            default:
+              break;
+          }
+          fireEvent(getUnit('BeerJet'), 'setJet');
+        },
+      },
+    },
+  },
+
+  BeerJet: {
+    nested() {
+      return [...getUnit('Faucets')].map((f) => {
+        const div = document.createElement('div');
+        f.node.appendChild(div);
+        const jet = new GameActor(div, f.jetPlace, commonParams.scaleFactor);
+        jet.faucet = f;
+        f.jet = jet;
+        return jet;
+      });
+    },
+
+    mechanism: {
+      setJet: {
+        type: 'setJet',
+        customType: true,
+        action({ target }) {
+          const { beer, switchOpened } = target.faucet.activeState;
+          if (target.img) {
+            target.img.remove();
+            target.img = null;
+          }
+          if (switchOpened) {
+            const img = document.createElement('img');
+            img.src = jetsMap.get(beer);
+            updateStyle(img, { height: '100%' });
+            target.node.appendChild(img);
+            target.img = img;
+          }
+        },
+        fireImmediately: true,
+      },
+    },
+  },
 
   MugPlaces: {
     nested() {
       return [...getUnit('Faucets')].map((f) => {
         const div = document.createElement('div');
         f.node.appendChild(div);
-        updateStyle(div, {
-          margin: 'auto',
-        });
-        console.log('f.placeMug: ', f.placeMug);
-        return new GameActor(div, f.placeMug, commonParams.scaleFactor);
+        return new GameActor(div, f.mugPlace, commonParams.scaleFactor);
       });
     },
 
@@ -200,21 +339,25 @@ export default parseDescription({
             updateStyle(target.node, { 'background-color': 'red' });
             if (tryToPlace) {
               const MugFilling = getUnit('MugFilling');
-              MugFilling.addElement(mug);
-              target.node.appendChild(mug.node);
-              mug.setPosition({
-                top: null,
-                bottom: mugRect.height,
-                left: (placeRect.width - mugRect.width) / 2,
-              });
+              updateStyle(target.node, { 'background-color': 'white' });
+              if (MugFilling.size === 0) {
+                MugFilling.addElement(mug);
+                target.node.appendChild(mug.node);
+                mug.setPosition({
+                  top: null,
+                  bottom: mugRect.height,
+                  left: (placeRect.width - mugRect.width) / 2,
+                });
+                return;
+              }
             }
           } else {
             updateStyle(target.node, { 'background-color': 'white' });
-            if (tryToPlace) {
-              const FallenMug = getUnit('FallenMug');
-              FallenMug.addElement(mug);
-              fireEvent(FallenMug, 'fallDown');
-            }
+          }
+          if (tryToPlace) {
+            const FallenMug = getUnit('FallenMug');
+            FallenMug.addElement(mug);
+            fireEvent(FallenMug, 'fallDown');
           }
         },
       },

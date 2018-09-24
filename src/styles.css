@@ -6,6 +6,10 @@
 
 #scene * {
   position: absolute;
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
 }
 
 img {
@@ -30,9 +34,18 @@ img {
   z-index: 80;
 }
 
+.Faucets {
+  z-index: 65;
+}
+
+.FaucetSwitches {
+  z-index: 70;
+  /* background-color: white; */
+}
+
 .MugPlaces {
   z-index: 70;
-  background-color: antiquewhite;
+  background-color: white;
 }
 
 .FallenMug {
@@ -41,4 +54,10 @@ img {
 
 .MugFilling {
   z-index: 75;
+}
+
+.BeerJet {
+  z-index: 73;
+  /* background-color: yellow;
+  border: solid 1px yellow; */
 }
