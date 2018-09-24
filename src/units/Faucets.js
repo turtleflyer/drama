@@ -314,7 +314,10 @@ export default parseDescription({
       return [...getUnit('Faucets')].map((f) => {
         const div = document.createElement('div');
         f.node.appendChild(div);
-        return new GameActor(div, f.mugPlace, commonParams.scaleFactor);
+        const place = new GameActor(div, f.mugPlace, commonParams.scaleFactor);
+        place.faucet = f;
+        f.mugPlace = place;
+        return place;
       });
     },
 
@@ -330,8 +333,9 @@ export default parseDescription({
             if (tryToPlace) {
               const MugFilling = getUnit('MugFilling');
               updateStyle(target.node, { 'background-color': 'rgba(255, 255, 255, 0.2)' });
-              if (MugFilling.size === 0) {
+              if (![...MugFilling].find(m => m.faucet === target.faucet)) {
                 MugFilling.addElement(mug);
+                mug.faucet = target.faucet;
                 target.node.appendChild(mug.node);
                 mug.setPosition({
                   top: null,
