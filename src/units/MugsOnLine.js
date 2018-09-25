@@ -1,9 +1,10 @@
 /* eslint-env browser */
 import {
-  commonParams, getUnit, GameActor, parseDescription, updateStyle,
+  commonParams, getUnit, GameActor, parseDescription,
 } from '../gamelibrary';
 import mugIPA from '../img/IPA_mug_empty.png';
 import { BEER_IPA } from '../types';
+import { setImg } from '../helperslib';
 
 export default parseDescription({
   MugsOnLine: {
@@ -12,11 +13,9 @@ export default parseDescription({
       switch (type) {
         case BEER_IPA: {
           element.setPosition({ width: 50 });
-          const img = document.createElement('img');
-          img.src = mugIPA;
-          updateStyle(img, { width: '100%' });
-          element.node.appendChild(img);
-          element.img = img;
+          setImg(element, mugIPA, { width: '100%' });
+          element.beerType = type;
+          element.load = {};
           commonParams.origin.appendChild(element.node);
           return element;
         }
@@ -28,7 +27,7 @@ export default parseDescription({
 
     startPoint: { top: 220 },
 
-    gap: 5,
+    gap: 30,
 
     getType() {
       return BEER_IPA;

@@ -19,10 +19,6 @@ function appendPx(n) {
   return `${n}px`;
 }
 
-function updateStyle(node, style) {
-  Object.assign(node.style, style);
-}
-
 class GameActor {
   constructor(node, position, scaleFactor = 1) {
     this.node = node;
@@ -183,5 +179,5 @@ function startModules(...modules) {
 }
 
 export {
-  commonParams, getUnit, appendPx, updateStyle, GameActor, parseDescription, startModules,
+  commonParams, getUnit, GameActor, parseDescription, startModules,
 };

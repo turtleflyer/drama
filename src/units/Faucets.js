@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import {
-  commonParams, GameActor, parseDescription, updateStyle, getUnit,
+  commonParams, GameActor, parseDescription, getUnit,
 } from '../gamelibrary';
 import faucetImg1 from '../img/faucet-s1.png';
 import faucetImg2 from '../img/faucet-s2.png';
@@ -8,6 +8,7 @@ import barImg from '../img/bar.png';
 import jetIPAImg from '../img/jet.gif';
 import { fireEvent } from '../eventswork';
 import { BEER_IPA } from '../types';
+import { updateStyle, setImg } from '../helperslib';
 
 const switchTypes = {
   NORMAL: '@@switchType/NORMAL',
@@ -150,22 +151,22 @@ export default parseDescription({
       }
     },
 
-    setImg(element, index) {
-      const img = document.createElement('img');
-      img.src = element.imgPhases[index];
-      updateStyle(img, {
-        height: '100%',
-        width: '100%',
-        left: '0',
-        right: '0',
-        'object-fit': 'contain',
-      });
-      element.node.appendChild(img);
-      if (element.img) {
-        element.img.remove();
-      }
-      element.img = img;
-    },
+    // setImg(element, index) {
+    //   const img = document.createElement('img');
+    //   img.src = element.imgPhases[index];
+    //   updateStyle(img, {
+    //     height: '100%',
+    //     width: '100%',
+    //     left: '0',
+    //     right: '0',
+    //     'object-fit': 'contain',
+    //   });
+    //   element.node.appendChild(img);
+    //   if (element.img) {
+    //     element.img.remove();
+    //   }
+    //   element.img = img;
+    // },
 
     renderFaucet(
       {
@@ -207,7 +208,14 @@ export default parseDescription({
       } else {
         faucet.activeState.switchOpened = false;
       }
-      this.setImg(faucet, 0);
+      setImg(faucet, faucet.imgPhases[0], {
+        height: '100%',
+        width: '100%',
+        left: '0',
+        right: '0',
+        'object-fit': 'contain',
+      });
+      // this.setImg(faucet, 0);
       return faucet;
     },
 
@@ -225,7 +233,14 @@ export default parseDescription({
         action({ target, event: { affected } }) {
           if (target === affected) {
             const newPhase = 1 - target.activeState.phase;
-            this.setImg(target, newPhase);
+            setImg(target, target.imgPhases[newPhase], {
+              height: '100%',
+              width: '100%',
+              left: '0',
+              right: '0',
+              'object-fit': 'contain',
+            });
+            // this.setImg(target, newPhase);
             target.activeState.phase = newPhase;
           }
         },

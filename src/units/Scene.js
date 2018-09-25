@@ -78,6 +78,7 @@ export default parseDescription({
       getUnit('Faucets'),
       getUnit('FaucetSwitches'),
       getUnit('MugPlaces'),
+      getUnit('MugFilling'),
     ],
 
     mechanism: {

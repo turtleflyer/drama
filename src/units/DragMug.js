@@ -1,6 +1,7 @@
 /* eslint-env browser */
-import { getUnit, parseDescription, updateStyle } from '../gamelibrary';
+import { getUnit, parseDescription } from '../gamelibrary';
 import { fireEvent } from '../eventswork';
+import { updateStyle } from '../helperslib';
 
 export default parseDescription({
   DragMug: {

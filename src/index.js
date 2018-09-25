@@ -17,6 +17,7 @@ Object.assign(commonParams, {
   sceneWidth: 1024,
   sceneHeight: 640,
   level: 0,
+  speedOfFilling: 0.25,
 });
 
 startModules(ServiceUnit, MugsOnLine, DragMug, Faucets, MugFilling, Scene);
