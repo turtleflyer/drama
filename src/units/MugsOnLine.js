@@ -8,8 +8,8 @@ import { setImg } from '../helperslib';
 
 export default parseDescription({
   MugsOnLine: {
-    render(type, { left, top }, scaleF) {
-      const element = new GameActor(document.createElement('div'), { left, top }, scaleF);
+    render(type, { left, top }) {
+      const element = new GameActor(document.createElement('div'), { left, top });
       switch (type) {
         case BEER_IPA: {
           element.setPosition({ width: 50 });
@@ -40,14 +40,10 @@ export default parseDescription({
         action({ target, memory }) {
           const curTime = Date.now();
           if (!target) {
-            const newB = this.render(
-              this.getType(),
-              {
-                left: commonParams.sceneWidth,
-                top: this.startPoint.top,
-              },
-              commonParams.scaleFactor,
-            );
+            const newB = this.render(this.getType(), {
+              left: commonParams.sceneWidth,
+              top: this.startPoint.top,
+            });
             memory.newborn = memory.foremost = newB;
             newB.lastMove = curTime;
             this.unit.addElement(newB);
@@ -67,14 +63,10 @@ export default parseDescription({
               if (target === memory.newborn) {
                 const possibleP = newL + target.width + this.gap;
                 if (possibleP < commonParams.sceneWidth) {
-                  const newB = this.render(
-                    this.getType(),
-                    {
-                      left: possibleP,
-                      top: this.startPoint.top,
-                    },
-                    commonParams.scaleFactor,
-                  );
+                  const newB = this.render(this.getType(), {
+                    left: possibleP,
+                    top: this.startPoint.top,
+                  });
                   target.next = memory.newborn = newB;
                   newB.lastMove = curTime;
                   this.unit.addElement(newB);

@@ -2,6 +2,7 @@
   position: relative;
   background-color: rgb(56, 56, 92);
   overflow: hidden;
+  z-index: 10;
 }
 
 #scene * {
@@ -60,4 +61,23 @@ img {
   z-index: 73;
   /* background-color: yellow;
   border: solid 1px yellow; */
+}
+
+.Score {
+  background-color: rgb(1, 1, 1);
+  z-index: 30;
+}
+
+#moneyDisplay {
+  background-color: rgb(202, 209, 208);
+  text-align: center;
+  font-size: 120%;
+}
+
+.Damages {
+  z-index: 72;
+  font-weight: 1000;
+  font-size: 120%;
+  color: rgb(243, 236, 141);
+  text-align: center;
 }

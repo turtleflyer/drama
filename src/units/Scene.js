@@ -12,6 +12,7 @@ export default parseDescription({
       switch (commonParams.level) {
         case 0:
           commonParams.mugSpeed = -50;
+          commonParams.money = 1000;
           break;
 
         default:
@@ -79,6 +80,8 @@ export default parseDescription({
       getUnit('FaucetSwitches'),
       getUnit('MugPlaces'),
       getUnit('MugFilling'),
+      getUnit('Damages'),
+      getUnit('Score'),
     ],
 
     mechanism: {

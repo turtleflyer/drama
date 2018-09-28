@@ -8,16 +8,27 @@ import MugsOnLine from './units/MugsOnLine';
 import Scene from './units/Scene';
 import DragMug from './units/DragMug';
 import Faucets from './units/Faucets';
+import BeerJet from './units/BeerJet';
+import Damages from './units/Damages';
 import MugFilling from './units/MugFilling';
+import Score from './units/Score';
 
 Object.assign(commonParams, {
   origin: document.querySelector('#scene'),
   tickTimeout: 5,
-  scaleFactor: 1,
   sceneWidth: 1024,
   sceneHeight: 640,
   level: 0,
-  speedOfFilling: 0.25,
 });
 
-startModules(ServiceUnit, MugsOnLine, DragMug, Faucets, MugFilling, Scene);
+startModules(
+  ServiceUnit,
+  MugsOnLine,
+  DragMug,
+  Faucets,
+  BeerJet,
+  Damages,
+  MugFilling,
+  Score,
+  Scene,
+);

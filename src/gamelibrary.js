@@ -13,14 +13,14 @@ defineRoutine(e => e.node, function (e, unit) {
 
 const registeredUnits = new Map();
 
-const commonParams = {};
+const commonParams = { scaleFactor: 1 };
 
 function appendPx(n) {
   return `${n}px`;
 }
 
 class GameActor {
-  constructor(node, position, scaleFactor = 1) {
+  constructor(node, position, scaleFactor = commonParams.scaleFactor) {
     this.node = node;
     this.scaleFactor = scaleFactor;
     this.linked = [];

@@ -1,4 +1,5 @@
-import { parseDescription, commonParams } from '../gamelibrary';
+/* eslint-env browser */
+import { parseDescription } from '../gamelibrary';
 import { BEER_IPA } from '../types';
 import { importAll, setImg } from '../helperslib';
 
@@ -7,6 +8,9 @@ fillingImgSrc[BEER_IPA] = importAll(require.context('../img/IPA_filling_states',
 fillingImgSrc[BEER_IPA].overfilled = importAll(
   require.context('../img/IPA_overfilled_states', false, /\.png$/),
 );
+const mugsVolumes = {
+  [BEER_IPA]: 4,
+};
 
 export default parseDescription({
   MugFilling: {
@@ -30,7 +34,7 @@ export default parseDescription({
                 target.lastFillState = { beer, lastTime: currTime };
               } else if (lastFillState.beer === beer) {
                 load[beer]
-                  += ((currTime - lastFillState.lastTime) * commonParams.speedOfFilling) / 1000;
+                  += ((currTime - lastFillState.lastTime) / 1000) * (1 / mugsVolumes[beer]);
                 lastFillState.lastTime = currTime;
               } else {
                 target.lastFillState = { beer, lastTime: currTime };
@@ -40,9 +44,8 @@ export default parseDescription({
                 const currFillingStage = Math.floor(load[beer] * fillingStages.length);
                 setImg(target, fillingImgSrc[beer][currFillingStage], { width: '100%' });
               } else {
-                const overfilledIndex = Math.floor(
-                  (((load[beer] - 1) / commonParams.speedOfFilling) * 1000) / 500,
-                ) % 2;
+                target.overfilled = true;
+                const overfilledIndex = Math.floor((((load[beer] - 1) / (1 / mugsVolumes[beer])) * 1000) / 500) % 2;
                 setImg(target, fillingImgSrc[beer].overfilled[overfilledIndex], { width: '100%' });
               }
             } else {
