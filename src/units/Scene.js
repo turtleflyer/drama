@@ -11,7 +11,7 @@ export default parseDescription({
     initialize() {
       switch (commonParams.level) {
         case 0:
-          commonParams.mugSpeed = -50;
+          commonParams.mugsSpeed = -50;
           commonParams.money = 1000;
           break;
 
@@ -22,10 +22,10 @@ export default parseDescription({
     },
 
     nested() {
-      const { left, top } = commonParams.origin.getBoundingClientRect();
+      const { left, top } = commonParams.scene.getBoundingClientRect();
       this.position = { x: left, y: top };
       const { sceneWidth, sceneHeight } = commonParams;
-      sceneTarget = new GameActor(commonParams.origin, {
+      sceneTarget = new GameActor(commonParams.scene, {
         width: sceneWidth,
         height: sceneHeight,
       });
@@ -33,11 +33,22 @@ export default parseDescription({
     },
 
     mechanism: {
+      tickAnimation: {
+        type: 'tickAnimation',
+        regAsCustom: true,
+        action() {
+          fireEvent(getUnit('AllUnits'), 'onTick');
+          window.setTimeout(() => {
+            fireEvent(this.unit, 'tickAnimation');
+          }, commonParams.tickTimeout);
+        },
+        fireImmediately: true,
+      },
+
       dragND: {
         type: 'mousemove',
         action({ target, event }) {
           event.preventDefault();
-          event.stopPropagation();
           const { clientX, clientY } = event;
           const { scaleFactor } = target;
           fireEvent(getUnit('DragMug'), 'followMouse', {
@@ -61,9 +72,15 @@ export default parseDescription({
 
       stopDnD: {
         type: 'mouseup',
-        action({ event }) {
-          event.stopPropagation();
+        action() {
           fireEvent(getUnit('DragMug'), 'stopDrag');
+        },
+      },
+
+      preventDefaultDnD: {
+        type: 'dragstart',
+        action({ event }) {
+          event.preventDefault();
         },
       },
     },

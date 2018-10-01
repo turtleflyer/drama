@@ -23,30 +23,42 @@ export default parseDescription({
             const {
               load,
               lastFillState,
-              faucet: {
-                activeState: { switchOpened, beer },
-              },
+              overfillState,
+              faucet: { activeState },
             } = target;
+            const { switchOpened, beer, imgFillingStage } = activeState;
             const currTime = Date.now();
             if (switchOpened) {
-              if (load[beer] === undefined) {
-                load[beer] = 0;
-                target.lastFillState = { beer, lastTime: currTime };
-              } else if (lastFillState.beer === beer) {
-                load[beer]
-                  += ((currTime - lastFillState.lastTime) / 1000) * (1 / mugsVolumes[beer]);
-                lastFillState.lastTime = currTime;
+              if (!overfillState) {
+                if (load[beer] === undefined) {
+                  load[beer] = 0;
+                  target.lastFillState = { beer, lastTime: currTime };
+                } else if (lastFillState.beer === beer) {
+                  load[beer]
+                    += ((currTime - lastFillState.lastTime) / 1000) * (1 / mugsVolumes[beer]);
+                  lastFillState.lastTime = currTime;
+                } else {
+                  target.lastFillState = { beer, lastTime: currTime };
+                }
+                if (Object.keys(load).reduce((total, b) => total + load[b], 0) < 1) {
+                  const fillingStages = fillingImgSrc[beer];
+                  const newImgFillingStage = Math.floor(load[beer] * fillingStages.length);
+                  if (newImgFillingStage !== imgFillingStage) {
+                    setImg(target, fillingImgSrc[beer][newImgFillingStage], { width: '100%' });
+                    activeState.imgFillingStage = newImgFillingStage;
+                  }
+                } else {
+                  target.overfillState = { imageIndex: 1 };
+                }
               } else {
-                target.lastFillState = { beer, lastTime: currTime };
-              }
-              if (load[beer] < 1) {
-                const fillingStages = fillingImgSrc[beer];
-                const currFillingStage = Math.floor(load[beer] * fillingStages.length);
-                setImg(target, fillingImgSrc[beer][currFillingStage], { width: '100%' });
-              } else {
-                target.overfilled = true;
-                const overfilledIndex = Math.floor((((load[beer] - 1) / (1 / mugsVolumes[beer])) * 1000) / 500) % 2;
-                setImg(target, fillingImgSrc[beer].overfilled[overfilledIndex], { width: '100%' });
+                const { countInterval, imageIndex } = overfillState;
+                if (!countInterval || currTime - countInterval > 1000) {
+                  overfillState.countInterval = currTime;
+                  overfillState.imageIndex = 1 - imageIndex;
+                  setImg(target, fillingImgSrc[beer].overfilled[overfillState.imageIndex], {
+                    width: '100%',
+                  });
+                }
               }
             } else {
               target.lastFillState = {};

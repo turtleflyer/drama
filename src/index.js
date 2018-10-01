@@ -3,7 +3,7 @@ import './styles.css';
 import './index.html';
 import { commonParams, startModules } from './gamelibrary';
 
-import ServiceUnit from './units/ServiceUnit';
+// import ServiceUnit from './units/ServiceUnit';
 import MugsOnLine from './units/MugsOnLine';
 import Scene from './units/Scene';
 import DragMug from './units/DragMug';
@@ -14,7 +14,7 @@ import MugFilling from './units/MugFilling';
 import Score from './units/Score';
 
 Object.assign(commonParams, {
-  origin: document.querySelector('#scene'),
+  scene: document.querySelector('#scene'),
   tickTimeout: 5,
   sceneWidth: 1024,
   sceneHeight: 640,
@@ -22,7 +22,7 @@ Object.assign(commonParams, {
 });
 
 startModules(
-  ServiceUnit,
+  // ServiceUnit,
   MugsOnLine,
   DragMug,
   Faucets,

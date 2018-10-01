@@ -6,5 +6,6 @@ module.exports = {
     'no-param-reassign': 'off',
     'func-names': 'off',
     'no-multi-assign': 'off',
+    'no-restricted-syntax': ['off', { selector: 'ForOfStatement' }],
   },
 };

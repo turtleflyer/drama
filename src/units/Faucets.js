@@ -87,7 +87,7 @@ export default parseDescription({
       img.src = barImg;
       updateStyle(img, { height: '100%', width: '100%', 'object-fit': 'fill' });
       div.appendChild(img);
-      commonParams.origin.appendChild(div);
+      commonParams.scene.appendChild(div);
       return new GameActor(div, toPlaceBar);
     },
   },
@@ -309,11 +309,11 @@ export default parseDescription({
             },
             startWasting,
           } = target;
-          let wastingStatus = false;
-          if (switchOpened && (!placedMug || placedMug.overfilled)) {
-            wastingStatus = true;
+          let isWasting = false;
+          if (switchOpened && (!placedMug || placedMug.overfillState)) {
+            isWasting = true;
           }
-          if (wastingStatus) {
+          if (isWasting) {
             const currTime = Date.now();
             if (startWasting) {
               const countWastingMoney = Math.floor(

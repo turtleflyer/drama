@@ -6,17 +6,20 @@ import mugIPA from '../img/IPA_mug_empty.png';
 import { BEER_IPA } from '../types';
 import { setImg } from '../helperslib';
 
+const topDistance = 220;
+const gapBetweenMugs = 30;
+
 export default parseDescription({
   MugsOnLine: {
-    render(type, { left, top }) {
-      const element = new GameActor(document.createElement('div'), { left, top });
+    renderMug(type, left) {
+      const element = new GameActor(document.createElement('div'), { left, top: topDistance });
       switch (type) {
         case BEER_IPA: {
           element.setPosition({ width: 50 });
           setImg(element, mugIPA, { width: '100%' });
           element.beerType = type;
           element.load = {};
-          commonParams.origin.appendChild(element.node);
+          commonParams.scene.appendChild(element.node);
           return element;
         }
 
@@ -24,10 +27,6 @@ export default parseDescription({
           return null;
       }
     },
-
-    startPoint: { top: 220 },
-
-    gap: 30,
 
     getType() {
       return BEER_IPA;
@@ -38,40 +37,46 @@ export default parseDescription({
         type: 'onTick',
         customType: true,
         action({ target, memory }) {
-          const curTime = Date.now();
-          if (!target) {
-            const newB = this.render(this.getType(), {
-              left: commonParams.sceneWidth,
-              top: this.startPoint.top,
-            });
-            memory.newborn = memory.foremost = newB;
-            newB.lastMove = curTime;
-            this.unit.addElement(newB);
+          const currTime = Date.now();
+          const {
+            positionsMap, lastPosition, lastTime, lastMug,
+          } = memory;
+          if (!positionsMap) {
+            const newbornPosition = commonParams.sceneWidth - 1;
+            const newbornMug = this.renderMug(this.getType(), newbornPosition);
+            this.unit.addElement(newbornMug);
+            memory.positionsMap = new Map([[newbornMug, newbornPosition]]);
+            memory.lastPosition = newbornPosition;
+            memory.lastTime = currTime;
+            memory.lastMug = newbornMug;
           } else {
-            const curL = target.left;
-            if (target === memory.foremost) {
-              memory.speed = commonParams.mugSpeed;
-            }
-            if (curL <= -target.width) {
-              target.node.remove();
-              memory.foremost = target.next;
-              this.unit.delete(target);
-            } else {
-              const newL = curL + ((curTime - target.lastMove) * memory.speed) / 1000;
-              target.setPosition({ left: newL });
-              target.lastMove = curTime;
-              if (target === memory.newborn) {
-                const possibleP = newL + target.width + this.gap;
-                if (possibleP < commonParams.sceneWidth) {
-                  const newB = this.render(this.getType(), {
-                    left: possibleP,
-                    top: this.startPoint.top,
-                  });
-                  target.next = memory.newborn = newB;
-                  newB.lastMove = curTime;
-                  this.unit.addElement(newB);
+            const { left, width } = target;
+            if (left >= lastPosition) {
+              const shift = ((currTime - lastTime) / 1000) * commonParams.mugsSpeed;
+              let expectedNewbornPosition;
+              for (const [mug, position] of positionsMap.entries()) {
+                const newPosition = position + shift;
+                positionsMap.set(mug, newPosition);
+                if (mug === lastMug) {
+                  expectedNewbornPosition = newPosition + mug.width + gapBetweenMugs;
                 }
               }
+              memory.lastTime = currTime;
+              if (expectedNewbornPosition < commonParams.sceneWidth) {
+                const newbornMug = this.renderMug(this.getType(), expectedNewbornPosition);
+                this.unit.addElement(newbornMug);
+                positionsMap.set(newbornMug, expectedNewbornPosition);
+                memory.lastMug = newbornMug;
+              }
+            }
+            const newPosition = positionsMap.get(target);
+            if (newPosition + width <= 0) {
+              target.node.remove();
+              this.unit.delete(target);
+              positionsMap.delete(target);
+            } else {
+              target.setPosition({ left: newPosition });
+              memory.lastPosition = newPosition;
             }
           }
         },

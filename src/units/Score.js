@@ -15,7 +15,7 @@ export default parseDescription({
   Score: {
     nested() {
       scoreBar = new GameActor(document.createElement('div'), barPosition);
-      commonParams.origin.appendChild(scoreBar.node);
+      commonParams.scene.appendChild(scoreBar.node);
       const moneyDisplay = new GameActor(document.createElement('div'), {
         top: 3,
         left: 3,
