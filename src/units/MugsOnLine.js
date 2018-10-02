@@ -3,18 +3,17 @@ import {
   commonParams, getUnit, GameActor, parseDescription,
 } from '../gamelibrary';
 import mugIPA from '../img/IPA_mug_empty.png';
-import { BEER_IPA } from '../types';
 import { setImg } from '../helperslib';
+import { beerTypes, mugLineParams } from '../usingparams';
 
-const topDistance = 220;
-const gapBetweenMugs = 30;
+const { topDistance, gapBetweenMugs } = mugLineParams;
 
 export default parseDescription({
   MugsOnLine: {
     renderMug(type, left) {
       const element = new GameActor(document.createElement('div'), { left, top: topDistance });
       switch (type) {
-        case BEER_IPA: {
+        case beerTypes.BEER_IPA: {
           element.setPosition({ width: 50 });
           setImg(element, mugIPA, { width: '100%' });
           element.beerType = type;
@@ -29,7 +28,7 @@ export default parseDescription({
     },
 
     getType() {
-      return BEER_IPA;
+      return beerTypes.BEER_IPA;
     },
 
     mechanism: {

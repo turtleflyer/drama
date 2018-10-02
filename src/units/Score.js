@@ -1,20 +1,13 @@
 /* eslint-env browser */
 import { parseDescription, GameActor, commonParams } from '../gamelibrary';
-import { fireEvent } from '../eventswork';
-
-const barPosition = {
-  right: 10,
-  top: 10,
-  width: 100,
-  height: 50,
-};
+import { scorePosition } from '../usingparams';
 
 let scoreBar;
 
 export default parseDescription({
   Score: {
     nested() {
-      scoreBar = new GameActor(document.createElement('div'), barPosition);
+      scoreBar = new GameActor(document.createElement('div'), scorePosition);
       commonParams.scene.appendChild(scoreBar.node);
       const moneyDisplay = new GameActor(document.createElement('div'), {
         top: 3,

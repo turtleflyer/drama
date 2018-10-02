@@ -1,16 +1,15 @@
 /* eslint-env browser */
 import { parseDescription } from '../gamelibrary';
-import { BEER_IPA } from '../types';
 import { importAll, setImg } from '../helperslib';
+import { beerTypes, mugsVolumes } from '../usingparams';
 
 const fillingImgSrc = {};
-fillingImgSrc[BEER_IPA] = importAll(require.context('../img/IPA_filling_states', false, /\.png$/));
-fillingImgSrc[BEER_IPA].overfilled = importAll(
+fillingImgSrc[beerTypes.BEER_IPA] = importAll(
+  require.context('../img/IPA_filling_states', false, /\.png$/),
+);
+fillingImgSrc[beerTypes.BEER_IPA].overfilled = importAll(
   require.context('../img/IPA_overfilled_states', false, /\.png$/),
 );
-const mugsVolumes = {
-  [BEER_IPA]: 4,
-};
 
 export default parseDescription({
   MugFilling: {
