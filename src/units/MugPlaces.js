@@ -2,6 +2,7 @@
 import { GameActor, parseDescription, getUnit } from '../gamelibrary';
 import { fireEvent } from '../eventswork';
 import { updateStyle } from '../helperslib';
+import { beerExpenses } from '../usingparams';
 
 function percentOverlap(targetBound, dragBound) {
   function linearOverlap(s1, e1, s2, e2) {
@@ -80,6 +81,41 @@ export default parseDescription({
             const FallenMug = getUnit('FallenMug');
             FallenMug.addElement(mug);
             fireEvent(FallenMug, 'fallDown');
+          }
+        },
+      },
+
+      monitorWasting: {
+        type: 'onTick',
+        customType: true,
+        action({ target }) {
+          const {
+            faucet: {
+              placedMug,
+              activeState: { switchOpened, beer },
+            },
+            startWasting,
+          } = target;
+          let isWasting = false;
+          if (switchOpened && (!placedMug || placedMug.overfillState)) {
+            isWasting = true;
+          }
+          if (isWasting) {
+            const currTime = Date.now();
+            if (startWasting) {
+              const countWastingMoney = Math.floor(
+                (((currTime - startWasting) / 1000) * beerExpenses[beer]) / 5,
+              );
+              if (countWastingMoney > target.countWastingMoney) {
+                this.renderDamage(target, countWastingMoney % 2);
+                target.countWastingMoney = countWastingMoney;
+              }
+            } else {
+              target.startWasting = currTime;
+              target.countWastingMoney = 0;
+            }
+          } else {
+            target.startWasting = null;
           }
         },
       },
