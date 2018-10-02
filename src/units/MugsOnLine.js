@@ -49,8 +49,7 @@ export default parseDescription({
             memory.lastTime = currTime;
             memory.lastMug = newbornMug;
           } else {
-            const { left, width } = target;
-            if (left >= lastPosition) {
+            if (!target || target.left >= lastPosition) {
               const shift = ((currTime - lastTime) / 1000) * commonParams.mugsSpeed;
               let expectedNewbornPosition;
               for (const [mug, position] of positionsMap.entries()) {
@@ -68,14 +67,16 @@ export default parseDescription({
                 memory.lastMug = newbornMug;
               }
             }
-            const newPosition = positionsMap.get(target);
-            if (newPosition + width <= 0) {
-              target.node.remove();
-              this.unit.delete(target);
-              positionsMap.delete(target);
-            } else {
-              target.setPosition({ left: newPosition });
-              memory.lastPosition = newPosition;
+            if (target) {
+              const newPosition = positionsMap.get(target);
+              if (newPosition + target.width <= 0) {
+                target.node.remove();
+                this.unit.delete(target);
+                positionsMap.delete(target);
+              } else {
+                target.setPosition({ left: newPosition });
+                memory.lastPosition = newPosition;
+              }
             }
           }
         },
