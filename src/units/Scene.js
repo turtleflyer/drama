@@ -85,39 +85,4 @@ export default parseDescription({
       },
     },
   },
-
-  AllUnits: {
-    nested: () => [
-      getUnit('Scene'),
-      getUnit('MugsOnLine'),
-      getUnit('DragMug'),
-      getUnit('FallenMug'),
-      getUnit('Bar'),
-      getUnit('Faucets'),
-      getUnit('FaucetSwitches'),
-      getUnit('MugPlaces'),
-      getUnit('MugFilling'),
-      getUnit('Damages'),
-      getUnit('Score'),
-    ],
-
-    mechanism: {
-      stop: {
-        type: 'stop',
-        customType: true,
-        action({ unit, target }) {
-          if (unit !== this.unit) {
-            unit.description.toTerminate = true;
-            if (target !== sceneTarget) {
-              target.node.remove();
-              unit.clear();
-            }
-          }
-          setTimeout(() => {
-            this.toTerminate = true;
-          }, 500);
-        },
-      },
-    },
-  },
 });

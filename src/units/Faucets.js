@@ -118,8 +118,9 @@ export default parseDescription({
           const { activeState } = target;
           if (activeState.switchOpened) {
             if (activeState.lastTime) {
-              commonParams.money
-                -= ((currTime - activeState.lastTime) / 1000) * beerExpenses[target.activeState.beer];
+              // prettier-ignore
+              commonParams.money -= ((currTime - activeState.lastTime) / 1000)
+                * beerExpenses[target.activeState.beer];
             }
             activeState.lastTime = currTime;
             fireEvent(getUnit('Score'), 'updateMoney');

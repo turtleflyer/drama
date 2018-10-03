@@ -1,7 +1,5 @@
 /* eslint-env browser */
-import {
-  commonParams, getUnit, GameActor, parseDescription,
-} from '../gamelibrary';
+import { commonParams, GameActor, parseDescription } from '../gamelibrary';
 import mugIPA from '../img/IPA_mug_empty.png';
 import { setImg } from '../helperslib';
 import { beerTypes, mugLineParams } from '../usingparams';
@@ -79,14 +77,6 @@ export default parseDescription({
               }
             }
           }
-        },
-      },
-
-      startDnD: {
-        type: 'mousedown',
-        action({ target, event }) {
-          event.preventDefault();
-          getUnit('DragMug').addElement(target);
         },
       },
     },

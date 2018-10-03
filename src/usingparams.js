@@ -73,3 +73,17 @@ export const scorePosition = {
   width: 100,
   height: 50,
 };
+
+export const toPlaceCustomersTable = {
+  left: 50,
+  top: 80,
+  width: 250,
+  hookPlace: {
+    top: 11,
+    height: 90,
+    left: 58,
+    right: 58,
+  },
+};
+
+export const howLongToWait = 2000;

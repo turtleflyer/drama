@@ -2,6 +2,7 @@
 import './styles.css';
 import './index.html';
 import { commonParams, startModules } from './gamelibrary';
+import { toCommonParams } from './usingparams';
 
 import MugsOnLine from './units/MugsOnLine';
 import Scene from './units/Scene';
@@ -12,8 +13,12 @@ import MugPlaces from './units/MugPlaces';
 import BeerJet from './units/BeerJet';
 import Damages from './units/Damages';
 import MugFilling from './units/MugFilling';
+import CustomersTable from './units/CustomersTable';
+import MugWaiting from './units/MugWaiting';
 import Score from './units/Score';
-import { toCommonParams } from './usingparams';
+import Mugs from './powerUnits/Mugs';
+import DropPlaces from './powerUnits/DropPlaces';
+import AllUnits from './powerUnits/AllUnits';
 
 Object.assign(commonParams, toCommonParams);
 
@@ -26,6 +31,11 @@ startModules(
   BeerJet,
   Damages,
   MugFilling,
+  CustomersTable,
+  MugWaiting,
   Score,
   Scene,
+  Mugs,
+  DropPlaces,
+  AllUnits,
 );

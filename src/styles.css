@@ -49,6 +49,11 @@ img {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
+.CustomersTable {
+  z-index: 30;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 .FallenMug {
   z-index: 90;
 }
@@ -59,8 +64,6 @@ img {
 
 .BeerJet {
   z-index: 73;
-  /* background-color: yellow;
-  border: solid 1px yellow; */
 }
 
 .Score {

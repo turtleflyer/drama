@@ -1,25 +1,6 @@
 /* eslint-env browser */
 import { GameActor, parseDescription, getUnit } from '../gamelibrary';
-import { fireEvent } from '../eventswork';
-import { updateStyle } from '../helperslib';
 import { beerExpenses } from '../usingparams';
-
-function percentOverlap(targetBound, dragBound) {
-  function linearOverlap(s1, e1, s2, e2) {
-    const c = Math.min(e1 - s2, e2 - s1);
-    return c < 0 ? 0 : c;
-  }
-
-  const {
-    left: tLeft, top: tTop, right: tRight, bottom: tBottom,
-  } = targetBound;
-  const {
-    left: dLeft, top: dTop, right: dRight, bottom: dBottom, width, height,
-  } = dragBound;
-  const dragArea = width * height;
-  const overlapArea = linearOverlap(tLeft, tRight, dLeft, dRight) * linearOverlap(tTop, tBottom, dTop, dBottom);
-  return overlapArea / dragArea;
-}
 
 export default parseDescription({
   MugPlaces: {
@@ -39,52 +20,16 @@ export default parseDescription({
 
     nested() {
       return [...getUnit('Faucets')].map((f) => {
-        const div = document.createElement('div');
-        f.node.appendChild(div);
-        const place = new GameActor(div, f.mugPlace);
+        const place = new GameActor(document.createElement('div'), f.mugPlace);
+        place.mugPlace = true;
         place.faucet = f;
         f.mugPlace = place;
+        f.node.appendChild(place.node);
         return place;
       });
     },
 
     mechanism: {
-      checkEnter: {
-        type: 'checkEnter',
-        customType: true,
-        action({ target, event: { mug, tryToPlace } }) {
-          const placeRect = target.node.getBoundingClientRect();
-          const mugRect = mug.img.getBoundingClientRect();
-          const { faucet } = target;
-          if (percentOverlap(placeRect, mugRect) > 0.75) {
-            updateStyle(target.node, { 'background-color': 'rgba(255, 0, 0, 0.2)' });
-            if (tryToPlace) {
-              const MugFilling = getUnit('MugFilling');
-              updateStyle(target.node, { 'background-color': 'rgba(255, 255, 255, 0.2)' });
-              if (!faucet.placedMug) {
-                MugFilling.addElement(mug);
-                mug.faucet = target.faucet;
-                faucet.placedMug = mug;
-                target.node.appendChild(mug.node);
-                mug.setPosition({
-                  top: null,
-                  bottom: mugRect.height,
-                  left: (placeRect.width - mugRect.width) / 2,
-                });
-                return;
-              }
-            }
-          } else {
-            updateStyle(target.node, { 'background-color': 'rgba(255, 255, 255, 0.2)' });
-          }
-          if (tryToPlace) {
-            const FallenMug = getUnit('FallenMug');
-            FallenMug.addElement(mug);
-            fireEvent(FallenMug, 'fallDown');
-          }
-        },
-      },
-
       monitorWasting: {
         type: 'onTick',
         customType: true,

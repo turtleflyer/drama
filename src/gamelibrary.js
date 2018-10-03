@@ -29,19 +29,19 @@ class GameActor {
 
   setPosition(position) {
     if (position) {
-      // eslint-disable-next-line
       for (const prop of GameActor.props) {
         const style = position[prop];
         if (typeof style === 'number' || style === null) {
           this[prop] = style;
-          this.node.style[prop] = style === null ? null : appendPx(position[prop] * this.scaleFactor);
+          // prettier-ignore
+          this.node.style[prop] = style === null
+            ? null : appendPx(position[prop] * this.scaleFactor);
         }
       }
     }
   }
 
   refreshScale(newScale) {
-    // eslint-disable-next-line
     for (const actor of [this].concat(this.linked)) {
       actor.scaleFactor = newScale;
       actor.setPosition(actor);
@@ -92,7 +92,9 @@ function parseDescription(description) {
                     this.mechanism[name].action = action.bind(this);
                   }
                   if (terminate) {
-                    this.mechanism[name].terminate = (...arg) => (() => this.toTerminate) || terminate.apply(this, arg);
+                    // prettier-ignore
+                    this.mechanism[name].terminate = (...arg) => (() => this.toTerminate)
+                      || terminate.apply(this, arg);
                   } else {
                     this.mechanism[name].terminate = () => this.toTerminate;
                   }

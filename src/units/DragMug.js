@@ -17,7 +17,7 @@ export default parseDescription({
               left: x - width / scaleFactor / 2,
               top: y - height / scaleFactor / 2,
             });
-            fireEvent(getUnit('MugPlaces'), 'checkEnter', {
+            fireEvent(getUnit('DropPlaces'), 'checkEnter', {
               mug: target,
               tryToPlace: false,
             });
@@ -30,7 +30,7 @@ export default parseDescription({
         customType: true,
         action({ target }) {
           if (target) {
-            fireEvent(getUnit('MugPlaces'), 'checkEnter', {
+            fireEvent(getUnit('DropPlaces'), 'checkEnter', {
               mug: target,
               tryToPlace: true,
             });
