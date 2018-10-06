@@ -5,16 +5,30 @@ import faucetImg2 from './img/faucet-s2.png';
 export const toCommonParams = {
   scene: document.querySelector('#scene'),
   tickTimeout: 5,
-  sceneWidth: 1024,
-  sceneHeight: 640,
   level: 0,
+  margin: 3.5,
+};
+
+export const initState = {
+  reputation: 100,
+  drunkFactor: 1,
+};
+
+export const sceneDimension = {
+  width: 1024,
+  height: 640,
+};
+
+export const tuneGame = {
+  reputationDecrement: -5,
+  reputationIncrement: 3,
+  drunkFactorIncrement: 0.02,
 };
 
 export const beerTypes = { BEER_IPA: '@@beer/IPA' };
 
 export const mugLineParams = {
   topDistance: 220,
-  gapBetweenMugs: 30,
 };
 
 export const switchTypes = {
@@ -87,3 +101,9 @@ export const toPlaceCustomersTable = {
 };
 
 export const howLongToWait = 2000;
+
+export const possibleCustomerReactions = {
+  OK: '@@customerReaction/OK',
+  TOO_FEW: '@@customerReaction/TOO_FEW',
+  WRONG_BEER: '@@customerReaction/WRONG_BEER',
+};

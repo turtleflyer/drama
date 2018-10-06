@@ -1,7 +1,6 @@
 /* eslint-env browser */
 import { getUnit, parseDescription } from '../gamelibrary';
 import { fireEvent } from '../eventswork';
-import { updateStyle } from '../helperslib';
 
 export default parseDescription({
   DragMug: {
@@ -35,22 +34,6 @@ export default parseDescription({
               tryToPlace: true,
             });
           }
-        },
-      },
-    },
-  },
-
-  FallenMug: {
-    mechanism: {
-      fallDown: {
-        type: 'fallDown',
-        customType: true,
-        action({ target }) {
-          updateStyle(target.node, { transform: 'scale(0.5)' });
-          window.setTimeout(() => {
-            target.node.remove();
-            this.unit.delete(target);
-          }, 1000);
         },
       },
     },

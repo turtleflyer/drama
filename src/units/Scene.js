@@ -3,16 +3,22 @@ import {
   commonParams, getUnit, GameActor, parseDescription,
 } from '../gamelibrary';
 import { fireEvent } from '../eventswork';
+import { initState, sceneDimension } from '../usingparams';
 
 let sceneTarget;
 
 export default parseDescription({
   Scene: {
     initialize() {
+      Object.assign(commonParams, initState);
       switch (commonParams.level) {
         case 0:
-          commonParams.mugsSpeed = -50;
-          commonParams.money = 1000;
+          Object.assign(commonParams, {
+            mugsSpeed: -75,
+            money: 100,
+            loanExpenses: 0,
+            initMugDensity: 4,
+          });
           break;
 
         default:
@@ -24,11 +30,8 @@ export default parseDescription({
     nested() {
       const { left, top } = commonParams.scene.getBoundingClientRect();
       this.position = { x: left, y: top };
-      const { sceneWidth, sceneHeight } = commonParams;
-      sceneTarget = new GameActor(commonParams.scene, {
-        width: sceneWidth,
-        height: sceneHeight,
-      });
+      const { width, height } = sceneDimension;
+      sceneTarget = new GameActor(commonParams.scene, { width, height });
       return [sceneTarget];
     },
 

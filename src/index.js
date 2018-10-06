@@ -7,6 +7,7 @@ import { toCommonParams } from './usingparams';
 import MugsOnLine from './units/MugsOnLine';
 import Scene from './units/Scene';
 import DragMug from './units/DragMug';
+import FallenMug from './units/FallenMug';
 import Faucets from './units/Faucets';
 import FaucetSwitches from './units/FaucetSwitches';
 import MugPlaces from './units/MugPlaces';
@@ -25,6 +26,7 @@ Object.assign(commonParams, toCommonParams);
 startModules(
   MugsOnLine,
   DragMug,
+  FallenMug,
   Faucets,
   FaucetSwitches,
   MugPlaces,

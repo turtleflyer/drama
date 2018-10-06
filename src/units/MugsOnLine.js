@@ -2,9 +2,11 @@
 import { commonParams, GameActor, parseDescription } from '../gamelibrary';
 import mugIPA from '../img/IPA_mug_empty.png';
 import { setImg } from '../helperslib';
-import { beerTypes, mugLineParams } from '../usingparams';
+import {
+  beerTypes, mugLineParams, sceneDimension, tuneGame,
+} from '../usingparams';
 
-const { topDistance, gapBetweenMugs } = mugLineParams;
+const { topDistance } = mugLineParams;
 
 export default parseDescription({
   MugsOnLine: {
@@ -38,8 +40,11 @@ export default parseDescription({
           const {
             positionsMap, lastPosition, lastTime, lastMug,
           } = memory;
+          const { width: sceneWidth } = sceneDimension;
+          const { initMugDensity, reputation } = commonParams;
+          const mugDensity = initMugDensity * (reputation / 100);
           if (!positionsMap) {
-            const newbornPosition = commonParams.sceneWidth - 1;
+            const newbornPosition = sceneWidth - 1;
             const newbornMug = this.renderMug(this.getType(), newbornPosition);
             this.unit.addElement(newbornMug);
             memory.positionsMap = new Map([[newbornMug, newbornPosition]]);
@@ -54,11 +59,13 @@ export default parseDescription({
                 const newPosition = position + shift;
                 positionsMap.set(mug, newPosition);
                 if (mug === lastMug) {
-                  expectedNewbornPosition = newPosition + mug.width + gapBetweenMugs;
+                  expectedNewbornPosition = newPosition
+                    + mug.width
+                    + (sceneWidth * 0.6 - lastMug.width * mugDensity) / (mugDensity - 1);
                 }
               }
               memory.lastTime = currTime;
-              if (expectedNewbornPosition < commonParams.sceneWidth) {
+              if (expectedNewbornPosition < sceneWidth) {
                 const newbornMug = this.renderMug(this.getType(), expectedNewbornPosition);
                 this.unit.addElement(newbornMug);
                 positionsMap.set(newbornMug, expectedNewbornPosition);
@@ -71,6 +78,7 @@ export default parseDescription({
                 target.node.remove();
                 this.unit.delete(target);
                 positionsMap.delete(target);
+                commonParams.reputation += tuneGame.reputationDecrement;
               } else {
                 target.setPosition({ left: newPosition });
                 memory.lastPosition = newPosition;
