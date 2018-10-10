@@ -1,7 +1,7 @@
 /* eslint-env browser */
-import { getUnit, parseDescription } from '../gamelibrary';
+import { getUnit, parseDescription, commonParams } from '../gamelibrary';
 import { updateStyle, percentOverlap } from '../helperslib';
-import { fireEvent, makeUnit } from '../eventswork';
+import { makeUnit } from '../eventswork';
 
 const lastCheck = makeUnit([]);
 
@@ -19,11 +19,15 @@ export default parseDescription({
               if (!mug.placed) {
                 const FallenMug = getUnit('FallenMug');
                 FallenMug.addElement(mug);
-                // fireEvent(FallenMug, 'fallDown');
               }
             } else {
+              const { scaleFactor } = commonParams;
               const placeRect = target.node.getBoundingClientRect();
               const mugRect = mug.img.getBoundingClientRect();
+              const sceneRect = commonParams.scene.getBoundingClientRect();
+              console.log('placeRect: ', placeRect);
+              console.log('mugRect: ', mugRect);
+              console.log('sceneRect: ', sceneRect);
               if (percentOverlap(placeRect, mugRect) > 0.75) {
                 switch (true) {
                   case target.mugPlace:
@@ -34,11 +38,15 @@ export default parseDescription({
                         MugFilling.addElement(mug);
                         mug.faucet = target.faucet;
                         faucet.placedMug = mug;
-                        target.node.appendChild(mug.node);
                         mug.setPosition({
                           top: null,
-                          bottom: mugRect.height,
-                          left: (placeRect.width - mugRect.width) / 2,
+                          bottom:
+                            (sceneRect.bottom - placeRect.bottom + mugRect.height) / scaleFactor,
+                          left:
+                            (placeRect.left
+                              - sceneRect.left
+                              + (placeRect.width - mugRect.width) / 2)
+                            / scaleFactor,
                         });
                         mug.placed = true;
                       }
@@ -49,11 +57,14 @@ export default parseDescription({
                     {
                       const MugWaiting = getUnit('MugWaiting');
                       MugWaiting.addElement(mug);
-                      target.node.appendChild(mug.node);
                       mug.setPosition({
                         top: null,
-                        bottom: mugRect.height + placeRect.height / 4,
-                        left: mugRect.left - placeRect.left,
+                        bottom:
+                          (sceneRect.bottom
+                            - placeRect.bottom
+                            + (mugRect.height + placeRect.height / 4))
+                          / scaleFactor,
+                        left: (mugRect.left - sceneRect.left) / scaleFactor,
                       });
                       mug.placed = true;
                     }

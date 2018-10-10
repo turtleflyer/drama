@@ -17,7 +17,6 @@ export default parseDescription({
             target.faucet = null;
             target.placed = false;
           }
-          target.setPosition({ left: 10000, top: 1000 });
           commonParams.scene.appendChild(target.node);
           getUnit('DragMug').addElement(target);
         },
