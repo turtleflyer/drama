@@ -1,7 +1,5 @@
 /* eslint-env browser */
-import { getUnit, parseDescription } from '../gamelibrary';
-
-let sceneTarget;
+import { getUnit, parseDescription, commonParams } from '../gamelibrary';
 
 export default parseDescription({
   AllUnits: {
@@ -26,7 +24,7 @@ export default parseDescription({
         action({ unit, target }) {
           if (unit !== this.unit) {
             unit.description.toTerminate = true;
-            if (target !== sceneTarget) {
+            if (target.node !== commonParams.scene) {
               target.node.remove();
               unit.clear();
             }

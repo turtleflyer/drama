@@ -5,8 +5,6 @@ import {
 import { fireEvent } from '../eventswork';
 import { initState, sceneDimension } from '../usingparams';
 
-let sceneTarget;
-
 export default parseDescription({
   Scene: {
     initialize() {
@@ -31,8 +29,7 @@ export default parseDescription({
       const { left, top } = commonParams.scene.getBoundingClientRect();
       this.position = { x: left, y: top };
       const { width, height } = sceneDimension;
-      sceneTarget = new GameActor(commonParams.scene, { width, height });
-      return [sceneTarget];
+      return [new GameActor(commonParams.scene, { width, height })];
     },
 
     mechanism: {

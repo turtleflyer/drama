@@ -1,14 +1,12 @@
 /* eslint-env browser */
-import { parseDescription, commonParams } from '../gamelibrary';
+import { parseDescription, commonParams, onAddElement } from '../gamelibrary';
 import { updateStyle } from '../helperslib';
 import { tuneGame } from '../usingparams';
 
 export default parseDescription({
   FallenMug: {
     mechanism: {
-      fallDown: {
-        type: 'fallDown',
-        customType: true,
+      [onAddElement]: {
         action({ target }) {
           updateStyle(target.node, { transform: 'scale(0.5)' });
           commonParams.reputation += tuneGame.reputationDecrement;

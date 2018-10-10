@@ -19,7 +19,7 @@ export default parseDescription({
               if (!mug.placed) {
                 const FallenMug = getUnit('FallenMug');
                 FallenMug.addElement(mug);
-                fireEvent(FallenMug, 'fallDown');
+                // fireEvent(FallenMug, 'fallDown');
               }
             } else {
               const placeRect = target.node.getBoundingClientRect();

@@ -19,8 +19,7 @@ const eventsStore = new Map();
  */
 const elementsMap = new Map();
 const customEventTypes = new Set();
-const fireFromQueueType = Symbol('@@fireFromQueue');
-const queueToFire = new Set();
+const unitsAddElementAction = new Map();
 const queueData = new Map();
 const routine = { interpretTarget: t => t, whenAddToUnit: () => {} };
 
@@ -80,7 +79,7 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
-function defineRoutine(interpretTarget, whenAddToUnit) {
+function defineRoutine({ interpretTarget, whenAddToUnit }) {
   if (interpretTarget) {
     routine.interpretTarget = interpretTarget;
   }
@@ -98,7 +97,7 @@ function defineRoutine(interpretTarget, whenAddToUnit) {
  * @returns {callback}
  */
 function getCallback(target, type, parent) {
-  // eslint-disable-next-line no-shadow
+  // eslint-disable-next-line
   function stageCallback(target, type, event, parent) {
     let getParent = parent;
     if (!parent) {
@@ -154,6 +153,7 @@ function addCallbackToChildren(parent, type) {
     const mapOfIDs = getFromDeepMap(eventsStore, parent).next(type).map;
     if (mapOfIDs.size === 0) {
       [...parent].forEach((element) => {
+        // eslint-disable-next-line
         if (element instanceof Unit) {
           addCallbackToChildren(element, type);
         } else {
@@ -164,10 +164,15 @@ function addCallbackToChildren(parent, type) {
   }
 }
 
+const addElementType = Symbol('@@addElement');
+
+// eslint-disable-next-line
+registerEventType(addElementType);
+
 class Unit extends Set {
   /**
    *Creates an instance of Unit.
-   * @param {Set} list
+   * @param {Set|Array} list
    */
   constructor(list) {
     const elements = [...list];
@@ -175,6 +180,18 @@ class Unit extends Set {
     elements.forEach((element) => {
       elementsMap.set(element, { belong: this });
     });
+    unitsAddElementAction.set(this, () => {});
+    // eslint-disable-next-line
+    eventChain(
+      {
+        unit: this,
+        type: addElementType,
+        action: (...args) => {
+          unitsAddElementAction.get(this)(...args);
+        },
+      },
+      Symbol('@@elementAdded'),
+    );
   }
 
   /**
@@ -227,6 +244,8 @@ class Unit extends Set {
         }
       });
     }
+    // eslint-disable-next-line
+    fireEvent(this, addElementType, { addedElement: element });
   }
 }
 
@@ -241,7 +260,37 @@ function makeUnit(list) {
   return new Unit(list);
 }
 
+function setActionOnAddedElement(unit, action) {
+  unitsAddElementAction.set(unit, action);
+}
+
 const worker = makeUnit([]);
+
+const fireFromQueueType = Symbol('@@fireFromQueue');
+
+// eslint-disable-next-line
+registerEventType(fireFromQueueType);
+
+// eslint-disable-next-line
+eventChain(
+  {
+    unit: worker,
+    type: fireFromQueueType,
+    action: function fire() {
+      const [nextE] = queueData.keys();
+      if (nextE) {
+        [...queueData.get(nextE).entries()].forEach(([type, event]) => {
+          // eslint-disable-next-line
+          fireEvent(nextE, type, event);
+        });
+        queueData.delete(nextE);
+        // eslint-disable-next-line
+        Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
+      }
+    },
+  },
+  Symbol('@@queue'),
+);
 
 /**
  *
@@ -278,25 +327,24 @@ function waitGroupEvent(unit, type, eventID) {
 /**
  *
  *
- * @param {(Element|UnitClass)} target
+ * @param {(Element|UnitClass)} unit
  * @param {string} type
  * @param {Object} event
  * @memberof EventsWork
  */
-function fireEvent(target, type, event) {
-  if (target instanceof Unit) {
-    if (target.size > 0) {
-      [...target].forEach((e) => {
-        queueToFire.add(e);
+function fireEvent(unit, type, event) {
+  if (unit instanceof Unit) {
+    if (unit.size > 0) {
+      [...unit].forEach((e) => {
         const mapOfTypes = getFromDeepMap(queueData, e).map;
         mapOfTypes.set(type, event);
       });
       fireEvent(worker, fireFromQueueType);
     } else {
-      getCallback(null, type, target)(event);
+      getCallback(null, type, unit)(event);
     }
   } else {
-    getCallback(target, type)(event);
+    getCallback(unit, type)(event);
   }
 }
 
@@ -324,7 +372,7 @@ function fireEvent(target, type, event) {
  */
 
 /**
- * @typedef {Onject} ChainInit
+ * @typedef {Object} ChainInit
  * @property {UnitClass|Set} unit
  * @property {string} type
  * @property {ToDoIfFired} action
@@ -368,29 +416,11 @@ function eventChain(description, eventID, memory = {}) {
   return eventID;
 }
 
-registerEventType(fireFromQueueType);
-eventChain(
-  {
-    unit: worker,
-    type: fireFromQueueType,
-    action: function fire() {
-      const nextE = [...queueToFire][0];
-      if (nextE) {
-        queueToFire.delete(nextE);
-        const mapOfTypes = queueData.get(nextE);
-        [...mapOfTypes.entries()].forEach(([type, event]) => {
-          if (event !== null) {
-            mapOfTypes.set(type, null);
-            fireEvent(nextE, type, event);
-          }
-        });
-        Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
-      }
-    },
-  },
-  Symbol('@@queue'),
-);
-
 export {
-  defineRoutine, makeUnit, registerEventType, fireEvent, eventChain,
+  defineRoutine,
+  makeUnit,
+  setActionOnAddedElement,
+  registerEventType,
+  fireEvent,
+  eventChain,
 };

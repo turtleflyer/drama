@@ -1,14 +1,24 @@
 import {
-  defineRoutine, makeUnit, registerEventType, fireEvent, eventChain,
+  defineRoutine,
+  makeUnit,
+  registerEventType,
+  fireEvent,
+  eventChain,
+  setActionOnAddedElement,
 } from './eventswork';
 
-defineRoutine(e => e.node, function (e, unit) {
-  if (e.node) {
-    e.node.classList.add(this.name);
-    if (unit) {
-      e.node.classList.remove(unit.name);
+const onAddElement = Symbol('@@onAddElement');
+
+defineRoutine({
+  interpretTarget: e => e.node,
+  whenAddToUnit(e, unit) {
+    if (e.node) {
+      e.node.classList.add(this.name);
+      if (unit) {
+        e.node.classList.remove(unit.name);
+      }
     }
-  }
+  },
 });
 
 const registeredUnits = new Map();
@@ -66,28 +76,33 @@ function parseDescription(description) {
   const seeds = [];
   Object.entries(description).forEach(([nameOfUnit, unitDescription]) => {
     seeds.push(
-      new class UnitDescriptor {
+      new class UnitDescription {
         constructor(toParse) {
           this.startChain = this.startChain.bind(this);
-          let getList = () => [];
+          let getElements = () => [];
+          let whenAddToUnitAction;
           Object.entries(toParse).forEach(([key, body]) => {
             switch (key) {
               case 'nested': {
                 if (typeof body === 'function') {
-                  getList = body.bind(this);
+                  getElements = body.bind(this);
                 } else {
-                  getList = () => body;
+                  getElements = () => body;
                 }
                 break;
               }
 
-              case 'mechanism':
+              case 'mechanism': {
                 this.mechanism = {};
+                const whenAddToUnit = body[onAddElement];
+                if (whenAddToUnit) {
+                  whenAddToUnitAction = whenAddToUnit.action;
+                }
                 Object.entries(body).forEach(([name, behave]) => {
-                  this.mechanism = { ...this.mechanism, [name]: behave };
                   const {
                     action, customType, type, terminate,
                   } = behave;
+                  this.mechanism = { ...this.mechanism, [name]: behave };
                   if (action) {
                     this.mechanism[name].action = action.bind(this);
                   }
@@ -103,6 +118,7 @@ function parseDescription(description) {
                   }
                 });
                 break;
+              }
 
               default:
                 if (typeof body === 'function') {
@@ -119,17 +135,21 @@ function parseDescription(description) {
             this.initialize = [this.initialize];
           }
           this.initialize.unshift(() => {
-            this.unit = makeUnit(
-              getList().map((e) => {
+            const unit = makeUnit(
+              getElements().map((e) => {
                 if (e.node) {
                   e.node.classList.add(nameOfUnit);
                 }
                 return e;
               }),
             );
-            registeredUnits[nameOfUnit] = this.unit;
-            this.unit.name = nameOfUnit;
-            this.unit.description = this;
+            registeredUnits[nameOfUnit] = unit;
+            unit.name = nameOfUnit;
+            unit.description = this;
+            if (whenAddToUnitAction) {
+              setActionOnAddedElement(unit, whenAddToUnitAction.bind(this));
+            }
+            this.unit = unit;
           });
           this.toTerminate = false;
         }
@@ -181,5 +201,5 @@ function startModules(...modules) {
 }
 
 export {
-  commonParams, getUnit, GameActor, parseDescription, startModules,
+  onAddElement, commonParams, getUnit, GameActor, parseDescription, startModules,
 };
