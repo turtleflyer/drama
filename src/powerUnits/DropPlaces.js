@@ -7,13 +7,13 @@ const lastCheck = makeUnit([]);
 
 export default parseDescription({
   DropPlaces: {
-    nested: () => [getUnit('MugPlaces'), getUnit('CustomersTable'), lastCheck],
+    nested: () => [getUnit('MugPlaces'), getUnit('HookPlace'), lastCheck],
 
     mechanism: {
       checkEnter: {
         type: 'checkEnter',
         customType: true,
-        action({ target, event: { mug, tryToPlace } }) {
+        action({ target, unit, event: { mug, tryToPlace } }) {
           if (tryToPlace) {
             if (!target) {
               if (!mug.placed) {
@@ -25,13 +25,11 @@ export default parseDescription({
               const placeRect = target.node.getBoundingClientRect();
               const mugRect = mug.img.getBoundingClientRect();
               const sceneRect = commonParams.scene.getBoundingClientRect();
-              console.log('placeRect: ', placeRect);
-              console.log('mugRect: ', mugRect);
-              console.log('sceneRect: ', sceneRect);
               if (percentOverlap(placeRect, mugRect) > 0.75) {
-                switch (true) {
-                  case target.mugPlace:
+                switch (unit.name) {
+                  case 'MugPlaces':
                     {
+                      console.log('unit: ', unit);
                       const { faucet } = target;
                       if (!faucet.placedMug) {
                         const MugFilling = getUnit('MugFilling');
@@ -53,8 +51,9 @@ export default parseDescription({
                     }
                     break;
 
-                  case target.customersTable:
+                  case 'HookPlace':
                     {
+                      console.log('unit: ', unit);
                       const MugWaiting = getUnit('MugWaiting');
                       MugWaiting.addElement(mug);
                       mug.setPosition({

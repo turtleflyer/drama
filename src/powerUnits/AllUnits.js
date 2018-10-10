@@ -13,6 +13,7 @@ export default parseDescription({
       getUnit('FaucetSwitches'),
       getUnit('DropPlaces'),
       getUnit('Damages'),
+      getUnit('CustomersTable'),
       getUnit('MugWaiting'),
       getUnit('Score'),
     ],

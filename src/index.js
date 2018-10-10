@@ -20,6 +20,7 @@ import Score from './units/Score';
 import Mugs from './powerUnits/Mugs';
 import DropPlaces from './powerUnits/DropPlaces';
 import AllUnits from './powerUnits/AllUnits';
+import StopButton from './debug/StopButton';
 
 Object.assign(commonParams, toCommonParams);
 
@@ -41,3 +42,6 @@ startModules(
   DropPlaces,
   AllUnits,
 );
+
+// debug section
+startModules(StopButton);
