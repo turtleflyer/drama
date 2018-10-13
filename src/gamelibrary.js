@@ -130,27 +130,28 @@ function parseDescription(description) {
             }
           });
           if (!this.initialize) {
-            this.initialize = [this.startChain];
+            this.initialize = { start: this.startChain };
           } else {
-            this.initialize = [this.initialize];
+            this.initialize = { start: this.initialize };
           }
-          this.initialize.unshift(() => {
-            const unit = makeUnit(
-              getElements().map((e) => {
-                if (e.node) {
-                  e.node.classList.add(nameOfUnit);
-                }
-                return e;
-              }),
-            );
-            registeredUnits[nameOfUnit] = unit;
-            unit.name = nameOfUnit;
-            unit.description = this;
-            if (whenAddToUnitAction) {
-              setActionOnAddedElement(unit, whenAddToUnitAction.bind(this));
+          this.initialize.buildUnit = () => {
+            if (!this.unit) {
+              const unit = makeUnit([]);
+              registeredUnits[nameOfUnit] = unit;
+              unit.name = nameOfUnit;
+              unit.description = this;
+              if (whenAddToUnitAction) {
+                setActionOnAddedElement(unit, whenAddToUnitAction.bind(this));
+              }
+              this.unit = unit;
             }
-            this.unit = unit;
-          });
+            getElements().forEach((e) => {
+              if (e.node) {
+                e.node.classList.add(nameOfUnit);
+              }
+              this.unit.addElement(e);
+            });
+          };
           this.toTerminate = false;
         }
 
@@ -190,14 +191,17 @@ function parseDescription(description) {
 
 function startModules(...modules) {
   const allModules = [].concat(...modules);
-  function lunchFromInit(i) {
-    allModules.forEach((m) => {
-      const { initialize } = m;
-      initialize[i]();
-    });
-  }
-  lunchFromInit(0);
-  lunchFromInit(1);
+  const lunchFromInit = {};
+  ['start', 'buildUnit'].forEach((key) => {
+    lunchFromInit[key] = () => {
+      allModules.forEach((m) => {
+        m.initialize[key]();
+        m.toTerminate = false;
+      });
+    };
+  });
+  lunchFromInit.buildUnit();
+  lunchFromInit.start();
 }
 
 export {

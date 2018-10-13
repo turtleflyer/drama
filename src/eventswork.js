@@ -137,7 +137,9 @@ function addCallback(target, type) {
   const elementEntry = elementsMap.get(target);
   const setOfTypes = getSome(elementEntry, 'types', () => new Set());
   if (!setOfTypes.has(type)) {
-    routine.interpretTarget(target).addEventListener(type, getCallback(target, type));
+    if (routine.interpretTarget(target)) {
+      routine.interpretTarget(target).addEventListener(type, getCallback(target, type));
+    }
     setOfTypes.add(type);
   }
 }
@@ -245,7 +247,7 @@ class Unit extends Set {
       });
     }
     // eslint-disable-next-line
-    fireEvent(this, addElementType, { addedElement: element });
+    fireEvent(this, addElementType, { addedElement: element, stopPropagation: true });
   }
 }
 
@@ -336,8 +338,10 @@ function fireEvent(unit, type, event) {
   if (unit instanceof Unit) {
     if (unit.size > 0) {
       [...unit].forEach((e) => {
-        const mapOfTypes = getFromDeepMap(queueData, e).map;
-        mapOfTypes.set(type, event);
+        if (!event || !event.stopPropagation || !(e instanceof Unit)) {
+          const mapOfTypes = getFromDeepMap(queueData, e).map;
+          mapOfTypes.set(type, event);
+        }
       });
       fireEvent(worker, fireFromQueueType);
     } else {

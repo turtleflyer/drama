@@ -36,6 +36,7 @@ export default parseDescription({
         type: 'onTick',
         customType: true,
         action({ target, memory }) {
+          console.log('tac');
           const currTime = Date.now();
           const {
             positionsMap, lastPosition, lastTime, lastMug,

@@ -37,6 +37,7 @@ export default parseDescription({
         type: 'tickAnimation',
         regAsCustom: true,
         action() {
+          // console.log('tic');
           fireEvent(getUnit('AllUnits'), 'onTick');
           window.setTimeout(() => {
             fireEvent(this.unit, 'tickAnimation');
@@ -48,6 +49,7 @@ export default parseDescription({
       dragND: {
         type: 'mousemove',
         action({ target, event }) {
+          console.log('mousemove');
           event.preventDefault();
           const { clientX, clientY } = event;
           const { scaleFactor } = target;

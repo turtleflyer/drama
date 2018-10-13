@@ -97,6 +97,7 @@ export default parseDescription({
         customType: true,
         action({ target, event: { affected } }) {
           if (target === affected) {
+            console.log('switchImg');
             const newPhase = 1 - target.activeState.phase;
             setImg(target, target.imgPhases[newPhase], {
               height: '100%',

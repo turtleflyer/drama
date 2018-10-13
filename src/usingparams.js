@@ -5,7 +5,6 @@ import faucetImg2 from './img/faucet-s2.png';
 export const toCommonParams = {
   scene: document.querySelector('#scene'),
   tickTimeout: 5,
-  level: 0,
   margin: 3.5,
 };
 

@@ -20,11 +20,13 @@ export default parseDescription({
       switchState: {
         type: 'click',
         action({ target, event }) {
+          console.log('click');
           event.preventDefault();
           event.stopPropagation();
           const { faucet } = target;
           const { switchType, beerTypes, activeState } = faucet;
           const Faucets = getUnit('Faucets');
+          console.log('Faucets: ', Faucets);
           switch (switchType) {
             case switchTypes.NORMAL:
               activeState.switchOpened = !activeState.switchOpened;

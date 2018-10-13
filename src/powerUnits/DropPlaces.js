@@ -3,7 +3,7 @@ import { getUnit, parseDescription, commonParams } from '../gamelibrary';
 import { updateStyle, percentOverlap } from '../helperslib';
 import { makeUnit } from '../eventswork';
 
-const lastCheck = makeUnit([]);
+const lastCheck = Symbol('@@lastChek');
 
 export default parseDescription({
   DropPlaces: {
@@ -15,7 +15,7 @@ export default parseDescription({
         customType: true,
         action({ target, unit, event: { mug, tryToPlace } }) {
           if (tryToPlace) {
-            if (!target) {
+            if (target === lastCheck) {
               if (!mug.placed) {
                 const FallenMug = getUnit('FallenMug');
                 FallenMug.addElement(mug);
@@ -74,7 +74,7 @@ export default parseDescription({
                 }
               }
             }
-          } else if (target) {
+          } else if (target !== lastCheck) {
             const placeRect = target.node.getBoundingClientRect();
             const mugRect = mug.img.getBoundingClientRect();
             if (percentOverlap(placeRect, mugRect) > 0.75) {
