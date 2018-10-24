@@ -30,6 +30,11 @@ export const mugsParams = {
 
 export const pulseTimeout = 5;
 
+export const stageParams = {
+  reputation: 100,
+  drunkFactor: 1,
+};
+
 export const tuneGame = {
   reputationDecrement: -5,
   reputationIncrement: 3,

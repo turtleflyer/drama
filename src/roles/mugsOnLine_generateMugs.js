@@ -37,7 +37,6 @@ export default onPulseTick.registerAction(mugsOnLine, {
         this.roleSet.delete(target);
         target.remove();
         stage.reputation += tuneGame.reputationDecrement;
-        console.log('stage.reputation: ', stage.reputation);
         if (this.roleSet.size === 2) {
           placeholdersMap.clear();
         }
@@ -55,51 +54,6 @@ export default onPulseTick.registerAction(mugsOnLine, {
         }
       }
     }
-    // const { initMugDensity, reputation } = stage;
-    // const mugDensity = initMugDensity * (reputation / 100);
-    // if (!positionsMap) {
-    //   const newMugType = determineTypeOfBeer();
-    //   const newbornPosition = stageWidth - 1 + mugTypes[newMugType].width / 2;
-    //   const newbornMug = new Mug(stage, newMugType, newbornPosition);
-    //   this.actorsSet.addElement(newbornMug);
-    //   memory.positionsMap = new Map([[newbornMug, newbornPosition]]);
-    //   memory.lastPosition = newbornPosition;
-    //   memory.lastTime = currTime;
-    //   memory.lastMug = newbornMug;
-    // } else {
-    //   if (!target || target.left >= lastPosition) {
-    //     const shift = ((currTime - lastTime) / 1000) * stage.mugsSpeed;
-    //     let expectedNewbornPosition;
-    //     for (const [mug, position] of positionsMap.entries()) {
-    //       const newPosition = position + shift;
-    //       positionsMap.set(mug, newPosition);
-    //       if (mug === lastMug) {
-    //         expectedNewbornPosition = newPosition
-    //           + mug.width
-    //           + (stageWidth * 0.6 - lastMug.width * mugDensity) / (mugDensity - 1);
-    //       }
-    //     }
-    //     memory.lastTime = currTime;
-    //     if (expectedNewbornPosition < stageWidth) {
-    //       const newbornMug = new Mug(stage, beerTypes.BEER_IPA, expectedNewbornPosition);
-    //       this.roleSet.addElement(newbornMug);
-    //       positionsMap.set(newbornMug, expectedNewbornPosition);
-    //       memory.lastMug = newbornMug;
-    //     }
-    //   }
-    //   if (target) {
-    //     const newPosition = positionsMap.get(target);
-    //     if (newPosition + target.width <= 0) {
-    //       target.node.remove();
-    //       this.unit.delete(target);
-    //       positionsMap.delete(target);
-    //       stage.reputation += tuneGame.reputationDecrement;
-    //     } else {
-    //       target.setPosition({ left: newPosition });
-    //       memory.lastPosition = newPosition;
-    //     }
-    //   }
-    // }
   },
   initMemoryState: {
     placeholdersMap: (function () {

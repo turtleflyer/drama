@@ -1,6 +1,7 @@
 /* eslint-env browser */
-import { stageDimension } from '../common_params';
+import { stageDimension, stageParams } from '../common_params';
 import { ActorsSet, Actor } from '../actors_and_roles';
+import levelsDescription from '../levels_description';
 
 class Stage extends ActorsSet {
   constructor(node, dimension) {
@@ -15,21 +16,7 @@ class Stage extends ActorsSet {
   }
 
   defineLevel(level) {
-    switch (level) {
-      case 0:
-        Object.assign(this, {
-          mugsSpeed: -75,
-          money: 100,
-          loanExpenses: 0,
-          initMugDensity: 4,
-        });
-        break;
-
-      default:
-        break;
-    }
-    this.reputation = 100;
-    this.drunkFactor = 1;
+    Object.assign(this, levelsDescription[level], stageParams);
   }
 }
 
