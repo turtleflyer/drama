@@ -1,22 +1,16 @@
 /* eslint-env browser */
 import './styles.css';
-import './index.html';
-import { commonParams, startModules, getUnit } from './gamelibrary';
-import { toCommonParams } from './usingparams';
+import stage from './role_sets/stage';
+import mugsOnLine from './role_sets/mugsOnLine';
+import setA from './supersets/setA';
+import generateMugs from './roles/generateMugs';
+import sendPulse from './roles/sendPulse';
 
-import StopButton from './debug/StopButton';
-import LevelForm from './debug/LevelForm';
-import { startLevel } from './start';
-import Scene from './units/Scene';
-import AllUnits from './powerUnits/AllUnits';
+// mugsOnLine.fill();
+// setA.fill();
+sendPulse.start();
+generateMugs.start();
+sendPulse.fireItself();
 
-Object.assign(commonParams, toCommonParams);
-
-startLevel(0);
-
-startModules(Scene, AllUnits);
-
-// debug section
-startModules(StopButton, LevelForm);
-
-// console.log("'getUnit('FallenMug'): '", getUnit('FallenMug'));
+// console.log('sendPulse: ', sendPulse);
+// console.log('generateMugs: ', generateMugs);

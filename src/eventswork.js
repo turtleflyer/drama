@@ -1,7 +1,7 @@
 /**
  *   eventsStore structure:
  *  Map(
- *    [unit, Map(
+ *    [roleSet, Map(
  *      [type, Map(
  *        [eventID, [...resolve]]
  *      )]
@@ -13,15 +13,17 @@ const eventsStore = new Map();
 /**
  *  elementsMap structure:
  *  Map(
- *    [element, { unit, types: Set of types }]
+ *    [element, { roleSet, types: Set of types }]
  *  )
  *
  */
 const elementsMap = new Map();
 const customEventTypes = new Set();
-const unitsAddElementAction = new Map();
-const queueData = new Map();
-const routine = { interpretTarget: t => t, whenAddToUnit: () => {} };
+const onAddElementActionsMap = new Map();
+// const queueData = new Map();
+const queueData = [];
+const routine = { interpretTarget: t => t };
+const fireFromQueueType = Symbol('@@fireFromQueue');
 
 /**
  *
@@ -51,7 +53,6 @@ function getSome(obj, key, create) {
     if (obj instanceof Map) {
       obj.set(key, toGet);
     } else {
-      // eslint-disable-next-line
       obj[key] = toGet;
     }
   }
@@ -79,12 +80,19 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
-function defineRoutine({ interpretTarget, whenAddToUnit }) {
+/**
+ *
+ *
+ * @param {*} type
+ * @memberof EventsWork
+ */
+function registerEventType(type) {
+  customEventTypes.add(type);
+}
+
+export function defineRoutine({ interpretTarget }) {
   if (interpretTarget) {
     routine.interpretTarget = interpretTarget;
-  }
-  if (whenAddToUnit) {
-    routine.whenAddToUnit = whenAddToUnit;
   }
 }
 
@@ -109,7 +117,7 @@ function getCallback(target, type, parent) {
         const [eventID, handle] = typeEntry;
         handle({
           target,
-          unit: target ? elementsMap.get(target).belong : parent,
+          roleSet: target ? elementsMap.get(target).belong : parent,
           event,
           eventID,
         });
@@ -156,7 +164,7 @@ function addCallbackToChildren(parent, type) {
     if (mapOfIDs.size === 0) {
       [...parent].forEach((element) => {
         // eslint-disable-next-line
-        if (element instanceof Unit) {
+        if (element instanceof RoleSet) {
           addCallbackToChildren(element, type);
         } else {
           addCallback(element, type);
@@ -168,53 +176,53 @@ function addCallbackToChildren(parent, type) {
 
 const addElementType = Symbol('@@addElement');
 
-// eslint-disable-next-line
 registerEventType(addElementType);
 
-class Unit extends Set {
+/**
+ *
+ *
+ * @param {EventsWork} context
+ * @param {RoleSet} roleSet
+ * @param {*[]} types
+ * @returns {*[]}
+ */
+function combineTypes(roleSet, types) {
+  let getTypes = types;
+  if (!getTypes) {
+    getTypes = [];
+  }
+  getTypes = getTypes.concat([...getFromDeepMap(eventsStore, roleSet).map.keys()]);
+  const parentEntry = elementsMap.get(roleSet);
+  if (parentEntry) {
+    combineTypes(parentEntry.belong, getTypes);
+  }
+  return getTypes;
+}
+
+export class RoleSet extends Set {
   /**
    *Creates an instance of Unit.
    * @param {Set|Array} list
    */
-  constructor(list) {
-    const elements = [...list];
+  constructor(elements) {
     super(elements);
-    elements.forEach((element) => {
-      elementsMap.set(element, { belong: this });
-    });
-    unitsAddElementAction.set(this, () => {});
+    if (elements) {
+      elements.forEach((e) => {
+        elementsMap.set(e, { belong: this });
+      });
+    }
+    onAddElementActionsMap.set(this, () => {});
     // eslint-disable-next-line
     eventChain(
       {
-        unit: this,
+        roleSet: this,
         type: addElementType,
         action: (...args) => {
-          unitsAddElementAction.get(this)(...args);
+          onAddElementActionsMap.get(this)(...args);
         },
       },
       Symbol('@@elementAdded'),
     );
-  }
-
-  /**
-   *
-   *
-   * @param {EventsWork} context
-   * @param {Unit} unit
-   * @param {*[]} types
-   * @returns {*[]}
-   */
-  static combineTypes(unit, types) {
-    let getTypes = types;
-    if (!getTypes) {
-      getTypes = [];
-    }
-    getTypes = getTypes.concat([...getFromDeepMap(eventsStore, unit).map.keys()]);
-    const parentEntry = elementsMap.get(unit);
-    if (parentEntry) {
-      Unit.combineTypes(parentEntry.belong, getTypes);
-    }
-    return getTypes;
   }
 
   /**
@@ -227,15 +235,14 @@ class Unit extends Set {
     const elementEntry = getSome(
       elementsMap,
       element,
-      () => (element instanceof Unit ? {} : { types: new Set() }),
+      () => (element instanceof RoleSet ? {} : { types: new Set() }),
     );
-    routine.whenAddToUnit.bind(this)(element, elementEntry.belong);
     if (elementEntry.belong) {
       elementEntry.belong.delete(element);
     }
     elementEntry.belong = this;
-    const types = Unit.combineTypes(this);
-    if (element instanceof Unit) {
+    const types = combineTypes(this);
+    if (element instanceof RoleSet) {
       types.forEach((type) => {
         addCallbackToChildren(element, type);
       });
@@ -251,104 +258,56 @@ class Unit extends Set {
   }
 }
 
-/**
- *
- *
- * @param {Set} list
- * @returns {UnitClass}
- * @memberof EventsWork
- */
-function makeUnit(list) {
-  return new Unit(list);
-}
+const worker = new RoleSet([]);
 
-function setActionOnAddedElement(unit, action) {
-  unitsAddElementAction.set(unit, action);
-}
-
-const worker = makeUnit([]);
-
-const fireFromQueueType = Symbol('@@fireFromQueue');
-
-// eslint-disable-next-line
-registerEventType(fireFromQueueType);
-
-// eslint-disable-next-line
-eventChain(
-  {
-    unit: worker,
-    type: fireFromQueueType,
-    action: function fire() {
-      const [nextE] = queueData.keys();
-      if (nextE) {
-        [...queueData.get(nextE).entries()].forEach(([type, event]) => {
-          // eslint-disable-next-line
-          fireEvent(nextE, type, event);
-        });
-        queueData.delete(nextE);
-        // eslint-disable-next-line
-        Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
-      }
-    },
-  },
-  Symbol('@@queue'),
-);
-
-/**
- *
- *
- * @param {*} type
- * @memberof EventsWork
- */
-function registerEventType(type) {
-  customEventTypes.add(type);
+export function setActionOnAddElement(roleSet, action) {
+  onAddElementActionsMap.set(roleSet, action);
 }
 
 /**
  *
  *
- * @param {UnitClass} unit
+ * @param {UnitClass} roleSet
  * @param {string} type
  * @param {Symbol} eventID
  * @returns
  * @memberof EventsWork
  */
-function waitGroupEvent(unit, type, eventID) {
+function waitGroupEvent(roleSet, type, eventID) {
   let promiseHandle;
-  const promiseToGet = new Promise((resolve) => {
+  const getPromise = new Promise((resolve) => {
     promiseHandle = resolve;
   });
 
-  addCallbackToChildren(unit, type);
-  getFromDeepMap(eventsStore, unit)
+  addCallbackToChildren(roleSet, type);
+  getFromDeepMap(eventsStore, roleSet)
     .next(type)
     .map.set(eventID, promiseHandle);
-  return promiseToGet;
+  return getPromise;
 }
 
 /**
  *
  *
- * @param {(Element|UnitClass)} unit
+ * @param {(Element|UnitClass)} roleSet
  * @param {string} type
  * @param {Object} event
  * @memberof EventsWork
  */
-function fireEvent(unit, type, event) {
-  if (unit instanceof Unit) {
-    if (unit.size > 0) {
-      [...unit].forEach((e) => {
-        if (!event || !event.stopPropagation || !(e instanceof Unit)) {
-          const mapOfTypes = getFromDeepMap(queueData, e).map;
-          mapOfTypes.set(type, event);
+export function fireEvent(roleSet, type, event) {
+  if (roleSet instanceof RoleSet) {
+    if (roleSet.size > 0) {
+      [...roleSet].forEach((e) => {
+        if (!event || !event.stopPropagation || !(e instanceof RoleSet)) {
+          queueData.push({ target: e, type, event });
         }
       });
       fireEvent(worker, fireFromQueueType);
     } else {
-      getCallback(null, type, unit)(event);
+      getCallback(null, type, roleSet)(event);
     }
   } else {
-    getCallback(unit, type)(event);
+    getCallback(roleSet, type)(event);
   }
 }
 
@@ -359,7 +318,7 @@ function fireEvent(unit, type, event) {
  * @property {Element} target
  * @property {Object} event
  * @property {Symbol} eventID
- * @property {UnitClass} unit
+ * @property {UnitClass} roleSet
  * @property {string} type
  */
 
@@ -377,10 +336,10 @@ function fireEvent(unit, type, event) {
 
 /**
  * @typedef {Object} ChainInit
- * @property {UnitClass|Set} unit
+ * @property {UnitClass|Set} roleSet
  * @property {string} type
  * @property {ToDoIfFired} action
- * @property {?IfTerminate} terminate
+ * @property {?IfTerminate} checkIfTerminate
  */
 
 /**
@@ -389,23 +348,31 @@ function fireEvent(unit, type, event) {
  * @returns {UnitClass}
  * @memberof EventsWork
  */
-function eventChain(description, eventID, memory = {}) {
-  const { unit, type, action } = description;
-  const terminate = description.terminate ? description.terminate : () => false;
+export function eventChain(description, eventID) {
+  const {
+    roleSet, type, action, typeRegistered,
+  } = description;
+  const checkIfTerminate = description.checkIfTerminate || (() => false);
+  const memory = description.memory || {};
+  const furtherDescription = { ...description, checkIfTerminate, memory };
+  if (!(typeRegistered || typeof type === 'string' || customEventTypes.has(type))) {
+    registerEventType(type);
+    furtherDescription.typeRegistered = true;
+  }
   let getId = eventID;
   if (!eventID) {
-    getId = Symbol(`@@${type}-event`);
+    getId = typeof type === 'string' ? Symbol(`@@${type}-event`) : type;
   }
-  waitGroupEvent(unit, type, getId).then((data) => {
+  waitGroupEvent(roleSet, type, getId).then((data) => {
     if (
-      terminate({
+      checkIfTerminate({
         ...data,
         type,
         memory,
       })
     ) {
       eventsStore
-        .get(unit)
+        .get(roleSet)
         .get(type)
         .delete(getId);
     } else {
@@ -414,17 +381,23 @@ function eventChain(description, eventID, memory = {}) {
         type,
         memory,
       });
-      eventChain(description, data.eventID, memory);
+      eventChain(furtherDescription, data.eventID);
     }
   });
   return eventID;
 }
 
-export {
-  defineRoutine,
-  makeUnit,
-  setActionOnAddedElement,
-  registerEventType,
-  fireEvent,
-  eventChain,
-};
+eventChain(
+  {
+    roleSet: worker,
+    type: fireFromQueueType,
+    action: function fire() {
+      if (queueData.length > 0) {
+        const { target, type, event } = queueData.shift();
+        fireEvent(target, type, event);
+        Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
+      }
+    },
+  },
+  Symbol('@@queue'),
+);
