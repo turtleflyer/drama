@@ -14,7 +14,7 @@ export default class Mug extends Actor {
     setImg(this, mugTypes[type].empty, { width: '100%', bottom: '0px' });
     this.type = type;
     this.load = {};
-    stage.stageNode.appendChild(this.node);
+    stage.appendAsChild(this);
     this.node.classList.add('mugsOnLine');
   }
 
