@@ -159,7 +159,7 @@ function addCallback(target, type) {
  * @param {string} type
  */
 function addCallbackToChildren(parent, type) {
-  if (!customEventTypes.has(type)) {
+  if (!customEventTypes.has(type) && parent.size > 0) {
     const mapOfIDs = getFromDeepMap(eventsStore, parent).next(type).map;
     if (mapOfIDs.size === 0) {
       [...parent].forEach((element) => {
@@ -242,17 +242,13 @@ export class RoleSet extends Set {
     }
     elementEntry.belong = this;
     const types = combineTypes(this);
-    if (element instanceof RoleSet) {
-      types.forEach((type) => {
+    types.forEach((type) => {
+      if (element instanceof RoleSet) {
         addCallbackToChildren(element, type);
-      });
-    } else {
-      types.forEach((type) => {
-        if (!customEventTypes.has(type)) {
-          addCallback(element, type);
-        }
-      });
-    }
+      } else if (!customEventTypes.has(type)) {
+        addCallback(element, type);
+      }
+    });
     // eslint-disable-next-line
     fireEvent(this, addElementType, { addedElement: element, stopPropagation: true });
   }
