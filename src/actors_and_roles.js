@@ -140,3 +140,34 @@ export class RoleClass {
     fireEvent(roleSet, this.type, event);
   }
 }
+
+const startType = Symbol('@@RolesManipulator/startType');
+const stopType = Symbol('@@RolesManipulator/stopType');
+
+export class RolesManipulator extends RoleSet {
+  constructor(roles) {
+    super(roles);
+    eventChain({
+      roleSet: this,
+      type: startType,
+      action: () => {
+        [...this].forEach(role => role.start());
+      },
+    });
+    eventChain({
+      roleSet: this,
+      type: stopType,
+      action: () => {
+        [...this].forEach(role => role.stop());
+      },
+    });
+  }
+
+  start() {
+    fireEvent(this, startType);
+  }
+
+  stop() {
+    fireEvent(this, stopType);
+  }
+}

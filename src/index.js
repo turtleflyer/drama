@@ -3,15 +3,18 @@ import './styles.css';
 import './role_sets/stage';
 import './role_sets/mugsOnLine';
 import './supersets/setA';
-import mugsOnLineGenerateMugs from './roles/mugsOnLine_generateMugs';
 import stageSendPulse from './roles/stage_sendPulse';
-import mugsStartDrag from './roles/mugs_startDrag';
-import dragMugFollowMouse from './roles/dragMug_followMouse';
-import stageDrag from './roles/stage_drag';
+import startStopLevel from './roles_manipulators/start_stop_level';
 
+startStopLevel.start();
 stageSendPulse.start();
-mugsOnLineGenerateMugs.start();
-mugsStartDrag.start();
-dragMugFollowMouse.start();
-stageDrag.start();
 stageSendPulse.fireItself();
+
+let f = true;
+const b = document.createElement('button');
+b.style = 'width: 100px; height: 30px';
+b.addEventListener('mousedown', () => {
+  f ? startStopLevel.stop() : startStopLevel.start();
+  f = !f;
+});
+document.querySelector('body').appendChild(b);
