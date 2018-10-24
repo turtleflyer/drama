@@ -63,7 +63,9 @@ Actor.props = ['left', 'top', 'width', 'height', 'bottom', 'right'];
 
 export class ActorsSet extends RoleSet {
   constructor(fill) {
-    if (typeof fill === 'function') {
+    if (!fill) {
+      super([]);
+    } else if (typeof fill === 'function') {
       super([]);
       this.fill = (...args) => {
         fill(...args).forEach((e) => {
