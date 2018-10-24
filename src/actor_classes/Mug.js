@@ -19,7 +19,7 @@ export default class Mug extends Actor {
   }
 
   get position() {
-    return { x: this.left + this.width / 2, y: this.bottom };
+    return { x: this.left + this.width / 2, y: this.top };
   }
 
   get boundingBox() {
@@ -34,7 +34,7 @@ export default class Mug extends Actor {
     const { x, y, width } = position;
     Actor.prototype.setPosition.call(this, {
       left: x - (width || this.width) / 2,
-      bottom: y,
+      top: y,
       width,
     });
   }

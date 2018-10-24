@@ -7,12 +7,22 @@ class Stage extends ActorsSet {
   constructor(node, dimension) {
     super([new Actor(node, dimension)]);
     this.stageNode = node;
+    const { left, top } = node.getBoundingClientRect();
+    this.origin = { x: left, y: top };
     Object.assign(this, dimension);
     this.defineLevel(0);
   }
 
   get scaleF() {
     return [...this][0].scaleF;
+  }
+
+  appendAsChild(actor) {
+    if (actor instanceof Actor) {
+      this.stageNode.appendChild(actor.node);
+    } else {
+      throw new Error('@@...');
+    }
   }
 
   defineLevel(level) {

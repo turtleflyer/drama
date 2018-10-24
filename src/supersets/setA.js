@@ -1,4 +1,4 @@
 import { ActorsSet } from '../actors_and_roles';
-import { mugsOnLine } from '../role_sets/mugsOnLine';
+import mugs from './mugs';
 
-export default new ActorsSet([mugsOnLine]);
+export default new ActorsSet([mugs]);
