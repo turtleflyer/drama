@@ -22,6 +22,14 @@ export default class Mug extends Actor {
     return { x: this.left + this.width / 2, y: this.bottom };
   }
 
+  get boundingBox() {
+    return this.node.querySelector('img').getBoundingClientRect();
+  }
+
+  get rectHeight() {
+    return this.boundingBox.height / this.scaleF;
+  }
+
   setPosition(position) {
     const { x, y, width } = position;
     Actor.prototype.setPosition.call(this, {
