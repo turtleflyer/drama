@@ -65,13 +65,6 @@ export class ActorsSet extends RoleSet {
   constructor(fill) {
     if (!fill) {
       super([]);
-    } else if (typeof fill === 'function') {
-      super([]);
-      this.fill = (...args) => {
-        fill(...args).forEach((e) => {
-          this.addElement(e);
-        });
-      };
     } else if (Array.isArray(fill)) {
       super(fill);
     } else {
