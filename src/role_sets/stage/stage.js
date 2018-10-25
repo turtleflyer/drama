@@ -1,7 +1,7 @@
 /* eslint-env browser */
-import { stageDimension, stageParams } from '../common_params';
-import { ActorsSet, Actor } from '../actors_and_roles';
-import levelsDescription from '../levels_description';
+import { stageDimension, stageParams } from '../../common_params';
+import { ActorsSet, Actor } from '../../actors_and_roles';
+import levelsDescription from '../../levels_description';
 
 class Stage extends ActorsSet {
   constructor(node, dimension) {

@@ -1,14 +1,14 @@
 /* eslint-env browser */
 import './styles.css';
-import './role_sets/stage';
-import './role_sets/mugsOnLine';
-import './supersets/setA';
-import stageSendPulse from './roles/stage_sendPulse';
+import './role_sets/stage/stage';
+import './screens/gameplay/role_sets/mugsOnLine/mugsOnLine';
+import './screens/gameplay/supersets/setA';
+import sendPulse from './role_sets/stage/roles/sendPulse';
 import startStopLevel from './roles_manipulators/start_stop_level';
 
 startStopLevel.start();
-stageSendPulse.start();
-stageSendPulse.fireItself();
+sendPulse.start();
+sendPulse.fireItself();
 
 let f = true;
 const b = document.createElement('button');

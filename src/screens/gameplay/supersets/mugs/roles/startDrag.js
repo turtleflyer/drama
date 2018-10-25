@@ -1,8 +1,8 @@
 /* eslint-env browser */
-import mousedown from '../role_classes/mousedown';
-import mugs from '../supersets/mugs';
-import stage from '../role_sets/stage';
-import dragMug from '../role_sets/dragMug';
+import mousedown from '../../../../../role_classes/mousedown';
+import mugs from '../mugs';
+import stage from '../../../../../role_sets/stage/stage';
+import dragMug from '../../../role_sets/dragMug/dragMug';
 
 export default mousedown.registerAction(mugs, {
   action({ target, unit, event }) {
