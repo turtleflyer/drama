@@ -1,5 +1,6 @@
 /* eslint-env browser */
-import imgIPAEmpty from './img/mugs/IPA/IPA_mug_empty.png';
+// import imgIPAEmpty from './img/mugs/IPA/IPA_mug_empty.png';
+import imgIPAEmpty from './screens/gameplay/actor_classes/Mug/img/IPA/IPA_mug_empty.png';
 import { importAll } from './helpers_lib';
 
 export const stageDimension = {
@@ -15,10 +16,18 @@ export const mugTypes = {
     width: 50,
     empty: imgIPAEmpty,
     fillingStates: importAll(
-      require.context('../src/img/mugs/IPA/IPA_filling_states', false, /\.png$/),
+      require.context(
+        './screens/gameplay/actor_classes/Mug/img/IPA/IPA_filling_states',
+        false,
+        /\.png$/,
+      ),
     ),
     overfilledStates: importAll(
-      require.context('../src/img/mugs/IPA/IPA_overfilled_states', false, /\.png$/),
+      require.context(
+        './screens/gameplay/actor_classes/Mug/img/IPA/IPA_overfilled_states',
+        false,
+        /\.png$/,
+      ),
     ),
   },
 };

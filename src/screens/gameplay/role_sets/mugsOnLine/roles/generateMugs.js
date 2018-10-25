@@ -5,7 +5,7 @@ import {
   stageDimension, tuneGame, beerTypes, mugsParams,
 } from '../../../../../common_params';
 import stage from '../../../../../role_sets/stage/stage';
-import Mug from '../../../../../actor_classes/Mug';
+import Mug from '../../../actor_classes/Mug/Mug';
 
 function determineTypeOfBeer() {
   return beerTypes.BEER_IPA;
