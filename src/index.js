@@ -8,7 +8,7 @@ import startStopLevel from './screens/gameplay/roles_manipulators/start_stop_lev
 
 startStopLevel.start();
 sendPulse.start();
-sendPulse.fireItself();
+sendPulse.fire();
 
 let f = true;
 const b = document.createElement('button');

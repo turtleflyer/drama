@@ -9,7 +9,7 @@ export default pulse.registerAction(stage, {
   action() {
     onPulseTick.fire(setA);
     window.setTimeout(() => {
-      this.fireItself();
+      this.fire();
     }, pulseTimeout);
   },
 });

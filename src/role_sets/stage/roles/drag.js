@@ -9,7 +9,7 @@ export default mousemove.registerAction(stage, {
     const { clientX, clientY } = event;
 
     const { scaleF } = stage;
-    followMouse.fireItself({
+    followMouse.fire({
       x: (clientX - stage.origin.x) / scaleF,
       y: (clientY - stage.origin.y) / scaleF,
     });

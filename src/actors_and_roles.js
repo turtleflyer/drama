@@ -117,13 +117,13 @@ export class RoleClass {
         }
       }
 
-      fireItself(event) {
+      fire(event) {
         this.roleSetter.fire(this.roleSet, event);
       }
 
       stop() {
         toTerminate = true;
-        this.fireItself();
+        this.fire();
         active = false;
       }
     }();
