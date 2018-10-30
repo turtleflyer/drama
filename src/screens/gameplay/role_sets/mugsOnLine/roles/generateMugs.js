@@ -6,7 +6,6 @@ import {
 } from '../../../../../common_params';
 import stage from '../../../../../role_sets/stage/stage';
 import Mug from '../../../actor_classes/Mug/Mug';
-import { debugSymbols } from '../../../../../actors_and_roles';
 
 function determineTypeOfBeer() {
   return beerTypes.BEER_IPA;
@@ -16,7 +15,6 @@ const { width: stageWidth } = stageDimension;
 
 export default onPulseTick.registerAction(mugsOnLine, {
   action({ target }) {
-    const { pushed } = debugSymbols;
     const currTime = Date.now();
     const { memory } = this;
     const { mugsSpeed, initMugDensity, reputation } = stage;

@@ -38,6 +38,7 @@ export class Actor {
         }
       }
     }
+    return this;
   }
 
   refreshScale(newScale) {
@@ -45,6 +46,7 @@ export class Actor {
       actor.scaleF = newScale;
       actor.setPosition(actor);
     }
+    return this;
   }
 
   linkActor(actor) {
@@ -53,10 +55,12 @@ export class Actor {
     }
     actor.refreshScale(this.scaleF);
     this.linked.push(actor);
+    return actor;
   }
 
   remove() {
     this.node.remove();
+    return this;
   }
 }
 Actor.props = ['left', 'top', 'width', 'height', 'bottom', 'right'];
@@ -109,10 +113,12 @@ export class RoleClass {
           });
           active = true;
         }
+        return this;
       }
 
       fire(event) {
         this.roleClass.fire(this.roleSet, event);
+        return this;
       }
 
       fireAndWaitWhenExhausted(event) {
@@ -123,12 +129,14 @@ export class RoleClass {
         toTerminate = true;
         this.fire();
         active = false;
+        return this;
       }
     }();
   }
 
   fire(roleSet, event) {
     fireEvent(roleSet, this.type, event);
+    return this;
   }
 
   fireAndWaitWhenExhausted(roleSet, event) {
@@ -220,10 +228,12 @@ export class RolesManipulator extends RoleSet {
 
   start() {
     fireEvent(this, startType);
+    return this;
   }
 
   stop() {
     fireEvent(this, stopType);
+    return this;
   }
 }
 
