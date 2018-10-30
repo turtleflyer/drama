@@ -3,11 +3,10 @@
 import imgIPAEmpty from '../actor_classes/Mug/img/IPA/IPA_mug_empty.png';
 import { importAll } from '../../../libs/helpers_lib';
 
-const BEER_IPA = '@@beer/IPA';
-export const beerTypes = { BEER_IPA };
+export const beerTypes = { IPA: '@@beer/IPA' };
 
 export const mugTypes = {
-  [BEER_IPA]: {
+  [beerTypes.IPA]: {
     width: 50,
     empty: imgIPAEmpty,
     fillingStates: importAll(
@@ -51,3 +50,44 @@ export const barPosition = {
   width: 245,
   height: 285,
 };
+
+export const switchTypes = {
+  NORMAL: '@@switchType/NORMAL',
+  BROKEN: '@@switchType/BROKEN',
+  DUAL: '@@switchType/DUAL',
+};
+
+export const faucetTypes = [
+  {
+    size: {
+      width: 110,
+      height: 275,
+    },
+    imgPhases: importAll(
+      require.context(
+        '../actor_classes/Faucet/img/0',
+        false,
+        /\.png$/,
+      ),
+    ),
+    beerTypes: [beerTypes.IPA],
+    switchType: switchTypes.NORMAL,
+    mugPlace: {
+      width: 90,
+      height: 90,
+      bottom: 0,
+      left: -20,
+    },
+    switchPlace: {
+      width: 50,
+      height: 40,
+      top: 0,
+      left: 40,
+    },
+    jetPlace: {
+      height: 80,
+      top: 130,
+      left: 17,
+    },
+  },
+];

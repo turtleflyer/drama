@@ -7,7 +7,7 @@ import { stageDimension } from '../../../../../assets/common_params';
 import { beerTypes, tuneGame, mugsParams } from '../../../assets/gameplay_params';
 
 function determineTypeOfBeer() {
-  return beerTypes.BEER_IPA;
+  return beerTypes.IPA;
 }
 
 const { width: stageWidth } = stageDimension;
