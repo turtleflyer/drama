@@ -1,6 +1,6 @@
-import { ActorsSet } from '../../../../actors_and_roles';
-import mugs from '../mugs/mugs';
-import dragMug from '../../role_sets/dragMug/dragMug';
+import { ActorsSet } from '../../../libs/actors_and_roles';
+import { mugs } from './mugs';
+import { dragMug } from '../role_sets/dragMug';
 
 export const setA = new ActorsSet([mugs, dragMug]);
 

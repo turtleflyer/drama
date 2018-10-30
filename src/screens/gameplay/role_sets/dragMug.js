@@ -1,9 +1,10 @@
 /* eslint-env browser */
-import followMouse from '../../../../../role_classes/followMouse';
-import dragMug from '../dragMug';
-import stage from '../../../../../role_sets/stage/stage';
+import { ActorsSet } from '../../../libs/actors_and_roles';
+import followMouse from '../../../role_classes/followMouse';
 
-export default followMouse.registerAction(dragMug, {
+export const dragMug = new ActorsSet();
+
+export const draggingMug = followMouse.registerAction(dragMug, {
   action({ target, event: { x, y } }) {
     if (target) {
       // const { scaleF } = stage;

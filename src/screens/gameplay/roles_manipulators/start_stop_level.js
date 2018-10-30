@@ -1,12 +1,8 @@
-import { RolesManipulator } from '../../../actors_and_roles';
-import followMouse from '../role_sets/dragMug/roles/followMouse';
-import startDrag from '../supersets/mugs/roles/startDrag';
+import { RolesManipulator } from '../../../libs/actors_and_roles';
 import generateMugs from '../role_sets/mugsOnLine/roles/generateMugs';
-import drag from '../../../role_sets/stage/roles/drag';
+import { draggingMug } from '../role_sets/dragMug';
+import { drag } from '../../../role_sets/stage/stage_roles';
+import { startDrag } from '../supersets/mugs';
 
-export default new RolesManipulator([
-  followMouse,
-  startDrag,
-  generateMugs,
-  drag,
-]);
+
+export default new RolesManipulator([draggingMug, startDrag, generateMugs, drag]);

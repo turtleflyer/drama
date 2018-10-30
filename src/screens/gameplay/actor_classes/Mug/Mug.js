@@ -1,7 +1,7 @@
 /* eslint-env browser */
-import { mugTypes, mugsParams } from '../../../../common_params';
-import { Actor } from '../../../../actors_and_roles';
-import { setImg, attachClassName } from '../../../../helpers_lib';
+import { Actor } from '../../../../libs/actors_and_roles';
+import { setImg, attachClassName } from '../../../../libs/helpers_lib';
+import { mugTypes, mugsParams } from '../../assets/gameplay_params';
 
 export default class Mug extends Actor {
   constructor(stage, type, horizontalPosition) {
