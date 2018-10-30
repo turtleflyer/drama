@@ -44,3 +44,10 @@ export const tuneGame = {
   reputationIncrement: 3,
   drunkFactorIncrement: 0.02,
 };
+
+export const barPosition = {
+  left: 75,
+  top: 210,
+  width: 245,
+  height: 285,
+};
