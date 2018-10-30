@@ -20,8 +20,9 @@ const eventsStore = new Map();
 const elementsMap = new Map();
 const customEventTypes = new Set();
 const onAddElementActionsMap = new Map();
-// const queueData = new Map();
-const queueData = [];
+export const queueData = [];
+const countTypesInQueue = new Map();
+const exhaustTypesMap = new Map();
 const routine = { interpretTarget: t => t };
 const fireFromQueueType = Symbol('@@fireFromQueue');
 
@@ -41,7 +42,7 @@ const fireFromQueueType = Symbol('@@fireFromQueue');
  * @param {whatToDo} create
  * @returns
  */
-function getSome(obj, key, create) {
+function getSomeFromDeep(obj, key, create) {
   let toGet;
   if (obj instanceof Map) {
     toGet = obj.get(key);
@@ -76,7 +77,7 @@ function getSome(obj, key, create) {
  *
  */
 function getFromDeepMap(map, key) {
-  const deepMap = getSome(map, key, () => new Map());
+  const deepMap = getSomeFromDeep(map, key, () => new Map());
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
@@ -97,7 +98,7 @@ export function defineRoutine({ interpretTarget }) {
 }
 
 /**
- *
+ * Function returns the callback to attach to event listener
  *
  * @param {EventsWork} context
  * @param {Element} target
@@ -129,7 +130,7 @@ function getCallback(target, type, parent) {
     }
   }
 
-  return function callback(event) {
+  return (event) => {
     stageCallback(target, type, event, parent);
   };
 }
@@ -143,7 +144,7 @@ function getCallback(target, type, parent) {
  */
 function addCallback(target, type) {
   const elementEntry = elementsMap.get(target);
-  const setOfTypes = getSome(elementEntry, 'types', () => new Set());
+  const setOfTypes = getSomeFromDeep(elementEntry, 'types', () => new Set());
   if (!setOfTypes.has(type)) {
     if (routine.interpretTarget(target)) {
       routine.interpretTarget(target).addEventListener(type, getCallback(target, type));
@@ -179,7 +180,8 @@ const addElementType = Symbol('@@addElement');
 registerEventType(addElementType);
 
 /**
- *
+ * Function returns the list of types of events that are whose the ancestors
+ * of the element have handles of.
  *
  * @param {EventsWork} context
  * @param {RoleSet} roleSet
@@ -191,7 +193,9 @@ function combineTypes(roleSet, types) {
   if (!getTypes) {
     getTypes = [];
   }
-  getTypes = getTypes.concat([...getFromDeepMap(eventsStore, roleSet).map.keys()]);
+  getTypes = getTypes.concat(
+    [...getFromDeepMap(eventsStore, roleSet).map.keys()].filter(type => typeof type === 'string'),
+  );
   const parentEntry = elementsMap.get(roleSet);
   if (parentEntry) {
     combineTypes(parentEntry.belong, getTypes);
@@ -232,7 +236,7 @@ export class RoleSet extends Set {
    */
   addElement(element) {
     this.add(element);
-    const elementEntry = getSome(
+    const elementEntry = getSomeFromDeep(
       elementsMap,
       element,
       () => (element instanceof RoleSet ? {} : { types: new Set() }),
@@ -245,12 +249,21 @@ export class RoleSet extends Set {
     types.forEach((type) => {
       if (element instanceof RoleSet) {
         addCallbackToChildren(element, type);
-      } else if (!customEventTypes.has(type)) {
+      } else {
         addCallback(element, type);
       }
     });
     // eslint-disable-next-line
     fireEvent(this, addElementType, { addedElement: element, stopPropagation: true });
+  }
+
+  deleteElement(element) {
+    this.delete(element);
+    elementsMap.get(element).belong = null;
+  }
+
+  clearElements() {
+    [...this].forEach(e => this.deleteElement(e));
   }
 }
 
@@ -258,6 +271,14 @@ const worker = new RoleSet([]);
 
 export function setActionOnAddElement(roleSet, action) {
   onAddElementActionsMap.set(roleSet, action);
+}
+
+function invokePromiseHandle() {
+  let promiseHandle;
+  const promise = new Promise((resolve) => {
+    promiseHandle = resolve;
+  });
+  return { promise, promiseHandle };
 }
 
 /**
@@ -270,16 +291,12 @@ export function setActionOnAddElement(roleSet, action) {
  * @memberof EventsWork
  */
 function waitGroupEvent(roleSet, type, eventID) {
-  let promiseHandle;
-  const getPromise = new Promise((resolve) => {
-    promiseHandle = resolve;
-  });
-
+  const { promise, promiseHandle } = invokePromiseHandle();
   addCallbackToChildren(roleSet, type);
   getFromDeepMap(eventsStore, roleSet)
     .next(type)
     .map.set(eventID, promiseHandle);
-  return getPromise;
+  return promise;
 }
 
 /**
@@ -296,6 +313,8 @@ export function fireEvent(roleSet, type, event) {
       [...roleSet].forEach((e) => {
         if (!event || !event.stopPropagation || !(e instanceof RoleSet)) {
           queueData.push({ target: e, type, event });
+          const countType = countTypesInQueue.get(type);
+          countTypesInQueue.set(type, countType ? countType + 1 : 1);
         }
       });
       fireEvent(worker, fireFromQueueType);
@@ -383,14 +402,31 @@ export function eventChain(description, eventID) {
   return eventID;
 }
 
+export function waitWhenTypeExhausted(type) {
+  const { promise, promiseHandle } = invokePromiseHandle();
+  // Register the promise handle to exhaustTypesMap
+  exhaustTypesMap.set(type, promiseHandle);
+  return promise;
+}
+
 eventChain(
   {
     roleSet: worker,
     type: fireFromQueueType,
-    action: function fire() {
+    action() {
       if (queueData.length > 0) {
         const { target, type, event } = queueData.shift();
         fireEvent(target, type, event);
+        // Look if waitWhenTypeExhausted for this type has been activated
+        const countType = countTypesInQueue.get(type) - 1;
+        if (countType === 0 && exhaustTypesMap.has(type)) {
+          // Fulfill the according promise sending the name of the type to it
+          exhaustTypesMap.get(type)(type);
+          exhaustTypesMap.delete(type);
+        }
+        countTypesInQueue.set(type, countType);
+        // Next call of fireEvent of fireFomQueueType is doing asynchronously to make a chance to
+        // fulfill the according promise and create the new one for the next target form the queue
         Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
       }
     },

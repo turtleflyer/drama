@@ -6,6 +6,7 @@ import {
 } from '../../../../../common_params';
 import stage from '../../../../../role_sets/stage/stage';
 import Mug from '../../../actor_classes/Mug/Mug';
+import { debugSymbols } from '../../../../../actors_and_roles';
 
 function determineTypeOfBeer() {
   return beerTypes.BEER_IPA;
@@ -15,6 +16,7 @@ const { width: stageWidth } = stageDimension;
 
 export default onPulseTick.registerAction(mugsOnLine, {
   action({ target }) {
+    const { pushed } = debugSymbols;
     const currTime = Date.now();
     const { memory } = this;
     const { mugsSpeed, initMugDensity, reputation } = stage;
@@ -34,7 +36,7 @@ export default onPulseTick.registerAction(mugsOnLine, {
       // check if the mug disappeared from the stage
       if (newPlace < -(width / 2)) {
         placeholdersMap.delete(target);
-        this.roleSet.delete(target);
+        this.roleSet.deleteElement(target);
         target.remove();
         stage.reputation += tuneGame.reputationDecrement;
         if (this.roleSet.size === 2) {
@@ -55,14 +57,14 @@ export default onPulseTick.registerAction(mugsOnLine, {
       }
     }
   },
-  initMemoryState: {
-    placeholdersMap: (function () {
-      const place = stageWidth + mugsParams.initialDelay;
-      const mug = new Mug(stage, determineTypeOfBeer(), place);
-      mug.hidden = true;
-      mugsOnLine.addElement(mug);
-      return new Map([[mug, place]]);
-    }()),
-    lastTime: Date.now(),
+  initMemoryState() {
+    const place = stageWidth + mugsParams.initialDelay;
+    const mug = new Mug(stage, determineTypeOfBeer(), place);
+    mug.hidden = true;
+    this.roleSet.addElement(mug);
+    return {
+      placeholdersMap: new Map([[mug, place]]),
+      lastTime: Date.now(),
+    };
   },
 });

@@ -1,5 +1,5 @@
 import {
-  defineRoutine, eventChain, fireEvent, RoleSet,
+  defineRoutine, eventChain, fireEvent, RoleSet, waitWhenTypeExhausted,
 } from './eventswork';
 
 defineRoutine({
@@ -61,25 +61,13 @@ export class Actor {
 }
 Actor.props = ['left', 'top', 'width', 'height', 'bottom', 'right'];
 
-export class ActorsSet extends RoleSet {
-  constructor(fill) {
-    if (!fill) {
-      super([]);
-    } else if (Array.isArray(fill)) {
-      super(fill);
-    } else {
-      throw new Error('@@...');
-    }
-  }
-}
-
 export class RoleClass {
   constructor(type) {
     this.type = type;
   }
 
   registerAction(roleSet, { action, checkIfTerminate, initMemoryState }) {
-    const roleSetter = this;
+    const roleClass = this;
     const { type } = this;
     let active = false;
     let toTerminate = false;
@@ -96,17 +84,23 @@ export class RoleClass {
           roleSet,
           type,
           action: action.bind(this),
-          memory: initMemoryState || {},
-          roleSetter,
+          initMemoryState,
+          roleClass,
         });
       }
 
       start() {
         if (!active) {
           toTerminate = false;
-          /* eslint-disable */
-          const { actorsSet, type, action, checkIfTerminate, memory } = this;
-          /* eslint-enable */
+          // eslint-disable-next-line
+          const { roleSet, type, action, checkIfTerminate, initMemoryState } = this;
+          if (typeof initMemoryState === 'function') {
+            this.memory = initMemoryState.call(this);
+          } else if (initMemoryState) {
+            this.memory = initMemoryState;
+          } else {
+            this.memory = {};
+          }
           eventChain({
             roleSet,
             type,
@@ -118,7 +112,11 @@ export class RoleClass {
       }
 
       fire(event) {
-        this.roleSetter.fire(this.roleSet, event);
+        this.roleClass.fire(this.roleSet, event);
+      }
+
+      fireAndWaitWhenExhausted(event) {
+        return this.roleClass.fireAndWaitWhenExhausted(this.roleSet, event);
       }
 
       stop() {
@@ -131,6 +129,70 @@ export class RoleClass {
 
   fire(roleSet, event) {
     fireEvent(roleSet, this.type, event);
+  }
+
+  fireAndWaitWhenExhausted(roleSet, event) {
+    fireEvent(roleSet, this.type, event);
+    const waitPromise = waitWhenTypeExhausted(this.type);
+    return function (callback) {
+      waitPromise.then(callback);
+    };
+  }
+}
+
+export const initializerClass = new RoleClass(Symbol('@@ActorSet/initializerClass'));
+const cleanerClass = new RoleClass(Symbol('@@ActorSet/cleanerClass'));
+
+export class ActorsSet extends RoleSet {
+  constructor(args) {
+    super(args);
+    this._cleaner = this.getCleaner();
+    this._cleaner.start();
+  }
+
+  getInitializer(initialize) {
+    if (initialize || !this._initializer) {
+      if (this._initializer) {
+        this._initializer.stop();
+      }
+      if (initialize) {
+        this._initializer = initializerClass.registerAction(this, {
+          action: ({ target }) => {
+            if (!target) {
+              initialize.call(this);
+            }
+          },
+        });
+      } else {
+        this._initializer = initializerClass.registerAction(this, {
+          action: () => null,
+        });
+      }
+      this._initializer.fireThenStart = (role) => {
+        this._initializer.fireAndWaitWhenExhausted().then(role.start);
+      };
+    }
+    this._initializer.start();
+    return this._initializer;
+  }
+
+  getCleaner() {
+    return (
+      this._cleaner
+      || cleanerClass.registerAction(this, {
+        action: () => {
+          [...this].forEach((e) => {
+            console.log('e: ', e);
+            if (!(e instanceof RoleSet)) {
+              if (e.node) {
+                e.node.remove();
+              }
+              this.deleteElement(e);
+            }
+          });
+        },
+      })
+    );
   }
 }
 
@@ -164,3 +226,5 @@ export class RolesManipulator extends RoleSet {
     fireEvent(this, stopType);
   }
 }
+
+export const debugSymbols = {};

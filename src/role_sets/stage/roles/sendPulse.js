@@ -3,7 +3,7 @@ import stage from '../stage';
 import { pulseTimeout } from '../../../common_params';
 import pulse from '../../../role_classes/pulse';
 import onPulseTick from '../../../role_classes/onPulseTick';
-import setA from '../../../screens/gameplay/supersets/setA/setA';
+import { setA } from '../../../screens/gameplay/supersets/setA/setA';
 
 export default pulse.registerAction(stage, {
   action() {
