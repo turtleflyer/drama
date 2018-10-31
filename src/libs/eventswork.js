@@ -20,7 +20,7 @@ const eventsStore = new Map();
 const elementsMap = new Map();
 const customEventTypes = new Set();
 const onAddElementActionsMap = new Map();
-export const queueData = [];
+const queueData = [];
 const countTypesInQueue = new Map();
 const exhaustTypesMap = new Map();
 const routine = { interpretTarget: t => t };
@@ -180,8 +180,8 @@ const addElementType = Symbol('@@addElement');
 registerEventType(addElementType);
 
 /**
- * Function returns the list of types of events that are whose the ancestors
- * of the element have handles of.
+ * Function returns the list of types of events the ancestors
+ * of the element have handles of whom.
  *
  * @param {EventsWork} context
  * @param {RoleSet} roleSet
@@ -205,7 +205,7 @@ function combineTypes(roleSet, types) {
 
 export class RoleSet extends Set {
   /**
-   *Creates an instance of Unit.
+   *Creates an instance of RoleSet.
    * @param {Set|Array} list
    */
   constructor(elements) {
