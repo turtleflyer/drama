@@ -1,7 +1,7 @@
 /* eslint-env browser */
-import { Actor } from '../../../../libs/actors_and_roles';
+import { Actor, attachClassName } from '../../../../libs/actors_and_roles';
 import { barPosition } from '../../assets/gameplay_params';
-import { setImg, attachClassName } from '../../../../libs/helpers_lib';
+import { setImg } from '../../../../libs/helpers_lib';
 import barImg from '../../assets/img/bar.png';
 import stage from '../../../../role_sets/stage/stage';
 

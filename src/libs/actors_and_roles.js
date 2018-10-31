@@ -65,6 +65,21 @@ export class Actor {
 }
 Actor.props = ['left', 'top', 'width', 'height', 'bottom', 'right'];
 
+const classNamesMap = new Map();
+
+export function attachClassName(element, className) {
+  if (!(element instanceof Actor)) {
+    throw new Error('@@...');
+  }
+  const { node } = element;
+  const prevClassName = classNamesMap.get(element);
+  if (prevClassName) {
+    element.node.classList.remove(prevClassName);
+  }
+  node.classList.add(className);
+  classNamesMap.set(element, className);
+}
+
 export class RoleClass {
   constructor(type) {
     this.type = type;

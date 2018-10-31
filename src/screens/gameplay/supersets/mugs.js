@@ -2,8 +2,7 @@
 import mousedown from '../../../role_classes/mousedown';
 import stage from '../../../role_sets/stage/stage';
 import { dragMug } from '../role_sets/dragMug';
-import { attachClassName } from '../../../libs/helpers_lib';
-import { ActorsSet } from '../../../libs/actors_and_roles';
+import { ActorsSet, attachClassName } from '../../../libs/actors_and_roles';
 import { mugsOnLine } from '../role_sets/mugsOnLine/mugsOnLine';
 
 export const mugs = new ActorsSet([mugsOnLine]);

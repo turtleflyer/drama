@@ -40,15 +40,3 @@ export function percentOverlap(targetBound, dragBound) {
     * linearOverlap(tTop, tBottom, dTop, dBottom);
   return overlapArea / dragArea;
 }
-
-const classNamesMap = new Map();
-
-export function attachClassName(element, className) {
-  const { node } = element;
-  const prevClassName = classNamesMap.get(element);
-  if (prevClassName) {
-    element.node.classList.remove(prevClassName);
-  }
-  node.classList.add(className);
-  classNamesMap.set(element, className);
-}
