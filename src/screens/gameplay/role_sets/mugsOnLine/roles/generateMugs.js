@@ -16,7 +16,8 @@ export default onPulseTick.registerAction(mugsOnLine, {
   action({ target }) {
     const currTime = Date.now();
     const { memory } = this;
-    const { mugsSpeed, initMugDensity, reputation } = stage;
+    const { mugsSpeed, initMugDensity } = stage.levelParams;
+    const { reputation } = stage.gameState;
     const { placeholdersMap, lastTime } = memory;
 
     // determine if to calculate placeholders shift

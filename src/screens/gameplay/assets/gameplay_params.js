@@ -10,18 +10,10 @@ export const mugTypes = {
     width: 50,
     empty: imgIPAEmpty,
     fillingStates: importAll(
-      require.context(
-        '../actor_classes/Mug/img/IPA/IPA_filling_states',
-        false,
-        /\.png$/,
-      ),
+      require.context('../actor_classes/Mug/img/IPA/IPA_filling_states', false, /\.png$/),
     ),
     overfilledStates: importAll(
-      require.context(
-        '../actor_classes/Mug/img/IPA/IPA_overfilled_states',
-        false,
-        /\.png$/,
-      ),
+      require.context('../actor_classes/Mug/img/IPA/IPA_overfilled_states', false, /\.png$/),
     ),
   },
 };
@@ -57,19 +49,13 @@ export const switchTypes = {
   DUAL: '@@switchType/DUAL',
 };
 
-export const faucetTypes = [
-  {
+export const faucetModels = {
+  normalIPA: {
     size: {
       width: 110,
       height: 275,
     },
-    imgPhases: importAll(
-      require.context(
-        '../actor_classes/Faucet/img/0',
-        false,
-        /\.png$/,
-      ),
-    ),
+    imgPhases: importAll(require.context('../actor_classes/Faucet/img/0', false, /\.png$/)),
     beerTypes: [beerTypes.IPA],
     switchType: switchTypes.NORMAL,
     mugPlace: {
@@ -90,4 +76,4 @@ export const faucetTypes = [
       left: 17,
     },
   },
-];
+};

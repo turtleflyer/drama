@@ -6,22 +6,15 @@ import stage from '../../../../role_sets/stage/stage';
 import bar from '../../role_sets/bar';
 
 export default class Faucet extends Actor {
-  constructor(type, horizontalPosition) {
+  constructor(model, horizontalPosition) {
     const {
-      size,
-      imgPhases,
-      beerTypes,
-      switchType,
-      mugPlace,
-      switchPlace,
-      jetPlace,
-      // prettier-ignore
-    } = faucetTypes[type];
+      size, imgPhases, beerTypes, switchType, mugPlace, switchPlace, jetPlace,
+    } = model;
     const { width, height } = size;
     super(document.createElement('div'), {
       width,
       height,
-      left: 100,
+      left: horizontalPosition,
       bottom: 0,
     });
     Object.assign(this, {
