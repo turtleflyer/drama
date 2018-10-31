@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { ActorsSet } from '../../../libs/actors_and_roles';
-import followMouse from '../../../role_classes/followMouse';
+import { followMouse } from '../../../assets/role_classes';
 
 export const dragMug = new ActorsSet();
 

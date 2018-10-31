@@ -1,10 +1,10 @@
 /* eslint-env browser */
-import onPulseTick from '../../../../../role_classes/onPulseTick';
 import { mugsOnLine, signalElementAmongMugs } from '../mugsOnLine';
 import stage from '../../../../../role_sets/stage/stage';
 import Mug from '../../../actor_classes/Mug/Mug';
 import { stageDimension } from '../../../../../assets/common_params';
 import { beerTypes, tuneGame, mugsParams } from '../../../assets/gameplay_params';
+import { onPulseTick } from '../../../../../assets/role_classes';
 
 function determineTypeOfBeer() {
   return beerTypes.IPA;

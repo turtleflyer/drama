@@ -80,8 +80,17 @@ export function attachClassName(element, className) {
   classNamesMap.set(element, className);
 }
 
+const registeredRoleClasses = new Map();
+
 export class RoleClass {
   constructor(type) {
+    if (typeof type === 'string') {
+      const getClass = registeredRoleClasses.get(type);
+      if (getClass) {
+        return getClass;
+      }
+      registeredRoleClasses.set(type, this);
+    }
     this.type = type;
   }
 
@@ -161,6 +170,13 @@ export class RoleClass {
       waitPromise.then(callback);
     };
   }
+}
+
+export function registerActionOfType(type, roleSet, { action, checkIfTerminate, initMemoryState }) {
+  if (!(typeof type === 'string')) {
+    throw new Error('@@@...');
+  }
+  return new RoleClass(type).registerAction(roleSet, { action, checkIfTerminate, initMemoryState });
 }
 
 export const initializerClass = new RoleClass(Symbol('@@ActorSet/initializerClass'));

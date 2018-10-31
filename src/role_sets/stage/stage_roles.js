@@ -1,11 +1,10 @@
 /* eslint-env browser */
-import mousemove from '../../role_classes/mousemove';
 import stage from './stage';
 import { draggingMug } from '../../screens/gameplay/role_sets/dragMug';
-import pulse from '../../role_classes/pulse';
-import onPulseTick from '../../role_classes/onPulseTick';
 import { setA } from '../../screens/gameplay/supersets/setA';
 import { pulseTimeout } from '../../screens/gameplay/assets/gameplay_params';
+import { registerActionOfType } from '../../libs/actors_and_roles';
+import { pulse, onPulseTick } from '../../assets/role_classes';
 
 export const sendPulse = pulse.registerAction(stage, {
   action() {
@@ -16,7 +15,7 @@ export const sendPulse = pulse.registerAction(stage, {
   },
 });
 
-export const drag = mousemove.registerAction(stage, {
+export const drag = registerActionOfType('mousemove', stage, {
   action({ event }) {
     event.preventDefault();
     const { clientX, clientY } = event;
