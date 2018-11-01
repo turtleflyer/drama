@@ -39,7 +39,7 @@ export const tuneGame = {
 export const barPosition = {
   left: 75,
   top: 210,
-  width: 245,
+  width: 350,
   height: 285,
 };
 

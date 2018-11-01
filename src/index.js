@@ -5,6 +5,7 @@ import './screens/gameplay/role_sets/mugsOnLine/mugsOnLine';
 import startStopLevel from './screens/gameplay/roles_manipulators/start_stop_level';
 import { setACleaner, setAInitializer } from './screens/gameplay/supersets/setA';
 import { sendPulse } from './role_sets/stage/stage_roles';
+import stage from './role_sets/stage/stage';
 
 setAInitializer.fireAndWaitWhenExhausted()(() => {
   startStopLevel.start();
@@ -20,6 +21,7 @@ b.addEventListener('mousedown', () => {
     startStopLevel.stop();
     setACleaner.fire();
   } else {
+    stage.defineLevel(1);
     setAInitializer.fireAndWaitWhenExhausted()(() => {
       startStopLevel.start();
     });
