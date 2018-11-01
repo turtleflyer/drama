@@ -1,14 +1,19 @@
 /* eslint-env browser */
 import { Actor } from '../../../../libs/actors_and_roles';
-import { faucetTypes, switchTypes } from '../../assets/gameplay_params';
+import { switchTypes } from '../../assets/gameplay_params';
 import { setImg } from '../../../../libs/helpers_lib';
-import stage from '../../../../role_sets/stage/stage';
 import bar from '../../role_sets/bar';
 
 export default class Faucet extends Actor {
   constructor(model, horizontalPosition) {
     const {
-      size, imgPhases, beerTypes, switchType, mugPlacePosition, switchPlace, jetPlace,
+      size,
+      imgPhases,
+      beerTypes,
+      switchType,
+      mugPlacePosition,
+      switchPlace,
+      jetPlace,
     } = model;
     const { width, height } = size;
     super(document.createElement('div'), {
