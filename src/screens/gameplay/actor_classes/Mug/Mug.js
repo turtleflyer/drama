@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { Actor, attachClassName } from '../../../../libs/actors_and_roles';
+import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
 import { mugTypes, mugsParams } from '../../assets/gameplay_params';
 
@@ -15,7 +15,7 @@ export default class Mug extends Actor {
     this.type = type;
     this.load = {};
     this.getAppendedAsChild(stage);
-    attachClassName(this, 'mugsOnLine');
+    this.attachClassName('mugsOnLine');
   }
 
   get position() {

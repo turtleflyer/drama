@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { Actor, attachClassName } from '../../../../libs/actors_and_roles';
+import { Actor } from '../../../../libs/actors_and_roles';
 import { faucetTypes, switchTypes } from '../../assets/gameplay_params';
 import { setImg } from '../../../../libs/helpers_lib';
 import stage from '../../../../role_sets/stage/stage';
@@ -39,6 +39,6 @@ export default class Faucet extends Actor {
       'object-fit': 'contain',
     });
     this.getAppendedAsChild(bar);
-    attachClassName(this, 'faucets');
+    this.attachClassName('faucets');
   }
 }

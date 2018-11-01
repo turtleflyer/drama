@@ -18,6 +18,8 @@ function appendPx(n) {
   return `${n}px`;
 }
 
+const classNamesMap = new Map();
+
 export class Actor {
   constructor(node, position, scaleF = 1) {
     this.node = node;
@@ -66,23 +68,18 @@ export class Actor {
   getAppendedAsChild(roleSet) {
     [...roleSet][0].node.appendChild(this.node);
   }
+
+  attachClassName(className) {
+    const { node } = this;
+    const prevClassName = classNamesMap.get(this);
+    if (prevClassName) {
+      node.classList.remove(prevClassName);
+    }
+    node.classList.add(className);
+    classNamesMap.set(this, className);
+  }
 }
 Actor.props = ['left', 'top', 'width', 'height', 'bottom', 'right'];
-
-const classNamesMap = new Map();
-
-export function attachClassName(element, className) {
-  if (!(element instanceof Actor)) {
-    throw new Error('@@...');
-  }
-  const { node } = element;
-  const prevClassName = classNamesMap.get(element);
-  if (prevClassName) {
-    element.node.classList.remove(prevClassName);
-  }
-  node.classList.add(className);
-  classNamesMap.set(element, className);
-}
 
 const registeredRoleClasses = new Map();
 
