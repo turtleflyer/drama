@@ -17,7 +17,7 @@ export const startDrag = registerActionOfType('mousedown', mugs, {
     //   target.placed = false;
     // }
     target.attachClassName('dragMug');
-    stage.appendAsChild(target);
+    target.getAppendedAsChild(stage);
     dragMug.addElement(target);
   },
 });
