@@ -58,7 +58,7 @@ export const faucetModels = {
     imgPhases: importAll(require.context('../actor_classes/Faucet/img/normalIPA', false, /\.png$/)),
     beerTypes: [beerTypes.IPA],
     switchType: switchTypes.NORMAL,
-    mugPlace: {
+    mugPlacePosition: {
       width: 90,
       height: 90,
       bottom: 0,

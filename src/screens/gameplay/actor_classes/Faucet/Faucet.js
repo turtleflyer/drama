@@ -8,7 +8,7 @@ import bar from '../../role_sets/bar';
 export default class Faucet extends Actor {
   constructor(model, horizontalPosition) {
     const {
-      size, imgPhases, beerTypes, switchType, mugPlace, switchPlace, jetPlace,
+      size, imgPhases, beerTypes, switchType, mugPlacePosition, switchPlace, jetPlace,
     } = model;
     const { width, height } = size;
     super(document.createElement('div'), {
@@ -21,7 +21,7 @@ export default class Faucet extends Actor {
       imgPhases,
       beerTypes,
       switchType,
-      mugPlace,
+      mugPlacePosition,
       switchPlace,
       jetPlace,
       activeState: { beer: beerTypes[0], phase: 0 },
