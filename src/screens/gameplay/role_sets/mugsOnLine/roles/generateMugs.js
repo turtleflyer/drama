@@ -36,7 +36,7 @@ export default onPulseTick.registerAction(mugsOnLine, {
         placeholdersMap.delete(target);
         this.roleSet.deleteElement(target);
         target.remove();
-        stage.reputation += tuneGame.reputationDecrement;
+        stage.gameState.reputation += tuneGame.reputationDecrement;
         if (this.roleSet.size === 2) {
           placeholdersMap.clear();
         }
