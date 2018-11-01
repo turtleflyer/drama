@@ -62,6 +62,10 @@ export class Actor {
     this.node.remove();
     return this;
   }
+
+  getAppendedAsChild(roleSet) {
+    [...roleSet][0].node.appendChild(this.node);
+  }
 }
 Actor.props = ['left', 'top', 'width', 'height', 'bottom', 'right'];
 
@@ -179,7 +183,7 @@ export function registerActionOfType(type, roleSet, { action, checkIfTerminate, 
   return new RoleClass(type).registerAction(roleSet, { action, checkIfTerminate, initMemoryState });
 }
 
-export const initializerClass = new RoleClass(Symbol('@@ActorSet/initializerClass'));
+const initializerClass = new RoleClass(Symbol('@@ActorSet/initializerClass'));
 const cleanerClass = new RoleClass(Symbol('@@ActorSet/cleanerClass'));
 
 export class ActorsSet extends RoleSet {

@@ -18,14 +18,6 @@ class Stage extends ActorsSet {
     return [...this][0].scaleF;
   }
 
-  appendAsChild(actor) {
-    if (actor instanceof Actor) {
-      this.stageNode.appendChild(actor.node);
-    } else {
-      throw new Error('@@...');
-    }
-  }
-
   defineLevel(level) {
     this.gameState = stageParams;
     this.levelParams = levelsDescription[level];

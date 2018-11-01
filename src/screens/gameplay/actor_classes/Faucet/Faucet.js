@@ -38,7 +38,7 @@ export default class Faucet extends Actor {
       right: '0',
       'object-fit': 'contain',
     });
-    [...bar][0].node.appendChild(this.node);
+    this.getAppendedAsChild(bar);
     attachClassName(this, 'faucets');
   }
 }
