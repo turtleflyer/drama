@@ -1,5 +1,10 @@
 import {
-  defineRoutine, eventChain, fireEvent, RoleSet, waitWhenTypeExhausted,
+  defineRoutine,
+  eventChain,
+  fireEvent,
+  RoleSet,
+  waitWhenTypeExhausted,
+  stopBubbling,
 } from './eventswork';
 
 defineRoutine({
@@ -220,7 +225,8 @@ export class ActorsSet extends RoleSet {
     return (
       this._cleaner
       || cleanerClass.registerAction(this, {
-        action: () => {
+        action: ({ event }) => {
+          stopBubbling(event);
           [...this].forEach((e) => {
             console.log('e: ', e);
             if (!(e instanceof RoleSet)) {

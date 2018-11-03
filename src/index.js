@@ -1,13 +1,12 @@
 /* eslint-env browser */
 import './styles.css';
-import './role_sets/stage/stage';
 import './screens/gameplay/role_sets/mugsOnLine/mugsOnLine';
 import startStopLevel from './screens/gameplay/roles_manipulators/start_stop_level';
-import { setACleaner, setAInitializer } from './screens/gameplay/supersets/setA';
+import setA from './screens/gameplay/supersets/setA';
 import { sendPulse } from './role_sets/stage/stage_roles';
 import stage from './role_sets/stage/stage';
 
-setAInitializer.fireAndWaitWhenExhausted()(() => {
+setA.getInitializer().fireAndWaitWhenExhausted()(() => {
   startStopLevel.start();
 });
 
@@ -19,10 +18,10 @@ b.style = 'width: 100px; height: 30px';
 b.addEventListener('mousedown', () => {
   if (f) {
     startStopLevel.stop();
-    setACleaner.fire();
+    setA.getCleaner().fire();
   } else {
     stage.defineLevel(1);
-    setAInitializer.fireAndWaitWhenExhausted()(() => {
+    setA.getInitializer().fireAndWaitWhenExhausted()(() => {
       startStopLevel.start();
     });
   }

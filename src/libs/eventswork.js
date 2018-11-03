@@ -25,6 +25,7 @@ const countTypesInQueue = new Map();
 const exhaustTypesMap = new Map();
 const routine = { interpretTarget: t => t };
 const fireFromQueueType = Symbol('@@fireFromQueue');
+const propagationKey = Symbol('propagationKey');
 
 /**
  *
@@ -81,6 +82,12 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
+export function defineRoutine({ interpretTarget }) {
+  if (interpretTarget) {
+    routine.interpretTarget = interpretTarget;
+  }
+}
+
 /**
  *
  *
@@ -91,10 +98,22 @@ function registerEventType(type) {
   customEventTypes.add(type);
 }
 
-export function defineRoutine({ interpretTarget }) {
-  if (interpretTarget) {
-    routine.interpretTarget = interpretTarget;
+export function managePropagation(event, option) {
+  // eslint-disable-next-line
+  const { stopBubbling, stopPropagatingNested } = option;
+  if (!event[propagationKey]) {
+    event[propagationKey] = {};
   }
+  Object.assign(event[propagationKey], { stopBubbling, stopPropagatingNested });
+  return event;
+}
+
+export function stopBubbling(event) {
+  return managePropagation(event, { stopBubbling: true });
+}
+
+export function stopPropagatingNested(event) {
+  return managePropagation(event, { stopPropagatingNested: true });
 }
 
 /**
@@ -125,7 +144,7 @@ function getCallback(target, type, parent) {
       });
     }
     const grandEntry = elementsMap.get(getParent);
-    if (grandEntry) {
+    if (grandEntry && !(event[propagationKey] && event[propagationKey].stopBubbling)) {
       stageCallback(target, type, event, grandEntry.belong);
     }
   }
@@ -175,9 +194,9 @@ function addCallbackToChildren(parent, type) {
   }
 }
 
-const addElementType = Symbol('@@addElement');
+const addElementEventType = Symbol('@@addElement');
 
-registerEventType(addElementType);
+registerEventType(addElementEventType);
 
 /**
  * Function returns the list of types of events the ancestors
@@ -220,7 +239,7 @@ export class RoleSet extends Set {
     eventChain(
       {
         roleSet: this,
-        type: addElementType,
+        type: addElementEventType,
         action: (...args) => {
           onAddElementActionsMap.get(this)(...args);
         },
@@ -254,7 +273,7 @@ export class RoleSet extends Set {
       }
     });
     // eslint-disable-next-line
-    fireEvent(this, addElementType, { addedElement: element, stopPropagation: true });
+    fireEvent(this, addElementEventType, stopPropagatingNested({ addedElement: element }));
   }
 
   deleteElement(element) {
@@ -302,16 +321,22 @@ function waitGroupEvent(roleSet, type, eventID) {
 /**
  *
  *
- * @param {(Element|UnitClass)} roleSet
+ * @param {(Element|UnitClass)} target
  * @param {string} type
- * @param {Object} event
+ * @param {Object} _event
  * @memberof EventsWork
  */
-export function fireEvent(roleSet, type, event) {
-  if (roleSet instanceof RoleSet) {
-    if (roleSet.size > 0) {
-      [...roleSet].forEach((e) => {
-        if (!event || !event.stopPropagation || !(e instanceof RoleSet)) {
+export function fireEvent(target, type, event = {}) {
+  if (target instanceof RoleSet) {
+    if (target.size > 0) {
+      [...target].forEach((e) => {
+        if (
+          !(
+            event[propagationKey]
+            && event[propagationKey].stopPropagatingNested
+            && e instanceof RoleSet
+          )
+        ) {
           queueData.push({ target: e, type, event });
           const countType = countTypesInQueue.get(type);
           countTypesInQueue.set(type, countType ? countType + 1 : 1);
@@ -319,10 +344,10 @@ export function fireEvent(roleSet, type, event) {
       });
       fireEvent(worker, fireFromQueueType);
     } else {
-      getCallback(null, type, roleSet)(event);
+      getCallback(null, type, target)(event);
     }
   } else {
-    getCallback(roleSet, type)(event);
+    getCallback(target, type)(event);
   }
 }
 

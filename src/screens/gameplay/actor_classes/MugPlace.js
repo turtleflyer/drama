@@ -4,7 +4,6 @@ import { Actor } from '../../../libs/actors_and_roles';
 export default class MugPlace extends Actor {
   constructor(faucet) {
     super(document.createElement('div'), faucet.mugPlacePosition);
-    console.log('faucet.mugPlacePosition: ', faucet.mugPlacePosition);
     // this.mugPlace = true;
     this.faucet = faucet;
     faucet.mugPlace = this;

@@ -5,7 +5,4 @@ import bar from '../role_sets/bar';
 import faucets from '../role_sets/faucets';
 import mugPlaces from '../role_sets/mugPlaces';
 
-export const setA = new ActorsSet([mugs, dragMug, bar, faucets, mugPlaces]);
-
-export const setACleaner = setA.getCleaner();
-export const setAInitializer = setA.getInitializer();
+export default new ActorsSet([mugs, dragMug, bar, faucets, mugPlaces]);
