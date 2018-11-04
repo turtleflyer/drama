@@ -7,13 +7,9 @@ import stage from '../../../../role_sets/stage/stage';
 
 export default class CustomersTable extends Actor {
   constructor() {
-    super(document.createElement('div'), customersTablePosition.hookPlace);
-    const table = new Actor(document.createElement('div'), customersTablePosition);
-    setImg(table, tableImg, { width: '100%' });
-    table.getAppendedAsChild(stage);
-    this.getAppendedAsChild(table);
-    this.linkActor(table);
-    this.attachClassName('hookPlace');
-    table.attachClassName('customersTable');
+    super(document.createElement('div'), customersTablePosition);
+    setImg(this, tableImg, { width: '100%' });
+    this.getAppendedAsChild(stage);
+    this.attachClassName('customersTable');
   }
 }
