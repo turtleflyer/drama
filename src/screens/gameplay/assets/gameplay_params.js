@@ -77,3 +77,15 @@ export const faucetModels = {
     },
   },
 };
+
+export const customersTablePosition = {
+  left: 50,
+  top: 80,
+  width: 250,
+  hookPlace: {
+    top: 11,
+    height: 90,
+    left: 58,
+    right: 58,
+  },
+};

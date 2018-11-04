@@ -39,19 +39,23 @@ img {
   z-index: 65;
 }
 
+.mugPlaces {
+  z-index: 70;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.hookPlace {
+  z-index: 30;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.customersTable {
+  z-index: 55;
+}
+
 .FaucetSwitches {
   z-index: 70;
   /* background-color: white; */
-}
-
-.MugPlaces {
-  z-index: 70;
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.HookPlace {
-  z-index: 30;
-  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .FallenMug {

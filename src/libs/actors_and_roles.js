@@ -70,8 +70,14 @@ export class Actor {
     return this;
   }
 
-  getAppendedAsChild(roleSet) {
-    [...roleSet][0].node.appendChild(this.node);
+  getAppendedAsChild(whereToAppend) {
+    if (whereToAppend instanceof Actor) {
+      whereToAppend.node.appendChild(this.node);
+    } else if (whereToAppend instanceof RoleSet) {
+      [...whereToAppend][0].node.appendChild(this.node);
+    } else {
+      throw new Error('@@...');
+    }
   }
 
   attachClassName(className) {
