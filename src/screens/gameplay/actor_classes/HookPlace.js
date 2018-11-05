@@ -3,7 +3,7 @@ import { customersTablePosition } from '../assets/gameplay_params';
 
 /* eslint-env browser */
 
-export default class CustomersTable extends Actor {
+export default class HookPlace extends Actor {
   constructor(table) {
     super(document.createElement('div'), customersTablePosition.hookPlace);
     this.getAppendedAsChild([...table][0]);
