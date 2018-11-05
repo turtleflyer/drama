@@ -15,6 +15,12 @@ export const sendPulse = pulse.registerAction(stage, {
   },
 });
 
+registerActionOfType('dragstart', stage, {
+  action({ event }) {
+    event.preventDefault();
+  },
+});
+
 export const drag = registerActionOfType('mousemove', stage, {
   action({ event }) {
     event.preventDefault();
