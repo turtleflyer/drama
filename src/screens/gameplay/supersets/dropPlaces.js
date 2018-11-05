@@ -6,8 +6,12 @@ import { checkEnter } from '../../../assets/role_classes';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
 
 const signalElement = Symbol('@@dropPlaces/signalElement');
+const signalSet = new ActorsSet();
+signalSet.getInitializer(function () {
+  this.addElement(signalElement);
+});
 
-export const dropPlaces = new ActorsSet([mugPlaces, hookPlace, signalElement]);
+export const dropPlaces = new ActorsSet([mugPlaces, hookPlace, signalSet]);
 
 export const dropMug = checkEnter.registerAction(dropPlaces, {
   action({ target, unit, event: { mug, tryToPlace } }) {
