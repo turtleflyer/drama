@@ -10,14 +10,6 @@ import {
 
 defineRoutine({
   interpretTarget: e => e.node,
-  whenAddToUnit(e, unit) {
-    if (e.node) {
-      e.node.classList.add(this.name);
-      if (unit) {
-        e.node.classList.remove(unit.name);
-      }
-    }
-  },
 });
 
 function appendPx(n) {
