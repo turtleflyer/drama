@@ -13,10 +13,6 @@ export const draggingMug = followMouse.registerAction(dragMug, {
         mug: target,
         tryToPlace: false,
       });
-      // fireEvent(getUnit('DropPlaces'), 'checkEnter', {
-      //   mug: target,
-      //   tryToPlace: false,
-      // });
     }
   },
 });
