@@ -5,6 +5,7 @@ import {
   RoleSet,
   waitWhenTypeExhausted,
   stopBubbling,
+  setActionOnAddElement,
 } from './eventswork';
 
 defineRoutine({
@@ -242,6 +243,11 @@ export class ActorsSet extends RoleSet {
         },
       })
     );
+  }
+
+  onAddActorEvent(action) {
+    setActionOnAddElement(this, action.bind(this));
+    return this;
   }
 }
 
