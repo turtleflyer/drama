@@ -4,9 +4,7 @@ import MugPlace from '../actor_classes/MugPlace';
 
 const mugPlaces = new ActorsSet();
 mugPlaces.getInitializer(function () {
-  [...faucets].forEach((faucet) => {
-    this.addElement(new MugPlace(faucet));
-  });
+  this.addElements([...faucets].map(faucet => new MugPlace(faucet)));
 });
 
 export default mugPlaces;
