@@ -219,9 +219,6 @@ export class ActorsSet extends RoleSet {
           action: () => null,
         });
       }
-      this._initializer.fireThenStart = (role) => {
-        this._initializer.fireAndWaitWhenExhausted().then(role.start);
-      };
     }
     this._initializer.start();
     return this._initializer;
