@@ -274,15 +274,23 @@ export class RoleSet extends Set {
     });
     // eslint-disable-next-line
     fireEvent(this, addElementEventType, stopPropagatingNested({ addedElement: element }));
+    return this;
   }
 
   deleteElement(element) {
     this.delete(element);
     elementsMap.get(element).belong = null;
+    return this;
+  }
+
+  addElements(elements) {
+    elements.forEach(e => this.addElement(e));
+    return this;
   }
 
   clearElements() {
     [...this].forEach(e => this.deleteElement(e));
+    return this;
   }
 }
 
