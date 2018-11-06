@@ -4,12 +4,12 @@ import {
   fireEvent,
   RoleSet,
   waitWhenTypeExhausted,
-  stopBubbling,
   setActionOnAddElement,
 } from './eventswork';
 
 defineRoutine({
   interpretTarget: e => e.node,
+  defaultPropagation: { stopBubbling: true },
 });
 
 function appendPx(n) {
@@ -201,8 +201,8 @@ export class ActorsSet extends RoleSet {
       }
       if (initialize) {
         this._initializer = initializerClass.registerAction(this, {
-          action: ({ target }) => {
-            if (!target) {
+          action: ({ roleSet }) => {
+            if (roleSet.size === 0) {
               initialize.call(this);
             }
           },
@@ -221,8 +221,7 @@ export class ActorsSet extends RoleSet {
     return (
       this._cleaner
       || cleanerClass.registerAction(this, {
-        action: ({ event }) => {
-          stopBubbling(event);
+        action: () => {
           [...this].forEach((e) => {
             console.log('e: ', e);
             if (!(e instanceof RoleSet)) {

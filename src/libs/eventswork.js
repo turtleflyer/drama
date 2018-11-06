@@ -26,6 +26,7 @@ const exhaustTypesMap = new Map();
 const routine = { interpretTarget: t => t };
 const fireFromQueueType = Symbol('@@fireFromQueue');
 const propagationKey = Symbol('propagationKey');
+const nullKey = Symbol('@@eventwork/nullKey');
 
 /**
  *
@@ -82,10 +83,8 @@ function getFromDeepMap(map, key) {
   return { map: deepMap, next: getFromDeepMap.bind(null, deepMap) };
 }
 
-export function defineRoutine({ interpretTarget }) {
-  if (interpretTarget) {
-    routine.interpretTarget = interpretTarget;
-  }
+export function defineRoutine({ interpretTarget, defaultPropagation }) {
+  Object.assign(routine, { interpretTarget, defaultPropagation });
 }
 
 /**
@@ -104,7 +103,11 @@ export function managePropagation(event, option) {
   if (!event[propagationKey]) {
     event[propagationKey] = {};
   }
-  Object.assign(event[propagationKey], { stopBubbling, stopPropagatingNested });
+  Object.assign(event[propagationKey], {
+    // If stopBubbling is assigned true its value changes by empty set (still get true value)
+    stopBubbling: stopBubbling ? new Set() : null,
+    stopPropagatingNested,
+  });
   return event;
 }
 
@@ -114,6 +117,17 @@ export function stopBubbling(event) {
 
 export function stopPropagatingNested(event) {
   return managePropagation(event, { stopPropagatingNested: true });
+}
+
+function applyDefaultPropagation(event) {
+  if (!event[propagationKey]) {
+    event[propagationKey] = {};
+    const { defaultPropagation } = routine;
+    if (defaultPropagation) {
+      managePropagation(event, defaultPropagation);
+    }
+  }
+  return event;
 }
 
 /**
@@ -137,20 +151,21 @@ function getCallback(target, type, parent) {
         const [eventID, handle] = typeEntry;
         handle({
           target,
-          roleSet: target ? elementsMap.get(target).belong : parent,
+          roleSet: !target || target[nullKey] ? parent : elementsMap.get(target).belong,
           event,
           eventID,
         });
       });
     }
     const grandEntry = elementsMap.get(getParent);
-    if (grandEntry && !(event[propagationKey] && event[propagationKey].stopBubbling)) {
+    // if (grandEntry && !event[propagationKey].stopBubbling) {
+    if (grandEntry) {
       stageCallback(target, type, event, grandEntry.belong);
     }
   }
 
   return (event) => {
-    stageCallback(target, type, event, parent);
+    stageCallback(target, type, applyDefaultPropagation(event), parent);
   };
 }
 
@@ -296,6 +311,8 @@ export class RoleSet extends Set {
 
 const worker = new RoleSet([]);
 
+worker.name = '@@worker';
+
 export function setActionOnAddElement(roleSet, action) {
   onAddElementActionsMap.set(roleSet, action);
 }
@@ -335,16 +352,11 @@ function waitGroupEvent(roleSet, type, eventID) {
  * @memberof EventsWork
  */
 export function fireEvent(target, type, event = {}) {
+  applyDefaultPropagation(event);
   if (target instanceof RoleSet) {
     if (target.size > 0) {
       [...target].forEach((e) => {
-        if (
-          !(
-            event[propagationKey]
-            && event[propagationKey].stopPropagatingNested
-            && e instanceof RoleSet
-          )
-        ) {
+        if (!(event[propagationKey].stopPropagatingNested && e instanceof RoleSet)) {
           queueData.push({ target: e, type, event });
           const countType = countTypesInQueue.get(type);
           countTypesInQueue.set(type, countType ? countType + 1 : 1);
@@ -352,7 +364,7 @@ export function fireEvent(target, type, event = {}) {
       });
       fireEvent(worker, fireFromQueueType);
     } else {
-      getCallback(null, type, target)(event);
+      getCallback({ [nullKey]: true }, type, target)(event);
     }
   } else {
     getCallback(target, type)(event);
@@ -412,23 +424,35 @@ export function eventChain(description, eventID) {
     getId = typeof type === 'string' ? Symbol(`@@${type}-event`) : type;
   }
   waitGroupEvent(roleSet, type, getId).then((data) => {
+    const _ = queueData;
+    const { target, event } = data;
     if (
-      checkIfTerminate({
-        ...data,
-        type,
-        memory,
-      })
+      (event[propagationKey].stopBubbling && !event[propagationKey].stopBubbling.has(target))
+      || !event[propagationKey].stopBubbling
     ) {
-      eventsStore
-        .get(roleSet)
-        .get(type)
-        .delete(getId);
+      if (
+        checkIfTerminate({
+          ...data,
+          type,
+          memory,
+        })
+      ) {
+        eventsStore
+          .get(roleSet)
+          .get(type)
+          .delete(getId);
+      } else {
+        action({
+          ...data,
+          type,
+          memory,
+        });
+        if (event[propagationKey].stopBubbling) {
+          event[propagationKey].stopBubbling.add(target);
+        }
+        eventChain(furtherDescription, data.eventID);
+      }
     } else {
-      action({
-        ...data,
-        type,
-        memory,
-      });
       eventChain(furtherDescription, data.eventID);
     }
   });
