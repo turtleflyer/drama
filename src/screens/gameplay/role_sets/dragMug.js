@@ -21,7 +21,6 @@ export const followMouse = new RoleClass(Symbol('followMouse')).registerAction(d
 export const stopDrag = new RoleClass(Symbol('stopDrag')).registerAction(dragMug, {
   action({ target }) {
     if (target instanceof Actor) {
-      console.log('stopDrag');
       dropMug.fire({
         mug: target,
         tryToPlace: true,

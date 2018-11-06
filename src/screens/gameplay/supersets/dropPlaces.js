@@ -19,7 +19,6 @@ dropPlaces.name = 'dropPlaces';
 export const dropMug = new RoleClass(Symbol('dropMug')).registerAction(dropPlaces, {
   action({ target, roleSet, event: { mug, tryToPlace } }) {
     if (tryToPlace) {
-      console.log('i am here');
       if (target === signalElement) {
         if (!mug.placed) {
           fallenMug.addElement(mug);

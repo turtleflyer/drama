@@ -223,7 +223,6 @@ export class ActorsSet extends RoleSet {
       || cleanerClass.registerAction(this, {
         action: () => {
           [...this].forEach((e) => {
-            console.log('e: ', e);
             if (!(e instanceof RoleSet)) {
               if (e.node) {
                 e.node.remove();
