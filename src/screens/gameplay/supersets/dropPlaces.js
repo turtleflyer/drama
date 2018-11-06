@@ -1,8 +1,7 @@
 /* eslint-env browser */
-import { ActorsSet } from '../../../libs/actors_and_roles';
+import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
 import mugPlaces from '../role_sets/mugPlaces';
 import hookPlace from '../role_sets/hookPlace';
-import { checkEnter } from '../../../assets/role_classes';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
 import fallenMug from '../role_sets/fallenMug';
 import { dragMug } from '../role_sets/dragMug';
@@ -17,7 +16,7 @@ export const dropPlaces = new ActorsSet([mugPlaces, hookPlace, signalSet]);
 
 dropPlaces.name = 'dropPlaces';
 
-export const dropMug = checkEnter.registerAction(dropPlaces, {
+export const dropMug = new RoleClass(Symbol('dropMug')).registerAction(dropPlaces, {
   action({ target, roleSet, event: { mug, tryToPlace } }) {
     if (tryToPlace) {
       console.log('i am here');
@@ -59,7 +58,7 @@ export const dropMug = checkEnter.registerAction(dropPlaces, {
         }
       }
 
-    // Block existing only for the time of developing
+      // Block existing only for the time of developing
     } else if (target !== signalElement) {
       const placeRect = target.node.getBoundingClientRect();
       const mugRect = mug.img.getBoundingClientRect();

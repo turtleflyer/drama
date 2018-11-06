@@ -1,6 +1,4 @@
 import { RoleClass } from '../libs/actors_and_roles';
 
-export const pulse = new RoleClass(Symbol('pulse'));
-export const followMouse = new RoleClass(Symbol('followMouse'));
+// eslint-disable-next-line
 export const onPulseTick = new RoleClass(Symbol('onPulseTick'));
-export const checkEnter = new RoleClass(Symbol('checkEnter'));
