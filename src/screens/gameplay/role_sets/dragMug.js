@@ -2,7 +2,6 @@
 import { ActorsSet, RoleClass, Actor } from '../../../libs/actors_and_roles';
 import { followMouse } from '../../../assets/role_classes';
 import { dropMug } from '../supersets/dropPlaces';
-import { stopBubbling } from '../../../libs/eventswork';
 
 export const dragMug = new ActorsSet();
 
@@ -21,9 +20,9 @@ export const draggingMug = followMouse.registerAction(dragMug, {
 });
 
 export const stopDrag = new RoleClass(Symbol('stopDrag')).registerAction(dragMug, {
-  action({ target, event }) {
-    stopBubbling(event);
-    if (target) {
+  action({ target }) {
+    if (target instanceof Actor) {
+      console.log('stopDrag');
       dropMug.fire({
         mug: target,
         tryToPlace: true,

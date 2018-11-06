@@ -13,7 +13,7 @@ export default class Mug extends Actor {
     );
     setImg(this, mugTypes[type].empty, { width: '100%', bottom: '0px' });
     this.type = type;
-    this.load = {};
+    this.fill = {};
     this.getAppendedAsChild(stage);
     this.attachClassName('mugsOnLine');
   }
@@ -22,19 +22,19 @@ export default class Mug extends Actor {
     return { x: this.left + this.width / 2, y: this.top };
   }
 
-  get boundingBox() {
+  getBoundingRect() {
     return this.node.querySelector('img').getBoundingClientRect();
   }
 
   get rectHeight() {
-    return this.boundingBox.height / this.scaleF;
+    return this.getBoundingRect().height / this.scaleF;
   }
 
   setPosition(position) {
     const { x, y, width } = position;
     Actor.prototype.setPosition.call(this, {
-      left: x - (width || this.width) / 2,
-      top: y,
+      left: (x || this.position.x) - (width || this.width) / 2,
+      top: y || this.position.y,
       width,
     });
   }

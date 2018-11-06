@@ -4,6 +4,8 @@ import mugPlaces from '../role_sets/mugPlaces';
 import hookPlace from '../role_sets/hookPlace';
 import { checkEnter } from '../../../assets/role_classes';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
+import fallenMug from '../role_sets/fallenMug';
+import { dragMug } from '../role_sets/dragMug';
 
 const signalElement = Symbol('@@dropPlaces/signalElement');
 const signalSet = new ActorsSet();
@@ -16,63 +18,48 @@ export const dropPlaces = new ActorsSet([mugPlaces, hookPlace, signalSet]);
 dropPlaces.name = 'dropPlaces';
 
 export const dropMug = checkEnter.registerAction(dropPlaces, {
-  action({ target, unit, event: { mug, tryToPlace } }) {
+  action({ target, roleSet, event: { mug, tryToPlace } }) {
     if (tryToPlace) {
       console.log('i am here');
-      //   if (target === signalElement) {
-      //     if (!mug.placed) {
-      //       const FallenMug = getUnit('FallenMug');
-      //       FallenMug.addElement(mug);
-      //     }
-      //   } else {
-      //     const { scaleFactor } = commonParams;
-      //     const placeRect = target.node.getBoundingClientRect();
-      //     const mugRect = mug.img.getBoundingClientRect();
-      //     const sceneRect = commonParams.scene.getBoundingClientRect();
-      //     if (percentOverlap(placeRect, mugRect) > 0.75) {
-      //       switch (unit.name) {
-      //         case 'MugPlaces':
-      //           {
-      //             console.log('unit: ', unit);
-      //             const { faucet } = target;
-      //             if (!faucet.placedMug) {
-      //               const MugFilling = getUnit('MugFilling');
-      //               MugFilling.addElement(mug);
-      //               mug.faucet = target.faucet;
-      //               faucet.placedMug = mug;
-      //               mug.setPosition({
-      //                 top: null,
-      //                 bottom: (sceneRect.bottom - placeRect.bottom + mugRect.height) / scaleFactor,
-      //                 left:
-      //                   (placeRect.left - sceneRect.left + (placeRect.width - mugRect.width) / 2)
-      //                   / scaleFactor,
-      //               });
-      //               mug.placed = true;
-      //             }
-      //           }
-      //           break;
-      //         case 'HookPlace':
-      //           {
-      //             console.log('unit: ', unit);
-      //             const MugWaiting = getUnit('MugWaiting');
-      //             MugWaiting.addElement(mug);
-      //             mug.setPosition({
-      //               top: null,
-      //               bottom:
-      //                 (sceneRect.bottom
-      //                   - placeRect.bottom
-      //                   + (mugRect.height + placeRect.height / 4))
-      //                 / scaleFactor,
-      //               left: (mugRect.left - sceneRect.left) / scaleFactor,
-      //             });
-      //             mug.placed = true;
-      //           }
-      //           break;
-      //         default:
-      //           break;
-      //       }
-      //     }
-      //   }
+      if (target === signalElement) {
+        if (!mug.placed) {
+          fallenMug.addElement(mug);
+        }
+      } else {
+        const placeRect = target.node.getBoundingClientRect();
+        const mugRect = mug.getBoundingRect();
+        if (percentOverlap(placeRect, mugRect) > 0.75) {
+          switch (roleSet) {
+            case mugPlaces:
+              {
+                const { faucet } = target;
+                if (!faucet.placedMug) {
+                  // const MugFilling = getUnit('MugFilling');
+                  // MugFilling.addElement(mug);
+                  mug.faucet = target.faucet;
+                  faucet.placedMug = mug;
+                  mug.placed = true;
+                  mug.setPosition(target.position);
+                  dragMug.deleteElement(mug);
+                }
+              }
+              break;
+
+            case hookPlace:
+              // const MugWaiting = getUnit('MugWaiting');
+              // MugWaiting.addElement(mug);
+              mug.setPosition({ y: target.mugsLine() });
+              mug.placed = true;
+              dragMug.deleteElement(mug);
+              break;
+
+            default:
+              break;
+          }
+        }
+      }
+
+    // Block existing only for the time of developing
     } else if (target !== signalElement) {
       const placeRect = target.node.getBoundingClientRect();
       const mugRect = mug.img.getBoundingClientRect();

@@ -18,6 +18,10 @@ class Stage extends ActorsSet {
     return [...this][0].scaleF;
   }
 
+  getBoundingRect() {
+    return this.stageNode.getBoundingClientRect();
+  }
+
   defineLevel(level) {
     this.gameState = stageParams;
     this.levelParams = levelsDescription[level];
