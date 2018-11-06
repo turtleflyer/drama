@@ -5,5 +5,10 @@ import bar from '../role_sets/bar';
 import faucets from '../role_sets/faucets';
 import customersTable from '../role_sets/customersTable';
 import { dropPlaces } from './dropPlaces';
+import fallenMug from '../role_sets/fallenMug';
 
-export default new ActorsSet([mugs, dragMug, bar, faucets, dropPlaces, customersTable]);
+const setA = new ActorsSet([mugs, dragMug, fallenMug, bar, faucets, dropPlaces, customersTable]);
+
+setA.name = 'setA';
+
+export default setA;

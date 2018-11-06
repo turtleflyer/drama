@@ -24,4 +24,8 @@ class Stage extends ActorsSet {
   }
 }
 
-export default new Stage(document.querySelector('#scene'), stageDimension);
+const stage = new Stage(document.querySelector('#scene'), stageDimension);
+
+stage.name = 'stage';
+
+export default stage;

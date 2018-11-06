@@ -7,4 +7,6 @@ hookPlace.getInitializer(function () {
   this.addElement(new HookPlace(customersTable));
 });
 
+hookPlace.name = 'hookPlace';
+
 export default hookPlace;

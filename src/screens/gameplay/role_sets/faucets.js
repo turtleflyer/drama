@@ -10,4 +10,6 @@ faucets.getInitializer(function () {
   });
 });
 
+faucets.name = 'faucets';
+
 export default faucets;

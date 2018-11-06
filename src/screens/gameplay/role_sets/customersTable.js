@@ -6,4 +6,6 @@ customersTable.getInitializer(function () {
   this.addElement(new CustomersTable());
 });
 
+customersTable.name = 'customersTable';
+
 export default customersTable;

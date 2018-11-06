@@ -7,4 +7,6 @@ mugPlaces.getInitializer(function () {
   this.addElements([...faucets].map(faucet => new MugPlace(faucet)));
 });
 
+mugPlaces.name = 'mugPlaces';
+
 export default mugPlaces;

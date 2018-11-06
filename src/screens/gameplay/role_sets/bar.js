@@ -13,4 +13,6 @@ bar.getInitializer(function () {
   this.addElement(new Bar());
 });
 
+bar.name = 'bar';
+
 export default bar;
