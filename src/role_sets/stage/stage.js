@@ -28,8 +28,7 @@ class Stage extends ActorsSet {
   }
 }
 
-const stage = new Stage(document.querySelector('#scene'), stageDimension);
+// eslint-disable-next-line
+export const stage = new Stage(document.querySelector('#scene'), stageDimension);
 
 stage.name = 'stage';
-
-export default stage;

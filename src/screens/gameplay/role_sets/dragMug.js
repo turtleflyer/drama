@@ -1,29 +1,31 @@
 /* eslint-env browser */
 import { ActorsSet, RoleClass, Actor } from '../../../libs/actors_and_roles';
-import { dropMug } from '../supersets/dropPlaces';
+import { placeMugRole } from '../supersets/dropPlaces';
 
 export const dragMug = new ActorsSet();
 
 dragMug.name = 'dragMug';
 
-export const followMouse = new RoleClass(Symbol('followMouse')).registerAction(dragMug, {
+export const followMouseRole = new RoleClass(Symbol('followMouse')).registerAction(dragMug, {
   action({ target, event: { x, y } }) {
     if (target instanceof Actor) {
       target.setPosition({ x, y: y + target.rectHeight / 2 });
-      dropMug.fire({
+      placeMugRole.fire({
         mug: target,
-        tryToPlace: false,
+        // Just to check if mug in the boundary of the place
+        gotToPlace: false,
       });
     }
   },
 });
 
-export const stopDrag = new RoleClass(Symbol('stopDrag')).registerAction(dragMug, {
+export const stopDragRole = new RoleClass(Symbol('stopDrag')).registerAction(dragMug, {
   action({ target }) {
     if (target instanceof Actor) {
-      dropMug.fire({
+      placeMugRole.fire({
         mug: target,
-        tryToPlace: true,
+        // After drag is stopped mug has to be placed or fall down
+        gotToPlace: true,
       });
     }
   },

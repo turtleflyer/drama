@@ -1,7 +1,8 @@
 import { ActorsSet, Actor } from '../../../libs/actors_and_roles';
 import Bar from '../actor_classes/Bar/Bar';
 
-const bar = new ActorsSet();
+// eslint-disable-next-line
+export const bar = new ActorsSet();
 // bar.appendAsChild = function (actor) {
 //   if (actor instanceof Actor) {
 //     [...this].node.appendChild(actor.node);
@@ -14,5 +15,3 @@ bar.getInitializer(function () {
 });
 
 bar.name = 'bar';
-
-export default bar;

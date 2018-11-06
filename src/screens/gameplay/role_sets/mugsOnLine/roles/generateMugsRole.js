@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { mugsOnLine, signalElementAmongMugs } from '../mugsOnLine';
-import stage from '../../../../../role_sets/stage/stage';
+import { stage } from '../../../../../role_sets/stage/stage';
 import Mug from '../../../actor_classes/Mug/Mug';
 import { stageDimension } from '../../../../../assets/common_params';
 import { beerTypes, tuneGame, mugsParams } from '../../../assets/gameplay_params';

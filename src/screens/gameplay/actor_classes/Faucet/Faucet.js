@@ -2,7 +2,7 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import { switchTypes } from '../../assets/gameplay_params';
 import { setImg } from '../../../../libs/helpers_lib';
-import bar from '../../role_sets/bar';
+import { bar } from '../../role_sets/bar';
 
 export default class Faucet extends Actor {
   constructor(model, horizontalPosition) {

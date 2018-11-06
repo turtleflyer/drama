@@ -1,9 +1,9 @@
 /* eslint-env browser */
 import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
-import mugPlaces from '../role_sets/mugPlaces';
-import hookPlace from '../role_sets/hookPlace';
+import { mugPlaces } from '../role_sets/mugPlaces';
+import { hookPlace } from '../role_sets/hookPlace';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
-import fallenMug from '../role_sets/fallenMug';
+import { fallenMug } from '../role_sets/fallenMug';
 import { dragMug } from '../role_sets/dragMug';
 
 const signalElement = Symbol('@@dropPlaces/signalElement');
@@ -16,9 +16,9 @@ export const dropPlaces = new ActorsSet([mugPlaces, hookPlace, signalSet]);
 
 dropPlaces.name = 'dropPlaces';
 
-export const dropMug = new RoleClass(Symbol('dropMug')).registerAction(dropPlaces, {
-  action({ target, roleSet, event: { mug, tryToPlace } }) {
-    if (tryToPlace) {
+export const placeMugRole = new RoleClass(Symbol('placeMug')).registerAction(dropPlaces, {
+  action({ target, roleSet, event: { mug, gotToPlace } }) {
+    if (gotToPlace) {
       if (target === signalElement) {
         if (!mug.placed) {
           fallenMug.addElement(mug);

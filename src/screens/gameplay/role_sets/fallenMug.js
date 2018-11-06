@@ -1,10 +1,11 @@
 /* eslint-env browser */
 import { ActorsSet } from '../../../libs/actors_and_roles';
 import { updateStyle } from '../../../libs/helpers_lib';
-import stage from '../../../role_sets/stage/stage';
+import { stage } from '../../../role_sets/stage/stage';
 import { tuneGame } from '../assets/gameplay_params';
 
-const fallenMug = new ActorsSet();
+// eslint-disable-next-line
+export const fallenMug = new ActorsSet();
 
 fallenMug.name = 'fallenMug';
 
@@ -16,5 +17,3 @@ fallenMug.onAddActorEvent(function ({ target }) {
     this.deleteElement(target);
   }, 1000);
 });
-
-export default fallenMug;

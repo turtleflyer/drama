@@ -1,6 +1,6 @@
 import { Actor } from '../../../libs/actors_and_roles';
 import { customersTablePosition } from '../assets/gameplay_params';
-import stage from '../../../role_sets/stage/stage';
+import { stage } from '../../../role_sets/stage/stage';
 
 /* eslint-env browser */
 
@@ -14,9 +14,7 @@ export default class HookPlace extends Actor {
   mugsLine() {
     const { y: originY } = stage.origin;
     const { scaleF } = stage;
-    const {
-      top, height,
-    } = this.node.getBoundingClientRect();
-    return (top - originY + height * 3 / 4) / scaleF;
+    const { top, height } = this.node.getBoundingClientRect();
+    return (top - originY + (height * 3) / 4) / scaleF;
   }
 }

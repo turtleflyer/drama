@@ -1,8 +1,9 @@
 import { ActorsSet } from '../../../libs/actors_and_roles';
 import Faucet from '../actor_classes/Faucet/Faucet';
-import stage from '../../../role_sets/stage/stage';
+import { stage } from '../../../role_sets/stage/stage';
 
-const faucets = new ActorsSet();
+// eslint-disable-next-line
+export const faucets = new ActorsSet();
 faucets.getInitializer(function () {
   stage.levelParams.faucets.forEach((faucet) => {
     const { model, horizontalPosition } = faucet;
@@ -11,5 +12,3 @@ faucets.getInitializer(function () {
 });
 
 faucets.name = 'faucets';
-
-export default faucets;
