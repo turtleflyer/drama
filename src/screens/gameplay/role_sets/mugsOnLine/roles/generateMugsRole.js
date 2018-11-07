@@ -20,33 +20,45 @@ export default onPulseTick.registerAction(mugsOnLine, {
     const { reputation } = stage.gameState;
     const { placeholdersMap, lastTime } = memory;
 
-    // determine if to calculate placeholders shift
-    if (target === signalElementAmongMugs) {
-      [...placeholdersMap.entries()].forEach(([mug, place]) => {
-        placeholdersMap.set(mug, place + ((currTime - lastTime) * mugsSpeed) / 1000);
-      });
-      memory.lastTime = currTime;
-      // check if the last mug is gone
-    } else if (placeholdersMap.size > 0) {
-      const newPlace = placeholdersMap.get(target);
-      target.setPosition({ x: newPlace });
-      const { width } = target;
-      // check if the mug disappeared from the stage
-      if (newPlace < -(width / 2)) {
-        placeholdersMap.delete(target);
-        this.roleSet.deleteElement(target);
-        target.remove();
-        stage.gameState.reputation += tuneGame.reputationDecrement;
-        if (this.roleSet.size === 2) {
-          placeholdersMap.clear();
+    if (this.roleSet.size > 2 || (() => [...placeholdersMap.values()].pop())() < 2 * stageWidth) {
+      // Determine if it is a time to calculate placeholders shift
+      if (target === signalElementAmongMugs) {
+        // [...placeholdersMap.entries()].forEach(([mug, position]) => {
+        for (const [mug, position] of placeholdersMap.entries()) {
+          const { width } = mug;
+          const calculatedPosition = position + ((currTime - lastTime) * mugsSpeed) / 1000;
+
+          // Check if the mug disappeared from the stage
+          if (calculatedPosition < -(width / 2)) {
+            placeholdersMap.delete(mug);
+            if (this.roleSet.has(mug)) {
+              this.roleSet.deleteElement(mug);
+              mug.remove();
+              stage.gameState.reputation += tuneGame.reputationDecrement;
+            }
+
+            // if (
+            //   this.roleSet.size === 2
+            //   && (() => [...placeholdersMap.values()].pop())() > 1.5 * stageWidth
+            // ) {
+            //   placeholdersMap.clear();
+            //   break;
+            // }
+          } else {
+            placeholdersMap.set(mug, calculatedPosition);
+          }
         }
-      }
-      if (target.hidden) {
-        // check if the hidden mug is appearing on the stage
-        if (newPlace < stageWidth + width / 2) {
+        memory.lastTime = currTime;
+      } else {
+        const position = placeholdersMap.get(target);
+        target.setPosition({ x: position });
+        const { width } = target;
+
+        // Check if the hidden mug is appearing on the stage. In this case a new mug is generating
+        if (target.hidden && position < stageWidth + width / 2) {
           target.hidden = false;
           const mugDensity = initMugDensity * (reputation / 100);
-          const createdPlace = newPlace + (stageWidth * 0.6) / (mugDensity - 1);
+          const createdPlace = position + (stageWidth * 0.6) / (mugDensity - 1);
           const createdMug = new Mug(stage, determineTypeOfBeer(), createdPlace);
           createdMug.hidden = true;
           placeholdersMap.set(createdMug, createdPlace);
@@ -55,6 +67,7 @@ export default onPulseTick.registerAction(mugsOnLine, {
       }
     }
   },
+
   initMemoryState() {
     const place = stageWidth + mugsParams.initialDelay;
     const mug = new Mug(stage, determineTypeOfBeer(), place);
