@@ -16,11 +16,12 @@ export const sendPulseRole = new RoleClass(Symbol('pulse')).registerAction(stage
   },
 });
 
+// Prevents default behaviors in Firefox browser
 registerActionOfType('dragstart', stage, {
   action({ event }) {
     event.preventDefault();
   },
-});
+}).start();
 
 export const dragRole = registerActionOfType('mousemove', stage, {
   action({ event }) {
