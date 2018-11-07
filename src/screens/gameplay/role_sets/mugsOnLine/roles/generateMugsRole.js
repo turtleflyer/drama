@@ -36,14 +36,6 @@ export default onPulseTick.registerAction(mugsOnLine, {
               mug.remove();
               stage.gameState.reputation += tuneGame.reputationDecrement;
             }
-
-            // if (
-            //   this.roleSet.size === 2
-            //   && (() => [...placeholdersMap.values()].pop())() > 1.5 * stageWidth
-            // ) {
-            //   placeholdersMap.clear();
-            //   break;
-            // }
           } else {
             placeholdersMap.set(mug, calculatedPosition);
           }
