@@ -49,8 +49,8 @@ export default onPulseTick.registerAction(mugsOnLine, {
         // Check if the hidden mug is appearing on the stage. In this case a new mug is generating
         if (target.hidden && position < stageWidth + width / 2) {
           target.hidden = false;
-          const mugDensity = initMugDensity * (reputation / 100);
-          const createdPlace = position + (stageWidth * 0.6) / (mugDensity - 1);
+          const mugDensity = initMugDensity * reputation;
+          const createdPlace = position + (stageWidth * 0.6) / mugDensity;
           const createdMug = new Mug(stage, determineTypeOfBeer(), createdPlace);
           createdMug.hidden = true;
           placeholdersMap.set(createdMug, createdPlace);
