@@ -22,7 +22,7 @@ export class Actor {
   constructor(node, position, scaleF = 1) {
     this.node = node;
     this.scaleF = scaleF;
-    this.linked = [];
+    this.linked = new Set();
     this.setPosition(position);
   }
 
@@ -42,20 +42,25 @@ export class Actor {
   }
 
   refreshScale(newScale) {
-    for (const actor of [this].concat(this.linked)) {
+    for (const actor of [this].concat([...this.linked])) {
       actor.scaleF = newScale;
       actor.setPosition(actor);
     }
     return this;
   }
 
-  linkActor(actor) {
+  linkActor(actor, link = true) {
     if (!(actor instanceof Actor)) {
       throw new Error('Parameter should be an instance of GameActor class');
     }
-    actor.refreshScale(this.scaleF);
-    this.linked.push(actor);
-    return actor;
+    const { linked } = this;
+    if (link && !linked.has(actor)) {
+      actor.refreshScale(this.scaleF);
+      linked.add(actor);
+    } else if (!link && linked.has(actor)) {
+      linked.delete(actor);
+    }
+    return this;
   }
 
   remove() {
@@ -163,13 +168,13 @@ export class RoleClass {
     }();
   }
 
-  fire(roleSet, event) {
-    fireEvent(roleSet, this.type, event);
+  fire(target, event) {
+    fireEvent(target, this.type, event);
     return this;
   }
 
-  fireAndWaitWhenExhausted(roleSet, event) {
-    fireEvent(roleSet, this.type, event);
+  fireAndWaitWhenExhausted(target, event) {
+    fireEvent(target, this.type, event);
     const waitPromise = waitWhenTypeExhausted(this.type);
     return function (callback) {
       waitPromise.then(callback);
