@@ -13,7 +13,7 @@ export default class Mug extends Actor {
     );
     setImg(this, mugTypes[type].empty, { width: '100%', bottom: '0px' });
     this.type = type;
-    this.fill = {};
+    this.fill = { beers: {}, total: 0, overfilled: false };
     this.getAppendedAsChild(stage);
     this.attachClassName('mugsOnLine');
   }
@@ -37,5 +37,18 @@ export default class Mug extends Actor {
       top: y || this.position.y,
       width,
     });
+  }
+
+  updateFillState() {
+    const { type } = this;
+    const { total, overfilled, overfilledPhase } = this.fill;
+    const imgSource = mugTypes[type];
+    if (overfilled) {
+      this.fill.overfilledPhase = 1 - overfilledPhase;
+      setImg(this, imgSource.overfilledStates[this.fill.overfilledPhase]);
+    } else {
+      const numberOfPhase = imgSource.fillingStates.length;
+      setImg(this, imgSource.fillingStates[Math.floor(total * numberOfPhase)]);
+    }
   }
 }

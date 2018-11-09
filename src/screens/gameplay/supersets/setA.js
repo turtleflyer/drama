@@ -6,7 +6,7 @@ import { faucets } from '../role_sets/faucets';
 import { customersTable } from '../role_sets/customersTable';
 import { dropPlaces } from './dropPlaces';
 import { fallenMug } from '../role_sets/fallenMug';
-import { faucetSwitches } from '../role_sets/faucetSwitches';
+import { faucetHandles } from '../role_sets/faucetHandles';
 
 // eslint-disable-next-line
 export const setA = new ActorsSet([
@@ -15,7 +15,7 @@ export const setA = new ActorsSet([
   fallenMug,
   bar,
   faucets,
-  faucetSwitches,
+  faucetHandles,
   dropPlaces,
   customersTable,
 ]);
