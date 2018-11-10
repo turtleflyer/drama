@@ -151,7 +151,8 @@ function getCallback(target, type, parent) {
         const [eventID, handle] = typeEntry;
         handle({
           target,
-          roleSet: !target || target[nullKey] ? parent : elementsMap.get(target).belong,
+          roleSet: target[nullKey] ? parent : elementsMap.get(target).belong,
+          type,
           event,
           eventID,
         });
@@ -416,40 +417,32 @@ export function eventChain(description, eventID) {
     registerEventType(type);
     furtherDescription.typeRegistered = true;
   }
-  let getId = eventID;
+  let getID = eventID;
   if (!eventID) {
-    getId = typeof type === 'string' ? Symbol(`@@${type}-event`) : type;
+    getID = typeof type === 'string' ? Symbol(`@@${type}-event`) : type;
   }
-  waitGroupEvent(roleSet, type, getId).then((data) => {
-    const { target, event } = data;
+  waitGroupEvent(roleSet, type, getID).then((arg) => {
+    const { target, event } = arg;
     if (
       (event[propagationKey].stopBubbling && !event[propagationKey].stopBubbling.has(target))
       || !event[propagationKey].stopBubbling
     ) {
       if (
-        checkIfTerminate({
-          ...data,
-          type,
-          memory,
-        })
+        checkIfTerminate(arg)
       ) {
         eventsStore
           .get(roleSet)
           .get(type)
-          .delete(getId);
+          .delete(getID);
       } else {
-        action({
-          ...data,
-          type,
-          memory,
-        });
+        action(arg);
         if (event[propagationKey].stopBubbling) {
           event[propagationKey].stopBubbling.add(target);
         }
-        eventChain(furtherDescription, data.eventID);
+        eventChain(furtherDescription, getID);
       }
     } else {
-      eventChain(furtherDescription, data.eventID);
+      eventChain(furtherDescription, getID);
     }
   });
   return eventID;
