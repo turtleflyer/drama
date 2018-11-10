@@ -315,6 +315,7 @@ worker.name = '@@worker';
 
 export function setActionOnAddElement(roleSet, action) {
   onAddElementActionsMap.set(roleSet, action);
+  return roleSet;
 }
 
 function invokePromiseHandle() {
