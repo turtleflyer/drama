@@ -7,5 +7,6 @@ module.exports = {
     'func-names': 'off',
     'no-multi-assign': 'off',
     'no-restricted-syntax': ['off', { selector: 'ForOfStatement' }],
+    'no-plusplus': 'off',
   },
 };
