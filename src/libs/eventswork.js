@@ -270,11 +270,7 @@ export class RoleSet extends Set {
    */
   addElement(element) {
     this.add(element);
-    const elementEntry = getSomeFromDeep(
-      elementsMap,
-      element,
-      () => (element instanceof RoleSet ? {} : { types: new Set() }),
-    );
+    const elementEntry = getSomeFromDeep(elementsMap, element, () => (element instanceof RoleSet ? {} : { types: new Set() }));
     if (elementEntry.belong) {
       elementEntry.belong.delete(element);
     }
@@ -425,7 +421,6 @@ export function eventChain(description, eventID) {
     getId = typeof type === 'string' ? Symbol(`@@${type}-event`) : type;
   }
   waitGroupEvent(roleSet, type, getId).then((data) => {
-    const _ = queueData;
     const { target, event } = data;
     if (
       (event[propagationKey].stopBubbling && !event[propagationKey].stopBubbling.has(target))
