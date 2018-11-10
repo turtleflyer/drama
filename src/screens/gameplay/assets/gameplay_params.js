@@ -7,14 +7,16 @@ export const beerTypes = { IPA: '@@beer/IPA' };
 
 export const mugTypes = {
   [beerTypes.IPA]: {
-    width: 50,
-    empty: imgIPAEmpty,
-    fillingStates: importAll(
-      require.context('../actor_classes/Mug/img/IPA/IPA_filling_states', false, /\.png$/),
-    ),
-    overfilledStates: importAll(
-      require.context('../actor_classes/Mug/img/IPA/IPA_overfilled_states', false, /\.png$/),
-    ),
+    img: {
+      width: 50,
+      empty: imgIPAEmpty,
+      fillingPhasesImgs: importAll(
+        require.context('../actor_classes/Mug/img/IPA/IPA_filling_states', false, /\.png$/),
+      ),
+      overfilledPhasesImgs: importAll(
+        require.context('../actor_classes/Mug/img/IPA/IPA_overfilled_states', false, /\.png$/),
+      ),
+    },
   },
 };
 

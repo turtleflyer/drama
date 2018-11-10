@@ -5,15 +5,29 @@ import { mugTypes, mugsParams } from '../../assets/gameplay_params';
 
 export default class Mug extends Actor {
   constructor(stage, type, horizontalPosition) {
-    const { width } = mugTypes[type];
+    const { img } = mugTypes[type];
+    const {
+      width, empty, fillingPhasesImgs, overfilledPhasesImgs,
+    } = img;
     super(
       document.createElement('div'),
       { x: horizontalPosition, y: mugsParams.lineBase, width },
       stage.scaleF,
     );
-    setImg(this, mugTypes[type].empty, { width: '100%', bottom: '0px' });
+    setImg(this, empty, { width: '100%', bottom: '0px' });
     this.type = type;
-    this.fill = { beers: {}, total: 0, overfilled: false };
+    this.params = {
+      fillingPhasesImgs,
+      overfilledPhasesImgs,
+      numberOfFillingPhases: fillingPhasesImgs.length,
+      numberOfOverfilledPhases: overfilledPhasesImgs.length,
+    };
+    this.fillingState = {
+      beers: {},
+      total: 0,
+      overfilled: false,
+      nextFillThreshold: 1 / this.numberOfFillingPhases,
+    };
     this.getAppendedAsChild(stage);
     this.attachClassName('mugsOnLine');
   }
@@ -40,15 +54,12 @@ export default class Mug extends Actor {
   }
 
   updateFillState() {
-    const { type } = this;
-    const { total, overfilled, overfilledPhase } = this.fill;
-    const imgSource = mugTypes[type];
+    const { overfilled, fillingPhase, overfilledPhase } = this.fillingState;
+    const { fillingPhasesImgs, overfilledPhasesImgs } = this.params;
     if (overfilled) {
-      this.fill.overfilledPhase = 1 - overfilledPhase;
-      setImg(this, imgSource.overfilledStates[this.fill.overfilledPhase]);
+      setImg(this, overfilledPhasesImgs[overfilledPhase]);
     } else {
-      const numberOfPhase = imgSource.fillingStates.length;
-      setImg(this, imgSource.fillingStates[Math.floor(total * numberOfPhase)]);
+      setImg(this, fillingPhasesImgs[fillingPhase]);
     }
   }
 }
