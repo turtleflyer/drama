@@ -362,6 +362,7 @@ export function fireEvent(target, type, event = {}) {
       });
       fireEvent(worker, fireFromQueueType);
     } else {
+      // If target is empty RoleSet the object with signal property is passing to callback
       getCallback({ [nullKey]: true }, type, target)(event);
     }
   } else {
