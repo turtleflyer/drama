@@ -6,9 +6,6 @@ export const fillingMugs = new ActorsSet();
 
 fillingMugs.name = 'fillingMugs';
 
-// fillingMugs.onAddActorEvent(({ event: { addedElement: mug } }) => {
-// });
-
 export const fillMugsRole = onPulseTick
   .registerAction(fillingMugs, {
     action({ target: mug }) {
