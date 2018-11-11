@@ -30,6 +30,7 @@ export default class Mug extends Actor {
       overfilled: false,
       fillingPhase: -1,
     };
+    this.waitingState = {};
     this.updateNextThreshold();
     this.getAppendedAsChild(stage);
     this.attachClassName('mugsOnLine');

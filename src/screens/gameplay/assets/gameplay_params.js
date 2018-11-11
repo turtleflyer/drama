@@ -92,3 +92,5 @@ export const customersTablePosition = {
     right: 58,
   },
 };
+
+export const waitingTimeMugDisappear = 2000;
