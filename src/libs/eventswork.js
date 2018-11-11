@@ -424,6 +424,9 @@ export function eventChain(description, eventID) {
   }
   waitGroupEvent(roleSet, type, getID).then((arg) => {
     const { target, event } = arg;
+    // Check if target is subject of situation of preventing bubbling.
+    // In this case we check if target was already processing.
+    // So this is a criteria that further processing is a bubbling.
     if (event[propagationKey].stopBubbling && event[propagationKey].stopBubbling.has(target)) {
       eventChain(furtherDescription, getID);
     } else if (checkIfTerminate(arg)) {
