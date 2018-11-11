@@ -17,7 +17,7 @@ export const followMouseRole = new RoleClass(Symbol('followMouse')).registerActi
       });
     }
   },
-});
+}).start();
 
 export const stopDragRole = new RoleClass(Symbol('stopDrag')).registerAction(dragMug, {
   action({ target }) {
@@ -29,4 +29,4 @@ export const stopDragRole = new RoleClass(Symbol('stopDrag')).registerAction(dra
       });
     }
   },
-});
+}).start();

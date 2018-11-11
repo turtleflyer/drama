@@ -7,14 +7,17 @@ import { registerActionOfType, RoleClass } from '../../libs/actors_and_roles';
 import { onPulseTick } from '../../assets/role_classes';
 import { fallenMug } from '../../screens/gameplay/role_sets/fallenMug';
 
-export const sendPulseRole = new RoleClass(Symbol('pulse')).registerAction(stage, {
-  action() {
-    onPulseTick.fire(setA);
-    window.setTimeout(() => {
-      this.fire();
-    }, pulseTimeout);
-  },
-});
+export const sendPulseRole = new RoleClass(Symbol('pulse'))
+  .registerAction(stage, {
+    action() {
+      onPulseTick.fire(setA);
+      window.setTimeout(() => {
+        this.fire();
+      }, pulseTimeout);
+    },
+  })
+  .start()
+  .fire();
 
 // Prevents default behaviors in Firefox browser
 registerActionOfType('dragstart', stage, {

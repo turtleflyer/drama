@@ -69,4 +69,4 @@ export const placeMugRole = new RoleClass(Symbol('placeMug')).registerAction(dro
       }
     }
   },
-});
+}).start();
