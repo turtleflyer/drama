@@ -68,10 +68,10 @@ export const faucetModels = {
       left: -20,
     },
     switchPlace: {
-      width: 50,
-      height: 40,
+      width: 47,
+      height: 44,
       top: 0,
-      left: 40,
+      left: 29,
     },
     jetPlace: {
       height: 80,
