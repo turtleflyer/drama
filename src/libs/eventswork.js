@@ -424,25 +424,18 @@ export function eventChain(description, eventID) {
   }
   waitGroupEvent(roleSet, type, getID).then((arg) => {
     const { target, event } = arg;
-    if (
-      (event[propagationKey].stopBubbling && !event[propagationKey].stopBubbling.has(target))
-      || !event[propagationKey].stopBubbling
-    ) {
-      if (
-        checkIfTerminate(arg)
-      ) {
-        eventsStore
-          .get(roleSet)
-          .get(type)
-          .delete(getID);
-      } else {
-        action(arg);
-        if (event[propagationKey].stopBubbling) {
-          event[propagationKey].stopBubbling.add(target);
-        }
-        eventChain(furtherDescription, getID);
-      }
+    if (event[propagationKey].stopBubbling && event[propagationKey].stopBubbling.has(target)) {
+      eventChain(furtherDescription, getID);
+    } else if (checkIfTerminate(arg)) {
+      eventsStore
+        .get(roleSet)
+        .get(type)
+        .delete(getID);
     } else {
+      action(arg);
+      if (event[propagationKey].stopBubbling) {
+        event[propagationKey].stopBubbling.add(target);
+      }
       eventChain(furtherDescription, getID);
     }
   });
