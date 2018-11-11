@@ -60,5 +60,4 @@ export const fillMugsRole = onPulseTick
         }
       }
     },
-  })
-  .start();
+  });
