@@ -17,6 +17,7 @@ export const mugTypes = {
         require.context('../actor_classes/Mug/img/IPA/IPA_overfilled_states', false, /\.png$/),
       ),
     },
+    volume: 4,
   },
 };
 

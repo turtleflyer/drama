@@ -2,7 +2,6 @@ import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
 import Faucet from '../actor_classes/Faucet/Faucet';
 import { stage } from '../../../role_sets/stage/stage';
 import { switchTypes } from '../assets/gameplay_params';
-import { setImg } from '../../../libs/helpers_lib';
 
 // eslint-disable-next-line
 export const faucets = new ActorsSet();
@@ -23,12 +22,10 @@ export const switchFaucetRole = SwitchFaucetClass.registerAction(faucets, {
       activeState, switchType, imgPhases, beerTypes,
     } = target;
     if (switchType !== switchTypes.BROKEN) {
-      let { phase } = activeState;
-      phase = 1 - phase;
-      activeState.phase = phase;
-      target.node.querySelector('img').src = imgPhases[phase];
+      activeState.phase = 1 - activeState.phase;
+      target.node.querySelector('img').src = imgPhases[activeState.phase];
       if (switchType === switchTypes.DUAL) {
-        activeState.beer = beerTypes[phase];
+        activeState.beer = beerTypes[activeState.phase];
       } else if (switchType === switchTypes.NORMAL) {
         activeState.isOpened = !activeState.isOpened;
         target.runJet(activeState.isOpened);

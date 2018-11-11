@@ -9,11 +9,11 @@ export const fallenMug = new ActorsSet();
 
 fallenMug.name = 'fallenMug';
 
-fallenMug.onAddActorEvent(function ({ target }) {
-  updateStyle(target.node, { transform: 'scale(0.5)' });
+fallenMug.onAddActorEvent(function ({ event: { addedElement: mug } }) {
+  updateStyle(mug.node, { transform: 'scale(0.5)' });
   stage.gameState.reputation += tuneGame.reputationDecrement;
   window.setTimeout(() => {
-    target.node.remove();
-    this.deleteElement(target);
+    mug.node.remove();
+    this.deleteElement(mug);
   }, 1000);
 });

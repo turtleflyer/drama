@@ -5,6 +5,7 @@ import { hookPlace } from '../role_sets/hookPlace';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
 import { fallenMug } from '../role_sets/fallenMug';
 import { dragMug } from '../role_sets/dragMug';
+import { fillingMugs } from '../role_sets/fillingMugs';
 
 const signalElement = Symbol('@@dropPlaces/signalElement');
 const signalSet = new ActorsSet();
@@ -34,11 +35,11 @@ export const placeMugRole = new RoleClass(Symbol('placeMug')).registerAction(dro
                 if (!faucet.placedMug) {
                   // const MugFilling = getUnit('MugFilling');
                   // MugFilling.addElement(mug);
-                  mug.faucet = target.faucet;
+                  mug.fillingState.faucet = target.faucet;
                   faucet.placedMug = mug;
                   mug.placed = true;
                   mug.setPosition(target.position);
-                  dragMug.deleteElement(mug);
+                  fillingMugs.addElement(mug);
                 }
               }
               break;
