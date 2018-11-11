@@ -51,8 +51,12 @@ export default class Faucet extends Actor {
     this.attachClassName('faucets');
   }
 
-  runJet(openedState) {
-    if (openedState) {
+  switchState() {
+    setImg(this, this.imgPhases[this.activeState.phase]);
+  }
+
+  runJet() {
+    if (this.activeState.isOpened) {
       this.jet.getAppendedAsChild(this);
     } else {
       this.jet.remove();

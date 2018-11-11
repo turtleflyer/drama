@@ -19,16 +19,16 @@ export const SwitchFaucetClass = new RoleClass(Symbol('switchFaucet'));
 export const switchFaucetRole = SwitchFaucetClass.registerAction(faucets, {
   action({ target }) {
     const {
-      activeState, switchType, imgPhases, beerTypes,
+      activeState, switchType, beerTypes,
     } = target;
     if (switchType !== switchTypes.BROKEN) {
       activeState.phase = 1 - activeState.phase;
-      target.node.querySelector('img').src = imgPhases[activeState.phase];
+      target.switchState();
       if (switchType === switchTypes.DUAL) {
         activeState.beer = beerTypes[activeState.phase];
       } else if (switchType === switchTypes.NORMAL) {
         activeState.isOpened = !activeState.isOpened;
-        target.runJet(activeState.isOpened);
+        target.runJet();
       }
     }
   },
