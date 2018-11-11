@@ -12,14 +12,16 @@ export function updateStyle(node, style) {
 }
 
 export function setImg(element, newImg, style) {
-  const img = document.createElement('img');
-  img.src = newImg;
-  updateStyle(img, style);
-  element.node.appendChild(img);
-  if (element.img) {
-    element.img.remove();
+  if (!element.img) {
+    const img = document.createElement('img');
+    img.src = newImg;
+    updateStyle(img, style);
+    element.node.appendChild(img);
+    element.img = img;
+  } else {
+    element.img.src = newImg;
+    updateStyle(element.img, style);
   }
-  element.img = img;
 }
 
 export function percentOverlap(targetBound, dragBound) {

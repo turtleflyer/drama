@@ -23,7 +23,7 @@ export default class Mug extends Actor {
       numberOfOverfilledPhases: overfilledPhasesImgs.length,
       volume,
     };
-    this.params.overfilledAnimationPhaseTime = volume * 1000 / this.params.numberOfFillingPhases;
+    this.params.overfilledAnimationPhaseTime = (volume * 1000) / this.params.numberOfFillingPhases;
     this.fillingState = {
       beers: {},
       total: 0,
@@ -68,9 +68,9 @@ export default class Mug extends Actor {
     const { overfilled, fillingPhase, overfilledPhase } = this.fillingState;
     const { fillingPhasesImgs, overfilledPhasesImgs } = this.params;
     if (overfilled) {
-      setImg(this, overfilledPhasesImgs[overfilledPhase], { width: '100%', bottom: '0px' });
+      setImg(this, overfilledPhasesImgs[overfilledPhase]);
     } else {
-      setImg(this, fillingPhasesImgs[fillingPhase], { width: '100%', bottom: '0px' });
+      setImg(this, fillingPhasesImgs[fillingPhase]);
     }
     return this;
   }
