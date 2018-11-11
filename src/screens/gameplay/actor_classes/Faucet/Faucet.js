@@ -13,8 +13,8 @@ export default class Faucet extends Actor {
       beerTypes,
       switchType,
       mugPlacePosition,
-      switchPlace,
-      jetPlace,
+      switchPlacePosition,
+      jetPlacePosition,
     } = model;
     const { width, height } = size;
     super(document.createElement('div'), {
@@ -30,7 +30,7 @@ export default class Faucet extends Actor {
       right: '0',
       'object-fit': 'contain',
     });
-    const jet = new Actor(document.createElement('div'), jetPlace);
+    const jet = new Actor(document.createElement('div'), jetPlacePosition);
     setImg(jet, jetImg, { height: '100%' });
     this.linkActor(jet);
     Object.assign(this, {
@@ -38,7 +38,7 @@ export default class Faucet extends Actor {
       beerTypes,
       switchType,
       mugPlacePosition,
-      switchPlace,
+      switchPlacePosition,
       jet,
       activeState: { beer: beerTypes[0], phase: 0 },
     });

@@ -67,13 +67,13 @@ export const faucetModels = {
       bottom: 0,
       left: -20,
     },
-    switchPlace: {
+    switchPlacePosition: {
       width: 47,
       height: 44,
       top: 0,
       left: 29,
     },
-    jetPlace: {
+    jetPlacePosition: {
       height: 80,
       top: 130,
       left: 17,
