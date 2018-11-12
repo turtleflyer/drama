@@ -7,7 +7,6 @@ import { customersTable } from '../role_sets/customersTable';
 import { dropPlaces } from './dropPlaces';
 import { fallenMug } from '../role_sets/fallenMug';
 import { faucetHandles } from '../role_sets/faucetHandles';
-import { fillingMugs } from '../role_sets/fillingMugs';
 import { waitingMugs } from '../role_sets/waitingMugs';
 
 // eslint-disable-next-line
@@ -20,7 +19,6 @@ export const setA = new ActorsSet([
   faucetHandles,
   dropPlaces,
   customersTable,
-  fillingMugs,
   waitingMugs,
 ]);
 
