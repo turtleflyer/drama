@@ -2,11 +2,10 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import { switchTypes } from '../../assets/gameplay_params';
 import { setImg } from '../../../../libs/helpers_lib';
-import { bar } from '../../role_sets/bar';
 import jetImg from './img/jet.gif';
 
 export default class Faucet extends Actor {
-  constructor(model, horizontalPosition) {
+  constructor(bar, model, horizontalPosition) {
     const {
       size,
       imgPhases,
@@ -17,12 +16,16 @@ export default class Faucet extends Actor {
       jetPlacePosition,
     } = model;
     const { width, height } = size;
-    super(document.createElement('div'), {
-      width,
-      height,
-      left: horizontalPosition,
-      bottom: 0,
-    });
+    super(
+      document.createElement('div'),
+      {
+        width,
+        height,
+        left: horizontalPosition,
+        bottom: 0,
+      },
+      bar.stage.scaleF,
+    );
     setImg(this, imgPhases[0], {
       height: '100%',
       width: '100%',

@@ -4,7 +4,7 @@ import { setImg } from '../../../../libs/helpers_lib';
 import { mugTypes, mugsParams } from '../../assets/gameplay_params';
 
 export default class Mug extends Actor {
-  constructor(stage, type, horizontalPosition) {
+  constructor(stage, type, horizontalPosition = 0) {
     const { img, volume } = mugTypes[type];
     const {
       width, empty, fillingPhasesImgs, overfilledPhasesImgs,
@@ -36,23 +36,24 @@ export default class Mug extends Actor {
     this.attachClassName('mugsOnLine');
   }
 
-  get position() {
-    return { x: this.left + this.width / 2, y: this.top };
-  }
+  // get position() {
+  //   return { x: this.left + this.width / 2, y: this.top };
+  // }
 
   getBoundingRect() {
     return this.node.querySelector('img').getBoundingClientRect();
   }
 
   get rectHeight() {
-    return this.getBoundingRect().height / this.scaleF;
+    return this.getBoundingRect().height / this.position.scaleF;
   }
 
   setPosition(position) {
     const { x, y, width } = position;
+    Object.assign(this.position, { x: x || this.position.x, y: y || this.position.y });
     Actor.prototype.setPosition.call(this, {
-      left: (x || this.position.x) - (width || this.width) / 2,
-      top: y || this.position.y,
+      left: this.position.x - (width || this.position.width) / 2,
+      top: this.position.y,
       width,
     });
   }

@@ -20,36 +20,33 @@ dropPlaces.name = 'dropPlaces';
 
 export const placeMugRole = new RoleClass(Symbol('placeMug'))
   .registerAction(dropPlaces, {
-    action({ target, roleSet, event: { mug, gotToPlace } }) {
+    action({ target: place, roleSet, event: { mug, gotToPlace } }) {
       if (gotToPlace) {
-        if (target === signalElement) {
+        // Check if the mug was tested to be placed in all the possible places
+        if (place === signalElement) {
           if (!mug.placed) {
             fallenMug.addElement(mug);
           }
         } else {
-          const placeRect = target.node.getBoundingClientRect();
+          const placeRect = place.node.getBoundingClientRect();
           const mugRect = mug.getBoundingRect();
           if (percentOverlap(placeRect, mugRect) > 0.75) {
             switch (roleSet) {
               case mugPlaces:
                 {
-                  const { faucet } = target;
+                  const { faucet } = place;
                   if (!faucet.placedMug) {
-                    // const MugFilling = getUnit('MugFilling');
-                    // MugFilling.addElement(mug);
-                    mug.fillingState.faucet = target.faucet;
+                    mug.fillingState.faucet = place.faucet;
                     faucet.placedMug = mug;
                     mug.placed = true;
-                    mug.setPosition(target.position);
+                    mug.setPosition(place.whereToPlaceMug());
                     fillingMugs.addElement(mug);
                   }
                 }
                 break;
 
               case hookPlace:
-                // const MugWaiting = getUnit('MugWaiting');
-                // MugWaiting.addElement(mug);
-                mug.setPosition({ y: target.mugsLine() });
+                mug.setPosition({ y: place.mugsLine() });
                 mug.placed = true;
                 waitingMugs.addElement(mug);
                 break;
@@ -61,13 +58,13 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
         }
 
         // Block existing only for the time of developing
-      } else if (target !== signalElement) {
-        const placeRect = target.node.getBoundingClientRect();
+      } else if (place !== signalElement) {
+        const placeRect = place.node.getBoundingClientRect();
         const mugRect = mug.img.getBoundingClientRect();
         if (percentOverlap(placeRect, mugRect) > 0.75) {
-          updateStyle(target.node, { 'background-color': 'rgba(255, 0, 0, 0.2)' });
+          updateStyle(place.node, { 'background-color': 'rgba(255, 0, 0, 0.2)' });
         } else {
-          updateStyle(target.node, { 'background-color': 'rgba(255, 255, 255, 0.2)' });
+          updateStyle(place.node, { 'background-color': 'rgba(255, 255, 255, 0.2)' });
         }
       }
     },

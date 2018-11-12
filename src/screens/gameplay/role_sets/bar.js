@@ -1,17 +1,12 @@
-import { ActorsSet, Actor } from '../../../libs/actors_and_roles';
+import { ActorsSet } from '../../../libs/actors_and_roles';
 import Bar from '../actor_classes/Bar/Bar';
+import stage from '../../../role_sets/stage/stage';
 
 // eslint-disable-next-line
 export const bar = new ActorsSet();
-// bar.appendAsChild = function (actor) {
-//   if (actor instanceof Actor) {
-//     [...this].node.appendChild(actor.node);
-//   } else {
-//     throw new Error('@@...');
-//   }
-// };
 bar.getInitializer(function () {
-  this.addElement(new Bar());
+  this.addElement(new Bar(stage));
 });
+bar.stage = stage;
 
 bar.name = 'bar';

@@ -1,20 +1,19 @@
 /* eslint-env browser */
 import { Actor } from '../../../libs/actors_and_roles';
-import { stage } from '../../../role_sets/stage/stage';
 
 export default class MugPlace extends Actor {
-  constructor(faucet) {
-    super(document.createElement('div'), faucet.mugPlacePosition);
-    // this.mugPlace = true;
+  constructor(stage, faucet) {
+    super(document.createElement('div'), faucet.mugPlacePosition, stage.scaleF);
+    this.stage = stage;
     this.faucet = faucet;
     faucet.mugPlace = this;
     faucet.node.appendChild(this.node);
     this.attachClassName('mugPlaces');
   }
 
-  get position() {
-    const { x: originX, y: originY } = stage.origin;
-    const { scaleF } = stage;
+  whereToPlaceMug() {
+    const { x: originX, y: originY } = this.stage.origin;
+    const { scaleF } = this.position;
     const {
       left, top, width, height,
     } = this.node.getBoundingClientRect();

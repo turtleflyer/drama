@@ -7,7 +7,6 @@ import { stageDimension } from '../../assets/common_params';
 class Stage extends ActorsSet {
   constructor(node, dimension) {
     super([new Actor(node, dimension)]);
-    this.stageNode = node;
     const { left, top } = node.getBoundingClientRect();
     this.origin = { x: left, y: top };
     Object.assign(this, dimension);
@@ -15,7 +14,7 @@ class Stage extends ActorsSet {
   }
 
   get scaleF() {
-    return [...this][0].scaleF;
+    return [...this][0].position.scaleF;
   }
 
   getBoundingRect() {
@@ -28,7 +27,8 @@ class Stage extends ActorsSet {
   }
 }
 
-// eslint-disable-next-line
-export const stage = new Stage(document.querySelector('#scene'), stageDimension);
+const stage = new Stage(document.querySelector('#scene'), stageDimension);
 
 stage.name = 'stage';
+
+export default stage;

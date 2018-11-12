@@ -21,20 +21,19 @@ const classNamesMap = new Map();
 export class Actor {
   constructor(node, position, scaleF = 1) {
     this.node = node;
-    this.scaleF = scaleF;
+    this.position = { scaleF };
     this.linked = new Set();
     this.setPosition(position);
   }
 
   setPosition(position) {
     if (position) {
-      for (const prop of Actor.props) {
+      for (const prop of Actor.positionPropsNames) {
         const style = position[prop];
         if (typeof style === 'number' || style === null) {
-          this[prop] = style;
+          this.position[prop] = style;
           // prettier-ignore
-          this.node.style[prop] = style === null
-            ? null : appendPx(position[prop] * this.scaleF);
+          this.node.style[prop] = style && appendPx(style * this.position.scaleF);
         }
       }
     }
@@ -43,7 +42,7 @@ export class Actor {
 
   refreshScale(newScale) {
     for (const actor of [this].concat([...this.linked])) {
-      actor.scaleF = newScale;
+      actor.position.scaleF = newScale;
       actor.setPosition(actor);
     }
     return this;
@@ -55,7 +54,7 @@ export class Actor {
     }
     const { linked } = this;
     if (link && !linked.has(actor)) {
-      actor.refreshScale(this.scaleF);
+      actor.refreshScale(this.position.scaleF);
       linked.add(actor);
     } else if (!link && linked.has(actor)) {
       linked.delete(actor);
@@ -88,7 +87,7 @@ export class Actor {
     classNamesMap.set(this, className);
   }
 }
-Actor.props = ['left', 'top', 'width', 'height', 'bottom', 'right'];
+Actor.positionPropsNames = ['left', 'top', 'width', 'height', 'bottom', 'right'];
 
 const registeredRoleClasses = new Map();
 

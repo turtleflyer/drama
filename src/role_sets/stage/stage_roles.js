@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { stage } from './stage';
+import stage from './stage';
 import { dragMug, followMouseRole, stopDragRole } from '../../screens/gameplay/role_sets/dragMug';
 import { setA } from '../../screens/gameplay/supersets/setA';
 import { pulseTimeout } from '../../screens/gameplay/assets/gameplay_params';

@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import { ActorsSet } from '../../../libs/actors_and_roles';
 import { updateStyle } from '../../../libs/helpers_lib';
-import { stage } from '../../../role_sets/stage/stage';
+import stage from '../../../role_sets/stage/stage';
 import { tuneGame } from '../assets/gameplay_params';
 
 // eslint-disable-next-line
