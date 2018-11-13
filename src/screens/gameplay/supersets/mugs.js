@@ -14,7 +14,8 @@ export const startDragRole = registerActionOfType('mousedown', mugs, {
     event.preventDefault();
     managePropagation(event, { stopBubbling: false });
     if (roleSet === fillingMugs) {
-      mug.fillingState.faucet.placedMug = null;
+      mug.fillingState.faucet.releaseMug();
+      // mug.fillingState.faucet.state.placedMug = null;
       mug.fillingState.faucet = null;
       mug.fillingState.lastTime = null;
       mug.placed = false;

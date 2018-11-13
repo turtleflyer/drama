@@ -33,36 +33,42 @@ export default class Faucet extends Actor {
       right: '0',
       'object-fit': 'contain',
     });
+    this.stage = bar.stage;
     const jet = new Actor(document.createElement('div'), jetPlacePosition);
     setImg(jet, jetImg, { height: '100%' });
     this.linkActor(jet);
-    Object.assign(this, {
+    this.params = {
       imgPhases,
       beerTypes,
       switchType,
       mugPlacePosition,
       switchPlacePosition,
       jet,
-      activeState: { beer: beerTypes[0], phase: 0 },
-    });
+    };
+    this.state = { beer: beerTypes[0], phase: 0 };
+
     if (switchType === switchTypes.BROKEN || switchType === switchTypes.DUAL) {
-      this.activeState.isOpened = true;
+      this.state.isOpened = true;
     } else {
-      this.activeState.isOpened = false;
+      this.state.isOpened = false;
     }
     this.getAppendedAsChild(bar);
     this.attachClassName('faucets');
   }
 
   switchState() {
-    setImg(this, this.imgPhases[this.activeState.phase]);
+    setImg(this, this.params.imgPhases[this.state.phase]);
   }
 
   runJet() {
-    if (this.activeState.isOpened) {
-      this.jet.getAppendedAsChild(this);
+    if (this.state.isOpened) {
+      this.params.jet.getAppendedAsChild(this);
     } else {
-      this.jet.remove();
+      this.params.jet.remove();
     }
   }
 }
+
+Actor.defineLifeCycleStage(Faucet, 'releaseMug', (state) => {
+  state.placedMug = null;
+});

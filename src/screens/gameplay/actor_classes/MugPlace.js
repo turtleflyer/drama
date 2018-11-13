@@ -2,12 +2,12 @@
 import { Actor } from '../../../libs/actors_and_roles';
 
 export default class MugPlace extends Actor {
-  constructor(stage, faucet) {
-    super(document.createElement('div'), faucet.mugPlacePosition, stage.scaleF);
-    this.stage = stage;
+  constructor(faucet) {
+    super(document.createElement('div'), faucet.params.mugPlacePosition, faucet.position.scaleF);
+    this.stage = faucet.stage;
     this.faucet = faucet;
-    faucet.mugPlace = this;
-    faucet.node.appendChild(this.node);
+    faucet.state.mugPlace = this;
+    this.getAppendedAsChild(faucet);
     this.attachClassName('mugPlaces');
   }
 

@@ -18,16 +18,17 @@ faucets.name = 'faucets';
 export const SwitchFaucetClass = new RoleClass(Symbol('switchFaucet'));
 
 export const switchFaucetRole = SwitchFaucetClass.registerAction(faucets, {
-  action({ target }) {
-    const { activeState, switchType, beerTypes } = target;
+  action({ target: faucet }) {
+    const { switchType, beerTypes } = faucet.params;
+    const { state } = faucet;
     if (switchType !== switchTypes.BROKEN) {
-      activeState.phase = 1 - activeState.phase;
-      target.switchState();
+      state.phase = 1 - state.phase;
+      faucet.switchState();
       if (switchType === switchTypes.DUAL) {
-        activeState.beer = beerTypes[activeState.phase];
+        state.beer = beerTypes[state.phase];
       } else if (switchType === switchTypes.NORMAL) {
-        activeState.isOpened = !activeState.isOpened;
-        target.runJet();
+        state.isOpened = !state.isOpened;
+        faucet.runJet();
       }
     }
   },

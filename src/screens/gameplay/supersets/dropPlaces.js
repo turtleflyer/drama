@@ -35,9 +35,9 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
               case mugPlaces:
                 {
                   const { faucet } = place;
-                  if (!faucet.placedMug) {
-                    mug.fillingState.faucet = place.faucet;
-                    faucet.placedMug = mug;
+                  if (!faucet.state.placedMug) {
+                    mug.fillingState.faucet = faucet;
+                    faucet.state.placedMug = mug;
                     mug.placed = true;
                     mug.setPosition(place.whereToPlaceMug());
                     fillingMugs.addElement(mug);

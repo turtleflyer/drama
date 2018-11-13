@@ -23,6 +23,8 @@ export class Actor {
     this.node = node;
     this.position = { scaleF };
     this.linked = new Set();
+    this.state = {};
+    this.porops = {};
     this.setPosition(position);
   }
 
@@ -85,6 +87,12 @@ export class Actor {
     }
     node.classList.add(className);
     classNamesMap.set(this, className);
+  }
+
+  static defineLifeCycleStage(modifiedClass, name, stateTransactor) {
+    modifiedClass.prototype[name] = function () {
+      stateTransactor(this.state, this.props);
+    };
   }
 }
 Actor.positionPropsNames = ['left', 'top', 'width', 'height', 'bottom', 'right'];
