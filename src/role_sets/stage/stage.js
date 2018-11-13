@@ -10,6 +10,7 @@ class Stage extends ActorsSet {
     const { left, top } = node.getBoundingClientRect();
     this.origin = { x: left, y: top };
     Object.assign(this, dimension);
+    this.params = {};
     this.defineLevel(0);
   }
 
@@ -22,8 +23,8 @@ class Stage extends ActorsSet {
   }
 
   defineLevel(level) {
-    Object.assign((this.gameState = {}), stageParams);
-    Object.assign((this.levelParams = {}), levelsDescription[level]);
+    Object.assign((this.state = {}), stageParams);
+    Object.assign((this.params.levelParams = {}), levelsDescription[level]);
   }
 }
 

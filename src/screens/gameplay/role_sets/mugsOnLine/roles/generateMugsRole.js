@@ -16,8 +16,7 @@ export default onPulseTick.registerAction(mugsOnLine, {
   action({ target: mug }) {
     const currTime = Date.now();
     const { memory } = this;
-    const { mugsSpeed, initMugDensity } = stage.levelParams;
-    const { reputation } = stage.gameState;
+    const { mugsSpeed, initMugDensity } = stage.params.levelParams;
     const { placeholdersMap, lastTime } = memory;
 
     if (this.roleSet.size > 2 || (() => [...placeholdersMap.values()].pop())() < 2 * stageWidth) {
@@ -35,7 +34,7 @@ export default onPulseTick.registerAction(mugsOnLine, {
             if (this.roleSet.has(processingMug)) {
               this.roleSet.deleteElement(processingMug);
               processingMug.remove();
-              stage.gameState.reputation += tuneGame.reputationDecrement;
+              stage.state.reputation += tuneGame.reputationDecrement;
             }
           } else {
             placeholdersMap.set(processingMug, calculatedPosition);
@@ -49,7 +48,7 @@ export default onPulseTick.registerAction(mugsOnLine, {
         // Check if the hidden mug is appearing on the stage. In this case a new mug is generating
         if (mug.state.hidden && horizontalPosition < stageWidth + mug.position.width / 2) {
           mug.appearOnStage();
-          const mugDensity = initMugDensity * reputation;
+          const mugDensity = initMugDensity * stage.state.reputation;
           const placeWhereCreate = horizontalPosition + (stageWidth * 0.6) / mugDensity;
           const createdMug = new Mug(stage, determineTypeOfBeer(), placeWhereCreate);
           placeholdersMap.set(createdMug, placeWhereCreate);

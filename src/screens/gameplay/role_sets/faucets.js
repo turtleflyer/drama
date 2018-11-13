@@ -7,7 +7,7 @@ import { bar } from './bar';
 // eslint-disable-next-line
 export const faucets = new ActorsSet();
 faucets.getInitializer(function () {
-  stage.levelParams.faucets.forEach((faucet) => {
+  stage.params.levelParams.faucets.forEach((faucet) => {
     const { model, horizontalPosition } = faucet;
     this.addElement(new Faucet(bar, model, horizontalPosition));
   });
