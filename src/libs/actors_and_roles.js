@@ -88,15 +88,6 @@ export class Actor {
     node.classList.add(className);
     classNamesMap.set(this, className);
   }
-
-  static defineLifeCycleStage(modifiedClass, name, stateTransactor) {
-    modifiedClass.prototype[name] = function (arg) {
-      const possibleState = stateTransactor.call(this, this.state, arg || this.props);
-      if (possibleState) {
-        this.state = possibleState;
-      }
-    };
-  }
 }
 Actor.positionPropsNames = ['left', 'top', 'width', 'height', 'bottom', 'right'];
 

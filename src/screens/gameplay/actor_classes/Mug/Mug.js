@@ -64,47 +64,54 @@ export default class Mug extends Actor {
     }
     return this;
   }
-}
 
-Actor.defineLifeCycleStage(Mug, 'born', function (state) {
-  state.hidden = true;
-  this.attachClassName('mugsOnLine');
-});
+  /**
+   *
+   * Life Cycles
+   */
 
-Actor.defineLifeCycleStage(Mug, 'appearOnStage', (state) => {
-  state.hidden = false;
-});
-
-Actor.defineLifeCycleStage(Mug, 'goDrug', function (state) {
-  if (state.faucet) {
-    state.faucet.releaseMug();
+  born() {
+    this.state.hidden = true;
+    this.attachClassName('mugsOnLine');
   }
-  Object.assign(state, {
-    faucet: null,
-    lastTime: null,
-    placed: null,
-  });
-  this.attachClassName('dragMug');
-});
 
-Actor.defineLifeCycleStage(Mug, 'dropDown', function () {
-  this.attachClassName('fallenMug');
-});
+  appearOnStage() {
+    this.state.hidden = false;
+  }
 
-Actor.defineLifeCycleStage(Mug, 'placedToBeFilled', function (state, faucet) {
-  Object.assign(state, {
-    placed: true,
-    faucet,
-    beers: state.beers || {},
-    total: state.total || 0,
-    overfilled: state.overfilled || false,
-    fillingPhase: state.fillingPhase || -1,
-  });
-  this.updateNextThreshold();
-  this.attachClassName('mugFilling');
-});
+  goDrug() {
+    const { state } = this;
+    if (state.faucet) {
+      state.faucet.releaseMug();
+    }
+    Object.assign(state, {
+      faucet: null,
+      lastTime: null,
+      placed: null,
+    });
+    this.attachClassName('dragMug');
+  }
 
-Actor.defineLifeCycleStage(Mug, 'carriedToCustomer', function (state) {
-  Object.assign(state, { placed: true, waitingSince: Date.now() });
-  this.attachClassName('waitingMug');
-});
+  dropDown() {
+    this.attachClassName('fallenMug');
+  }
+
+  placedToBeFilled(faucet) {
+    const { state } = this;
+    Object.assign(state, {
+      placed: true,
+      faucet,
+      beers: state.beers || {},
+      total: state.total || 0,
+      overfilled: state.overfilled || false,
+      fillingPhase: state.fillingPhase || -1,
+    });
+    this.updateNextThreshold();
+    this.attachClassName('mugFilling');
+  }
+
+  carriedToCustomer() {
+    Object.assign(this.state, { placed: true, waitingSince: Date.now() });
+    this.attachClassName('waitingMug');
+  }
+}
