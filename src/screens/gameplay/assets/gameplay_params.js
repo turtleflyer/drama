@@ -28,11 +28,6 @@ export const mugsParams = {
 
 export const pulseTimeout = 5;
 
-export const stageParams = {
-  reputation: 1,
-  drunkFactor: 0,
-};
-
 export const tuneGame = {
   reputationDecrement: -0.05,
   reputationIncrement: 3,
@@ -94,3 +89,16 @@ export const customersTablePosition = {
 };
 
 export const waitingTimeMugDisappear = 2000;
+
+export const scorePosition = {
+  right: 10,
+  top: 10,
+  width: 100,
+  height: 50,
+  moneyDisplayPosition: {
+    top: 3,
+    left: 3,
+    right: 3,
+    bottom: 27,
+  },
+};

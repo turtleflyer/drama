@@ -1,7 +1,9 @@
 /* eslint-env browser */
 import { ActorsSet, Actor } from '../../libs/actors_and_roles';
-import { levelsDescription } from '../../screens/gameplay/assets/levels_description';
-import { stageParams } from '../../screens/gameplay/assets/gameplay_params';
+import {
+  levelsDescription,
+  commonInitState,
+} from '../../screens/gameplay/assets/levels_description';
 import { stageDimension } from '../../assets/common_params';
 
 class Stage extends ActorsSet {
@@ -23,8 +25,9 @@ class Stage extends ActorsSet {
   }
 
   defineLevel(level) {
-    Object.assign((this.state = {}), stageParams);
-    Object.assign((this.params.levelParams = {}), levelsDescription[level]);
+    const levelEntry = levelsDescription[level];
+    Object.assign((this.state = {}), commonInitState, levelEntry.initState);
+    Object.assign((this.params.levelParams = {}), levelEntry.params);
   }
 }
 
