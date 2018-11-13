@@ -10,17 +10,9 @@ export const mugs = new ActorsSet([mugsOnLine, fillingMugs]);
 mugs.name = 'mugs';
 
 export const startDragRole = registerActionOfType('mousedown', mugs, {
-  action({ target: mug, roleSet, event }) {
+  action({ target: mug, event }) {
     event.preventDefault();
-    managePropagation(event, { stopBubbling: false });
-    if (roleSet === fillingMugs) {
-      mug.fillingState.faucet.releaseMug();
-      // mug.fillingState.faucet.state.placedMug = null;
-      mug.fillingState.faucet = null;
-      mug.fillingState.lastTime = null;
-      mug.placed = false;
-    }
-    mug.attachClassName('dragMug');
+    // managePropagation(event, { stopBubbling: false });
     dragMug.addElement(mug);
   },
 });

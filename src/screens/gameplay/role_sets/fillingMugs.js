@@ -9,53 +9,51 @@ fillingMugs.name = 'fillingMugs';
 export const fillMugsRole = onPulseTick.registerAction(fillingMugs, {
   action({ target: mug }) {
     if (this.roleSet.size > 0) {
-      const { fillingState, params } = mug;
-      const { faucet } = fillingState;
+      const { faucet } = mug.state;
       if (faucet.state.isOpened) {
         const currTime = Date.now();
-        if (fillingState.lastTime) {
-          if (fillingState.overfilled) {
-            if (fillingState.whenSwitchNextOverfilledPhase) {
-              if (currTime > fillingState.whenSwitchNextOverfilledPhase) {
+        if (mug.state.lastTime) {
+          if (mug.state.overfilled) {
+            if (mug.state.whenSwitchNextOverfilledPhase) {
+              if (currTime > mug.state.whenSwitchNextOverfilledPhase) {
                 // prettier-ignore
-                fillingState.overfilledPhase = (fillingState.overfilledPhase + 1)
-                    % params.numberOfOverfilledPhases;
-                fillingState.whenSwitchNextOverfilledPhase += params.overfilledAnimationPhaseTime;
+                mug.state.overfilledPhase = (mug.state.overfilledPhase + 1)
+                % mug.params.numberOfOverfilledPhases;
+                mug.state.whenSwitchNextOverfilledPhase += mug.params.overfilledAnimationPhaseTime;
                 mug.updateFillRepresentation();
               }
             } else {
               // prettier-ignore
-              fillingState.whenSwitchNextOverfilledPhase = currTime
-                  + params.overfilledAnimationPhaseTime;
+              mug.state.whenSwitchNextOverfilledPhase = currTime
+              + mug.params.overfilledAnimationPhaseTime;
             }
           } else {
-            let beerQuantity = (currTime - fillingState.lastTime) / 1000 / params.volume;
-            const overfilledQuantity = fillingState.total + beerQuantity - 1;
+            let beerQuantity = (currTime - mug.state.lastTime) / 1000 / mug.params.volume;
+            const overfilledQuantity = mug.state.total + beerQuantity - 1;
             // prettier-ignore
             beerQuantity = overfilledQuantity > 0
               ? beerQuantity - overfilledQuantity : beerQuantity;
             // prettier-ignore
-            fillingState.beers[faucet.state.beer] = (fillingState.beers[faucet.state.beer] || 0)
+            mug.state.beers[faucet.state.beer] = (mug.state.beers[faucet.state.beer] || 0)
                 + beerQuantity;
-            fillingState.total += beerQuantity;
-            const { total } = fillingState;
-            if (total === 1) {
-              fillingState.overfilled = true;
-              fillingState.overfilledPhase = -1;
+            mug.state.total += beerQuantity;
+            if (mug.state.total === 1) {
+              mug.state.overfilled = true;
+              mug.state.overfilledPhase = -1;
               // prettier-ignore
-              fillingState.whenSwitchNextOverfilledPhase = currTime
-                  + params.overfilledAnimationPhaseTime / 2
-                  + (fillingState.nextFillThreshold - 1 - overfilledQuantity)
-                  / params.volume * 1000;
-            } else if (total >= fillingState.nextFillThreshold) {
-              fillingState.fillingPhase += 1;
+              mug.state.whenSwitchNextOverfilledPhase = currTime
+                  + mug.params.overfilledAnimationPhaseTime / 2
+                  + (mug.state.nextFillThreshold - 1 - overfilledQuantity)
+                  / mug.params.volume * 1000;
+            } else if (mug.state.total >= mug.state.nextFillThreshold) {
+              mug.state.fillingPhase += 1;
               mug.updateNextThreshold().updateFillRepresentation();
             }
           }
         }
-        fillingState.lastTime = currTime;
+        mug.state.lastTime = currTime;
       } else {
-        fillingState.whenSwitchNextOverfilledPhase = null;
+        mug.state.whenSwitchNextOverfilledPhase = null;
       }
     }
   },

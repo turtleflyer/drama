@@ -10,6 +10,7 @@ export const fallenMug = new ActorsSet();
 fallenMug.name = 'fallenMug';
 
 fallenMug.onAddActorEvent(function ({ target: mug }) {
+  mug.dropDown();
   updateStyle(mug.node, { transform: 'scale(0.5)' });
   stage.gameState.reputation += tuneGame.reputationDecrement;
   window.setTimeout(() => {

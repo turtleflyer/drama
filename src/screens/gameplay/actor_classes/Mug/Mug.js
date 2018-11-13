@@ -24,21 +24,10 @@ export default class Mug extends Actor {
       volume,
     };
     this.params.overfilledAnimationPhaseTime = (volume * 1000) / this.params.numberOfFillingPhases;
-    this.fillingState = {
-      beers: {},
-      total: 0,
-      overfilled: false,
-      fillingPhase: -1,
-    };
     this.waitingState = {};
-    this.updateNextThreshold();
     this.getAppendedAsChild(stage);
-    this.attachClassName('mugsOnLine');
+    this.born();
   }
-
-  // get position() {
-  //   return { x: this.left + this.width / 2, y: this.top };
-  // }
 
   getBoundingRect() {
     return this.node.querySelector('img').getBoundingClientRect();
@@ -59,15 +48,14 @@ export default class Mug extends Actor {
   }
 
   updateNextThreshold() {
-    const { fillingState } = this;
     // prettier-ignore
-    fillingState.nextFillThreshold = (fillingState.fillingPhase + 1.5)
-    / this.params.numberOfFillingPhases;
+    this.state.nextFillThreshold = (this.state.fillingPhase + 1.5)
+      / this.params.numberOfFillingPhases;
     return this;
   }
 
   updateFillRepresentation() {
-    const { overfilled, fillingPhase, overfilledPhase } = this.fillingState;
+    const { overfilled, fillingPhase, overfilledPhase } = this.state;
     const { fillingPhasesImgs, overfilledPhasesImgs } = this.params;
     if (overfilled) {
       setImg(this, overfilledPhasesImgs[overfilledPhase]);
@@ -77,3 +65,46 @@ export default class Mug extends Actor {
     return this;
   }
 }
+
+Actor.defineLifeCycleStage(Mug, 'born', function (state) {
+  state.hidden = true;
+  this.attachClassName('mugsOnLine');
+});
+
+Actor.defineLifeCycleStage(Mug, 'appearOnStage', (state) => {
+  state.hidden = false;
+});
+
+Actor.defineLifeCycleStage(Mug, 'goDrug', function (state) {
+  if (state.faucet) {
+    state.faucet.releaseMug();
+  }
+  Object.assign(state, {
+    faucet: null,
+    lastTime: null,
+    placed: null,
+  });
+  this.attachClassName('dragMug');
+});
+
+Actor.defineLifeCycleStage(Mug, 'dropDown', function () {
+  this.attachClassName('fallenMug');
+});
+
+Actor.defineLifeCycleStage(Mug, 'placedToBeFilled', function (state, faucet) {
+  Object.assign(state, {
+    placed: true,
+    faucet,
+    beers: state.beers || {},
+    total: state.total || 0,
+    overfilled: state.overfilled || false,
+    fillingPhase: state.fillingPhase || -1,
+  });
+  this.updateNextThreshold();
+  this.attachClassName('mugFilling');
+});
+
+Actor.defineLifeCycleStage(Mug, 'carriedToCustomer', function (state) {
+  Object.assign(state, { placed: true, waitingSince: Date.now() });
+  this.attachClassName('waitingMug');
+});

@@ -58,16 +58,12 @@ img {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.FallenMug {
+.fallenMug {
   z-index: 90;
 }
 
-.MugFilling {
+.mugFilling, .waitingMug {
   z-index: 75;
-}
-
-.BeerJet {
-  z-index: 73;
 }
 
 .Score {

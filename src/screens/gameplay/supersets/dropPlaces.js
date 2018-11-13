@@ -4,7 +4,6 @@ import { mugPlaces } from '../role_sets/mugPlaces';
 import { hookPlace } from '../role_sets/hookPlace';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
 import { fallenMug } from '../role_sets/fallenMug';
-import { dragMug } from '../role_sets/dragMug';
 import { fillingMugs } from '../role_sets/fillingMugs';
 import { waitingMugs } from '../role_sets/waitingMugs';
 
@@ -24,7 +23,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
       if (gotToPlace) {
         // Check if the mug was tested to be placed in all the possible places
         if (place === signalElement) {
-          if (!mug.placed) {
+          if (!mug.state.placed) {
             fallenMug.addElement(mug);
           }
         } else {
@@ -36,9 +35,8 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
                 {
                   const { faucet } = place;
                   if (!faucet.state.placedMug) {
-                    mug.fillingState.faucet = faucet;
                     faucet.placeMug(mug);
-                    mug.placed = true;
+                    mug.placedToBeFilled(faucet);
                     mug.setPosition(place.whereToPlaceMug());
                     fillingMugs.addElement(mug);
                   }
@@ -47,7 +45,6 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
 
               case hookPlace:
                 mug.setPosition({ y: place.mugsLine() });
-                mug.placed = true;
                 waitingMugs.addElement(mug);
                 break;
 
