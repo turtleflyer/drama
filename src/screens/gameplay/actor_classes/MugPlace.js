@@ -6,7 +6,7 @@ export default class MugPlace extends Actor {
     super(document.createElement('div'), faucet.params.mugPlacePosition, faucet.position.scaleF);
     this.stage = faucet.stage;
     this.faucet = faucet;
-    faucet.state.mugPlace = this;
+    faucet.mugPlace = this;
     this.getAppendedAsChild(faucet);
     this.attachClassName('mugPlaces');
   }
