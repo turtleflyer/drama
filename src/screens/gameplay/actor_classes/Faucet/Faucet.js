@@ -69,6 +69,10 @@ export default class Faucet extends Actor {
   }
 }
 
+Actor.defineLifeCycleStage(Faucet, 'placeMug', (state, mug) => {
+  state.placedMug = mug;
+});
+
 Actor.defineLifeCycleStage(Faucet, 'releaseMug', (state) => {
   state.placedMug = null;
 });

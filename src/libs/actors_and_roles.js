@@ -90,8 +90,8 @@ export class Actor {
   }
 
   static defineLifeCycleStage(modifiedClass, name, stateTransactor) {
-    modifiedClass.prototype[name] = function () {
-      stateTransactor(this.state, this.props);
+    modifiedClass.prototype[name] = function (arg) {
+      stateTransactor(this.state, arg || this.props);
     };
   }
 }
