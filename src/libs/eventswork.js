@@ -97,7 +97,7 @@ function registerEventType(type) {
   customEventTypes.add(type);
 }
 
-export function managePropagation(event, option) {
+export function managePropagation(event = {}, option) {
   // eslint-disable-next-line
   const { stopBubbling, stopPropagatingNested } = option;
   if (!event[propagationKey]) {
@@ -111,12 +111,17 @@ export function managePropagation(event, option) {
   return event;
 }
 
-export function stopBubbling(event) {
-  return managePropagation(event, { stopBubbling: true });
+export function stopBubbling(event = {}) {
+  managePropagation(event, { stopBubbling: true });
+  // eslint-disable-next-line
+  event.stopPropagatingNested = stopPropagatingNested.bind(null, event);
+  return event;
 }
 
-export function stopPropagatingNested(event) {
-  return managePropagation(event, { stopPropagatingNested: true });
+export function stopPropagatingNested(event = {}) {
+  managePropagation(event, { stopPropagatingNested: true });
+  event.stopBubbling = stopBubbling.bind(null, event);
+  return event;
 }
 
 function applyDefaultPropagation(event) {
@@ -271,7 +276,12 @@ export class RoleSet extends Set {
    */
   addElement(element) {
     this.add(element);
-    const elementEntry = getSomeFromDeep(elementsMap, element, () => (element instanceof RoleSet ? {} : { types: new Set() }));
+    // prettier-ignore
+    const elementEntry = getSomeFromDeep(
+      elementsMap,
+      element,
+      () => (element instanceof RoleSet ? {} : { types: new Set() }),
+    );
     if (elementEntry.belong) {
       elementEntry.belong.delete(element);
     }
@@ -285,7 +295,7 @@ export class RoleSet extends Set {
       }
     });
     // eslint-disable-next-line
-    fireEvent(this, addElementEventType, stopPropagatingNested({ addedElement: element }));
+    fireEvent(element, addElementEventType, stopPropagatingNested());
     return this;
   }
 
