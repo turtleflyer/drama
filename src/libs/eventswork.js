@@ -97,7 +97,7 @@ function registerEventType(type) {
   customEventTypes.add(type);
 }
 
-export function managePropagation(event = {}, option) {
+export function managePropagation(event, option) {
   // eslint-disable-next-line
   const { stopBubbling, stopPropagatingNested } = option;
   if (!event[propagationKey]) {
@@ -295,7 +295,11 @@ export class RoleSet extends Set {
       }
     });
     // eslint-disable-next-line
-    fireEvent(element, addElementEventType, stopPropagatingNested());
+    fireEvent(
+      element,
+      addElementEventType,
+      managePropagation({}, { stopBubbling: true, stopPropagatingNested: true }),
+    );
     return this;
   }
 
