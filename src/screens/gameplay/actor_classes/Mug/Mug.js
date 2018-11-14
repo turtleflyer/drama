@@ -79,9 +79,9 @@ export default class Mug extends Actor {
     const {
       reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
     } = tuneGame;
-    const targetBeer = this.state.beers[targetBeerType];
+    const targetBeer = this.state.beers ? this.state.beers[targetBeerType] : 0;
     switch (true) {
-      case beerTotalAmount < 0.9 / drunkFactor:
+      case !beerTotalAmount || beerTotalAmount < 0.9 / drunkFactor:
         stage.state.reputation += reputationDecrement;
         return { money: 0, reaction: customerReactionsTypes.TOO_FEW };
 
