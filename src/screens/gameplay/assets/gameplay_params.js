@@ -126,7 +126,7 @@ export const damagesParams = {
       bottom: 70,
       width: 50,
       height: 50,
-      right: -10,
+      right: 30,
     },
   ],
 
