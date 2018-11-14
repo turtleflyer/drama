@@ -3,7 +3,7 @@
 import imgIPAEmpty from '../actor_classes/Mug/img/IPA/IPA_mug_empty.png';
 import { importAll } from '../../../libs/helpers_lib';
 
-export const beerTypes = { IPA: '@@beer/IPA' };
+export const beerTypes = { IPA: '@@beerTypes/IPA' };
 
 export const mugTypes = {
   [beerTypes.IPA]: {
@@ -21,6 +21,8 @@ export const mugTypes = {
   },
 };
 
+export const beerCost = { [beerTypes.IPA]: 5 };
+
 export const mugsParams = {
   lineBase: 300,
   initialDelay: 100,
@@ -30,8 +32,9 @@ export const pulseTimeout = 5;
 
 export const tuneGame = {
   reputationDecrement: -0.05,
-  reputationIncrement: 3,
+  reputationIncrement: 0.03,
   drunkFactorIncrement: 0.02,
+  beerMarkup: 3.5,
 };
 
 export const barPosition = {
@@ -42,9 +45,9 @@ export const barPosition = {
 };
 
 export const switchTypes = {
-  NORMAL: '@@switchType/NORMAL',
-  BROKEN: '@@switchType/BROKEN',
-  DUAL: '@@switchType/DUAL',
+  NORMAL: '@@switchTypes/NORMAL',
+  BROKEN: '@@switchTypes/BROKEN',
+  DUAL: '@@switchTypes/DUAL',
 };
 
 export const faucetModels = {
@@ -101,4 +104,10 @@ export const scorePosition = {
     right: 3,
     bottom: 27,
   },
+};
+
+export const customerReactionsTypes = {
+  OK: '@@customerReactionsTypes/OK',
+  TOO_FEW: '@@customerReactionsTypes/TOO_FEW',
+  WRONG_BEER: '@@customerReactionsTypes/WRONG_BEER',
 };

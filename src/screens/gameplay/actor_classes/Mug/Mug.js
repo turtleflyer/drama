@@ -1,11 +1,17 @@
 /* eslint-env browser */
 import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
-import { mugTypes, mugsParams } from '../../assets/gameplay_params';
+import {
+  mugTypes,
+  mugsParams,
+  tuneGame,
+  customerReactionsTypes,
+  beerCost,
+} from '../../assets/gameplay_params';
 
 export default class Mug extends Actor {
-  constructor(stage, type, horizontalPosition = 0) {
-    const { img, volume } = mugTypes[type];
+  constructor(stage, beerType, horizontalPosition = 0) {
+    const { img, volume } = mugTypes[beerType];
     const {
       width, empty, fillingPhasesImgs, overfilledPhasesImgs,
     } = img;
@@ -15,7 +21,7 @@ export default class Mug extends Actor {
       stage.scaleF,
     );
     setImg(this, empty, { width: '100%', bottom: '0px' });
-    this.type = type;
+    this.beerType = beerType;
     this.params = {
       fillingPhasesImgs,
       overfilledPhasesImgs,
@@ -26,6 +32,7 @@ export default class Mug extends Actor {
     this.params.overfilledAnimationPhaseTime = (volume * 1000) / this.params.numberOfFillingPhases;
     this.waitingState = {};
     this.getAppendedAsChild(stage);
+    this.stage = stage;
     this.born();
   }
 
@@ -63,6 +70,33 @@ export default class Mug extends Actor {
       setImg(this, fillingPhasesImgs[fillingPhase]);
     }
     return this;
+  }
+
+  turnIntoMoney() {
+    const { beerType: targetBeerType } = this;
+    const { total: beerTotalAmount } = this.state;
+    const { drunkFactor } = this.stage.state;
+    const {
+      reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
+    } = tuneGame;
+    const targetBeer = this.state.beers[targetBeerType];
+    switch (true) {
+      case beerTotalAmount < 0.9 / drunkFactor:
+        this.stage.state.reputation += reputationDecrement;
+        return { money: 0, reaction: customerReactionsTypes.TOO_FEW };
+
+      case targetBeer / beerTotalAmount < 0.9 / drunkFactor:
+        this.stage.state.reputation += reputationDecrement;
+        return { money: 0, reaction: customerReactionsTypes.WRONG_BEER };
+
+      default:
+        this.stage.state.drunkFactor += drunkFactorIncrement;
+        this.stage.state.reputation += reputationIncrement;
+        return {
+          money: beerTotalAmount * this.params.volume * beerCost[targetBeerType] * beerMarkup,
+          reaction: customerReactionsTypes.OK,
+        };
+    }
   }
 
   /**

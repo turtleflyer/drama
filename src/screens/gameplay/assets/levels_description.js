@@ -2,7 +2,7 @@ import { faucetModels } from './gameplay_params';
 
 export const commonInitState = {
   reputation: 1,
-  drunkFactor: 0,
+  drunkFactor: 1,
 };
 
 export const levelsDescription = [
