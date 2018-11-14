@@ -1,7 +1,9 @@
 import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
 import Faucet from '../actor_classes/Faucet/Faucet';
 import stage from '../../../role_sets/stage/stage';
-import { switchTypes } from '../assets/gameplay_params';
+import { switchTypes, beerCost } from '../assets/gameplay_params';
+import { onPulseTick } from '../../../assets/role_classes';
+import { updateMoney } from './scoreBoard';
 
 // eslint-disable-next-line
 export const faucets = new ActorsSet();
@@ -32,3 +34,19 @@ export const switchFaucetRole = SwitchFaucetClass.registerAction(faucets, {
     }
   },
 }).start();
+
+export const countExpenses = onPulseTick.registerAction(faucets, {
+  action({ target: faucet }) {
+    const currTime = Date.now();
+    if (faucet.state.isOpened) {
+      if (faucet.state.lastTime) {
+        stage.state.money
+          -= ((currTime - faucet.state.lastTime) / 1000) * beerCost[faucet.state.beer];
+      }
+      faucet.state.lastTime = currTime;
+      updateMoney.fire();
+    } else {
+      faucet.state.lastTime = null;
+    }
+  },
+});
