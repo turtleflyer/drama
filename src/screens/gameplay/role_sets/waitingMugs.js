@@ -3,7 +3,7 @@ import { ActorsSet } from '../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../assets/role_classes';
 import { waitingTimeMugDisappear } from '../assets/gameplay_params';
 import stage from '../../../role_sets/stage/stage';
-import { updateMoney } from './scoreBoard';
+import { updateMoneyRole } from './scoreBoard';
 
 export const waitingMugs = new ActorsSet();
 
@@ -21,7 +21,7 @@ export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {
       if (currTime - waitingSince >= waitingTimeMugDisappear) {
         const { money } = mug.turnIntoMoney();
         stage.state.money += money;
-        updateMoney.fire();
+        updateMoneyRole.fire();
         this.roleSet.deleteElement(mug);
         mug.remove();
       }

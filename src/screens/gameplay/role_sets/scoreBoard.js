@@ -11,7 +11,7 @@ scoreBoard.getInitializer(function () {
 
 scoreBoard.name = 'scoreBoard';
 
-export const updateMoney = new RoleClass(Symbol('updateMoney'))
+export const updateMoneyRole = new RoleClass(Symbol('updateMoney'))
   .registerAction(scoreBoard, {
     action({ target: scoreB }) {
       scoreB.refreshInformation();

@@ -3,7 +3,7 @@ import Faucet from '../actor_classes/Faucet/Faucet';
 import stage from '../../../role_sets/stage/stage';
 import { switchTypes, beerCost, damagesParams } from '../assets/gameplay_params';
 import { onPulseTick } from '../../../assets/role_classes';
-import { updateMoney } from './scoreBoard';
+import { updateMoneyRole } from './scoreBoard';
 import { damages } from './damages';
 import Damage from '../actor_classes/Damage';
 
@@ -37,7 +37,7 @@ export const switchFaucetRole = SwitchFaucetClass.registerAction(faucets, {
   },
 }).start();
 
-export const countExpenses = onPulseTick.registerAction(faucets, {
+export const countExpensesRole = onPulseTick.registerAction(faucets, {
   action({ target: faucet }) {
     const currTime = Date.now();
     if (faucet.state.isOpened) {
@@ -46,7 +46,7 @@ export const countExpenses = onPulseTick.registerAction(faucets, {
           -= ((currTime - faucet.state.lastTime) / 1000) * beerCost[faucet.state.beer];
       }
       faucet.state.lastTime = currTime;
-      updateMoney.fire();
+      updateMoneyRole.fire();
       let isWasting = false;
       const { placedMug } = faucet.state;
       if (!placedMug || placedMug.state.overfilled) {
