@@ -4,6 +4,7 @@ import './screens/gameplay/role_sets/mugsOnLine/mugsOnLine';
 import { setA } from './screens/gameplay/supersets/setA';
 import stage from './role_sets/stage/stage';
 import { startStopLevel } from './roles_manipulators';
+import './debug/stopButton';
 
 setA.getInitializer().fireAndWaitWhenExhausted()(() => {
   startStopLevel.start();
