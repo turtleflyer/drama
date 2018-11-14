@@ -8,9 +8,10 @@ import {
   customerReactionsTypes,
   beerCost,
 } from '../../assets/gameplay_params';
+import stage from '../../../../role_sets/stage/stage';
 
 export default class Mug extends Actor {
-  constructor(stage, beerType, horizontalPosition = 0) {
+  constructor(beerType, horizontalPosition = 0) {
     const { img, volume } = mugTypes[beerType];
     const {
       width, empty, fillingPhasesImgs, overfilledPhasesImgs,
@@ -32,7 +33,6 @@ export default class Mug extends Actor {
     this.params.overfilledAnimationPhaseTime = (volume * 1000) / this.params.numberOfFillingPhases;
     this.waitingState = {};
     this.getAppendedAsChild(stage);
-    this.stage = stage;
     this.born();
   }
 
@@ -75,23 +75,23 @@ export default class Mug extends Actor {
   turnIntoMoney() {
     const { beerType: targetBeerType } = this;
     const { total: beerTotalAmount } = this.state;
-    const { drunkFactor } = this.stage.state;
+    const { drunkFactor } = stage.state;
     const {
       reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
     } = tuneGame;
     const targetBeer = this.state.beers[targetBeerType];
     switch (true) {
       case beerTotalAmount < 0.9 / drunkFactor:
-        this.stage.state.reputation += reputationDecrement;
+        stage.state.reputation += reputationDecrement;
         return { money: 0, reaction: customerReactionsTypes.TOO_FEW };
 
       case targetBeer / beerTotalAmount < 0.9 / drunkFactor:
-        this.stage.state.reputation += reputationDecrement;
+        stage.state.reputation += reputationDecrement;
         return { money: 0, reaction: customerReactionsTypes.WRONG_BEER };
 
       default:
-        this.stage.state.drunkFactor += drunkFactorIncrement;
-        this.stage.state.reputation += reputationIncrement;
+        stage.state.drunkFactor += drunkFactorIncrement;
+        stage.state.reputation += reputationIncrement;
         return {
           money: beerTotalAmount * this.params.volume * beerCost[targetBeerType] * beerMarkup,
           reaction: customerReactionsTypes.OK,

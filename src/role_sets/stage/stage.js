@@ -7,9 +7,11 @@ import {
 import { stageDimension } from '../../assets/common_params';
 
 class Stage extends ActorsSet {
-  constructor(node, dimension) {
-    super([new Actor(node, dimension)]);
-    const { left, top } = node.getBoundingClientRect();
+  constructor(dimension) {
+    const stageNode = document.querySelector('#scene');
+    super([new Actor(stageNode, dimension)]);
+    this.stageNode = stageNode;
+    const { left, top } = this.getBoundingRect();
     this.origin = { x: left, y: top };
     Object.assign(this, dimension);
     this.params = {};
@@ -31,7 +33,7 @@ class Stage extends ActorsSet {
   }
 }
 
-const stage = new Stage(document.querySelector('#scene'), stageDimension);
+const stage = new Stage(stageDimension);
 
 stage.name = 'stage';
 

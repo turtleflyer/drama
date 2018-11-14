@@ -1,17 +1,18 @@
 /* eslint-env browser */
 import { Actor } from '../../../libs/actors_and_roles';
 import { customersTablePosition } from '../assets/gameplay_params';
+import { customersTable } from '../role_sets/customersTable/customersTable';
+import stage from '../../../role_sets/stage/stage';
 
 export default class HookPlace extends Actor {
-  constructor(stage, table) {
+  constructor() {
     super(document.createElement('div'), customersTablePosition.hookPlace, stage.scaleF);
-    this.stage = stage;
-    this.getAppendedAsChild([...table][0]);
+    this.getAppendedAsChild(customersTable);
     this.attachClassName('hookPlace');
   }
 
   mugsLine() {
-    const { y: originY } = this.stage.origin;
+    const { y: originY } = stage.origin;
     const { top, height } = this.node.getBoundingClientRect();
     return (top - originY + (height * 3) / 4) / this.position.scaleF;
   }

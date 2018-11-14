@@ -50,7 +50,7 @@ export default onPulseTick.registerAction(mugsOnLine, {
           mug.appearOnStage();
           const mugDensity = initMugDensity * stage.state.reputation;
           const placeWhereCreate = horizontalPosition + (stageWidth * 0.6) / mugDensity;
-          const createdMug = new Mug(stage, determineTypeOfBeer(), placeWhereCreate);
+          const createdMug = new Mug(determineTypeOfBeer(), placeWhereCreate);
           placeholdersMap.set(createdMug, placeWhereCreate);
           this.roleSet.addElement(createdMug);
         }
@@ -60,7 +60,7 @@ export default onPulseTick.registerAction(mugsOnLine, {
 
   initMemoryState() {
     const place = stageWidth + mugsParams.initialDelay;
-    const mug = new Mug(stage, determineTypeOfBeer(), place);
+    const mug = new Mug(determineTypeOfBeer(), place);
     this.roleSet.addElement(mug);
     return {
       placeholdersMap: new Map([[mug, place]]),

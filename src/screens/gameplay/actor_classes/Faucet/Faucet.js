@@ -3,9 +3,11 @@ import { Actor } from '../../../../libs/actors_and_roles';
 import { switchTypes } from '../../assets/gameplay_params';
 import { setImg } from '../../../../libs/helpers_lib';
 import jetImg from './img/jet.gif';
+import stage from '../../../../role_sets/stage/stage';
+import { bar } from '../../role_sets/bar/bar';
 
 export default class Faucet extends Actor {
-  constructor(bar, model, horizontalPosition) {
+  constructor(model, horizontalPosition) {
     const {
       size,
       imgPhases,
@@ -24,7 +26,7 @@ export default class Faucet extends Actor {
         left: horizontalPosition,
         bottom: 0,
       },
-      bar.stage.scaleF,
+      stage.scaleF,
     );
     setImg(this, imgPhases[0], {
       height: '100%',
@@ -33,7 +35,6 @@ export default class Faucet extends Actor {
       right: '0',
       'object-fit': 'contain',
     });
-    this.stage = bar.stage;
     const jet = new Actor(document.createElement('div'), jetPlacePosition);
     setImg(jet, jetImg, { height: '100%' });
     this.linkActor(jet);
