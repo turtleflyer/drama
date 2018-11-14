@@ -9,6 +9,7 @@ import { faucetHandles } from '../role_sets/faucetHandles';
 import { waitingMugs } from '../role_sets/waitingMugs';
 import { bar } from '../role_sets/bar/bar';
 import { scoreBoard } from '../role_sets/scoreBoard';
+import { damages } from '../role_sets/damages';
 
 // eslint-disable-next-line
 export const setA = new ActorsSet([
@@ -22,6 +23,7 @@ export const setA = new ActorsSet([
   customersTable,
   waitingMugs,
   scoreBoard,
+  damages,
 ]);
 
 setA.name = 'setA';

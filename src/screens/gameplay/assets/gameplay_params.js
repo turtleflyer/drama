@@ -111,3 +111,24 @@ export const customerReactionsTypes = {
   TOO_FEW: '@@customerReactionsTypes/TOO_FEW',
   WRONG_BEER: '@@customerReactionsTypes/WRONG_BEER',
 };
+
+export const damagesParams = {
+  quant: 5,
+
+  position: [
+    {
+      bottom: 70,
+      width: 50,
+      height: 50,
+      left: -50,
+    },
+    {
+      bottom: 70,
+      width: 50,
+      height: 50,
+      right: -10,
+    },
+  ],
+
+  lifeTime: 1000,
+};
