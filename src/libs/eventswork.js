@@ -199,7 +199,7 @@ function addCallback(target, type) {
  * @param {string} type
  */
 function addCallbackToChildren(parent, type) {
-  if (!customEventTypes.has(type) && parent.size > 0) {
+  if (parent.size > 0) {
     const mapOfIDs = getFromDeepMap(eventsStore, parent).next(type).map;
     if (mapOfIDs.size === 0) {
       [...parent].forEach((element) => {
@@ -343,7 +343,9 @@ function invokePromiseHandle() {
  */
 function waitGroupEvent(roleSet, type, eventID) {
   const { promise, promiseHandle } = invokePromiseHandle();
-  addCallbackToChildren(roleSet, type);
+  if (typeof type === 'string') {
+    addCallbackToChildren(roleSet, type);
+  }
   getFromDeepMap(eventsStore, roleSet)
     .next(type)
     .map.set(eventID, promiseHandle);
@@ -421,15 +423,14 @@ export function eventChain(description, eventID) {
     roleSet, type, action, typeRegistered,
   } = description;
   const checkIfTerminate = description.checkIfTerminate || (() => false);
-  const memory = description.memory || {};
-  const furtherDescription = { ...description, checkIfTerminate, memory };
+  const furtherDescription = { ...description, checkIfTerminate };
   if (!(typeRegistered || typeof type === 'string' || customEventTypes.has(type))) {
     registerEventType(type);
     furtherDescription.typeRegistered = true;
   }
   let getID = eventID;
   if (!eventID) {
-    getID = typeof type === 'string' ? Symbol(`@@${type}-event`) : type;
+    getID = typeof type === 'string' ? Symbol(`${type}-eventID`) : Symbol(`${type.description}-eventID`);
   }
   waitGroupEvent(roleSet, type, getID).then((arg) => {
     const { target, event } = arg;
