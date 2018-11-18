@@ -7,22 +7,22 @@ import { registerActionOfType, RoleClass } from '../../libs/actors_and_roles';
 import { onPulseTick } from '../../assets/role_classes';
 import { fallenMug } from '../../screens/gameplay/role_sets/fallenMug';
 import { setD } from '../../debug/setD';
+import { stopBubbling } from '../../libs/eventswork';
 
 export const sendPulseRole = new RoleClass(Symbol('pulse'))
   .registerAction(stage, {
     action() {
-      onPulseTick.fire(setA);
-
-      /**
-       * Display debugging information
-       */
-      onPulseTick.fire(setD);
-      /**
-       *
-       */
-
+      onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
+        /**
+         * Display debugging information
+         */
+        onPulseTick.fire(setD, stopBubbling({}));
+        /**
+         *
+         */
+      });
       window.setTimeout(() => {
-        this.fire();
+        this.roleClass.fire([...stage][0]);
       }, pulseTimeout);
     },
   })

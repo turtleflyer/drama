@@ -28,7 +28,7 @@ export const mugsParams = {
   initialDelay: 100,
 };
 
-export const pulseTimeout = 5;
+export const pulseTimeout = 16;
 
 export const tuneGame = {
   reputationDecrement: -0.05,
