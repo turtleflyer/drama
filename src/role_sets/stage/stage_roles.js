@@ -9,7 +9,7 @@ import { fallenMug } from '../../screens/gameplay/role_sets/fallenMug';
 import { setD } from '../../debug/setD';
 import { stopBubbling } from '../../libs/eventswork';
 
-export const sendPulseRole = new RoleClass(Symbol('pulse'))
+new RoleClass(Symbol('pulse'))
   .registerAction(stage, {
     action() {
       onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
