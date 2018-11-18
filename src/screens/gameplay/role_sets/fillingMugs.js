@@ -53,6 +53,7 @@ export const fillMugsRole = onPulseTick.registerAction(fillingMugs, {
         }
         mug.state.lastTime = currTime;
       } else {
+        mug.state.lastTime = null;
         mug.state.whenSwitchNextOverfilledPhase = null;
       }
     }
