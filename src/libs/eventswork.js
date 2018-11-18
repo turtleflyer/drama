@@ -164,7 +164,6 @@ function getCallback(target, type, parent) {
       });
     }
     const grandEntry = elementsMap.get(getParent);
-    // if (grandEntry && !event[propagationKey].stopBubbling) {
     if (grandEntry) {
       stageCallback(target, type, event, grandEntry.belong);
     }
@@ -228,19 +227,15 @@ registerEventType(addElementEventType);
  * @param {*[]} types
  * @returns {*[]}
  */
-function combineTypes(roleSet, types) {
-  let getTypes = types;
-  if (!getTypes) {
-    getTypes = [];
-  }
-  getTypes = getTypes.concat(
+function combineTypes(roleSet, types = []) {
+  let collectedTypes = types.concat(
     [...getFromDeepMap(eventsStore, roleSet).map.keys()].filter(type => typeof type === 'string'),
   );
   const parentEntry = elementsMap.get(roleSet);
   if (parentEntry) {
-    combineTypes(parentEntry.belong, getTypes);
+    collectedTypes = combineTypes(parentEntry.belong, collectedTypes);
   }
-  return getTypes;
+  return collectedTypes;
 }
 
 export class RoleSet extends Set {
