@@ -28,8 +28,8 @@ onPulseTick
         if (collectFps.length > 200) {
           fps.innerText = `${Math.round(
             (collectFps.reduce((count, { amount }) => count + amount, 0)
-                / (currTime - collectFps[0].time))
-                * 1000,
+              / (currTime - collectFps[0].time))
+              * 1000,
           )}fps, min: ${Math.round(
             collectFps.reduce((min, { value }) => (min < value ? min : value), Infinity),
           )}\r\n${debugPulse.info}`;
