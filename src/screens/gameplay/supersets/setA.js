@@ -10,6 +10,7 @@ import { waitingMugs } from '../role_sets/waitingMugs';
 import { bar } from '../role_sets/bar/bar';
 import { scoreBoard } from '../role_sets/scoreBoard';
 import { damages } from '../role_sets/damages';
+import { customersReactions } from '../role_sets/customersReactions';
 
 // eslint-disable-next-line
 export const setA = new ActorsSet([
@@ -24,6 +25,7 @@ export const setA = new ActorsSet([
   waitingMugs,
   scoreBoard,
   damages,
+  customersReactions,
 ]);
 
 setA.name = 'setA';

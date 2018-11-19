@@ -62,7 +62,8 @@ img {
   z-index: 90;
 }
 
-.mugFilling, .waitingMug {
+.mugFilling,
+.waitingMug {
   z-index: 75;
 }
 
@@ -83,4 +84,8 @@ img {
   font-size: 120%;
   color: rgb(243, 236, 141);
   text-align: center;
+}
+
+.customersReaction {
+  z-index: 60;
 }
