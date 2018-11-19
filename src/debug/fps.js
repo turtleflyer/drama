@@ -5,9 +5,8 @@ import { onPulseTick } from '../assets/role_classes';
 const fps = document.createElement('div');
 document.querySelector('body').appendChild(fps);
 
-const fpsSet = new ActorsSet([fps]);
-
-export default fpsSet;
+export const fpsSet = new ActorsSet([fps]);
+export const debugPulse = { info: '' };
 
 let lastTime;
 let counter = -1;
@@ -29,11 +28,11 @@ onPulseTick
         if (collectFps.length > 200) {
           fps.innerText = `${Math.round(
             (collectFps.reduce((count, { amount }) => count + amount, 0)
-              / (currTime - collectFps[0].time))
-              * 1000,
+                / (currTime - collectFps[0].time))
+                * 1000,
           )}fps, min: ${Math.round(
             collectFps.reduce((min, { value }) => (min < value ? min : value), Infinity),
-          )}`;
+          )}\r\n${debugPulse.info}`;
           collectFps.shift();
         }
         counter = 0;

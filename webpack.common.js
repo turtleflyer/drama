@@ -23,6 +23,10 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         use: ['file-loader'],
       },
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' },
+      },
     ],
   },
   resolve: { extensions: ['*', '.js', '.jsx'] },
@@ -37,5 +41,6 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    globalObject: 'this',
   },
 };

@@ -8,26 +8,45 @@ import { onPulseTick } from '../../assets/role_classes';
 import { fallenMug } from '../../screens/gameplay/role_sets/fallenMug';
 import { setD } from '../../debug/setD';
 import { stopBubbling } from '../../libs/eventswork';
+import { debugPulse } from '../../debug/fps';
+import Worker from '../../webworkers/pulse.worker';
 
-new RoleClass(Symbol('pulse'))
-  .registerAction(stage, {
-    action() {
-      onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
-        /**
-         * Display debugging information
-         */
-        onPulseTick.fire(setD, stopBubbling({}));
-        /**
-         *
-         */
-      });
-      window.setTimeout(() => {
-        this.roleClass.fire([...stage][0]);
-      }, pulseTimeout);
-    },
-  })
-  .start()
-  .fire();
+// new RoleClass(Symbol('pulse'))
+//   .registerAction(stage, {
+//     action() {
+//       onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
+//         /**
+//          * Display debugging information
+//          */
+//         onPulseTick.fire(setD, stopBubbling({}));
+//         /**
+//          *
+//          */
+//       });
+//       window.setTimeout(() => {
+//         this.roleClass.fire([...stage][0]);
+//       }, pulseTimeout);
+//     },
+//   })
+//   .start()
+//   .fire();
+
+const pulseWorker = new Worker();
+
+pulseWorker.onmessage = (e) => {
+  onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
+    /**
+     * Display debugging information
+     */
+    onPulseTick.fire(setD, stopBubbling({}));
+    if (e.data) {
+      debugPulse.info = e.data;
+    }
+    /**
+     *
+     */
+  });
+};
 
 // Prevents default behaviors in Firefox browser
 registerActionOfType('dragstart', stage, {
