@@ -2,34 +2,13 @@
 import stage from './stage';
 import { dragMug, followMouseRole, stopDragRole } from '../../screens/gameplay/role_sets/dragMug';
 import { setA } from '../../screens/gameplay/supersets/setA';
-import { pulseTimeout } from '../../screens/gameplay/assets/gameplay_params';
-import { registerActionOfType, RoleClass } from '../../libs/actors_and_roles';
+import { registerActionOfType } from '../../libs/actors_and_roles';
 import { onPulseTick } from '../../assets/role_classes';
 import { fallenMug } from '../../screens/gameplay/role_sets/fallenMug';
 import { setD } from '../../debug/setD';
 import { stopBubbling } from '../../libs/eventswork';
 import { debugPulse } from '../../debug/fps';
 import Worker from '../../webworkers/pulse.worker';
-
-// new RoleClass(Symbol('pulse'))
-//   .registerAction(stage, {
-//     action() {
-//       onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
-//         /**
-//          * Display debugging information
-//          */
-//         onPulseTick.fire(setD, stopBubbling({}));
-//         /**
-//          *
-//          */
-//       });
-//       window.setTimeout(() => {
-//         this.roleClass.fire([...stage][0]);
-//       }, pulseTimeout);
-//     },
-//   })
-//   .start()
-//   .fire();
 
 const pulseWorker = new Worker();
 
