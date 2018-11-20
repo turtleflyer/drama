@@ -9,7 +9,7 @@ export const levelsDescription = [
   {
     params: {
       mugsSpeed: -75,
-      loanExpenses: 0,
+      loanExpenses: 1,
       initMugDensity: 4,
       faucets: [{ model: faucetModels.normalIPA, horizontalPosition: 140 }],
     },
@@ -20,7 +20,7 @@ export const levelsDescription = [
   {
     params: {
       mugsSpeed: -75,
-      loanExpenses: 0,
+      loanExpenses: 1,
       initMugDensity: 4,
       faucets: [
         { model: faucetModels.normalIPA, horizontalPosition: 40 },

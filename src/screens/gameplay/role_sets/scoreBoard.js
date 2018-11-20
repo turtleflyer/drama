@@ -1,5 +1,7 @@
 import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
 import ScoreBoard from '../actor_classes/ScoreBoard';
+import { onPulseTick } from '../../../assets/role_classes';
+import stage from '../../../role_sets/stage/stage';
 
 // eslint-disable-next-line
 export const scoreBoard = new ActorsSet();
@@ -11,29 +13,15 @@ scoreBoard.getInitializer(function () {
 
 scoreBoard.name = 'scoreBoard';
 
-export const updateMoneyRole = new RoleClass(Symbol('updateMoney'))
-  .registerAction(scoreBoard, {
-    action({ target: scoreB }) {
-      scoreB.refreshInformation();
-    },
-  })
-  .start();
+let lastTime;
 
-/**
- * Chunk of the old code that may occur to be useful
- *
-  loanExpenses: {
-        type: 'onTick',
-        customType: true,
-        action({ memory }) {
-          const { lastTime } = memory;
-          const currTime = Date.now();
-          if (lastTime) {
-            commonParams.money -= ((currTime - lastTime) / 1000) * commonParams.loanExpenses;
-            fireEvent(this.unit, 'updateMoney');
-          }
-          memory.lastTime = currTime;
-        },
-      },
- *
- */
+export const updateMoneyRole = onPulseTick.registerAction(scoreBoard, {
+  action({ target: scoreB }) {
+    const currTime = Date.now();
+    if (lastTime) {
+      stage.state.money -= ((currTime - lastTime) / 1000) * stage.params.levelParams.loanExpenses;
+      scoreB.refreshInformation();
+    }
+    lastTime = currTime;
+  },
+});
