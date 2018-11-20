@@ -9,8 +9,12 @@ export const waitingMugs = new ActorsSet();
 
 waitingMugs.name = 'waitingMugs';
 
-waitingMugs.onAddActorEvent(({ target: mug }) => {
+waitingMugs.onAddActorEvent(function ({ target: mug }) {
   mug.carriedToCustomer();
+  window.setTimeout(() => {
+    this.deleteElement(mug);
+    mug.remove();
+  }, waitingMugParams.lifeTime);
 });
 
 export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {
@@ -23,10 +27,6 @@ export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {
         const { money, reaction } = mug.turnIntoMoney();
         stage.state.money += money;
         createReactionRole.fire({ reactionType: reaction });
-        window.setTimeout(() => {
-          this.roleSet.deleteElement(mug);
-          mug.remove();
-        }, waitingMugParams.lifeTime - waitingMugParams.timeWhenMoneyFly);
       }
     }
   },
