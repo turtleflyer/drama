@@ -149,3 +149,19 @@ export const damagesParams = {
 
   lifeTime: 1000,
 };
+
+export const totalsParams = {
+  position: {
+    width: 50,
+    height: 50,
+    top: 70,
+  },
+
+  lifeTime: 500,
+
+  creationTimeout: 100,
+
+  valueToCreate: 12,
+
+  swayRange: 20,
+};

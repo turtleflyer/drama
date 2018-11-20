@@ -62,9 +62,22 @@ img {
   z-index: 90;
 }
 
-.mugFilling,
+.mugFilling {
+  z-index: 75;
+}
+
+@keyframes fade-waitingMug {
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .waitingMug {
   z-index: 75;
+  animation: fade-waitingMug 2s forwards;
 }
 
 .scoreBoard {
@@ -78,14 +91,71 @@ img {
   font-size: 120%;
 }
 
+@keyframes fade-damages {
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(10px, -10px) scale(1.2);
+  }
+}
+
 .damages {
   z-index: 72;
-  font-weight: 1000;
+  font-weight: 900;
   font-size: 120%;
-  color: rgb(243, 236, 141);
+  color: rgb(255, 51, 51);
   text-align: center;
+  animation: fade-damages 1s forwards;
+}
+
+@keyframes fade-customersReaction {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .customersReaction {
   z-index: 78;
+  animation: fade-customersReaction 1.5s forwards;
+}
+
+@keyframes fade-totals {
+  18% {
+    transform: translate(10px, -40px);
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(15px, -90px) scale(0.7);
+  }
+}
+
+.totalsOnTable--positive,
+.totalsOnTable--negative {
+  z-index: 72;
+  font-weight: 900;
+  font-size: 120%;
+  text-align: center;
+  animation: fade-totals 0.5s forwards;
+}
+
+.totalsOnTable--positive {
+  color: rgb(0, 255, 0);
+}
+
+.totalsOnTable--negative {
+  color: rgb(255, 51, 51);
 }

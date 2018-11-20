@@ -9,6 +9,7 @@ import {
   beerCost,
 } from '../../assets/gameplay_params';
 import stage from '../../../../role_sets/stage/stage';
+import { totalsOnTable } from '../../role_sets/totalsOnTable';
 
 export default class Mug extends Actor {
   constructor(beerType, horizontalPosition = 0) {
@@ -80,22 +81,35 @@ export default class Mug extends Actor {
       reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
     } = tuneGame;
     const targetBeer = this.state.beers ? this.state.beers[targetBeerType] : 0;
+
+    // const beerExpenses = beerTotalAmount
+    //   ? Object.keys(beers).reduce(
+    //     (sum, beerType) => sum + beerCost[beerType] * beers[beerType] * this.params.volume,
+    //     0,
+    //   )
+    //   : 0;
     switch (true) {
       case !beerTotalAmount || beerTotalAmount < 0.9 / drunkFactor:
         stage.state.reputation += reputationDecrement;
+        if (beerTotalAmount) {
+          totalsOnTable.createNew(false, this.position.x);
+        }
         return { money: 0, reaction: customerReactionsTypes.TOO_FEW };
 
       case targetBeer / beerTotalAmount < 0.9 / drunkFactor:
         stage.state.reputation += reputationDecrement;
+        totalsOnTable.createNew(false, this.position.x);
         return { money: 0, reaction: customerReactionsTypes.WRONG_BEER };
 
-      default:
+      default: {
         stage.state.drunkFactor += drunkFactorIncrement;
         stage.state.reputation += reputationIncrement;
+        totalsOnTable.createNew(true, this.position.x);
         return {
           money: beerTotalAmount * this.params.volume * beerCost[targetBeerType] * beerMarkup,
           reaction: customerReactionsTypes.OK,
         };
+      }
     }
   }
 
