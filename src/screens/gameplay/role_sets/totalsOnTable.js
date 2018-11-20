@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import { ActorsSet } from '../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../assets/role_classes';
 import { damagesParams, totalsParams } from '../assets/gameplay_params';
@@ -14,9 +15,12 @@ totalsOnTable.getInitializer(function () {
 
 totalsOnTable.name = 'totalsOnTable';
 
-totalsOnTable.onAddActorEvent(({ target: totalPiece }) => {
+totalsOnTable.onAddActorEvent(function ({ target: totalPiece }) {
   if (totalPiece !== signalElement) {
-    totalPiece.bornTime = Date.now();
+    window.setTimeout(() => {
+      this.deleteElement(totalPiece);
+      totalPiece.remove();
+    }, damagesParams.lifeTime);
   }
 });
 
@@ -40,9 +44,6 @@ export const inspectTotalsToDisappearRole = onPulseTick.registerAction(totalsOnT
         }
         return entry.value !== 0;
       });
-    } else if (currTime - totalPiece.bornTime > damagesParams.lifeTime) {
-      roleSet.deleteElement(totalPiece);
-      totalPiece.remove();
     }
   },
 });

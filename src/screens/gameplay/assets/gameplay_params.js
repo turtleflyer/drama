@@ -91,7 +91,7 @@ export const customersTablePosition = {
   },
 };
 
-export const waitingTimeMugDisappear = 2000;
+export const waitingMugParams = { lifeTime: 6000, timeWhenMoneyFly: 2000 };
 
 export const scorePosition = {
   right: 10,
@@ -157,11 +157,11 @@ export const totalsParams = {
     top: 70,
   },
 
-  lifeTime: 500,
+  lifeTime: 3000,
 
-  creationTimeout: 100,
+  creationTimeout: 200,
 
-  valueToCreate: 12,
+  valueToCreate: 5,
 
   swayRange: 10,
 };
