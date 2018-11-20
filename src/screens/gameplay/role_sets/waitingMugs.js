@@ -3,7 +3,7 @@ import { ActorsSet } from '../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../assets/role_classes';
 import { waitingMugParams } from '../assets/gameplay_params';
 import stage from '../../../role_sets/stage/stage';
-import { createReactionRole } from './customersReactions';
+import { customersReactions } from './customersReactions';
 
 export const waitingMugs = new ActorsSet();
 
@@ -26,7 +26,7 @@ export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {
         mug.state.waitingSince = Infinity;
         const { money, reaction } = mug.turnIntoMoney();
         stage.state.money += money;
-        createReactionRole.fire({ reactionType: reaction });
+        customersReactions.createNew(reaction);
       }
     }
   },

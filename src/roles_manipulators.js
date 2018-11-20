@@ -4,7 +4,6 @@ import generateMugsRole from './screens/gameplay/role_sets/mugsOnLine/roles/gene
 import { waitMugDisappearRole } from './screens/gameplay/role_sets/waitingMugs';
 import { fillMugsRole } from './screens/gameplay/role_sets/fillingMugs';
 import { countExpensesRole } from './screens/gameplay/role_sets/faucets';
-import { watchReactionsLifeRole } from './screens/gameplay/role_sets/customersReactions';
 import { updateMoneyRole } from './screens/gameplay/role_sets/scoreBoard';
 import { inspectTotalsToDisappearRole } from './screens/gameplay/role_sets/totalsOnTable';
 
@@ -18,7 +17,6 @@ export const startStopLevel = new RolesManipulator([
   fillMugsRole,
   waitMugDisappearRole,
   countExpensesRole,
-  watchReactionsLifeRole,
   inspectTotalsToDisappearRole,
 ]);
 
