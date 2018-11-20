@@ -163,5 +163,5 @@ export const totalsParams = {
 
   valueToCreate: 12,
 
-  swayRange: 20,
+  swayRange: 10,
 };
