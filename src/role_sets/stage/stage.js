@@ -28,8 +28,8 @@ class Stage extends ActorsSet {
 
   defineLevel(level) {
     const levelEntry = levelsDescription[level];
-    Object.assign((this.state = {}), commonInitState, levelEntry.initState);
-    Object.assign((this.params.levelParams = {}), levelEntry.params);
+    this.state = { ...commonInitState, ...levelEntry.initState };
+    this.params.levelParams = { ...levelEntry.params };
   }
 }
 
