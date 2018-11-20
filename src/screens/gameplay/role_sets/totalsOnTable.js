@@ -32,7 +32,7 @@ totalsOnTable.createNew = function (isPositive, horizontalPosition) {
   });
 };
 
-export const inspectTotalsToDisappearRole = onPulseTick.registerAction(totalsOnTable, {
+export const manageTotalsRole = onPulseTick.registerAction(totalsOnTable, {
   action({ target: totalPiece, roleSet }) {
     const currTime = Date.now();
     if (totalPiece === signalElement && elementsToCreate.length > 0) {
