@@ -1,4 +1,4 @@
-import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
+import { ActorsSet } from '../../../libs/actors_and_roles';
 import ScoreBoard from '../actor_classes/ScoreBoard';
 import { onPulseTick } from '../../../assets/role_classes';
 import stage from '../../../role_sets/stage/stage';
