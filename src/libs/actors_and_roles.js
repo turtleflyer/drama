@@ -105,25 +105,17 @@ export class RoleClass {
     this.type = type;
   }
 
-  registerAction(roleSet, { action, checkIfTerminate, initMemoryState }) {
+  registerAction(roleSet, { action }) {
     const roleClass = this;
     const { type } = this;
     let active = false;
     let toTerminate = false;
     return new class Role {
       constructor() {
-        if (checkIfTerminate) {
-          // prettier-ignore
-          this.checkIfTerminate = (...args) => toTerminate
-            || checkIfTerminate.bind(this)(...args);
-        } else {
-          this.checkIfTerminate = () => toTerminate;
-        }
         Object.assign(this, {
           roleSet,
           type,
           action: action.bind(this),
-          initMemoryState,
           roleClass,
         });
       }
@@ -132,19 +124,12 @@ export class RoleClass {
         if (!active) {
           toTerminate = false;
           // eslint-disable-next-line
-          const { roleSet, type, action, checkIfTerminate, initMemoryState } = this;
-          if (typeof initMemoryState === 'function') {
-            this.memory = initMemoryState.call(this);
-          } else if (initMemoryState) {
-            this.memory = initMemoryState;
-          } else {
-            this.memory = {};
-          }
+          const { roleSet, type, action } = this;
           eventChain({
             roleSet,
             type,
             action,
-            checkIfTerminate,
+            checkIfTerminate: () => toTerminate,
           });
           active = true;
         }
@@ -183,11 +168,11 @@ export class RoleClass {
   }
 }
 
-export function registerActionOfType(type, roleSet, { action, checkIfTerminate, initMemoryState }) {
+export function registerActionOfType(type, roleSet, { action }) {
   if (!(typeof type === 'string')) {
     throw new Error('@@@...');
   }
-  return new RoleClass(type).registerAction(roleSet, { action, checkIfTerminate, initMemoryState });
+  return new RoleClass(type).registerAction(roleSet, { action });
 }
 
 const initializerClass = new RoleClass(Symbol('@@ActorSet/initializerClass'));
