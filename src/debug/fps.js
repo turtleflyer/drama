@@ -6,7 +6,7 @@ const fps = document.createElement('div');
 document.querySelector('body').appendChild(fps);
 
 export const fpsSet = new ActorsSet([fps]);
-export const debugPulse = { info: '' };
+export const debugPulse = { info: '\r\n' };
 
 let lastTime;
 let counter = -1;
@@ -34,6 +34,8 @@ onPulseTick
             collectFps.reduce((min, { value }) => (min < value ? min : value), Infinity),
           )}\r\n${debugPulse.info}`;
           collectFps.shift();
+        } else {
+          fps.innerText = `\r\n${debugPulse.info}`;
         }
         counter = 0;
         lastTime = currTime;
