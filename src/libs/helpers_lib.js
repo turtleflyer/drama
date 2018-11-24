@@ -22,6 +22,7 @@ export function setImg(element, newImg, style) {
     element.img.src = newImg;
     updateStyle(element.img, style);
   }
+  return element;
 }
 
 export function percentOverlap(targetBound, dragBound) {
