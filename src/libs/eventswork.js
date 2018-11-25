@@ -21,6 +21,7 @@ const elementsMap = new Map();
 const customEventTypes = new Set();
 const onAddElementActionsMap = new Map();
 const queueData = [];
+const queueMap = new Map();
 const countTypesInQueue = new Map();
 const exhaustTypesMap = new Map();
 const routine = { interpretTarget: t => t };
@@ -366,9 +367,15 @@ export function fireEvent(target, type, event = {}) {
     if (target.size > 0) {
       [...target].forEach((e) => {
         if (!(event[propagationKey].stopPropagatingNested && e instanceof RoleSet)) {
-          queueData.push({ target: e, type, event });
-          const countType = countTypesInQueue.get(type);
-          countTypesInQueue.set(type, countType ? countType + 1 : 1);
+          const getMapOfTypeFomQueue = getFromDeepMap(queueMap, type).map;
+          if (!getMapOfTypeFomQueue.has(e)) {
+            queueData.push({ target: e, type, eventReference: { event } });
+            const countType = countTypesInQueue.get(type);
+            countTypesInQueue.set(type, countType ? countType + 1 : 1);
+            getMapOfTypeFomQueue.set(e.eventReference);
+          } else {
+            getMapOfTypeFomQueue.get(e).eventReference.event = event;
+          }
         }
       });
       fireEvent(worker, fireFromQueueType);
@@ -468,8 +475,14 @@ eventChain(
     type: fireFromQueueType,
     action() {
       if (queueData.length > 0) {
-        const { target, type, event } = queueData.shift();
+        const {
+          target,
+          type,
+          eventReference: { event },
+        } = queueData.shift();
         fireEvent(target, type, event);
+        queueMap.get(type).delete(target);
+
         // Look if waitWhenTypeExhausted for this type has been activated
         const countType = countTypesInQueue.get(type) - 1;
         if (countType === 0 && exhaustTypesMap.has(type)) {
@@ -478,6 +491,7 @@ eventChain(
           exhaustTypesMap.delete(type);
         }
         countTypesInQueue.set(type, countType);
+
         // Next call of fireEvent of fireFomQueueType is doing asynchronously to make a chance to
         // fulfill the according promise and create the new one for the next target form the queue
         Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
