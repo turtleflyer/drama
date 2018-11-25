@@ -179,3 +179,9 @@ img {
   animation: fade-totals-negative 2s forwards;
   color: rgb(184, 192, 204);
 }
+
+.timeBox--wrapper {
+  z-index: 50;
+  background-color: rgb(34, 8, 39);
+  overflow: hidden;
+}

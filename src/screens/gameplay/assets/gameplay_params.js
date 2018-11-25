@@ -29,6 +29,7 @@ export const mugsParams = {
 };
 
 export const pulseTimeout = 16;
+export const rotationAngleOfDayAndNight = 160;
 
 export const tuneGame = {
   reputationDecrement: -0.05,
@@ -164,4 +165,20 @@ export const totalsParams = {
   valueToCreate: 5,
 
   swayRange: 10,
+};
+
+export const timeDisplayParams = {
+  position: {
+    right: 10,
+    top: 80,
+    width: 140,
+    height: 50,
+  },
+
+  dayAndNightPosition: {
+    top: 10,
+    left: 0,
+    right: 0,
+    height: 120,
+  },
 };

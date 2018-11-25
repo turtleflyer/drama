@@ -6,6 +6,7 @@ import { fillMugsRole } from './screens/gameplay/role_sets/fillingMugs';
 import { countExpensesRole } from './screens/gameplay/role_sets/faucets';
 import { updateMoneyRole } from './screens/gameplay/role_sets/scoreBoard';
 import { manageTotalsRole } from './screens/gameplay/role_sets/totalsOnTable';
+import { rotateDayAndNightRole } from './screens/gameplay/role_sets/timeDisplay/timeDisplay';
 
 // eslint-disable-next-line
 export const startStopLevel = new RolesManipulator([
@@ -18,6 +19,7 @@ export const startStopLevel = new RolesManipulator([
   waitMugDisappearRole,
   countExpensesRole,
   manageTotalsRole,
+  rotateDayAndNightRole,
 ]);
 
 startStopLevel.name = 'startStopLevel';

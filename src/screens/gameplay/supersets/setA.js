@@ -12,6 +12,7 @@ import { scoreBoard } from '../role_sets/scoreBoard';
 import { damages } from '../role_sets/damages';
 import { customersReactions } from '../role_sets/customersReactions';
 import { totalsOnTable } from '../role_sets/totalsOnTable';
+import { timeDisplay } from '../role_sets/timeDisplay/timeDisplay';
 
 // eslint-disable-next-line
 export const setA = new ActorsSet([
@@ -28,6 +29,7 @@ export const setA = new ActorsSet([
   damages,
   customersReactions,
   totalsOnTable,
+  timeDisplay,
 ]);
 
 setA.name = 'setA';
