@@ -55,7 +55,9 @@ export const rotateDayAndNightRole = onPulseTick.registerAction(timeDisplay, {
     if (lifeTime < remainingTime) {
       const angleToRotate = (lifeTime / remainingTime) * rotationAngleOfDayAndNight;
       updateStyle(dayAndNight.node, { transform: `rotate(${angleToRotate}deg)` });
-      const progressBarLength = (1 - lifeTime / remainingTime) * timeDisplayParams.progressBarPosition.width;
+      // prettier-ignore
+      const progressBarLength = (1 - lifeTime / remainingTime)
+        * timeDisplayParams.progressBarPosition.width;
       timeProgressBar.setPosition({ width: progressBarLength });
     }
   },
