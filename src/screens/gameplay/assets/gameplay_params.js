@@ -182,4 +182,11 @@ export const timeDisplayParams = {
     right: 0,
     height: 120,
   },
+
+  progressBarPosition: {
+    top: 45,
+    right: 0,
+    width: 140,
+    height: 5,
+  },
 };

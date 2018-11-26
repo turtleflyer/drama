@@ -6,13 +6,18 @@ import { setImg, updateStyle } from '../../../../libs/helpers_lib';
 import dayAndNightImg from './img/day_and_night.png';
 import { onPulseTick } from '../../../../assets/role_classes';
 
-const timeBox = new Actor(document.createElement('div'), timeDisplayParams.position, stage.scaleF);
-timeBox.attachClassName('timeBox--wrapper');
+const timeBox = new Actor(
+  document.createElement('div'),
+  timeDisplayParams.position,
+  stage.scaleF,
+).attachClassName('timeBox--wrapper');
+
 const dayAndNight = new Actor(
   document.createElement('div'),
   timeDisplayParams.dayAndNightPosition,
   stage.scaleF,
 );
+
 setImg(dayAndNight, dayAndNightImg, {
   height: '100%',
   display: 'block',
@@ -20,6 +25,15 @@ setImg(dayAndNight, dayAndNightImg, {
   margin: 'auto',
 }).getAppendedAsChild(timeBox);
 timeBox.linkActor(dayAndNight);
+
+const timeProgressBar = new Actor(
+  document.createElement('div'),
+  timeDisplayParams.progressBarPosition,
+  stage.scaleF,
+)
+  .attachClassName('timeBox--progress-bar')
+  .getAppendedAsChild(timeBox);
+timeBox.linkActor(timeProgressBar);
 
 // eslint-disable-next-line
 export const timeDisplay = new ActorsSet();
@@ -41,6 +55,8 @@ export const rotateDayAndNightRole = onPulseTick.registerAction(timeDisplay, {
     if (lifeTime < remainingTime) {
       const angleToRotate = (lifeTime / remainingTime) * rotationAngleOfDayAndNight;
       updateStyle(dayAndNight.node, { transform: `rotate(${angleToRotate}deg)` });
+      const progressBarLength = (1 - lifeTime / remainingTime) * timeDisplayParams.progressBarPosition.width;
+      timeProgressBar.setPosition({ width: progressBarLength });
     }
   },
 });

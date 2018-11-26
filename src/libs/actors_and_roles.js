@@ -77,6 +77,7 @@ export class Actor {
     } else {
       throw new Error('@@...');
     }
+    return this;
   }
 
   attachClassName(className) {
@@ -87,6 +88,7 @@ export class Actor {
     }
     node.classList.add(className);
     classNamesMap.set(this, className);
+    return this;
   }
 }
 Actor.positionPropsNames = ['left', 'top', 'width', 'height', 'bottom', 'right'];
