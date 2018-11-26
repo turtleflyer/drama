@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import {
   defineRoutine,
   eventChain,
@@ -20,7 +21,11 @@ const classNamesMap = new Map();
 
 export class Actor {
   constructor(node, position, scaleF = 1) {
-    this.node = node;
+    if (typeof node === 'string') {
+      this.node = document.createElement(node);
+    } else {
+      this.node = node;
+    }
     this.position = { scaleF };
     this.linked = new Set();
     this.state = {};
