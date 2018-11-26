@@ -25,7 +25,8 @@ export const beerCost = { [beerTypes.IPA]: 5 };
 
 export const mugsParams = {
   lineBase: 300,
-  initialDelay: 100,
+  initialDelay: 3,
+  maxDelayToGenerateNext: 8,
 };
 
 export const pulseTimeout = 16;

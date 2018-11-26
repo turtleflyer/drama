@@ -8,7 +8,7 @@ export const commonInitState = {
 export const levelsDescription = [
   {
     params: {
-      mugsSpeed: -75,
+      mugsSpeed: 75,
       loanExpenses: 1,
       initMugDensity: 4,
       remainingTime: 20,
@@ -21,7 +21,7 @@ export const levelsDescription = [
   },
   {
     params: {
-      mugsSpeed: -75,
+      mugsSpeed: 75,
       loanExpenses: 1,
       initMugDensity: 4,
       remainingTime: 20,

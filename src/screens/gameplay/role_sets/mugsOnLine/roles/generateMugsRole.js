@@ -1,57 +1,49 @@
 /* eslint-env browser */
-import { mugsOnLine, signalElementAmongMugs } from '../mugsOnLine';
+import { mugsOnLine } from '../mugsOnLine';
 import stage from '../../../../../role_sets/stage/stage';
 import Mug from '../../../actor_classes/Mug/Mug';
 import { stageDimension } from '../../../../../assets/common_params';
-import { tuneGame } from '../../../assets/gameplay_params';
+import { tuneGame, mugsParams } from '../../../assets/gameplay_params';
 import { onPulseTick } from '../../../../../assets/role_classes';
 
 const { width: stageWidth } = stageDimension;
 
 export default onPulseTick.registerAction(mugsOnLine, {
   action({ target: mug }) {
-    const currTime = Date.now();
+    const currTime = performance.now();
     const { state } = this.roleSet;
-    const { mugsSpeed, initMugDensity } = stage.params.levelParams;
+    const { mugsSpeed } = stage.params.levelParams;
+
+    if (this.roleSet.size > 0) {
+      const {
+        params: { bornTime },
+      } = mug;
+
+      const calculatedPosition = stageWidth - (currTime - bornTime) * (mugsSpeed / 1000);
+
+      // Check if the mug disappeared from the stage
+      if (calculatedPosition < -(mug.position.width / 2)) {
+        this.roleSet.deleteElement(mug);
+        mug.remove();
+        stage.state.reputation += tuneGame.reputationDecrement;
+      } else {
+        mug.setPosition({ x: calculatedPosition });
+      }
+    } else if (
+      state.timeOfNextBirth
+      && state.timeOfNextBirth - currTime > mugsParams.maxDelayToGenerateNext * 1000
+    ) {
+      state.timeOfNextBirth = null;
+    }
 
     if (
-      this.roleSet.size > 2
-      || (() => [...state.placeholdersMap.values()].pop())() < 2 * stageWidth
+      state.timeOfNextBirth
+      && state.timeOfNextBirth - mugsParams.initialDelay * 1000 < currTime
     ) {
-      // Determine if it is a time to calculate placeholders shift
-      if (mug === signalElementAmongMugs) {
-        for (const [processingMug, horizontalPosition] of state.placeholdersMap.entries()) {
-          // prettier-ignore
-          const calculatedPosition = horizontalPosition
-            + ((currTime - state.lastTime) * mugsSpeed) / 1000;
-
-          // Check if the mug disappeared from the stage
-          if (calculatedPosition < -(processingMug.position.width / 2)) {
-            state.placeholdersMap.delete(processingMug);
-            if (this.roleSet.has(processingMug)) {
-              this.roleSet.deleteElement(processingMug);
-              processingMug.remove();
-              stage.state.reputation += tuneGame.reputationDecrement;
-            }
-          } else {
-            state.placeholdersMap.set(processingMug, calculatedPosition);
-          }
-        }
-        state.lastTime = currTime;
-      } else {
-        const horizontalPosition = state.placeholdersMap.get(mug);
-        mug.setPosition({ x: horizontalPosition });
-
-        // Check if the hidden mug is appearing on the stage. In this case a new mug is generating
-        if (mug.state.hidden && horizontalPosition < stageWidth + mug.position.width / 2) {
-          mug.appearOnStage();
-          const mugDensity = initMugDensity * stage.state.reputation;
-          const placeWhereCreate = horizontalPosition + (stageWidth * 0.6) / mugDensity;
-          const createdMug = new Mug(this.roleSet.determineTypeOfBeer(), placeWhereCreate);
-          state.placeholdersMap.set(createdMug, placeWhereCreate);
-          this.roleSet.addElement(createdMug);
-        }
-      }
+      const generatedMug = new Mug(this.roleSet.determineTypeOfBeer(), stageWidth + 1000);
+      generatedMug.params.bornTime = state.timeOfNextBirth;
+      this.roleSet.addElement(generatedMug);
+      state.timeOfNextBirth = this.roleSet.newBornTime(generatedMug);
     }
   },
 });
