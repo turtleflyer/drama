@@ -15,7 +15,7 @@ export default class CustomersReaction extends Actor {
       left: left + swayPosition,
     };
     swayPosition *= -1;
-    super('div', actualPosition, stage.scaleF);
+    super('div', actualPosition, { scaleF: stage.scaleF });
     setImg(this, customerReactionsImgs[reactionType], { width: '100%' });
     this.attachClassName('customersReaction');
     this.getAppendedAsChild(stage);
