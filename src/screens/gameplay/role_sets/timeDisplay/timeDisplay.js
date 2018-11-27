@@ -6,17 +6,11 @@ import { setImg, updateStyle } from '../../../../libs/helpers_lib';
 import dayAndNightImg from './img/day_and_night.png';
 import { onPulseTick } from '../../../../assets/role_classes';
 
-const timeBox = new Actor(
-  document.createElement('div'),
-  timeDisplayParams.position,
-  stage.scaleF,
-).attachClassName('timeBox--wrapper');
-
-const dayAndNight = new Actor(
-  document.createElement('div'),
-  timeDisplayParams.dayAndNightPosition,
-  stage.scaleF,
+const timeBox = new Actor('div', timeDisplayParams.position, stage.scaleF).attachClassName(
+  'timeBox--wrapper',
 );
+
+const dayAndNight = new Actor('div', timeDisplayParams.dayAndNightPosition, stage.scaleF);
 
 setImg(dayAndNight, dayAndNightImg, {
   height: '100%',
@@ -26,11 +20,7 @@ setImg(dayAndNight, dayAndNightImg, {
 }).getAppendedAsChild(timeBox);
 timeBox.linkActor(dayAndNight);
 
-const timeProgressBar = new Actor(
-  document.createElement('div'),
-  timeDisplayParams.progressBarPosition,
-  stage.scaleF,
-)
+const timeProgressBar = new Actor('div', timeDisplayParams.progressBarPosition, stage.scaleF)
   .attachClassName('timeBox--progress-bar')
   .getAppendedAsChild(timeBox);
 timeBox.linkActor(timeProgressBar);

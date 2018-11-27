@@ -7,7 +7,7 @@ import barImg from './img/bar.png';
 
 class Bar extends Actor {
   constructor() {
-    super(document.createElement('div'), barPosition, stage.scaleF);
+    super('div', barPosition, stage.scaleF);
     setImg(this, barImg, { height: '100%', width: '100%', 'object-fit': 'fill' });
     this.getAppendedAsChild(stage);
     this.attachClassName('bar');

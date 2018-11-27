@@ -7,7 +7,7 @@ import { setImg } from '../../../../libs/helpers_lib';
 
 class CustomersTable extends Actor {
   constructor() {
-    super(document.createElement('div'), customersTablePosition, stage.scaleF);
+    super('div', customersTablePosition, stage.scaleF);
     setImg(this, tableImg, { width: '100%' });
     this.getAppendedAsChild(stage);
     this.attachClassName('customersTable');

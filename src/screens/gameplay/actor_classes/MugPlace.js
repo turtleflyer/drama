@@ -4,7 +4,7 @@ import stage from '../../../role_sets/stage/stage';
 
 export default class MugPlace extends Actor {
   constructor(faucet) {
-    super(document.createElement('div'), faucet.params.mugPlacePosition, stage.scaleF);
+    super('div', faucet.params.mugPlacePosition, stage.scaleF);
     this.faucet = faucet;
     faucet.mugPlace = this;
     this.getAppendedAsChild(faucet);

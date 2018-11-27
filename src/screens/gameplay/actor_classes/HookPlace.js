@@ -6,7 +6,7 @@ import stage from '../../../role_sets/stage/stage';
 
 export default class HookPlace extends Actor {
   constructor() {
-    super(document.createElement('div'), customersTablePosition.hookPlace, stage.scaleF);
+    super('div', customersTablePosition.hookPlace, stage.scaleF);
     this.getAppendedAsChild(customersTable);
     this.attachClassName('hookPlace');
   }
