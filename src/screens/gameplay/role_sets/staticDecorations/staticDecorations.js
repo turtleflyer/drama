@@ -40,7 +40,7 @@ staticDecorations.getInitializer(function () {
   [...postedSign.node.childNodes].forEach(child => postedSign.node.removeChild(child));
   postedSign.node.insertAdjacentHTML(
     'beforeend',
-    `<p>The goal is to get</p><p class="objectives--money">${
+    `<p>The goal is to get</p><p class="objectives--money">$${
       stage.params.levelParams.moneyToEarn
     }</p><p>before the night ends</p>`,
   );
