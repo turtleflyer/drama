@@ -190,3 +190,12 @@ export const timeDisplayParams = {
     height: 5,
   },
 };
+
+export const objectivesParams = {
+  position: {
+    left: 500,
+    top: 20,
+    width: 140,
+    height: 60,
+  },
+};

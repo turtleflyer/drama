@@ -12,7 +12,7 @@ export const levelsDescription = [
       loanExpenses: 1,
       initMugDensity: 4,
       remainingTime: 200,
-      moneyToErn: 1000,
+      moneyToEarn: 1000,
       faucets: [{ model: faucetModels.normalIPA, horizontalPosition: 140 }],
     },
     initState: {
@@ -25,7 +25,7 @@ export const levelsDescription = [
       loanExpenses: 1,
       initMugDensity: 4,
       remainingTime: 200,
-      moneyToErn: 1000,
+      moneyToEarn: 1000,
       faucets: [
         { model: faucetModels.normalIPA, horizontalPosition: 40 },
         { model: faucetModels.normalIPA, horizontalPosition: 190 },

@@ -85,13 +85,14 @@ img {
 
 .scoreBoard {
   background-color: rgb(1, 1, 1);
-  z-index: 30;
+  z-index: 80;
 }
 
 .moneyDisplay {
   background-color: rgb(202, 209, 208);
   text-align: center;
   font-size: 120%;
+  z-index: 80;
 }
 
 @keyframes fade-damages {
@@ -198,4 +199,20 @@ img {
 .timeBox--progress-bar {
   background-color: rgb(105, 7, 145);
   animation: play-colors-progress-bar 1s infinite;
+}
+
+.objectives {
+  z-index: 80;
+  background-color: white;
+}
+
+.objectives p {
+  position: static !important;
+  margin: 0;
+  text-align: center;
+}
+
+.objectives--money {
+  color: red;
+  font-weight: 900;
 }
