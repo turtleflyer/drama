@@ -4,7 +4,7 @@ import { switchTypes } from '../../assets/gameplay_params';
 import { setImg } from '../../../../libs/helpers_lib';
 import jetImg from './img/jet.gif';
 import stage from '../../../../role_sets/stage/stage';
-import { bar } from '../../role_sets/bar/bar';
+import { bar } from '../../role_sets/staticDecorations/staticDecorations';
 
 export default class Faucet extends Actor {
   constructor(model, horizontalPosition) {
