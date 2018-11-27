@@ -5,11 +5,12 @@ import {
   commonInitState,
 } from '../../screens/gameplay/assets/levels_description';
 import { stageDimension } from '../../assets/common_params';
+import './styles.css';
 
 class Stage extends ActorsSet {
   constructor(dimension) {
     const stageNode = document.querySelector('#scene');
-    super([new Actor(stageNode, dimension)]);
+    super([new Actor(stageNode, dimension, { zIndex: 10 })]);
     this.stageNode = stageNode;
     const { left, top } = this.getBoundingRect();
     this.origin = { x: left, y: top };

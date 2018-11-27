@@ -32,7 +32,7 @@ export class Actor {
     this.porops = {};
     this.setPosition(position);
     if (zIndex) {
-      this.node.style['z-index'] = zIndex;
+      this.setZIndex(zIndex);
     }
   }
 
@@ -55,6 +55,11 @@ export class Actor {
       actor.position.scaleF = newScale;
       actor.setPosition(actor);
     }
+    return this;
+  }
+
+  setZIndex(zIndex) {
+    this.node.style['z-index'] = zIndex;
     return this;
   }
 

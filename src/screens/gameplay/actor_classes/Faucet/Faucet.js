@@ -26,7 +26,7 @@ export default class Faucet extends Actor {
         left: horizontalPosition,
         bottom: 0,
       },
-      stage.scaleF,
+      { scaleF: stage.scaleF, zIndex: 65 },
     );
     setImg(this, imgPhases[0], {
       height: '100%',
@@ -54,7 +54,6 @@ export default class Faucet extends Actor {
       this.state.isOpened = false;
     }
     this.getAppendedAsChild(bar);
-    this.attachClassName('faucets');
   }
 
   switchState() {

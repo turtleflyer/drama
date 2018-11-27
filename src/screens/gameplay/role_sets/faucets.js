@@ -4,7 +4,7 @@ import stage from '../../../role_sets/stage/stage';
 import { switchTypes, beerCost, damagesParams } from '../assets/gameplay_params';
 import { onPulseTick } from '../../../assets/role_classes';
 import { damages } from './damages';
-import Damage from '../actor_classes/Damage';
+import Damage from '../actor_classes/Damage/Damage';
 
 // eslint-disable-next-line
 export const faucets = new ActorsSet();

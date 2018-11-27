@@ -10,6 +10,7 @@ import {
 } from '../../assets/gameplay_params';
 import stage from '../../../../role_sets/stage/stage';
 import { totalsOnTable } from '../../role_sets/totalsOnTable';
+import './styles.css';
 
 export default class Mug extends Actor {
   constructor(beerType, horizontalPosition = 0) {
@@ -17,7 +18,11 @@ export default class Mug extends Actor {
     const {
       width, empty, fillingPhasesImgs, overfilledPhasesImgs,
     } = img;
-    super('div', { x: horizontalPosition, y: mugsParams.lineBase, width }, stage.scaleF);
+    super(
+      'div',
+      { x: horizontalPosition, y: mugsParams.lineBase, width },
+      { scaleF: stage.scaleF, zIndex: 50 },
+    );
     setImg(this, empty, { width: '100%', bottom: '0px' });
     this.beerType = beerType;
     this.params = {
@@ -78,12 +83,6 @@ export default class Mug extends Actor {
     } = tuneGame;
     const targetBeer = this.state.beers ? this.state.beers[targetBeerType] : 0;
 
-    // const beerExpenses = beerTotalAmount
-    //   ? Object.keys(beers).reduce(
-    //     (sum, beerType) => sum + beerCost[beerType] * beers[beerType] * this.params.volume,
-    //     0,
-    //   )
-    //   : 0;
     switch (true) {
       case !beerTotalAmount || beerTotalAmount < 0.9 / drunkFactor:
         stage.state.reputation += reputationDecrement;
@@ -116,7 +115,6 @@ export default class Mug extends Actor {
 
   born() {
     this.state.hidden = true;
-    this.attachClassName('mugsOnLine');
   }
 
   appearOnStage() {
@@ -133,10 +131,11 @@ export default class Mug extends Actor {
       lastTime: null,
       placed: null,
     });
-    this.attachClassName('dragMug');
+    this.setZIndex(80);
   }
 
   dropDown() {
+    this.setZIndex(90);
     this.attachClassName('fallenMug');
   }
 
@@ -151,11 +150,12 @@ export default class Mug extends Actor {
       fillingPhase: state.fillingPhase || -1,
     });
     this.updateNextThreshold();
-    this.attachClassName('mugFilling');
+    this.setZIndex(75);
   }
 
   carriedToCustomer() {
     Object.assign(this.state, { placed: true, waitingSince: Date.now() });
+    this.setZIndex(75);
     this.attachClassName('waitingMug');
   }
 }

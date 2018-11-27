@@ -4,11 +4,15 @@ import stage from '../../../role_sets/stage/stage';
 
 export default class MugPlace extends Actor {
   constructor(faucet) {
-    super('div', faucet.params.mugPlacePosition, { scaleF: stage.scaleF });
+    super('div', faucet.params.mugPlacePosition, { scaleF: stage.scaleF, zIndex: 70 });
     this.faucet = faucet;
     faucet.mugPlace = this;
     this.getAppendedAsChild(faucet);
-    this.attachClassName('mugPlaces');
+
+    /**
+     * Debugging purpose
+     */
+    this.node.style['background-color'] = 'rgba(255, 255, 255, 0.2)';
   }
 
   whereToPlaceMug() {

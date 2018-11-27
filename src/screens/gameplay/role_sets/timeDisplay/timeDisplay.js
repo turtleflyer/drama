@@ -5,9 +5,11 @@ import stage from '../../../../role_sets/stage/stage';
 import { setImg, updateStyle } from '../../../../libs/helpers_lib';
 import dayAndNightImg from './img/day_and_night.png';
 import { onPulseTick } from '../../../../assets/role_classes';
+import './styles.css';
 
 const timeBox = new Actor('div', timeDisplayParams.position, {
   scaleF: stage.scaleF,
+  zIndex: 50,
 }).attachClassName('timeBox--wrapper');
 
 const dayAndNight = new Actor('div', timeDisplayParams.dayAndNightPosition, {

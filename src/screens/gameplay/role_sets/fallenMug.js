@@ -11,7 +11,6 @@ fallenMug.name = 'fallenMug';
 
 fallenMug.onAddActorEvent(function ({ target: mug }) {
   mug.dropDown();
-  updateStyle(mug.node, { transform: 'scale(0.5)' });
   stage.state.reputation += tuneGame.reputationDecrement;
   window.setTimeout(() => {
     mug.node.remove();

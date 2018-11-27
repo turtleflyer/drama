@@ -2,7 +2,7 @@
 import { ActorsSet } from '../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../assets/role_classes';
 import { damagesParams, totalsParams } from '../assets/gameplay_params';
-import TotalOnTable from '../actor_classes/TotalOnTable';
+import TotalOnTable from '../actor_classes/TotalOnTable/TotalOnTable';
 
 const signalElement = Symbol('@@totalsOnTable/signalElement');
 let elementsToCreate;

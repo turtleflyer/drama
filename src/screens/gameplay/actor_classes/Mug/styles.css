@@ -1,0 +1,19 @@
+.fallenMug {
+  transform: scale(0.5);
+}
+
+@keyframes fade-waitingMug {
+  50% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.waitingMug {
+  animation: fade-waitingMug 3s forwards;
+}

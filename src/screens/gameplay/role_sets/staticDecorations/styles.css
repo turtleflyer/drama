@@ -1,0 +1,14 @@
+.objectives {
+  background-color: white;
+}
+
+.objectives p {
+  position: static !important;
+  margin: 0;
+  text-align: center;
+}
+
+.objectives--money {
+  color: red;
+  font-weight: 900;
+}

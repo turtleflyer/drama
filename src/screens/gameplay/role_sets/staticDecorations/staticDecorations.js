@@ -9,9 +9,10 @@ import {
 } from '../../assets/gameplay_params';
 import { setImg } from '../../../../libs/helpers_lib';
 import barImg from './img/bar.png';
+import './styles.css';
 
 export const bar = setImg(
-  new Actor('div', barPosition, { scaleF: stage.scaleF }).attachClassName('bar'),
+  new Actor('div', barPosition, { scaleF: stage.scaleF, zIndex: 60 }),
   barImg,
   {
     height: '100%',
@@ -21,15 +22,14 @@ export const bar = setImg(
 );
 
 export const customersTable = setImg(
-  new Actor('div', customersTablePosition, { scaleF: stage.scaleF }).attachClassName(
-    'customersTable',
-  ),
+  new Actor('div', customersTablePosition, { scaleF: stage.scaleF, zIndex: 55 }),
   tableImg,
   { width: '100%' },
 );
 
 const postedSign = new Actor('div', objectivesParams.position, {
   scaleF: stage.scaleF,
+  zIndex: 80,
 }).attachClassName('objectives');
 
 export const staticDecorations = new ActorsSet();
