@@ -8,14 +8,9 @@ export default class ScoreBoard extends Actor {
     super('div', scorePosition, stage.scaleF);
     this.attachClassName('scoreBoard');
     this.getAppendedAsChild(stage);
-    const moneyDisplay = new Actor('div', scorePosition.moneyDisplayPosition, stage.scaleF);
-    moneyDisplay.attachClassName('moneyDisplay');
-    moneyDisplay.getAppendedAsChild(this);
-    this.linkActor(moneyDisplay);
-    this.moneyDisplay = moneyDisplay;
   }
 
   refreshInformation() {
-    this.moneyDisplay.node.textContent = `$${Math.round(stage.state.money)}`;
+    this.node.textContent = `$${Math.round(stage.state.money)}`;
   }
 }

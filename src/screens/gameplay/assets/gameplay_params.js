@@ -99,13 +99,7 @@ export const scorePosition = {
   right: 10,
   top: 10,
   width: 100,
-  height: 50,
-  moneyDisplayPosition: {
-    top: 3,
-    left: 3,
-    right: 3,
-    bottom: 27,
-  },
+  height: 20,
 };
 
 export const customersReactionsParams = {

@@ -84,11 +84,6 @@ img {
 }
 
 .scoreBoard {
-  background-color: rgb(1, 1, 1);
-  z-index: 80;
-}
-
-.moneyDisplay {
   background-color: rgb(202, 209, 208);
   text-align: center;
   font-size: 120%;
