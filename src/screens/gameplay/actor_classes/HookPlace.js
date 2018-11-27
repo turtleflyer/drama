@@ -1,8 +1,8 @@
 /* eslint-env browser */
 import { Actor } from '../../../libs/actors_and_roles';
 import { customersTablePosition } from '../assets/gameplay_params';
-import { customersTable } from '../role_sets/customersTable/customersTable';
 import stage from '../../../role_sets/stage/stage';
+import { customersTable } from '../role_sets/staticDecorations/staticDecorations';
 
 export default class HookPlace extends Actor {
   constructor() {
