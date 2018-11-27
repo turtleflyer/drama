@@ -3,14 +3,14 @@ import { dragRole, stopCarryingRole, dropMugRole } from './role_sets/stage/stage
 import { waitMugDisappearRole } from './screens/gameplay/role_sets/waitingMugs';
 import { fillMugsRole } from './screens/gameplay/role_sets/fillingMugs';
 import { countExpensesRole } from './screens/gameplay/role_sets/faucets';
-import { updateMoneyRole } from './screens/gameplay/role_sets/scoreBoard';
+// import { updateMoneyRole } from './screens/gameplay/role_sets/scoreBoard';
 import { manageTotalsRole } from './screens/gameplay/role_sets/totalsOnTable';
 import { rotateDayAndNightRole } from './screens/gameplay/role_sets/timeDisplay/timeDisplay';
 import { generateMugsRole } from './screens/gameplay/role_sets/mugsOnLine';
 
 // eslint-disable-next-line
 export const startStopLevel = new RolesManipulator([
-  updateMoneyRole,
+  // updateMoneyRole,
   dragRole,
   dropMugRole,
   stopCarryingRole,

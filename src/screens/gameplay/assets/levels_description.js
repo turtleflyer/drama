@@ -9,7 +9,6 @@ export const levelsDescription = [
   {
     params: {
       mugsSpeed: 75,
-      loanExpenses: 1,
       initMugDensity: 4,
       remainingTime: 200,
       moneyToEarn: 1000,
@@ -22,7 +21,6 @@ export const levelsDescription = [
   {
     params: {
       mugsSpeed: 75,
-      loanExpenses: 1,
       initMugDensity: 4,
       remainingTime: 200,
       moneyToEarn: 1000,
