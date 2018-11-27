@@ -17,7 +17,7 @@ export default class Mug extends Actor {
     const {
       width, empty, fillingPhasesImgs, overfilledPhasesImgs,
     } = img;
-    super('div', { x: horizontalPosition, y: mugsParams.lineBase, width }, stage.scaleF);
+    super('div', { x: horizontalPosition, y: mugsParams.lineBase, width }, { scaleF: stage.scaleF });
     setImg(this, empty, { width: '100%', bottom: '0px' });
     this.beerType = beerType;
     this.params = {
