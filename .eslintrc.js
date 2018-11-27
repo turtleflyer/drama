@@ -1,7 +1,7 @@
 module.exports = {
   extends: 'airbnb-base',
   rules: {
-    'linebreak-style': ['warn', 'windows'],
+    'linebreak-style': ['off'],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-param-reassign': 'off',
     'func-names': 'off',
