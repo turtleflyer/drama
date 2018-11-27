@@ -11,7 +11,7 @@ import { setImg } from '../../../../libs/helpers_lib';
 import barImg from './img/bar.png';
 
 export const bar = setImg(
-  new Actor('div', barPosition, stage.scaleF).attachClassName('bar'),
+  new Actor('div', barPosition, { scaleF: stage.scaleF }).attachClassName('bar'),
   barImg,
   {
     height: '100%',
@@ -21,14 +21,16 @@ export const bar = setImg(
 );
 
 export const customersTable = setImg(
-  new Actor('div', customersTablePosition, stage.scaleF).attachClassName('customersTable'),
+  new Actor('div', customersTablePosition, { scaleF: stage.scaleF }).attachClassName(
+    'customersTable',
+  ),
   tableImg,
   { width: '100%' },
 );
 
-const postedSign = new Actor('div', objectivesParams.position, stage.scaleF).attachClassName(
-  'objectives',
-);
+const postedSign = new Actor('div', objectivesParams.position, {
+  scaleF: stage.scaleF,
+}).attachClassName('objectives');
 
 export const staticDecorations = new ActorsSet();
 

@@ -20,17 +20,20 @@ function appendPx(n) {
 const classNamesMap = new Map();
 
 export class Actor {
-  constructor(node, position, scaleF = 1) {
+  constructor(node, position, { scaleF, zIndex } = {}) {
     if (typeof node === 'string') {
       this.node = document.createElement(node);
     } else {
       this.node = node;
     }
-    this.position = { scaleF };
+    this.position = { scaleF: scaleF || 1 };
     this.linked = new Set();
     this.state = {};
     this.porops = {};
     this.setPosition(position);
+    if (zIndex) {
+      this.node.style['z-index'] = zIndex;
+    }
   }
 
   setPosition(position) {

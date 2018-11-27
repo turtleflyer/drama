@@ -35,7 +35,7 @@ export default class Faucet extends Actor {
       right: '0',
       'object-fit': 'contain',
     });
-    const jet = new Actor('div', jetPlacePosition);
+    const jet = new Actor('div', jetPlacePosition, { scaleF: stage.scaleF });
     setImg(jet, jetImg, { height: '100%' });
     this.linkActor(jet);
     this.params = {

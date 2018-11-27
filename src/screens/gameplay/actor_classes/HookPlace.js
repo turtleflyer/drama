@@ -6,7 +6,7 @@ import { customersTable } from '../role_sets/staticDecorations/staticDecorations
 
 export default class HookPlace extends Actor {
   constructor() {
-    super('div', customersTablePosition.hookPlace, stage.scaleF);
+    super('div', customersTablePosition.hookPlace, { scaleF: stage.scaleF });
     this.getAppendedAsChild(customersTable);
     this.attachClassName('hookPlace');
   }

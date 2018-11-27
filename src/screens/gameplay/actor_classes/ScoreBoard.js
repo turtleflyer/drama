@@ -5,7 +5,7 @@ import stage from '../../../role_sets/stage/stage';
 
 export default class ScoreBoard extends Actor {
   constructor() {
-    super('div', scorePosition, stage.scaleF);
+    super('div', scorePosition, { scaleF: stage.scaleF });
     this.attachClassName('scoreBoard');
     this.getAppendedAsChild(stage);
   }
