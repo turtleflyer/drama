@@ -21,9 +21,9 @@ export const levelsDescription = [
   {
     params: {
       mugsSpeed: 75,
-      initMugDensity: 4,
+      initMugDensity: 4.5,
       remainingTime: 60,
-      moneyToEarn: 1000,
+      moneyToEarn: 600,
       faucets: [
         { model: faucetModels.normalIPA, horizontalPosition: 40 },
         { model: faucetModels.normalIPA, horizontalPosition: 190 },
