@@ -13,8 +13,8 @@ import { totalsOnTable } from '../role_sets/totalsOnTable';
 import { timeDisplay } from '../role_sets/timeDisplay/timeDisplay';
 import { staticDecorations } from '../role_sets/staticDecorations/staticDecorations';
 import { resultOfGame } from '../role_sets/resultOfGame/resultOfGame';
+import { onResize } from '../../../assets/role_classes';
 
-// eslint-disable-next-line
 export const setA = new ActorsSet([
   mugs,
   dragMug,
@@ -33,3 +33,14 @@ export const setA = new ActorsSet([
 ]);
 
 setA.name = 'setA';
+
+export const resizeEverythingRole = onResize
+  .registerAction(setA, {
+    action({ target, event: { scaleF } }) {
+      if (target.node) {
+        // console.log('target: ', target);
+        target.refreshScaleF(scaleF);
+      }
+    },
+  })
+  .start();

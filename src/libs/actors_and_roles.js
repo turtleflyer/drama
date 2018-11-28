@@ -50,10 +50,10 @@ export class Actor {
     return this;
   }
 
-  refreshScale(newScale) {
+  refreshScaleF(newScale) {
     for (const actor of [this].concat([...this.linked])) {
       actor.position.scaleF = newScale;
-      actor.setPosition(actor);
+      actor.setPosition(actor.position);
     }
     return this;
   }
@@ -69,7 +69,7 @@ export class Actor {
     }
     const { linked } = this;
     if (link && !linked.has(actor)) {
-      actor.refreshScale(this.position.scaleF);
+      actor.refreshScaleF(this.position.scaleF);
       linked.add(actor);
     } else if (!link && linked.has(actor)) {
       linked.delete(actor);

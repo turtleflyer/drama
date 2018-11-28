@@ -7,14 +7,23 @@ import {
 import { stageDimension } from '../../assets/common_params';
 import './styles.css';
 
+export function defineScaleF() {
+  const { innerWidth } = window;
+  let scaleF = 1;
+  if (innerWidth < stageDimension.width) {
+    scaleF = innerWidth / stageDimension.width;
+  }
+  return scaleF;
+}
+
 class Stage extends ActorsSet {
-  constructor(dimension) {
+  constructor() {
     const stageNode = document.querySelector('#scene');
-    super([new Actor(stageNode, dimension, { zIndex: 10 })]);
+    super([new Actor(stageNode, stageDimension, { scaleF: defineScaleF(), zIndex: 10 })]);
     this.stageNode = stageNode;
     const { left, top } = this.getBoundingRect();
     this.origin = { x: left, y: top };
-    Object.assign(this, dimension);
+    Object.assign(this, stageDimension);
     this.params = {};
     this.defineLevel(0);
   }
@@ -42,7 +51,7 @@ class Stage extends ActorsSet {
   }
 }
 
-const stage = new Stage(stageDimension);
+const stage = new Stage();
 
 stage.name = 'stage';
 

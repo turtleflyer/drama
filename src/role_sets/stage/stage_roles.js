@@ -1,9 +1,9 @@
 /* eslint-env browser */
-import stage from './stage';
+import stage, { defineScaleF } from './stage';
 import { dragMug, followMouseRole, stopDragRole } from '../../screens/gameplay/role_sets/dragMug';
-import { setA } from '../../screens/gameplay/supersets/setA';
+import { setA, resizeEverythingRole } from '../../screens/gameplay/supersets/setA';
 import { registerActionOfType } from '../../libs/actors_and_roles';
-import { onPulseTick } from '../../assets/role_classes';
+import { onPulseTick, onResize } from '../../assets/role_classes';
 import { fallenMug } from '../../screens/gameplay/role_sets/fallenMug';
 import { setD } from '../../debug/setD';
 import { stopBubbling } from '../../libs/eventswork';
@@ -61,4 +61,18 @@ export const stopCarryingRole = registerActionOfType('mouseup', stage, {
   action() {
     stopDragRole.fire();
   },
+});
+
+const resizeStageRole = onResize
+  .registerAction(stage, {
+    action({ target, event: { scaleF } }) {
+      target.refreshScaleF(scaleF);
+    },
+  })
+  .start();
+
+window.addEventListener('resize', () => {
+  const scaleF = defineScaleF();
+  resizeEverythingRole.fire({ scaleF });
+  resizeStageRole.fire({ scaleF });
 });
