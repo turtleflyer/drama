@@ -3,6 +3,13 @@
 import imgIPAEmpty from '../actor_classes/Mug/img/IPA/IPA_mug_empty.png';
 import { importAll } from '../../../libs/helpers_lib';
 
+export const tuneGame = {
+  reputationDecrement: -0.15,
+  reputationIncrement: 0.06,
+  drunkFactorIncrement: 0.02,
+  beerMarkup: 3.5,
+};
+
 export const beerTypes = { IPA: '@@beerTypes/IPA' };
 
 export const mugTypes = {
@@ -25,19 +32,12 @@ export const beerCost = { [beerTypes.IPA]: 5 };
 
 export const mugsParams = {
   lineBase: 300,
-  initialDelay: 3,
+  initialDelay: 1,
   maxDelayToGenerateNext: 8,
 };
 
 export const pulseTimeout = 16;
 export const rotationAngleOfDayAndNight = 160;
-
-export const tuneGame = {
-  reputationDecrement: -0.05,
-  reputationIncrement: 0.03,
-  drunkFactorIncrement: 0.02,
-  beerMarkup: 3.5,
-};
 
 export const barPosition = {
   left: 75,
