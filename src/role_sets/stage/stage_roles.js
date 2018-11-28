@@ -13,18 +13,20 @@ import Worker from '../../webworkers/pulse.worker';
 const pulseWorker = new Worker();
 
 pulseWorker.onmessage = (e) => {
-  onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
-    /**
-     * Display debugging information
-     */
-    onPulseTick.fire(setD, stopBubbling({}));
-    if (e.data) {
-      debugPulse.info = e.data;
-    }
-    /**
-     *
-     */
-  });
+  if (!stage.state.paused) {
+    onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
+      /**
+       * Display debugging information
+       */
+      onPulseTick.fire(setD, stopBubbling({}));
+      if (e.data) {
+        debugPulse.info = e.data;
+      }
+      /**
+       *
+       */
+    });
+  }
 };
 
 // Prevents default behaviors in Firefox browser

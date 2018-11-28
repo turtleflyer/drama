@@ -1,11 +1,16 @@
 /* eslint-env browser */
 import { Actor, ActorsSet } from '../../../../libs/actors_and_roles';
-import { timeDisplayParams, rotationAngleOfDayAndNight } from '../../assets/gameplay_params';
+import {
+  timeDisplayParams,
+  rotationAngleOfDayAndNight,
+  gameResultsTypes,
+} from '../../assets/gameplay_params';
 import stage from '../../../../role_sets/stage/stage';
 import { setImg, updateStyle } from '../../../../libs/helpers_lib';
 import dayAndNightImg from './img/day_and_night.png';
 import { onPulseTick } from '../../../../assets/role_classes';
 import './styles.css';
+import { getResultRole } from '../resultOfGame/resultOfGame';
 
 const timeBox = new Actor('div', timeDisplayParams.position, {
   scaleF: stage.scaleF,
@@ -55,6 +60,8 @@ export const rotateDayAndNightRole = onPulseTick.registerAction(timeDisplay, {
       const progressBarLength = (1 - lifeTime / remainingTime)
         * timeDisplayParams.progressBarPosition.width;
       timeProgressBar.setPosition({ width: progressBarLength });
+    } else {
+      getResultRole.fire({ result: gameResultsTypes.LOST });
     }
   },
 });

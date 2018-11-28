@@ -10,8 +10,8 @@ export const levelsDescription = [
     params: {
       mugsSpeed: 75,
       initMugDensity: 4,
-      remainingTime: 200,
-      moneyToEarn: 1000,
+      remainingTime: 30,
+      moneyToEarn: 200,
       faucets: [{ model: faucetModels.normalIPA, horizontalPosition: 140 }],
     },
     initState: {
@@ -22,7 +22,7 @@ export const levelsDescription = [
     params: {
       mugsSpeed: 75,
       initMugDensity: 4,
-      remainingTime: 200,
+      remainingTime: 60,
       moneyToEarn: 1000,
       faucets: [
         { model: faucetModels.normalIPA, horizontalPosition: 40 },
