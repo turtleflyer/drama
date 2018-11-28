@@ -52,7 +52,6 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
     if (lastReputationValue !== stage.state.reputation) {
       refreshTimeOfNextBirth();
       lastReputationValue = stage.state.reputation;
-      console.log('reputation lost');
     }
 
     if (this.roleSet.size > 0) {
@@ -84,7 +83,6 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
     if (
       timeOfNextBirth
       && timeOfNextBirth - 200 < currTime
-      // && state.timeOfNextBirth - mugsParams.initialDelay * 1000 < currTime
     ) {
       const generatedMug = new Mug(determineTypeOfBeer(), stageWidth + 1000);
       generatedMug.params.bornTime = timeOfNextBirth;
