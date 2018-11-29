@@ -6,12 +6,20 @@ import {
 } from '../../screens/gameplay/assets/levels_description';
 import { stageDimension } from '../../assets/common_params';
 import './styles.css';
+import { defaultFontSize } from '../../screens/gameplay/assets/gameplay_params';
 
 export function defineScaleF() {
-  const { innerWidth } = window;
+  const innerSize = document.querySelector('body').getBoundingClientRect();
   let scaleF = 1;
-  if (innerWidth < stageDimension.width) {
-    scaleF = innerWidth / stageDimension.width;
+  if (innerSize.width < stageDimension.width) {
+    scaleF = innerSize.width / stageDimension.width;
+  }
+  const viewPortHeight = window.innerHeight - innerSize.top;
+  if (viewPortHeight < stageDimension.height) {
+    const altScaleF = viewPortHeight / stageDimension.height;
+    if (altScaleF < scaleF) {
+      scaleF = altScaleF;
+    }
   }
   return scaleF;
 }
@@ -19,7 +27,9 @@ export function defineScaleF() {
 class Stage extends ActorsSet {
   constructor() {
     const stageNode = document.querySelector('#scene');
-    super([new Actor(stageNode, stageDimension, { scaleF: defineScaleF(), zIndex: 10 })]);
+    const scaleF = defineScaleF();
+    super([new Actor(stageNode, stageDimension, { scaleF, zIndex: 10 })]);
+    stageNode.style['font-size'] = `${defaultFontSize * scaleF}px`;
     this.stageNode = stageNode;
     const { left, top } = this.getBoundingRect();
     this.origin = { x: left, y: top };

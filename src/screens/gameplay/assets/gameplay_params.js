@@ -10,6 +10,8 @@ export const tuneGame = {
   beerMarkup: 3.5,
 };
 
+export const defaultFontSize = 14;
+
 export const beerTypes = { IPA: '@@beerTypes/IPA' };
 
 export const mugTypes = {

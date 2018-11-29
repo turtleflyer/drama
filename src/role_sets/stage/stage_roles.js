@@ -9,6 +9,7 @@ import { setD } from '../../debug/setD';
 import { stopBubbling } from '../../libs/eventswork';
 import { debugPulse } from '../../debug/fps';
 import Worker from '../../webworkers/pulse.worker';
+import { defaultFontSize } from '../../screens/gameplay/assets/gameplay_params';
 
 const pulseWorker = new Worker();
 
@@ -67,6 +68,7 @@ const resizeStageRole = onResize
   .registerAction(stage, {
     action({ target, event: { scaleF } }) {
       target.refreshScaleF(scaleF);
+      stage.stageNode.style['font-size'] = `${defaultFontSize * scaleF}px`;
     },
   })
   .start();
