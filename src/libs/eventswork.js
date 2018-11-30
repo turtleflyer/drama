@@ -164,9 +164,11 @@ function getCallback(target, type, parent) {
         });
       });
     }
-    const grandEntry = elementsMap.get(getParent);
-    if (grandEntry) {
-      stageCallback(target, type, event, grandEntry.belong);
+    if (!target[nullKey]) {
+      const grandEntry = elementsMap.get(getParent);
+      if (grandEntry) {
+        stageCallback(target, type, event, grandEntry.belong);
+      }
     }
   }
 
