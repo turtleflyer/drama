@@ -19,7 +19,7 @@ class WinResult extends GameResult {
   constructor() {
     super();
     this.node.classList.add('gameResult--won');
-    this.node.insertAdjacentHTML('beforeend', '<p>You won!!!</p>');
+    this.node.innerHTML = '<p>You won!!!</p>';
     this.getAppendedAsChild(stage);
   }
 }
@@ -28,7 +28,7 @@ class LoseResult extends GameResult {
   constructor() {
     super();
     this.node.classList.add('gameResult--lost');
-    this.node.insertAdjacentHTML('beforeend', '<p>You lost!!!</p>');
+    this.node.innerHTML = '<p>You lost!!!</p>';
     this.getAppendedAsChild(stage);
   }
 }

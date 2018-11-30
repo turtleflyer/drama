@@ -38,12 +38,9 @@ staticDecorations.getInitializer(function () {
   bar.getAppendedAsChild(stage);
   customersTable.getAppendedAsChild(stage);
   [...postedSign.node.childNodes].forEach(child => postedSign.node.removeChild(child));
-  postedSign.node.insertAdjacentHTML(
-    'beforeend',
-    `<p>The goal is to get</p><p class="objectives--money">$${
-      stage.params.levelParams.moneyToEarn
-    }</p><p>before the night ends</p>`,
-  );
+  postedSign.node.innerHTML = `<p>The goal is to get</p><p class="objectives--money">$${
+    stage.params.levelParams.moneyToEarn
+  }</p><p>before the night ends</p>`;
   postedSign.getAppendedAsChild(stage);
   this.addElements([bar, customersTable, postedSign]);
 });
