@@ -263,9 +263,7 @@ export class RolesManipulator extends RoleSet {
     eventChain({
       roleSet: this,
       type: stopType,
-      action: () => {
-        [...this].forEach(role => role.stop());
-      },
+      action: ({ target: role }) => role.stop(),
     });
   }
 
