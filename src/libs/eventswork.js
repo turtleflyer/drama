@@ -20,14 +20,11 @@ const eventsStore = new Map();
 const elementsMap = new Map();
 const customEventTypes = new Set();
 const onAddElementActionsMap = new Map();
-const queueData = [];
-const queueMap = new Map();
-const countTypesInQueue = new Map();
 const exhaustTypesMap = new Map();
 const routine = { interpretTarget: t => t };
-const fireFromQueueType = Symbol('@@fireFromQueue');
 const propagationKey = Symbol('propagationKey');
-const nullKey = Symbol('@@eventwork/nullKey');
+const nullKey = Symbol('@@eventswork/nullKey');
+const parentKey = Symbol('@@eventswork/parentKey');
 
 /**
  *
@@ -144,36 +141,34 @@ function applyDefaultPropagation(event) {
  * @param {*} type
  * @returns {callback}
  */
-function getCallback(target, type, parent) {
+function getCallback(target, type) {
   // eslint-disable-next-line
-  function stageCallback(target, type, event, parent) {
-    let getParent = parent;
-    if (!parent) {
-      getParent = elementsMap.get(target).belong;
+  function stageCallback(target, type, event, ancestor) {
+    let getAncestor = ancestor;
+    if (!ancestor) {
+      getAncestor = target[parentKey] || elementsMap.get(target).belong;
     }
-    const mapOfTypes = getFromDeepMap(eventsStore, getParent).map;
+    const mapOfTypes = getFromDeepMap(eventsStore, getAncestor).map;
     if (mapOfTypes.has(type)) {
       [...mapOfTypes.get(type).entries()].forEach((typeEntry) => {
         const [eventID, handle] = typeEntry;
         handle({
           target,
-          roleSet: target[nullKey] ? parent : elementsMap.get(target).belong,
+          roleSet: target[parentKey] || elementsMap.get(target).belong,
           type,
           event,
           eventID,
         });
       });
     }
-    if (!target[nullKey]) {
-      const grandEntry = elementsMap.get(getParent);
-      if (grandEntry) {
-        stageCallback(target, type, event, grandEntry.belong);
-      }
+    const grandAncestorEntry = elementsMap.get(getAncestor);
+    if (grandAncestorEntry) {
+      stageCallback(target, type, event, grandAncestorEntry.belong);
     }
   }
 
   return (event) => {
-    stageCallback(target, type, applyDefaultPropagation(event), parent);
+    stageCallback(target, type, applyDefaultPropagation(event));
   };
 }
 
@@ -319,6 +314,9 @@ export class RoleSet extends Set {
 }
 
 const worker = new RoleSet([]);
+const fireFromQueueType = Symbol('@@eventswork/fireFromQueue');
+const queueData = [];
+const countTypesInQueue = new Map();
 
 worker.name = '@@worker';
 
@@ -369,21 +367,15 @@ export function fireEvent(target, type, event = {}) {
     if (target.size > 0) {
       [...target].forEach((e) => {
         if (!(event[propagationKey].stopPropagatingNested && e instanceof RoleSet)) {
-          const getMapOfTypeFomQueue = getFromDeepMap(queueMap, type).map;
-          if (!getMapOfTypeFomQueue.has(e)) {
-            queueData.push({ target: e, type, eventReference: { event } });
-            const countType = countTypesInQueue.get(type);
-            countTypesInQueue.set(type, countType ? countType + 1 : 1);
-            getMapOfTypeFomQueue.set(e.eventReference);
-          } else {
-            getMapOfTypeFomQueue.get(e).eventReference.event = event;
-          }
+          queueData.push({ target: e, type, event });
+          const countType = countTypesInQueue.get(type);
+          countTypesInQueue.set(type, countType ? countType + 1 : 1);
         }
       });
       fireEvent(worker, fireFromQueueType);
     } else {
       // If target is empty RoleSet the object with signal property is passing to callback
-      getCallback({ [nullKey]: true }, type, target)(event);
+      getCallback({ [nullKey]: true, [parentKey]: target }, type)(event);
     }
   } else {
     getCallback(target, type)(event);
@@ -477,13 +469,8 @@ eventChain(
     type: fireFromQueueType,
     action() {
       if (queueData.length > 0) {
-        const {
-          target,
-          type,
-          eventReference: { event },
-        } = queueData.shift();
+        const { target, type, event } = queueData.shift();
         fireEvent(target, type, event);
-        queueMap.get(type).delete(target);
 
         // Look if waitWhenTypeExhausted for this type has been activated
         const countType = countTypesInQueue.get(type) - 1;
@@ -500,5 +487,5 @@ eventChain(
       }
     },
   },
-  Symbol('@@queue'),
+  Symbol('@@eventswork/fromQueue'),
 );
