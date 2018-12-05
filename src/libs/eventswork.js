@@ -365,19 +365,21 @@ function waitGroupEvent(roleSet, type, eventID) {
 export function fireEvent(target, type, event = {}) {
   applyDefaultPropagation(event);
   if (target instanceof RoleSet) {
+    let toProcess;
     if (target.size > 0) {
-      [...target].forEach((e) => {
-        if (!(event[propagationKey].stopPropagatingNested && e instanceof RoleSet)) {
-          queueData.push({ target: e, type, event });
-          const countType = countTypesInQueue.get(type);
-          countTypesInQueue.set(type, countType ? countType + 1 : 1);
-        }
-      });
-      getCallback({ [nullKey]: true, [parentKey]: worker }, fireFromQueueType)();
+      toProcess = [...target];
     } else {
       // If target is empty RoleSet the object with signal property is passing to callback
-      getCallback({ [nullKey]: true, [parentKey]: target }, type)(event);
+      toProcess = [{ [nullKey]: true, [parentKey]: target }];
     }
+    toProcess.forEach((e) => {
+      if (!(event[propagationKey].stopPropagatingNested && e instanceof RoleSet)) {
+        queueData.push({ target: e, type, event });
+        const countType = countTypesInQueue.get(type);
+        countTypesInQueue.set(type, countType ? countType + 1 : 1);
+      }
+    });
+    getCallback({ [nullKey]: true, [parentKey]: worker }, fireFromQueueType)();
   } else {
     getCallback(target, type)(event);
   }
