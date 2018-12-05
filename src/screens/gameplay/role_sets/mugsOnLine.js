@@ -16,33 +16,34 @@ export const mugsOnLine = new ActorsSet();
 
 mugsOnLine.name = 'mugsOnLine';
 
-function determineTypeOfBeer() {
-  return beerTypes.IPA;
-}
-
-const { mugsSpeed, initMugDensity } = stage.params.levelParams;
 const { width: stageWidth } = stageDimension;
 let lastMug;
 let timeOfNextBirth;
 let lastReputationValue = stage.state.reputation;
 
-function refreshTimeOfNextBirth() {
+function determineTypeOfBeer() {
+  return beerTypes.IPA;
+}
+
+function refreshTimeOfNextBirth(takeThis) {
   if (stage.state.reputation < 0) {
     timeOfNextBirth = Infinity;
   } else {
     // prettier-ignore
-    const delay = (stageWidth * 0.6) / (initMugDensity * stage.state.reputation)
-      / (mugsSpeed / 1000);
+    const delay = (stageWidth * 0.6) / (takeThis.params.initMugDensity * stage.state.reputation)
+    / (takeThis.params.mugsSpeed / 1000);
     timeOfNextBirth = delay ? lastMug.params.bornTime + delay : Infinity;
   }
 }
 
 mugsOnLine.getInitializer(function () {
+  const { mugsSpeed, initMugDensity } = stage.params.levelParams;
+  Object.assign((this.params = {}), { mugsSpeed, initMugDensity });
   const mug = new Mug(determineTypeOfBeer(), stageWidth + 1000);
   mug.params.bornTime = performance.now() + mugsParams.initialDelay * 1000;
   this.addElements([mug]);
   lastMug = mug;
-  refreshTimeOfNextBirth();
+  refreshTimeOfNextBirth(this);
 });
 
 export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
@@ -50,7 +51,7 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
     const currTime = performance.now();
 
     if (lastReputationValue !== stage.state.reputation) {
-      refreshTimeOfNextBirth();
+      refreshTimeOfNextBirth(this.roleSet);
       lastReputationValue = stage.state.reputation;
     }
 
@@ -59,7 +60,9 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
         params: { bornTime },
       } = mug;
 
-      const calculatedPosition = stageWidth - (currTime - bornTime) * (mugsSpeed / 1000);
+      // eslint-disable-next-line
+      const calculatedPosition =
+        stageWidth - (currTime - bornTime) * (this.roleSet.params.mugsSpeed / 1000);
 
       // Check if the mug disappeared from the stage
       if (calculatedPosition < -(mug.position.width / 2)) {
@@ -80,15 +83,27 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
       getResultRole.fire({ result: gameResultsTypes.LOST });
     }
 
-    if (
-      timeOfNextBirth
-      && timeOfNextBirth - 200 < currTime
-    ) {
+    if (timeOfNextBirth && timeOfNextBirth - 200 < currTime) {
       const generatedMug = new Mug(determineTypeOfBeer(), stageWidth + 1000);
       generatedMug.params.bornTime = timeOfNextBirth;
       lastMug = generatedMug;
       this.roleSet.addElement(generatedMug);
-      refreshTimeOfNextBirth();
+      refreshTimeOfNextBirth(this.roleSet);
+
+      /**
+       *
+       * Block to debug
+       *
+       */
+      // const generatedMugs = [];
+      // for (let i = 0; i < 1; i++) {
+      //   const gen = new Mug(determineTypeOfBeer(), stageWidth + 1000);
+      //   generatedMugs.push(gen);
+      //   gen.params.bornTime = timeOfNextBirth;
+      //   lastMug = gen;
+      // }
+      // this.roleSet.addElements(generatedMugs);
+      // refreshTimeOfNextBirth(this.roleSet);
     }
   },
 });

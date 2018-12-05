@@ -34,3 +34,19 @@ export const levelsDescription = [
     },
   },
 ];
+
+/**
+ * For debugging purpose
+ */
+levelsDescription[100] = {
+  params: {
+    mugsSpeed: 30,
+    initMugDensity: 10,
+    remainingTime: Infinity,
+    moneyToEarn: Infinity,
+    faucets: [{ model: faucetModels.normalIPA, horizontalPosition: 140 }],
+  },
+  initState: {
+    money: 100,
+  },
+};

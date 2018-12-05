@@ -209,3 +209,12 @@ export const gameResultsParams = {
     height: 150,
   },
 };
+
+export const pourOutAreaParams = {
+  position: {
+    right: 0,
+    bottom: 0,
+    height: 250,
+    width: 400,
+  },
+};
