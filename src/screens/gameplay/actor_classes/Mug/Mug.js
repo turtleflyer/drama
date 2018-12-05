@@ -33,7 +33,6 @@ export default class Mug extends Actor {
       volume,
       empty,
     };
-    this.params.overfilledAnimationPhaseTime = (volume * 1000) / this.params.numberOfFillingPhases;
     this.waitingState = {};
     this.getAppendedAsChild(stage);
     this.born();
@@ -65,21 +64,32 @@ export default class Mug extends Actor {
   }
 
   updateFillRepresentation() {
-    const { overfilled, fillingPhase, overfilledPhase } = this.state;
-    const { fillingPhasesImgs, overfilledPhasesImgs, empty } = this.params;
+    const {
+      state: { overfilled, total: totalBeer, overfilledPhase },
+      params: {
+        fillingPhasesImgs, numberOfFillingPhases, overfilledPhasesImgs, empty,
+      },
+    } = this;
     if (overfilled) {
       setImg(this, overfilledPhasesImgs[overfilledPhase]);
-    } else if (!fillingPhase) {
+    } else if (!totalBeer) {
       setImg(this, empty);
     } else {
-      setImg(this, fillingPhasesImgs[fillingPhase]);
+      const numberOfSteps = totalBeer * (numberOfFillingPhases + 0.3) - 0.3;
+      if (numberOfSteps < 0) {
+        setImg(this, empty);
+      } else {
+        setImg(this, fillingPhasesImgs[Math.floor(numberOfSteps)]);
+      }
     }
     return this;
   }
 
   turnIntoMoney() {
-    const { beerType: targetBeerType } = this;
-    const { total: beerTotalAmount } = this.state;
+    const {
+      beerType: targetBeerType,
+      state: { total: beerTotalAmount },
+    } = this;
     const { drunkFactor } = stage.state;
     const {
       reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
@@ -150,7 +160,6 @@ export default class Mug extends Actor {
       beers: state.beers || {},
       total: state.total || 0,
       overfilled: state.overfilled || false,
-      fillingPhase: state.fillingPhase || -1,
     });
     this.updateNextThreshold();
     this.setZIndex(75);

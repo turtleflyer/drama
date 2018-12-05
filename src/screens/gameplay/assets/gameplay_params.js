@@ -36,6 +36,7 @@ export const mugsParams = {
   lineBase: 300,
   initialDelay: 1,
   maxDelayToGenerateNext: 8,
+  overfillPhaseDuration: 800,
 };
 
 export const pulseTimeout = 16;
