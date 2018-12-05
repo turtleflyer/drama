@@ -30,6 +30,12 @@ pulseWorker.onmessage = (e) => {
   }
 };
 
+registerActionOfType('contextmenu', stage, {
+  action({ event }) {
+    event.preventDefault();
+  },
+}).start();
+
 // Prevents default behaviors in Firefox browser
 registerActionOfType('dragstart', stage, {
   action({ event }) {
