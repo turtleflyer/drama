@@ -17,24 +17,20 @@ faucets.getInitializer(function () {
 
 faucets.name = 'faucets';
 
-export const SwitchFaucetClass = new RoleClass(Symbol('switchFaucet'));
-
-export const switchFaucetRole = SwitchFaucetClass.registerAction(faucets, {
-  action({ target: faucet }) {
-    const { switchType, beerTypes } = faucet.params;
-    const { state } = faucet;
-    if (switchType !== switchTypes.BROKEN) {
-      state.phase = 1 - state.phase;
-      faucet.switchState();
-      if (switchType === switchTypes.DUAL) {
-        state.beer = beerTypes[state.phase];
-      } else if (switchType === switchTypes.NORMAL) {
-        state.isOpened = !state.isOpened;
-        faucet.runJet();
-      }
+faucets.switchFaucet = function (faucet) {
+  const { switchType, beerTypes } = faucet.params;
+  const { state } = faucet;
+  if (switchType !== switchTypes.BROKEN) {
+    state.phase = 1 - state.phase;
+    faucet.switchState();
+    if (switchType === switchTypes.DUAL) {
+      state.beer = beerTypes[state.phase];
+    } else if (switchType === switchTypes.NORMAL) {
+      state.isOpened = !state.isOpened;
+      faucet.runJet();
     }
-  },
-}).start();
+  }
+};
 
 export const countExpensesRole = onPulseTick.registerAction(faucets, {
   action({ target: faucet }) {

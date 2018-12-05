@@ -1,5 +1,5 @@
 import { ActorsSet, registerActionOfType } from '../../../libs/actors_and_roles';
-import { faucets, SwitchFaucetClass } from './faucets';
+import { faucets } from './faucets';
 import FaucetHandle from '../actor_classes/FaucetHandle';
 
 export const faucetHandles = new ActorsSet();
@@ -14,6 +14,6 @@ export const switchFaucetStateRole = registerActionOfType('click', faucetHandles
     event.preventDefault();
     event.stopPropagation();
     const { faucet } = handle;
-    SwitchFaucetClass.fire(faucet);
+    faucets.switchFaucet(faucet);
   },
 }).start();
