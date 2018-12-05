@@ -3,7 +3,7 @@
  *  Map(
  *    [roleSet, Map(
  *      [type, Map(
- *        [eventID, [...resolve]]
+ *        [eventID, promiseHandle]
  *      )]
  *    )]
  *  )
@@ -167,7 +167,7 @@ function getCallback(target, type) {
     }
   }
 
-  return (event) => {
+  return (event = {}) => {
     stageCallback(target, type, applyDefaultPropagation(event));
   };
 }
@@ -315,6 +315,7 @@ export class RoleSet extends Set {
 
 const worker = new RoleSet([]);
 const fireFromQueueType = Symbol('@@eventswork/fireFromQueue');
+const fireFromQueueId = Symbol('@@eventswork/fireFromQueueId');
 const queueData = [];
 const countTypesInQueue = new Map();
 
@@ -372,7 +373,7 @@ export function fireEvent(target, type, event = {}) {
           countTypesInQueue.set(type, countType ? countType + 1 : 1);
         }
       });
-      fireEvent(worker, fireFromQueueType);
+      getCallback({ [nullKey]: true, [parentKey]: worker }, fireFromQueueType)();
     } else {
       // If target is empty RoleSet the object with signal property is passing to callback
       getCallback({ [nullKey]: true, [parentKey]: target }, type)(event);
@@ -483,9 +484,12 @@ eventChain(
 
         // Next call of fireEvent of fireFomQueueType is doing asynchronously to make a chance to
         // fulfill the according promise and create the new one for the next target form the queue
-        Promise.resolve().then(() => fireEvent(worker, fireFromQueueType));
+        // prettier-ignore
+        Promise.resolve().then(
+          () => getCallback({ [nullKey]: true, [parentKey]: worker }, fireFromQueueType)(),
+        );
       }
     },
   },
-  Symbol('@@eventswork/fromQueue'),
+  fireFromQueueId,
 );
