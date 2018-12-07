@@ -1,8 +1,8 @@
 /* eslint-env browser */
 import { ActorsSet, RoleClass, Actor } from '../../../../libs/actors_and_roles';
-import { gameResultsParams, gameResultsTypes } from '../../assets/gameplay_params';
 import stage from '../../../../role_sets/stage/stage';
 import './styles.css';
+import { gameResultsParams, gameResultsTypes } from './resultOfGame_params';
 
 export const resultOfGame = new ActorsSet();
 

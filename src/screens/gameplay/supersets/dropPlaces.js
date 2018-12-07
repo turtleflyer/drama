@@ -1,12 +1,12 @@
 /* eslint-env browser */
 import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
-import { mugPlaces } from '../role_sets/mugPlaces';
-import { hookPlace } from '../role_sets/hookPlace';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
-import { fallenMug } from '../role_sets/fallenMug';
-import { fillingMugs } from '../role_sets/fillingMugs';
-import { waitingMugs } from '../role_sets/waitingMugs';
+import { fallenMug } from '../role_sets/fallenMug/fallenMug';
 import { pourOutArea } from '../role_sets/pourOutArea/pourOutArea';
+import { fillingMugs } from '../role_sets/fillingMugs/fillingMugs';
+import { hookPlace } from '../role_sets/hookPlace/hookPlace';
+import { mugPlaces } from '../role_sets/mugPlaces/mugPlaces';
+import { waitingMugs } from '../role_sets/waitingMugs/waitingMugs';
 
 // const signalElement = Symbol('@@dropPlaces/signalElement');
 const signalSet = new ActorsSet();

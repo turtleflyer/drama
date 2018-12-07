@@ -1,8 +1,8 @@
 /* eslint-env browser */
-import { dragMug } from '../role_sets/dragMug';
+import { dragMug } from '../role_sets/dragMug/dragMug';
 import { ActorsSet, registerActionOfType } from '../../../libs/actors_and_roles';
-import { mugsOnLine } from '../role_sets/mugsOnLine';
-import { fillingMugs } from '../role_sets/fillingMugs';
+import { mugsOnLine } from '../role_sets/mugs/mugsOnLine/mugsOnLine';
+import { fillingMugs } from '../role_sets/fillingMugs/fillingMugs';
 
 // eslint-disable-next-line
 export const mugs = new ActorsSet([mugsOnLine, fillingMugs]);

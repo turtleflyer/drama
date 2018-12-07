@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { Actor, ActorsSet } from '../../../../libs/actors_and_roles';
-import { pourOutAreaParams } from '../../assets/gameplay_params';
+import { pourOutAreaParams } from './pourOutArea_params';
 import stage from '../../../../role_sets/stage/stage';
 import './styles.css';
 

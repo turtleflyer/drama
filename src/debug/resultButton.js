@@ -4,7 +4,7 @@ import {
   getResultRole,
   resultOfGame,
 } from '../screens/gameplay/role_sets/resultOfGame/resultOfGame';
-import { gameResultsTypes } from '../screens/gameplay/assets/gameplay_params';
+import { gameResultsTypes } from '../screens/gameplay/role_sets/resultOfGame/resultOfGame_params';
 
 const button = new Actor('button', { width: 100, height: 50 });
 document.querySelector('body').appendChild(button.node);

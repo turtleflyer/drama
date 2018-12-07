@@ -1,16 +1,13 @@
 /* eslint-env browser */
 import { Actor, ActorsSet } from '../../../../libs/actors_and_roles';
-import {
-  timeDisplayParams,
-  rotationAngleOfDayAndNight,
-  gameResultsTypes,
-} from '../../assets/gameplay_params';
 import stage from '../../../../role_sets/stage/stage';
 import { setImg, updateStyle } from '../../../../libs/helpers_lib';
 import dayAndNightImg from './img/day_and_night.png';
 import { onPulseTick } from '../../../../assets/role_classes';
 import './styles.css';
 import { getResultRole } from '../resultOfGame/resultOfGame';
+import { timeDisplayParams, rotationAngleOfDayAndNight } from './timeDisplay_params';
+import { gameResultsTypes } from '../resultOfGame/resultOfGame_params';
 
 const timeBox = new Actor('div', timeDisplayParams.position, {
   scaleF: stage.scaleF,

@@ -2,14 +2,10 @@
 import { ActorsSet, Actor } from '../../../../libs/actors_and_roles';
 import stage from '../../../../role_sets/stage/stage';
 import tableImg from './img/table.png';
-import {
-  customersTablePosition,
-  barPosition,
-  objectivesParams,
-} from '../../assets/gameplay_params';
 import { setImg } from '../../../../libs/helpers_lib';
 import barImg from './img/bar.png';
 import './styles.css';
+import { customersTablePosition, barPosition, objectivesParams } from './staticDecorations_params';
 
 export const bar = setImg(
   new Actor('div', barPosition, { scaleF: stage.scaleF, zIndex: 60 }),

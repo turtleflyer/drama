@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { pulseTimeout } from '../screens/gameplay/assets/gameplay_params';
+import { pulseTimeout } from '../role_sets/stage/gameplay_params';
 
 let lastTime;
 let counter = -1;

@@ -1,12 +1,9 @@
 /* eslint-env browser */
 import { ActorsSet, Actor } from '../../libs/actors_and_roles';
-import {
-  levelsDescription,
-  commonInitState,
-} from '../../screens/gameplay/assets/levels_description';
 import { stageDimension } from '../../assets/common_params';
 import './styles.css';
-import { defaultFontSize } from '../../screens/gameplay/assets/gameplay_params';
+import { defaultFontSize } from './gameplay_params';
+import { levelsDescription, commonInitState } from './levels_description';
 
 export function defineScaleF() {
   const innerSize = document.querySelector('body').getBoundingClientRect();
