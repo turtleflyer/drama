@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { ActorsSet, RoleClass, Actor } from '../../../../libs/actors_and_roles';
-import stage from '../../../../role_sets/stage/stage';
+import stage from '../../../../stage/stage';
 import './styles.css';
 import { gameResultsParams, gameResultsTypes } from './resultOfGame_params';
 

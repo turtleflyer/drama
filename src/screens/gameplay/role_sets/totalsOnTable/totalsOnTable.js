@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { ActorsSet } from '../../../../libs/actors_and_roles';
-import { onPulseTick } from '../../../../assets/role_classes';
+import { onPulseTick } from '../../../../stage/role_classes';
 import TotalOnTable from './TotalOnTableClass';
 import { damagesParams } from '../damages/damages_params';
 import { totalsParams } from './totalsOnTable_params';

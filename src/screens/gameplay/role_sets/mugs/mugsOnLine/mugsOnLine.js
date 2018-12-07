@@ -1,12 +1,11 @@
 /* eslint-env browser */
 import { ActorsSet } from '../../../../../libs/actors_and_roles';
 import Mug from '../MugClass';
-import { stageDimension } from '../../../../../assets/common_params';
-import stage from '../../../../../role_sets/stage/stage';
-import { onPulseTick } from '../../../../../assets/role_classes';
+import stage from '../../../../../stage/stage';
+import { onPulseTick } from '../../../../../stage/role_classes';
 import { getResultRole } from '../../resultOfGame/resultOfGame';
 import { dragMug } from '../../dragMug/dragMug';
-import { beerTypes, tuneGame } from '../../../../../role_sets/stage/gameplay_params';
+import { beerTypes, tuneGame, stageDimension } from '../../../../../stage/gameplay_params';
 import { gameResultsTypes } from '../../resultOfGame/resultOfGame_params';
 import { fillingMugs } from '../../fillingMugs/fillingMugs';
 import { mugsParams } from '../mugs_params';

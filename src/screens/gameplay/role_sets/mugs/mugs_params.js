@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import imgIPAEmpty from './img/IPA/IPA_mug_empty.png';
 import { importAll } from '../../../../libs/helpers_lib';
-import { beerTypes } from '../../../../role_sets/stage/gameplay_params';
+import { beerTypes } from '../../../../stage/gameplay_params';
 
 export const mugTypes = {
   [beerTypes.IPA]: {

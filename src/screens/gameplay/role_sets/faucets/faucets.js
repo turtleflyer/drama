@@ -1,10 +1,10 @@
 import { ActorsSet } from '../../../../libs/actors_and_roles';
 import Faucet from './FaucetClass';
-import stage from '../../../../role_sets/stage/stage';
-import { onPulseTick } from '../../../../assets/role_classes';
+import stage from '../../../../stage/stage';
+import { onPulseTick } from '../../../../stage/role_classes';
 import { damages } from '../damages/damages';
 import Damage from '../damages/DamageClass';
-import { beerCost } from '../../../../role_sets/stage/gameplay_params';
+import { beerCost } from '../../../../stage/gameplay_params';
 import { switchTypes } from './faucets_params';
 import { damagesParams } from '../damages/damages_params';
 

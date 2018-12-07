@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { beerTypes } from '../../../../role_sets/stage/gameplay_params';
+import { beerTypes } from '../../../../stage/gameplay_params';
 import { importAll } from '../../../../libs/helpers_lib';
 
 export const switchTypes = {

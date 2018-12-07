@@ -2,7 +2,7 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
 import jetImg from './img/jet.gif';
-import stage from '../../../../role_sets/stage/stage';
+import stage from '../../../../stage/stage';
 import { bar } from '../staticDecorations/staticDecorations';
 import { switchTypes } from './faucets_params';
 

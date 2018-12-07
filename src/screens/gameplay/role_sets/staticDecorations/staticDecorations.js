@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { ActorsSet, Actor } from '../../../../libs/actors_and_roles';
-import stage from '../../../../role_sets/stage/stage';
+import stage from '../../../../stage/stage';
 import tableImg from './img/table.png';
 import { setImg } from '../../../../libs/helpers_lib';
 import barImg from './img/bar.png';

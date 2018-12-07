@@ -1,9 +1,9 @@
 /* eslint-env browser */
 import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
-import stage from '../../../../role_sets/stage/stage';
+import stage from '../../../../stage/stage';
 import './styles.css';
-import { tuneGame, beerCost } from '../../../../role_sets/stage/gameplay_params';
+import { tuneGame, beerCost } from '../../../../stage/gameplay_params';
 import { mugsParams, mugTypes } from './mugs_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';

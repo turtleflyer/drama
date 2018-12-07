@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { Actor } from '../../../../libs/actors_and_roles';
-import stage from '../../../../role_sets/stage/stage';
+import stage from '../../../../stage/stage';
 
 export default class MugPlace extends Actor {
   constructor(faucet) {

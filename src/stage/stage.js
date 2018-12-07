@@ -1,8 +1,7 @@
 /* eslint-env browser */
-import { ActorsSet, Actor } from '../../libs/actors_and_roles';
-import { stageDimension } from '../../assets/common_params';
+import { ActorsSet, Actor } from '../libs/actors_and_roles';
 import './styles.css';
-import { defaultFontSize } from './gameplay_params';
+import { defaultFontSize, stageDimension } from './gameplay_params';
 import { levelsDescription, commonInitState } from './levels_description';
 
 export function defineScaleF() {

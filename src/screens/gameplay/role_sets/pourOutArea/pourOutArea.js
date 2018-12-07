@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import { Actor, ActorsSet } from '../../../../libs/actors_and_roles';
 import { pourOutAreaParams } from './pourOutArea_params';
-import stage from '../../../../role_sets/stage/stage';
+import stage from '../../../../stage/stage';
 import './styles.css';
 
 const emptyingPhaseStyle = 'pourOutArea--emptying';

@@ -1,5 +1,5 @@
 import { RolesManipulator } from './libs/actors_and_roles';
-import { dragRole, stopCarryingRole, dropMugRole } from './role_sets/stage/stage_roles';
+import { dragRole, stopCarryingRole, dropMugRole } from './stage/stage_roles';
 import { countExpensesRole } from './screens/gameplay/role_sets/faucets/faucets';
 import { updateMoneyRole } from './screens/gameplay/role_sets/scoreBoard/scoreBoard';
 import { rotateDayAndNightRole } from './screens/gameplay/role_sets/timeDisplay/timeDisplay';

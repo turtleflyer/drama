@@ -1,4 +1,7 @@
-/* eslint-env browser */
+export const stageDimension = {
+  width: 1024,
+  height: 640,
+};
 
 export const tuneGame = {
   reputationDecrement: -0.15,

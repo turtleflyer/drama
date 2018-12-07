@@ -1,5 +1,5 @@
 import { ActorsSet } from '../../../../libs/actors_and_roles';
-import { onPulseTick } from '../../../../assets/role_classes';
+import { onPulseTick } from '../../../../stage/role_classes';
 import ScoreBoard from './ScoreBoardClass';
 
 // eslint-disable-next-line

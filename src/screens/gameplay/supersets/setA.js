@@ -9,7 +9,7 @@ import { damages } from '../role_sets/damages/damages';
 import { timeDisplay } from '../role_sets/timeDisplay/timeDisplay';
 import { staticDecorations } from '../role_sets/staticDecorations/staticDecorations';
 import { resultOfGame } from '../role_sets/resultOfGame/resultOfGame';
-import { onResize } from '../../../assets/role_classes';
+import { onResize } from '../../../stage/role_classes';
 import { scoreBoard } from '../role_sets/scoreBoard/scoreBoard';
 import { totalsOnTable } from '../role_sets/totalsOnTable/totalsOnTable';
 import { customersReactions } from '../role_sets/customersReactions/customersReactions';

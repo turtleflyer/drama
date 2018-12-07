@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import { ActorsSet } from '../libs/actors_and_roles';
-import stage from '../role_sets/stage/stage';
-import { onPulseTick } from '../assets/role_classes';
+import stage from '../stage/stage';
+import { onPulseTick } from '../stage/role_classes';
 
 const info = document.createElement('div');
 document.querySelector('body').appendChild(info);

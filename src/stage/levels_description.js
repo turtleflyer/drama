@@ -1,4 +1,4 @@
-import { faucetModels } from '../../screens/gameplay/role_sets/faucets/faucets_params';
+import { faucetModels } from '../screens/gameplay/role_sets/faucets/faucets_params';
 
 export const commonInitState = {
   reputation: 1,

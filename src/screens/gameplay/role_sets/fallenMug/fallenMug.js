@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import { ActorsSet } from '../../../../libs/actors_and_roles';
-import stage from '../../../../role_sets/stage/stage';
-import { tuneGame } from '../../../../role_sets/stage/gameplay_params';
+import stage from '../../../../stage/stage';
+import { tuneGame } from '../../../../stage/gameplay_params';
 
 // eslint-disable-next-line
 export const fallenMug = new ActorsSet();

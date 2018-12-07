@@ -2,7 +2,7 @@
 import { ActorsSet, registerActionOfType } from '../libs/actors_and_roles';
 import { startStopLevel } from '../roles_manipulators';
 import { setA } from '../screens/gameplay/supersets/setA';
-import stage from '../role_sets/stage/stage';
+import stage from '../stage/stage';
 
 document
   .querySelector('body')
