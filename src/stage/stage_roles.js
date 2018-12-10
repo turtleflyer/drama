@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import stage, { defineScaleF } from './stage';
-import { dragMug, followMouseRole, stopDragRole } from '../screens/gameplay/role_sets/dragMug/dragMug';
+import { dragMug } from '../screens/gameplay/role_sets/dragMug/dragMug';
 import { setA, resizeEverythingRole } from '../screens/gameplay/supersets/setA';
 import { registerActionOfType } from '../libs/actors_and_roles';
 import { onPulseTick, onResize } from './role_classes';
@@ -10,6 +10,7 @@ import { stopBubbling } from '../libs/eventswork';
 import { debugPulse } from '../debug/fps';
 import Worker from '../webworkers/pulse.worker';
 import { defaultFontSize } from './gameplay_params';
+import { followMouseRole, stopDragRole } from '../screens/gameplay/supersets/draggable';
 
 const pulseWorker = new Worker();
 

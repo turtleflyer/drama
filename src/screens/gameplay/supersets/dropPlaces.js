@@ -7,14 +7,11 @@ import { fillingMugs } from '../role_sets/fillingMugs/fillingMugs';
 import { hookPlace } from '../role_sets/hookPlace/hookPlace';
 import { mugPlaces } from '../role_sets/mugPlaces/mugPlaces';
 import { waitingMugs } from '../role_sets/waitingMugs/waitingMugs';
+import { pouringMug } from '../role_sets/pouringMug/pouringMug';
 
-// const signalElement = Symbol('@@dropPlaces/signalElement');
 const signalSet = new ActorsSet();
 
 signalSet.name = 'signalSet';
-// signalSet.getInitializer(function () {
-//   this.addElement(signalElement);
-// });
 
 export const dropPlaces = new ActorsSet([hookPlace, mugPlaces, pourOutArea, signalSet]);
 
@@ -25,11 +22,14 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
     action({ target: place, roleSet, event: { mug, gotToPlace } }) {
       const placeRect = place.node && place.node.getBoundingClientRect();
       const mugRect = mug.getBoundingRect();
+      const {
+        state: { placed: isPlaced, pouring },
+      } = mug;
 
       if (gotToPlace) {
         // Check if the mug was tested to be placed in all the possible places
         if (roleSet === signalSet) {
-          if (!mug.state.placed) {
+          if (!isPlaced) {
             fallenMug.addElement(mug);
           }
         } else if (percentOverlap(placeRect, mugRect) > 0.75) {
@@ -55,10 +55,13 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
               break;
           }
         }
-      } else if (roleSet === pourOutArea) {
-        if (mug.state.total && percentOverlap(placeRect, mugRect) > 0.75) {
-          pourOutArea.emptyMug(mug);
-        }
+      } else if (
+        roleSet === pourOutArea
+        && !pouring
+        && mug.state.total
+        && percentOverlap(placeRect, mugRect) > 0.75
+      ) {
+        pouringMug.addElement(mug);
       }
 
       // Block existing only for the time of developing
