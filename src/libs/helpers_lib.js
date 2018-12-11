@@ -43,3 +43,8 @@ export function percentOverlap(targetBound, dragBound) {
     * linearOverlap(tTop, tBottom, dTop, dBottom);
   return overlapArea / dragArea;
 }
+
+export function removeElementWhenAnimationEnds({ roleSet, target }) {
+  roleSet.deleteElement(target);
+  target.remove();
+}

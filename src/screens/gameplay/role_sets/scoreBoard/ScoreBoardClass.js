@@ -2,9 +2,9 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
 import './styles.css';
-import { getResultRole } from '../resultOfGame/resultOfGame';
 import { gameResultsTypes } from '../resultOfGame/resultOfGame_params';
 import { scorePosition } from './scoreBoard_params';
+import { resultOfGame } from '../resultOfGame/resultOfGame';
 
 export default class ScoreBoard extends Actor {
   constructor() {
@@ -21,9 +21,9 @@ export default class ScoreBoard extends Actor {
       },
     } = stage;
     if (money <= 0) {
-      getResultRole.fire({ result: gameResultsTypes.LOST });
+      resultOfGame.getResult(gameResultsTypes.LOST);
     } else if (money >= moneyToEarn) {
-      getResultRole.fire({ result: gameResultsTypes.WON });
+      resultOfGame.getResult(gameResultsTypes.WON);
     }
     this.node.textContent = `$${Math.round(stage.state.money)}`;
   }

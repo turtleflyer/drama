@@ -1,20 +1,21 @@
 /* eslint-env browser */
-import { ActorsSet } from '../../../../libs/actors_and_roles';
+import { ActorsSet, registerActionOfType } from '../../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../../stage/role_classes';
 import stage from '../../../../stage/stage';
 import { customersReactions } from '../customersReactions/customersReactions';
 import { waitingMugParams } from './waitingMugs_params';
+import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
 
 export const waitingMugs = new ActorsSet();
 
 waitingMugs.name = 'waitingMugs';
 
-waitingMugs.onAddActorEvent(function ({ target: mug }) {
+registerActionOfType('animationend', waitingMugs, {
+  action: removeElementWhenAnimationEnds,
+}).start();
+
+waitingMugs.onAddActorEvent(({ target: mug }) => {
   mug.carriedToCustomer();
-  window.setTimeout(() => {
-    this.deleteElement(mug);
-    mug.remove();
-  }, waitingMugParams.lifeTime);
 });
 
 export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {

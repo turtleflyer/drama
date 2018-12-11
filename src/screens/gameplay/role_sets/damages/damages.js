@@ -1,13 +1,28 @@
 /* eslint-env browser */
-import { ActorsSet } from '../../../../libs/actors_and_roles';
+import { ActorsSet, registerActionOfType, Actor } from '../../../../libs/actors_and_roles';
+import stage from '../../../../stage/stage';
+import { damagesParams } from './damages_params';
+import './styles.css';
+import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
+
+class Damage extends Actor {
+  constructor(faucet, phase) {
+    super('div', damagesParams.position[phase], { scaleF: stage.scaleF, zIndex: 72 });
+    this.node.textContent = '-$5';
+    this.getAppendedAsChild(faucet);
+    this.attachClassName('damages');
+  }
+}
 
 // eslint-disable-next-line
 export const damages = new ActorsSet();
 
 damages.name = 'damages';
 
-damages.onAddActorEvent(function ({ target: damage }) {
-  window.setTimeout(() => {
-    this.deleteElement(damage);
-  });
-});
+damages.addDamage = function (faucet, phase) {
+  this.addElement(new Damage(faucet, phase));
+};
+
+registerActionOfType('animationend', damages, {
+  action: removeElementWhenAnimationEnds,
+}).start();

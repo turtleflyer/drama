@@ -3,13 +3,13 @@ import { ActorsSet } from '../../../../../libs/actors_and_roles';
 import Mug from '../MugClass';
 import stage from '../../../../../stage/stage';
 import { onPulseTick } from '../../../../../stage/role_classes';
-import { getResultRole } from '../../resultOfGame/resultOfGame';
 import { dragMug } from '../../dragMug/dragMug';
 import { beerTypes, tuneGame, stageDimension } from '../../../../../stage/gameplay_params';
 import { gameResultsTypes } from '../../resultOfGame/resultOfGame_params';
 import { fillingMugs } from '../../fillingMugs/fillingMugs';
-import { mugsParams } from '../mugs_params';
 import { waitingMugs } from '../../waitingMugs/waitingMugs';
+import { magsCreatingParams } from '../mugs_params';
+import { resultOfGame } from '../../resultOfGame/resultOfGame';
 
 export const mugsOnLine = new ActorsSet();
 
@@ -39,7 +39,7 @@ mugsOnLine.getInitializer(function () {
   const { mugsSpeed, initMugDensity } = stage.params.levelParams;
   Object.assign((this.params = {}), { mugsSpeed, initMugDensity });
   const mug = new Mug(determineTypeOfBeer(), stageWidth + 1000);
-  mug.params.bornTime = performance.now() + mugsParams.initialDelay * 1000;
+  mug.params.bornTime = performance.now() + magsCreatingParams.initialDelay * 1000;
   this.addElements([mug]);
   lastMug = mug;
   refreshTimeOfNextBirth(this);
@@ -76,10 +76,10 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
       && waitingMugs.size === 0
       && fillingMugs.size === 0
       && timeOfNextBirth
-      && timeOfNextBirth - currTime > mugsParams.maxDelayToGenerateNext * 1000
+      && timeOfNextBirth - currTime > magsCreatingParams.maxDelayToGenerateNext * 1000
     ) {
       timeOfNextBirth = null;
-      getResultRole.fire({ result: gameResultsTypes.LOST });
+      resultOfGame.getResult(gameResultsTypes.LOST);
     }
 
     if (timeOfNextBirth && timeOfNextBirth - 200 < currTime) {

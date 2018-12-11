@@ -8,8 +8,6 @@ export const totalsParams = {
     top: 70,
   },
 
-  lifeTime: 3000,
-
   creationTimeout: 200,
 
   valueToCreate: 5,

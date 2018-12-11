@@ -1,9 +1,9 @@
 /* eslint-env browser */
-import { ActorsSet } from '../../../../libs/actors_and_roles';
+import { ActorsSet, registerActionOfType } from '../../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../../stage/role_classes';
 import TotalOnTable from './TotalOnTableClass';
-import { damagesParams } from '../damages/damages_params';
 import { totalsParams } from './totalsOnTable_params';
+import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
 
 const signalElement = Symbol('@@totalsOnTable/signalElement');
 let elementsToCreate;
@@ -16,15 +16,6 @@ totalsOnTable.getInitializer(function () {
 
 totalsOnTable.name = 'totalsOnTable';
 
-totalsOnTable.onAddActorEvent(function ({ target: totalPiece }) {
-  if (totalPiece !== signalElement) {
-    window.setTimeout(() => {
-      this.deleteElement(totalPiece);
-      totalPiece.remove();
-    }, damagesParams.lifeTime);
-  }
-});
-
 totalsOnTable.createNew = function (isPositive, horizontalPosition) {
   elementsToCreate.push({
     value: isPositive ? totalsParams.valueToCreate : -totalsParams.valueToCreate,
@@ -32,6 +23,10 @@ totalsOnTable.createNew = function (isPositive, horizontalPosition) {
     nextQuant: Date.now(),
   });
 };
+
+registerActionOfType('animationend', totalsOnTable, {
+  action: removeElementWhenAnimationEnds,
+}).start();
 
 export const manageTotalsRole = onPulseTick.registerAction(totalsOnTable, {
   action({ target: totalPiece, roleSet }) {

@@ -3,7 +3,6 @@ import Faucet from './FaucetClass';
 import stage from '../../../../stage/stage';
 import { onPulseTick } from '../../../../stage/role_classes';
 import { damages } from '../damages/damages';
-import Damage from '../damages/DamageClass';
 import { beerCost } from '../../../../stage/gameplay_params';
 import { switchTypes } from './faucets_params';
 import { damagesParams } from '../damages/damages_params';
@@ -55,7 +54,7 @@ export const countExpensesRole = onPulseTick.registerAction(faucets, {
           const wastingMoney = ((currTime - lastRenderedDamage.created) / 1000)
             * beerCost[faucet.state.beer];
           if (wastingMoney > damagesParams.quant) {
-            damages.addElement(new Damage(faucet, lastRenderedDamage.phase));
+            damages.addDamage(faucet, lastRenderedDamage.phase);
             // this.renderDamage(target, countWastingMoney % 2);
             faucet.state.lastRenderedDamage = {
               phase: 1 - lastRenderedDamage.phase,

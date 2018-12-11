@@ -1,7 +1,7 @@
 /* eslint-env browser */
-import { ActorsSet } from '../../../../libs/actors_and_roles';
+import { ActorsSet, registerActionOfType } from '../../../../libs/actors_and_roles';
 import CustomersReaction from './CustomersReactionClass';
-import { customersReactionsParams } from './customersReactions_params';
+import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
 
 // eslint-disable-next-line
 export const customersReactions = new ActorsSet();
@@ -10,11 +10,8 @@ customersReactions.createNew = function (reactionType) {
   this.addElement(new CustomersReaction(reactionType));
 };
 
-customersReactions.onAddActorEvent(function ({ target: reaction }) {
-  window.setTimeout(() => {
-    this.deleteElement(reaction);
-    reaction.remove();
-  }, customersReactionsParams.lifeTime);
-});
-
 customersReactions.name = 'customersReactions';
+
+registerActionOfType('animationend', customersReactions, {
+  action: removeElementWhenAnimationEnds,
+}).start();

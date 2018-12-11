@@ -1,12 +1,13 @@
 /* eslint-env browser */
-import { ActorsSet, RoleClass, Actor } from '../../../../libs/actors_and_roles';
+import {
+  ActorsSet,
+  RoleClass,
+  Actor,
+  registerActionOfType,
+} from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
 import './styles.css';
 import { gameResultsParams, gameResultsTypes } from './resultOfGame_params';
-
-export const resultOfGame = new ActorsSet();
-
-resultOfGame.name = 'resultOfGame';
 
 class GameResult extends Actor {
   constructor() {
@@ -33,30 +34,34 @@ class LoseResult extends GameResult {
   }
 }
 
-export const getResultRole = new RoleClass(Symbol('getResultRole'))
-  .registerAction(resultOfGame, {
-    action({ event: { result } }) {
-      if (this.roleSet.size === 0) {
-        stage.pause();
-        let newElement;
-        switch (result) {
-          case gameResultsTypes.WON:
-            newElement = new WinResult();
-            break;
+// eslint-disable-next-line
+export const resultOfGame = new ActorsSet();
 
-          case gameResultsTypes.LOST:
-            newElement = new LoseResult();
-            break;
+resultOfGame.name = 'resultOfGame';
 
-          default:
-            break;
-        }
-        resultOfGame.addElement(newElement);
-        window.setTimeout(() => {
-          resultOfGame.deleteElement(newElement);
-          newElement.remove();
-        }, 5000);
-      }
-    },
-  })
-  .start();
+registerActionOfType('animationend', resultOfGame, {
+  action({ target: result }) {
+    resultOfGame.deleteElement(result);
+    result.remove();
+  },
+});
+
+resultOfGame.getResult = function (result) {
+  if (this.size === 0) {
+    stage.pause();
+    let newElement;
+    switch (result) {
+      case gameResultsTypes.WON:
+        newElement = new WinResult();
+        break;
+
+      case gameResultsTypes.LOST:
+        newElement = new LoseResult();
+        break;
+
+      default:
+        break;
+    }
+    resultOfGame.addElement(newElement);
+  }
+};

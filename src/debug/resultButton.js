@@ -1,9 +1,6 @@
 /* eslint-env browser */
 import { ActorsSet, Actor, registerActionOfType } from '../libs/actors_and_roles';
-import {
-  getResultRole,
-  resultOfGame,
-} from '../screens/gameplay/role_sets/resultOfGame/resultOfGame';
+import { resultOfGame } from '../screens/gameplay/role_sets/resultOfGame/resultOfGame';
 import { gameResultsTypes } from '../screens/gameplay/role_sets/resultOfGame/resultOfGame_params';
 
 const button = new Actor('button', { width: 100, height: 50 });
@@ -21,7 +18,7 @@ registerActionOfType('click', totalButton, {
       [...resultOfGame][0].remove();
       resultOfGame.clearElements();
     }
-    getResultRole.fire({ result: gameResultsTypes[Object.keys(gameResultsTypes)[index]] });
+    resultOfGame.getResult(gameResultsTypes[Object.keys(gameResultsTypes)[index]]);
     index = 1 - index;
   },
 }).start();

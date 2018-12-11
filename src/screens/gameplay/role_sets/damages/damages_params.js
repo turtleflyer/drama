@@ -18,6 +18,4 @@ export const damagesParams = {
       right: 30,
     },
   ],
-
-  lifeTime: 1000,
 };

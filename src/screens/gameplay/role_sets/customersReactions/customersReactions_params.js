@@ -7,8 +7,6 @@ export const customersReactionsParams = {
     left: 10,
     top: 50,
   },
-
-  lifeTime: 1500,
 };
 
 export const customerReactionsTypes = {
