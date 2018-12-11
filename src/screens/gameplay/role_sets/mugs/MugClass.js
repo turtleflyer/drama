@@ -26,7 +26,6 @@ export default class Mug extends Actor {
       volume,
       empty,
     };
-    this.waitingState = {};
     this.getAppendedAsChild(stage);
     this.born();
   }
