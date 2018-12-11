@@ -4,7 +4,7 @@ import { setImg } from '../../../../libs/helpers_lib';
 import stage from '../../../../stage/stage';
 import './styles.css';
 import { tuneGame, beerCost } from '../../../../stage/gameplay_params';
-import { mugsParams, mugTypes } from './mugs_params';
+import { mugTypes, magsCreatingParams } from './mugs_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 
@@ -14,11 +14,8 @@ export default class Mug extends Actor {
     const {
       width, empty, fillingPhasesImgs, overfilledPhasesImgs,
     } = img;
-    super(
-      'div',
-      { x: horizontalPosition, y: mugsParams.lineBase, width },
-      { scaleF: stage.scaleF, zIndex: 50 },
-    );
+    super('div', {}, { scaleF: stage.scaleF, zIndex: 50 });
+    this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase, width });
     setImg(this, empty, { width: '100%', bottom: '0px' });
     this.beerType = beerType;
     this.params = {
@@ -42,10 +39,10 @@ export default class Mug extends Actor {
     return this.getBoundingRect().height / this.position.scaleF;
   }
 
-  setPosition(position) {
+  setPositionXY(position) {
     const { x, y, width } = position;
     Object.assign(this.position, { x: x || this.position.x, y: y || this.position.y });
-    Actor.prototype.setPosition.call(this, {
+    this.setPosition({
       left: this.position.x - (width || this.position.width) / 2,
       top: this.position.y,
       width,

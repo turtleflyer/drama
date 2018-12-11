@@ -40,14 +40,14 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
                 if (!faucet.state.placedMug) {
                   faucet.placeMug(mug);
                   mug.placedToBeFilled(faucet);
-                  mug.setPosition(place.whereToPlaceMug());
+                  mug.setPositionXY(place.whereToPlaceMug());
                   fillingMugs.addElement(mug);
                 }
               }
               break;
 
             case hookPlace:
-              mug.setPosition({ y: place.mugsLine() });
+              mug.setPositionXY({ y: place.mugsLine() });
               waitingMugs.addElement(mug);
               break;
 

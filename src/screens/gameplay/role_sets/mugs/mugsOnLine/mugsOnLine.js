@@ -69,7 +69,7 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
         mug.remove();
         stage.state.reputation += tuneGame.reputationDecrement;
       } else {
-        mug.setPosition({ x: calculatedPosition });
+        mug.setPositionXY({ x: calculatedPosition });
       }
     } else if (
       dragMug.size === 0
