@@ -3,7 +3,6 @@ import { ActorsSet } from '../../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../../stage/role_classes';
 import stage from '../../../../stage/stage';
 import { customersReactions } from '../customersReactions/customersReactions';
-import { waitingMugParams } from './fillingGlass_params';
 
 export const fillingGlass = new ActorsSet();
 
