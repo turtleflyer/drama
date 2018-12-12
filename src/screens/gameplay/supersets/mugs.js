@@ -3,9 +3,10 @@ import { dragMug } from '../role_sets/dragMug/dragMug';
 import { ActorsSet, registerActionOfType } from '../../../libs/actors_and_roles';
 import { mugsOnLine } from '../role_sets/mugs/mugsOnLine/mugsOnLine';
 import { fillingMugs } from '../role_sets/fillingMugs/fillingMugs';
+import { fillingGlass } from '../role_sets/fillingGlass/fillingGlass';
 
 // eslint-disable-next-line
-export const mugs = new ActorsSet([mugsOnLine, fillingMugs]);
+export const mugs = new ActorsSet([mugsOnLine, fillingMugs, fillingGlass]);
 
 mugs.name = 'mugs';
 

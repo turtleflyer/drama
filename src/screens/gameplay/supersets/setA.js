@@ -14,7 +14,6 @@ import { totalsOnTable } from '../role_sets/totalsOnTable/totalsOnTable';
 import { customersReactions } from '../role_sets/customersReactions/customersReactions';
 import { waitingMugs } from '../role_sets/waitingMugs/waitingMugs';
 import { draggable } from './draggable';
-import { fillingGlass } from '../role_sets/fillingGlass/fillingGlass';
 
 export const setA = new ActorsSet([
   mugs,
@@ -31,7 +30,6 @@ export const setA = new ActorsSet([
   timeDisplay,
   staticDecorations,
   resultOfGame,
-  fillingGlass,
 ]);
 
 setA.name = 'setA';
