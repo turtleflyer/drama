@@ -1,4 +1,5 @@
 import { faucetModels } from '../screens/gameplay/role_sets/faucets/faucets_params';
+import { beerTypes, glassType } from './gameplay_params';
 
 export const commonInitState = {
   reputation: 1,
@@ -13,6 +14,9 @@ export const levelsDescription = [
       remainingTime: 50,
       moneyToEarn: 300,
       faucets: [{ model: faucetModels.normalIPA, horizontalPosition: 140 }],
+      mugsDistribution: {
+        [beerTypes.IPA]: 100,
+      },
     },
     initState: {
       money: 100,
@@ -28,6 +32,25 @@ export const levelsDescription = [
         { model: faucetModels.normalIPA, horizontalPosition: 40 },
         { model: faucetModels.normalIPA, horizontalPosition: 190 },
       ],
+      mugsDistribution: {
+        [beerTypes.IPA]: 100,
+      },
+    },
+    initState: {
+      money: 100,
+    },
+  },
+  {
+    params: {
+      mugsSpeed: 75,
+      initMugDensity: 4,
+      remainingTime: 50,
+      moneyToEarn: 300,
+      faucets: [{ model: faucetModels.normalIPA, horizontalPosition: 140 }],
+      mugsDistribution: {
+        [beerTypes.IPA]: 50,
+        [glassType]: 50,
+      },
     },
     initState: {
       money: 100,

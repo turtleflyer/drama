@@ -4,12 +4,13 @@ import Mug from '../MugClass';
 import stage from '../../../../../stage/stage';
 import { onPulseTick } from '../../../../../stage/role_classes';
 import { dragMug } from '../../dragMug/dragMug';
-import { beerTypes, tuneGame, stageDimension } from '../../../../../stage/gameplay_params';
+import { tuneGame, stageDimension, glassType } from '../../../../../stage/gameplay_params';
 import { gameResultsTypes } from '../../resultOfGame/resultOfGame_params';
 import { fillingMugs } from '../../fillingMugs/fillingMugs';
 import { waitingMugs } from '../../waitingMugs/waitingMugs';
 import { magsCreatingParams } from '../mugs_params';
 import { resultOfGame } from '../../resultOfGame/resultOfGame';
+import WhiskeyGlass from '../WhiskeyGlassClass';
 
 export const mugsOnLine = new ActorsSet();
 
@@ -21,7 +22,23 @@ let timeOfNextBirth;
 let lastReputationValue = stage.state.reputation;
 
 function determineTypeOfBeer() {
-  return beerTypes.IPA;
+  const random = Math.random();
+  const {
+    params: {
+      levelParams: { mugsDistribution },
+    },
+  } = stage;
+
+  for (const key in mugsDistribution) {
+    if (Object.prototype.hasOwnProperty.call(mugsDistribution, key)) {
+      const threshold = mugsDistribution[key];
+      if (random <= threshold) {
+        return key;
+      }
+    }
+  }
+
+  return null;
 }
 
 function refreshTimeOfNextBirth(takeThis) {
@@ -35,10 +52,18 @@ function refreshTimeOfNextBirth(takeThis) {
   }
 }
 
+function createNewMug() {
+  const typeOfMug = determineTypeOfBeer();
+  if (typeOfMug === glassType) {
+    return new WhiskeyGlass(stageWidth + 1000);
+  }
+  return new Mug(typeOfMug, stageWidth + 1000);
+}
+
 mugsOnLine.getInitializer(function () {
   const { mugsSpeed, initMugDensity } = stage.params.levelParams;
   Object.assign((this.params = {}), { mugsSpeed, initMugDensity });
-  const mug = new Mug(determineTypeOfBeer(), stageWidth + 1000);
+  const mug = createNewMug();
   mug.params.bornTime = performance.now() + magsCreatingParams.initialDelay * 1000;
   this.addElements([mug]);
   lastMug = mug;
@@ -83,7 +108,7 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
     }
 
     if (timeOfNextBirth && timeOfNextBirth - 200 < currTime) {
-      const generatedMug = new Mug(determineTypeOfBeer(), stageWidth + 1000);
+      const generatedMug = createNewMug();
       generatedMug.params.bornTime = timeOfNextBirth;
       lastMug = generatedMug;
       this.roleSet.addElement(generatedMug);

@@ -8,12 +8,16 @@ import { hookPlace } from '../role_sets/hookPlace/hookPlace';
 import { mugPlaces } from '../role_sets/mugPlaces/mugPlaces';
 import { waitingMugs } from '../role_sets/waitingMugs/waitingMugs';
 import { pouringMug } from '../role_sets/pouringMug/pouringMug';
+import { glassPlace } from '../role_sets/glassPlace/glassPlace';
+import Mug from '../role_sets/mugs/MugClass';
+import WhiskeyGlass from '../role_sets/mugs/WhiskeyGlassClass';
+import { fillingGlass } from '../role_sets/fillingGlass/fillingGlass';
 
 const signalSet = new ActorsSet();
 
 signalSet.name = 'signalSet';
 
-export const dropPlaces = new ActorsSet([hookPlace, mugPlaces, pourOutArea, signalSet]);
+export const dropPlaces = new ActorsSet([hookPlace, mugPlaces, pourOutArea, glassPlace, signalSet]);
 
 dropPlaces.name = 'dropPlaces';
 
@@ -35,7 +39,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
         } else if (percentOverlap(placeRect, mugRect) > 0.75) {
           switch (roleSet) {
             case mugPlaces:
-              {
+              if (mug instanceof Mug) {
                 const { faucet } = place;
                 if (!faucet.state.placedMug) {
                   faucet.placeMug(mug);
@@ -51,6 +55,13 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
               waitingMugs.addElement(mug);
               break;
 
+            case glassPlace:
+              if (mug instanceof WhiskeyGlass) {
+                mug.setPositionXY({ y: place.mugsLine() });
+                fillingGlass.addElement(mug);
+              }
+              break;
+
             default:
               break;
           }
@@ -58,6 +69,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
       } else if (
         roleSet === pourOutArea
         && !pouring
+        && mug instanceof Mug
         && mug.state.total
         && percentOverlap(placeRect, mugRect) > 0.75
       ) {

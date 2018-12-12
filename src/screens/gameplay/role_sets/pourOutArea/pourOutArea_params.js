@@ -6,6 +6,6 @@ export const pourOutAreaParams = {
     right: 0,
     bottom: 0,
     height: 250,
-    width: 400,
+    width: 300,
   },
 };
