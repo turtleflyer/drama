@@ -20,25 +20,65 @@ const { width: stageWidth } = stageDimension;
 let lastMug;
 let timeOfNextBirth;
 let lastReputationValue = stage.state.reputation;
+let queueOfMugTypes;
+let lastCreatedType;
 
 function determineTypeOfBeer() {
-  const random = Math.random();
   const {
     params: {
       levelParams: { mugsDistribution },
     },
   } = stage;
 
-  for (const key in mugsDistribution) {
-    if (Object.prototype.hasOwnProperty.call(mugsDistribution, key)) {
-      const threshold = mugsDistribution[key];
-      if (random <= threshold) {
-        return key;
+  if (Object.keys(mugsDistribution).length === 1) {
+    return Object.keys(mugsDistribution)[0];
+  }
+
+  const tempPlace = [];
+  let getType;
+
+  function probeGetType(type) {
+    const { type: lastType, count: lastCount } = lastCreatedType;
+    if (!lastCount || lastCount < 2 || lastType !== type) {
+      getType = type;
+      Object.assign(lastCreatedType, { type, count: lastType === type ? lastCount + 1 : 1 });
+      return true;
+    }
+    return false;
+  }
+
+  while (queueOfMugTypes.length > 0) {
+    const nextFromQueue = queueOfMugTypes.shift();
+    if (probeGetType(nextFromQueue)) {
+      break;
+    } else {
+      tempPlace.push(nextFromQueue);
+    }
+  }
+  queueOfMugTypes.splice(0, 0, ...tempPlace);
+
+  if (!getType) {
+    while (true) {
+      const random = Math.random();
+      let randomType;
+      for (const key in mugsDistribution) {
+        if (Object.prototype.hasOwnProperty.call(mugsDistribution, key)) {
+          const threshold = mugsDistribution[key];
+          if (random <= threshold) {
+            randomType = key;
+            break;
+          }
+        }
+      }
+      if (probeGetType(randomType)) {
+        break;
+      } else {
+        queueOfMugTypes.push(randomType);
       }
     }
   }
 
-  return null;
+  return getType;
 }
 
 function refreshTimeOfNextBirth(takeThis) {
@@ -61,6 +101,8 @@ function createNewMug() {
 }
 
 mugsOnLine.getInitializer(function () {
+  queueOfMugTypes = [];
+  lastCreatedType = {};
   const { mugsSpeed, initMugDensity } = stage.params.levelParams;
   Object.assign((this.params = {}), { mugsSpeed, initMugDensity });
   const mug = createNewMug();
