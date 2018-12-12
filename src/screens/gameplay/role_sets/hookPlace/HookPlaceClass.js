@@ -15,9 +15,9 @@ export default class HookPlace extends Actor {
     this.node.style['background-color'] = 'rgba(255, 255, 255, 0.2)';
   }
 
-  mugsLine() {
+  whereToPlaceMug() {
     const { y: originY } = stage.origin;
     const { top, height } = this.node.getBoundingClientRect();
-    return (top - originY + height * hookPlaceParams.mugLine) / this.position.scaleF;
+    return { y: (top - originY + height * hookPlaceParams.mugLine) / this.position.scaleF };
   }
 }

@@ -1,3 +1,5 @@
+import stage from '../stage/stage';
+
 /* eslint-env browser */
 export function importAll(r) {
   const a = [];
@@ -47,4 +49,20 @@ export function percentOverlap(targetBound, dragBound) {
 export function removeElementWhenAnimationEnds({ roleSet, target }) {
   roleSet.deleteElement(target);
   target.remove();
+}
+
+export function addWhereToPlaceMugMethod(obj, params) {
+  obj.whereToPlaceMug = function () {
+    {
+      const { x: originX, y: originY } = stage.origin;
+      const { scaleF } = this.position;
+      const {
+        left, top, width, height,
+      } = this.node.getBoundingClientRect();
+      return {
+        x: (left - originX + width / 2) / scaleF,
+        y: (top - originY + height * params.mugLine) / scaleF,
+      };
+    }
+  };
 }

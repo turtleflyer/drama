@@ -42,22 +42,22 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
               if (mug instanceof Mug) {
                 const { faucet } = place;
                 if (!faucet.state.placedMug) {
+                  mug.setPositionXY(place.whereToPlaceMug());
                   faucet.placeMug(mug);
                   mug.placedToBeFilled(faucet);
-                  mug.setPositionXY(place.whereToPlaceMug());
                   fillingMugs.addElement(mug);
                 }
               }
               break;
 
             case hookPlace:
-              mug.setPositionXY({ y: place.mugsLine() });
+              mug.setPositionXY(place.whereToPlaceMug());
               waitingMugs.addElement(mug);
               break;
 
             case glassPlace:
               if (mug instanceof WhiskeyGlass) {
-                mug.setPositionXY({ y: place.mugsLine() });
+                mug.setPositionXY(place.whereToPlaceMug());
                 fillingGlass.addElement(mug);
               }
               break;
