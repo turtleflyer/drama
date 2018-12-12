@@ -2,11 +2,11 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
 import { customersTable } from '../staticDecorations/staticDecorations';
-import { customersTablePosition } from '../staticDecorations/staticDecorations_params';
+import { hookPlaceParams } from './hooksPlace_params';
 
 export default class HookPlace extends Actor {
   constructor() {
-    super('div', customersTablePosition.hookPlace, { scaleF: stage.scaleF, zIndex: 30 });
+    super('div', hookPlaceParams.position, { scaleF: stage.scaleF, zIndex: 30 });
     this.getAppendedAsChild(customersTable);
 
     /**
@@ -18,6 +18,6 @@ export default class HookPlace extends Actor {
   mugsLine() {
     const { y: originY } = stage.origin;
     const { top, height } = this.node.getBoundingClientRect();
-    return (top - originY + (height * 3) / 4) / this.position.scaleF;
+    return (top - originY + height * hookPlaceParams.mugLine) / this.position.scaleF;
   }
 }
