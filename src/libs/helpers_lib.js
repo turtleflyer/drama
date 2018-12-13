@@ -1,4 +1,5 @@
 import stage from '../stage/stage';
+import { Actor } from './actors_and_roles';
 
 /* eslint-env browser */
 export function importAll(r) {
@@ -65,4 +66,30 @@ export function addWhereToPlaceMugMethod(obj, params) {
       };
     }
   };
+}
+
+export function addSetPositionXYMethod(obj) {
+  Object.defineProperties(obj, {
+    getBoundingRect: {
+      value() {
+        return this.node.querySelector('img').getBoundingClientRect();
+      },
+    },
+    rectHeight: {
+      get() {
+        return this.getBoundingRect().height / this.position.scaleF;
+      },
+    },
+    setPositionXY: {
+      value(position) {
+        const { x, y, width } = position;
+        Object.assign(this.position, { x: x || this.position.x, y: y || this.position.y });
+        Actor.prototype.setPosition.call(this, {
+          left: this.position.x - (width || this.position.width) / 2,
+          top: this.position.y,
+          width,
+        });
+      },
+    },
+  });
 }
