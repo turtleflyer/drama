@@ -56,7 +56,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
               break;
 
             case glassPlace:
-              if (mug instanceof WhiskeyGlass) {
+              if (mug instanceof WhiskeyGlass && fillingGlass.size === 0) {
                 mug.setPositionXY(place.whereToPlaceMug());
                 fillingGlass.addElement(mug);
               }
