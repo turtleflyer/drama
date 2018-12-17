@@ -1,6 +1,3 @@
-import stage from '../stage/stage';
-import { Actor } from './actors_and_roles';
-
 /* eslint-env browser */
 export function importAll(r) {
   const a = [];
@@ -50,46 +47,4 @@ export function percentOverlap(targetBound, dragBound) {
 export function removeElementWhenAnimationEnds({ roleSet, target }) {
   roleSet.deleteElement(target);
   target.remove();
-}
-
-export function addWhereToPlaceMugMethod(obj, params) {
-  obj.whereToPlaceMug = function () {
-    {
-      const { x: originX, y: originY } = stage.origin;
-      const { scaleF } = this.position;
-      const {
-        left, top, width, height,
-      } = this.node.getBoundingClientRect();
-      return {
-        x: (left - originX + width / 2) / scaleF,
-        y: (top - originY + height * params.mugLine) / scaleF,
-      };
-    }
-  };
-}
-
-export function addSetPositionXYMethod(obj) {
-  Object.defineProperties(obj, {
-    getBoundingRect: {
-      value() {
-        return this.node.querySelector('img').getBoundingClientRect();
-      },
-    },
-    rectHeight: {
-      get() {
-        return this.getBoundingRect().height / this.position.scaleF;
-      },
-    },
-    setPositionXY: {
-      value(position) {
-        const { x, y, width } = position;
-        Object.assign(this.position, { x: x || this.position.x, y: y || this.position.y });
-        Actor.prototype.setPosition.call(this, {
-          left: this.position.x - (width || this.position.width) / 2,
-          top: this.position.y,
-          width,
-        });
-      },
-    },
-  });
 }

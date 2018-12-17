@@ -1,12 +1,13 @@
 /* eslint-env browser */
 import { Actor } from '../../../../libs/actors_and_roles';
-import { setImg, addSetPositionXYMethod } from '../../../../libs/helpers_lib';
+import { setImg } from '../../../../libs/helpers_lib';
 import stage from '../../../../stage/stage';
 import './styles.css';
 import { whiskeyGlassParams, magsCreatingParams } from './mugs_params';
 import { tuneGame } from '../../../../stage/gameplay_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
+import { addSetPositionXYMethod } from '../../../../libs/class_decorators';
 
 const { img, volume, costOfFilledGlass } = whiskeyGlassParams;
 
@@ -14,7 +15,6 @@ export default class WhiskeyGlass extends Actor {
   constructor(horizontalPosition = 0) {
     const { width, empty, full } = img;
     super('div', {}, { scaleF: stage.scaleF, zIndex: 50 });
-    addSetPositionXYMethod(this);
     this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase, width });
     setImg(this, empty, { width: '100%', bottom: '0px' });
     this.params = {
@@ -93,3 +93,5 @@ export default class WhiskeyGlass extends Actor {
     this.attachClassName('waitingMug');
   }
 }
+
+addSetPositionXYMethod(WhiskeyGlass);

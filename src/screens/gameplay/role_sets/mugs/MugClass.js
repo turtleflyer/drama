@@ -1,12 +1,13 @@
 /* eslint-env browser */
 import { Actor } from '../../../../libs/actors_and_roles';
-import { setImg, addSetPositionXYMethod } from '../../../../libs/helpers_lib';
+import { setImg } from '../../../../libs/helpers_lib';
 import stage from '../../../../stage/stage';
 import './styles.css';
 import { tuneGame, beerCost } from '../../../../stage/gameplay_params';
 import { mugTypes, magsCreatingParams } from './mugs_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
+import { addSetPositionXYMethod } from '../../../../libs/class_decorators';
 
 export default class Mug extends Actor {
   constructor(beerType, horizontalPosition = 0) {
@@ -15,7 +16,6 @@ export default class Mug extends Actor {
       width, empty, fillingPhasesImgs, overfilledPhasesImgs,
     } = img;
     super('div', {}, { scaleF: stage.scaleF, zIndex: 50 });
-    addSetPositionXYMethod(this);
     this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase, width });
     setImg(this, empty, { width: '100%', bottom: '0px' });
     this.beerType = beerType;
@@ -147,3 +147,5 @@ export default class Mug extends Actor {
     this.attachClassName('waitingMug');
   }
 }
+
+addSetPositionXYMethod(Mug);

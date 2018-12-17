@@ -5,7 +5,6 @@ import { pouringMug } from '../role_sets/pouringMug/pouringMug';
 import { bottleToFill } from '../role_sets/bottleToFill/bottleToFill';
 import { stopDrag, followMouse } from '../../../stage/role_classes';
 
-// eslint-disable-next-line
 export const draggable = new ActorsSet([dragMug, pouringMug, bottleToFill]);
 
 draggable.name = 'draggable';
