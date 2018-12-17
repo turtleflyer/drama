@@ -85,6 +85,8 @@ const resizeStageRole = onResize
 
 window.addEventListener('resize', () => {
   const scaleF = defineScaleF();
-  resizeEverythingRole.fire({ scaleF });
-  resizeStageRole.fire({ scaleF });
+  if (scaleF !== stage.scaleF) {
+    resizeEverythingRole.fire({ scaleF });
+    resizeStageRole.fire({ scaleF });
+  }
 });
