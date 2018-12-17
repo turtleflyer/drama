@@ -10,7 +10,10 @@ import { stopBubbling } from '../libs/eventswork';
 import { debugPulse } from '../debug/fps';
 import Worker from '../webworkers/pulse.worker';
 import { defaultFontSize } from './gameplay_params';
-import { followMouseRole, stopDragRole } from '../screens/gameplay/supersets/draggable';
+import {
+  followMouseRoleDraggable,
+  stopDragRoleDraggable,
+} from '../screens/gameplay/supersets/draggable';
 
 const pulseWorker = new Worker();
 
@@ -50,7 +53,7 @@ export const dragRole = registerActionOfType('mousemove', stage, {
     const { clientX, clientY } = event;
 
     const { scaleF } = stage;
-    followMouseRole.fire({
+    followMouseRoleDraggable.fire({
       x: (clientX - stage.origin.x) / scaleF,
       y: (clientY - stage.origin.y) / scaleF,
     });
@@ -67,7 +70,7 @@ export const dropMugRole = registerActionOfType('mouseleave', stage, {
 
 export const stopCarryingRole = registerActionOfType('mouseup', stage, {
   action() {
-    stopDragRole.fire();
+    stopDragRoleDraggable.fire();
   },
 });
 

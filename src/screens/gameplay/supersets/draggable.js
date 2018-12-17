@@ -1,15 +1,16 @@
-import { ActorsSet, Actor, RoleClass } from '../../../libs/actors_and_roles';
+import { ActorsSet, Actor } from '../../../libs/actors_and_roles';
 import { dragMug } from '../role_sets/dragMug/dragMug';
 import { placeMugRole } from './dropPlaces';
 import { pouringMug } from '../role_sets/pouringMug/pouringMug';
 import { bottleToFill } from '../role_sets/bottleToFill/bottleToFill';
+import { stopDrag, followMouse } from '../../../stage/role_classes';
 
 // eslint-disable-next-line
 export const draggable = new ActorsSet([dragMug, pouringMug, bottleToFill]);
 
 draggable.name = 'draggable';
 
-export const followMouseRole = new RoleClass(Symbol('followMouse'))
+export const followMouseRoleDraggable = followMouse
   .registerAction(draggable, {
     action({ target, event: { x, y } }) {
       if (target instanceof Actor) {
@@ -24,7 +25,7 @@ export const followMouseRole = new RoleClass(Symbol('followMouse'))
   })
   .start();
 
-export const stopDragRole = new RoleClass(Symbol('stopDrag'))
+export const stopDragRoleDraggable = stopDrag
   .registerAction(draggable, {
     action({ target }) {
       if (target instanceof Actor) {
