@@ -14,8 +14,8 @@ const { img, volume, costOfFilledGlass } = whiskeyGlassParams;
 export default class WhiskeyGlass extends Actor {
   constructor(horizontalPosition = 0) {
     const { width, empty, full } = img;
-    super('div', {}, { scaleF: stage.scaleF, zIndex: 50 });
-    this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase, width });
+    super('div', { width }, { scaleF: stage.scaleF, zIndex: 50 });
+    this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase });
     setImg(this, empty, { width: '100%', bottom: '0px' });
     this.params = {
       full,
