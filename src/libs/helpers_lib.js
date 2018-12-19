@@ -1,3 +1,5 @@
+import { Actor } from './actors_and_roles';
+
 /* eslint-env browser */
 export function importAll(r) {
   const a = [];
@@ -7,8 +9,12 @@ export function importAll(r) {
   return a;
 }
 
-export function updateStyle(node, style) {
-  Object.assign(node.style, style);
+export function updateStyle(obj, style) {
+  let getNode = obj;
+  if (obj instanceof Actor) {
+    getNode = obj.node;
+  }
+  Object.assign(getNode.style, style);
 }
 
 export function setImg(element, newImg, style) {
@@ -47,4 +53,14 @@ export function percentOverlap(targetBound, dragBound) {
 export function removeElementWhenAnimationEnds({ roleSet, target }) {
   roleSet.deleteElement(target);
   target.remove();
+}
+
+export function getXYInTransformedNode(node, { x, y }) {
+  const matrixString = window.getComputedStyle(node).getPropertyValue('transform');
+  const matrix = matrixString
+    .replace(/([^\-\d\.]+)/g, ' ')
+    .replace(/^ (.*) $/, '$1')
+    .split(' ')
+    .map(e => Number(e));
+  return { x: x * matrix[0] + y * matrix[2], y: x * matrix[1] + y * matrix[3] };
 }
