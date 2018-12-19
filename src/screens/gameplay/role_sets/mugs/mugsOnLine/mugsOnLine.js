@@ -41,7 +41,7 @@ function determineTypeOfBeer() {
     const { type: lastType, count: lastCount } = lastCreatedType;
     if (!lastCount || lastCount < 2 || lastType !== type) {
       getType = type;
-      Object.assign(lastCreatedType, { type, count: lastType === type ? lastCount + 1 : 1 });
+      lastCreatedType = { type, count: lastType === type ? lastCount + 1 : 1 };
       return true;
     }
     return false;
