@@ -3,13 +3,19 @@ import { glassPlaceParams } from './glassPlace_params';
 import stage from '../../../../stage/stage';
 import { addWhereToPlaceMugMethod } from '../../../../libs/class_decorators';
 
-export const centerOfGlassPlace = {};
-
 class GlassPlace extends Actor {
   constructor() {
     super('div', glassPlaceParams.position, { scaleF: stage.scaleF, zIndex: 30 });
     this.getAppendedAsChild(stage);
     this.setPosition();
+    const {
+      left, right, top, bottom,
+    } = this.node.getBoundingClientRect();
+
+    this.centerOfGlassPlace = {
+      x: ((left + right) / 2 - stage.origin.x) / stage.scaleF,
+      y: ((top + bottom) / 2 - stage.origin.y) / stage.scaleF,
+    };
 
     /**
      * Debugging purpose
@@ -19,22 +25,16 @@ class GlassPlace extends Actor {
      *
      */
   }
-
-  setPosition(position) {
-    Actor.prototype.setPosition.call(this, position);
-    const {
-      left, right, top, bottom,
-    } = this.node.getBoundingClientRect();
-    centerOfGlassPlace.x = (left + right) / 2 - stage.origin.x;
-    centerOfGlassPlace.y = (top + bottom) / 2 - stage.origin.y;
-  }
 }
 
 addWhereToPlaceMugMethod(GlassPlace, glassPlaceParams);
 
+// eslint-disable-next-line
 export const glassPlace = new ActorsSet();
 glassPlace.getInitializer(function () {
-  this.addElement(new GlassPlace());
+  const newGlassPlace = new GlassPlace();
+  this.addElement(newGlassPlace);
+  this.centerOfGlassPlace = newGlassPlace.centerOfGlassPlace;
 });
 
 glassPlace.name = 'glassPlace';
