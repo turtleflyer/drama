@@ -16,10 +16,10 @@ totalsOnTable.getInitializer(function () {
 
 totalsOnTable.name = 'totalsOnTable';
 
-totalsOnTable.createNew = function (isPositive, horizontalPosition) {
+totalsOnTable.createNew = function (isPositive, position) {
   elementsToCreate.push({
     value: isPositive ? totalsParams.valueToCreate : -totalsParams.valueToCreate,
-    horizontalPosition,
+    position,
     nextQuant: Date.now(),
   });
 };
@@ -34,7 +34,7 @@ export const manageTotalsRole = onPulseTick.registerAction(totalsOnTable, {
     if (totalPiece === signalElement && elementsToCreate.length > 0) {
       elementsToCreate = elementsToCreate.filter((entry) => {
         if (entry.nextQuant < currTime) {
-          roleSet.addElement(new TotalOnTable(entry.horizontalPosition, entry.value > 0));
+          roleSet.addElement(new TotalOnTable(entry.position, entry.value > 0));
           entry.value = entry.value > 0 ? entry.value - 1 : entry.value + 1;
           entry.nextQuant += totalsParams.creationTimeout;
         }

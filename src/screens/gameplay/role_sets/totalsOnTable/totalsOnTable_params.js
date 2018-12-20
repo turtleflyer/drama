@@ -5,7 +5,6 @@ export const totalsParams = {
   position: {
     width: 50,
     height: 50,
-    top: 70,
   },
 
   creationTimeout: 200,

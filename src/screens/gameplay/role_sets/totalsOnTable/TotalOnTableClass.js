@@ -5,13 +5,13 @@ import './styles.css';
 import { totalsParams } from './totalsOnTable_params';
 
 export default class TotalOnTable extends Actor {
-  constructor(horizontalPosition, isPositive) {
+  constructor({ x, y }, isPositive) {
     super(
       'div',
       {
         ...totalsParams.position,
-        top: totalsParams.position.top + (Math.random() * 2 - 1) * totalsParams.swayRange,
-        left: horizontalPosition + (Math.random() * 2 - 1) * totalsParams.swayRange,
+        left: x + (Math.random() * 2 - 1) * totalsParams.swayRange,
+        top: y + (Math.random() * 2 - 1) * totalsParams.swayRange,
       },
       { scaleF: stage.scaleF, zIndex: 72 },
     );

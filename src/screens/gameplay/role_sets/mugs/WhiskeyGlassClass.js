@@ -38,7 +38,10 @@ export default class WhiskeyGlass extends Actor {
     if (isGlassFilled) {
       stateOfStage.drunkFactor += drunkFactorIncrement;
       stateOfStage.reputation += reputationIncrement;
-      totalsOnTable.createNew(true, this.position.x);
+      totalsOnTable.createNew(true, {
+        x: this.position.x,
+        y: this.position.y - this.position.height,
+      });
 
       return {
         money: costOfFilledGlass * beerMarkup,

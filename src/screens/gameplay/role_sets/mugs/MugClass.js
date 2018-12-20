@@ -70,10 +70,12 @@ export default class Mug extends Actor {
     } = tuneGame;
     const targetBeer = this.state.beers ? this.state.beers[targetBeerType] : 0;
 
+    const totalsPosition = { x: this.position.x, y: this.position.y - this.position.height };
+
     if (!beerTotalAmount || beerTotalAmount < 0.9 / drunkFactor) {
       stage.state.reputation += reputationDecrement;
       if (beerTotalAmount) {
-        totalsOnTable.createNew(false, this.position.x);
+        totalsOnTable.createNew(false, totalsPosition);
       }
 
       return { money: 0, reaction: customerReactionsTypes.TOO_FEW };
@@ -81,14 +83,14 @@ export default class Mug extends Actor {
 
     if (targetBeer / beerTotalAmount < 0.9 / drunkFactor) {
       stage.state.reputation += reputationDecrement;
-      totalsOnTable.createNew(false, this.position.x);
+      totalsOnTable.createNew(false, totalsPosition);
 
       return { money: 0, reaction: customerReactionsTypes.WRONG_BEER };
     }
 
     stage.state.drunkFactor += drunkFactorIncrement;
     stage.state.reputation += reputationIncrement;
-    totalsOnTable.createNew(true, this.position.x);
+    totalsOnTable.createNew(true, totalsPosition);
 
     return {
       money: beerTotalAmount * this.params.volume * beerCost[targetBeerType] * beerMarkup,

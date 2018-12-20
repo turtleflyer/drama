@@ -13,7 +13,7 @@ let isPositive = true;
 
 registerActionOfType('click', totalButton, {
   action() {
-    totalsOnTable.createNew(isPositive, 500);
+    totalsOnTable.createNew(isPositive, { x: 500, y: 70 });
     isPositive = !isPositive;
   },
 }).start();
