@@ -5,7 +5,6 @@ import { pourOutArea } from '../role_sets/pourOutArea/pourOutArea';
 import { fillingMugs } from '../role_sets/fillingMugs/fillingMugs';
 import { hookPlace } from '../role_sets/hookPlace/hookPlace';
 import { mugPlaces } from '../role_sets/mugPlaces/mugPlaces';
-import { waitingMugs } from '../role_sets/waitingMugs/waitingMugs';
 import { pouringMug } from '../role_sets/pouringMug/pouringMug';
 import { glassPlace } from '../role_sets/glassPlace/glassPlace';
 import Mug from '../role_sets/mugs/MugClass';
