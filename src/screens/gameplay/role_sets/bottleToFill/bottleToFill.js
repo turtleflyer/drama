@@ -1,8 +1,11 @@
+/* eslint-env browser */
 import { ActorsSet } from '../../../../libs/actors_and_roles';
-import { followMouse, stopDrag } from '../../../../stage/role_classes';
-import { centerOfGlassPlace } from '../glassPlace/glassPlace';
+import { followMouse, stopDrag, onPulseTick } from '../../../../stage/role_classes';
 import { bottleFillParams } from './bottleFill_params';
+import { glassPlace } from '../glassPlace/glassPlace';
+import { fillingGlass } from '../fillingGlass/fillingGlass';
 import stage from '../../../../stage/stage';
+import { whiskeyGlassParams } from '../mugs/mugs_params';
 
 export const bottleToFill = new ActorsSet();
 
@@ -14,43 +17,67 @@ bottleToFill.onAddActorEvent(({ target: bottle }) => {
 
 export const followMouseRoleBottleToFill = followMouse
   .registerAction(bottleToFill, {
-    action({ target: bottle, roleSet, event: { x, y } }) {
+    action({
+      target: bottle,
+      target: { node: bottleNode, state: stateOfBottle },
+      roleSet,
+      event: { x, y },
+    }) {
       if (roleSet.size > 0) {
-        const { x: xp, y: yp } = centerOfGlassPlace;
+        const { x: xp, y: yp } = glassPlace.centerOfGlassPlace;
         if (
           // eslint-disable-next-line
-          Math.sqrt((xp - x) ** 2 + (yp - y) ** 2) / stage.scaleF >
-          bottleFillParams.distanceToGetBackBottle
+          Math.sqrt((xp - x) ** 2 + (yp - y) ** 2) > bottleFillParams.distanceToGetBackBottle
         ) {
-          bottle.node.style.transform = null;
+          bottleNode.style.transform = null;
           bottle.getBackOnTable();
         } else {
           bottle.setPositionXY({ x, y }, true);
-          if (y < yp) {
-            const {
-              start: startRotatePoint,
-              end: endRotatePoint,
-            } = bottleFillParams.distancesXToRotateBottle;
-            const distanceX = (x - xp) / stage.scaleF;
-            if (distanceX > startRotatePoint || distanceX < endRotatePoint) {
-              bottle.node.style.transform = null;
-            } else {
-              const angle = 360 - (95 * (startRotatePoint - distanceX)) / (startRotatePoint - endRotatePoint);
-              bottle.node.style.transform = `rotate(${angle}deg)`;
+          if (fillingGlass.size > 0) {
+            const [glass] = [...fillingGlass];
 
-              // const m = window.getComputedStyle(bottle.node).getPropertyValue('transform');
-              // console.log('m: ', m);
-              // const r = m
-              //   .replace(/([^\-\d\.]+)/g, ' ')
-              //   .replace(/^ (.*) $/, '$1')
-              //   .split(' ')
-              //   .map(e => Number(e));
-              // console.log('r: ', r);
-              // console.log('bottle: ', bottle);
-              // console.log('bottle.node.style.transform: ', bottle.node.style.transform);
+            const {
+              state: { filled: isGlassFilled },
+            } = glass;
+
+            if (isGlassFilled || y > yp) {
+              bottleNode.style.transform = null;
+              bottle.detachJet();
+            } else {
+              const { fillingStartPoint } = stateOfBottle;
+              if (
+                fillingStartPoint
+                && Math.abs(x - fillingStartPoint) < bottleFillParams.shiftAllowanceWhileFilling
+              ) {
+                bottle.attachJet(yp - y);
+              } else {
+                const {
+                  start: startRotatePoint,
+                  end: endRotatePoint,
+                } = bottleFillParams.distancesXToRotateBottle;
+
+                const distanceX = x - xp;
+
+                if (distanceX > startRotatePoint || distanceX < endRotatePoint) {
+                  bottleNode.style.transform = null;
+                  bottle.detachJet();
+                } else {
+                  const angle = 360
+                    - (bottleFillParams.maxPitch * (startRotatePoint - distanceX))
+                      / (startRotatePoint - endRotatePoint);
+
+                  bottleNode.style.transform = `rotate(${angle}deg)`;
+
+                  if (angle <= 360 - bottleFillParams.pitchWhenFlow) {
+                    bottle.attachJet(yp - y, angle);
+                    stateOfBottle.fillingStartPoint = x;
+                    stateOfBottle.fillingStartTime = performance.now();
+                  } else {
+                    bottle.detachJet();
+                  }
+                }
+              }
             }
-          } else {
-            bottle.node.style.transform = null;
           }
         }
       }
@@ -60,11 +87,32 @@ export const followMouseRoleBottleToFill = followMouse
 
 export const stopDragRoleDraggable = stopDrag
   .registerAction(bottleToFill, {
-    action({ target: bottle, roleSet }) {
+    action({ target: bottle, target: { node: bottleNode }, roleSet }) {
       if (roleSet.size > 0) {
-        bottle.node.style.transform = null;
+        bottleNode.style.transform = null;
         bottle.getBackOnTable();
       }
     },
   })
   .start();
+
+export const watchFillingRole = onPulseTick.registerAction(bottleToFill, {
+  action({ target: bottle, roleSet }) {
+    if (roleSet.size > 0 && fillingGlass.size > 0) {
+      const {
+        state: { fillingStartTime },
+      } = bottle;
+      if (fillingStartTime) {
+        const [glass] = [...fillingGlass];
+        const { state: stateOfGlass } = glass;
+        if (performance.now() - fillingStartTime >= whiskeyGlassParams.volume * 1000) {
+          stateOfGlass.filled = true;
+          glass.showToBeFilled();
+          bottle.node.style.transform = null;
+          bottle.detachJet();
+          stage.state.money -= whiskeyGlassParams.costOfFilledGlass;
+        }
+      }
+    }
+  },
+});

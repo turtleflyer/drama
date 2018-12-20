@@ -16,6 +16,6 @@ export const beerTypes = { IPA: '@@beerTypes/IPA' };
 
 export const glassType = '@@glassType';
 
-export const beerCost = { [beerTypes.IPA]: 5 };
+export const beerCost = { [beerTypes.IPA]: 2.5 };
 
 export const pulseTimeout = 16;

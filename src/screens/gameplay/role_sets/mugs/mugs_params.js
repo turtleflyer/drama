@@ -38,5 +38,5 @@ export const whiskeyGlassParams = {
     full: fullGlassImg,
   },
   volume: 2,
-  costOfFilledGlass: 30,
+  costOfFilledGlass: 15,
 };

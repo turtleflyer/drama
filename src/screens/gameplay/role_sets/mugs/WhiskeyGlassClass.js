@@ -87,6 +87,10 @@ export default class WhiskeyGlass extends Actor {
     this.setZIndex(75);
   }
 
+  showToBeFilled() {
+    setImg(this, this.params.full);
+  }
+
   carriedToCustomer() {
     Object.assign(this.state, { placed: true, waitingSince: Date.now() });
     this.setZIndex(75);
