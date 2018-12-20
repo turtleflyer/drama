@@ -5,6 +5,8 @@ import stage from '../../../../stage/stage';
 import { customersReactions } from '../customersReactions/customersReactions';
 import { waitingMugParams } from './waitingMugs_params';
 import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
+import { hookPlace } from '../hookPlace/hookPlace';
+import './styles.css';
 
 export const waitingMugs = new ActorsSet();
 
@@ -15,7 +17,10 @@ registerActionOfType('animationend', waitingMugs, {
 }).start();
 
 waitingMugs.onAddActorEvent(({ target: mug }) => {
-  mug.carriedToCustomer();
+  mug.setPositionXY([...hookPlace][0].whereToPlaceMug());
+  Object.assign(mug.state, { placed: true, waitingSince: Date.now() });
+  mug.setZIndex(75);
+  mug.attachClassName('waitingMug');
 });
 
 export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {

@@ -2,13 +2,11 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
 import stage from '../../../../stage/stage';
-import './styles.css';
 import { tuneGame, beerCost } from '../../../../stage/gameplay_params';
 import { mugTypes, magsCreatingParams } from './mugs_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
-import { fallenMug } from '../fallenMug/fallenMug';
 
 export default class Mug extends Actor {
   constructor(beerType, horizontalPosition = 0) {

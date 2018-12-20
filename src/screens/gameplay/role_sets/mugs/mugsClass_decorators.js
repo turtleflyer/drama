@@ -1,5 +1,6 @@
 import { stageDimension } from '../../../../stage/gameplay_params';
 import { fallenMug } from '../fallenMug/fallenMug';
+import { waitingMugs } from '../waitingMugs/waitingMugs';
 
 export function addSetPositionXYMethod(cl) {
   Object.defineProperties(cl.prototype, {
@@ -77,9 +78,7 @@ export function addMugsLifeCyclesMethods(cl) {
 
     carriedToCustomer: {
       value() {
-        Object.assign(this.state, { placed: true, waitingSince: Date.now() });
-        this.setZIndex(75);
-        this.attachClassName('waitingMug');
+        waitingMugs.addElement(this);
       },
     },
   });

@@ -1,7 +1,3 @@
-.fallenMug {
-  transform: scale(0.5);
-}
-
 @keyframes fade-waitingMug {
   50% {
     opacity: 1;

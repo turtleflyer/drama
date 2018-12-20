@@ -50,8 +50,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
               break;
 
             case hookPlace:
-              mug.setPositionXY(place.whereToPlaceMug());
-              waitingMugs.addElement(mug);
+              mug.carriedToCustomer();
               break;
 
             case glassPlace:

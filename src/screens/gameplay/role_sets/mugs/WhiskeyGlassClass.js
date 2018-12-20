@@ -2,7 +2,6 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
 import stage from '../../../../stage/stage';
-import './styles.css';
 import { whiskeyGlassParams, magsCreatingParams } from './mugs_params';
 import { tuneGame } from '../../../../stage/gameplay_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
