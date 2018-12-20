@@ -5,7 +5,7 @@ import stage from '../../../../stage/stage';
 import bottleImg from './img/bottle.png';
 import { setImg, updateStyle } from '../../../../libs/helpers_lib';
 import { bottleToFill } from '../bottleToFill/bottleToFill';
-import { addSetPositionXYMethod } from '../../../../libs/class_decorators';
+import { addSetPositionXYMethod } from '../mugs/mugsClass_decorators';
 import './styles.css';
 
 // eslint-disable-next-line

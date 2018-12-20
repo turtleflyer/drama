@@ -2,7 +2,7 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
 import { mugPlacesParams } from './mugPlaces_params';
-import { addWhereToPlaceMugMethod } from '../../../../libs/class_decorators';
+import { addWhereToPlaceMugMethod } from './mugPlaceClass_decorators';
 
 export default class MugPlace extends Actor {
   constructor(faucet) {

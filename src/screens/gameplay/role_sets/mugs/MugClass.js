@@ -7,7 +7,8 @@ import { tuneGame, beerCost } from '../../../../stage/gameplay_params';
 import { mugTypes, magsCreatingParams } from './mugs_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
-import { addSetPositionXYMethod } from '../../../../libs/class_decorators';
+import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
+import { fallenMug } from '../fallenMug/fallenMug';
 
 export default class Mug extends Actor {
   constructor(beerType, horizontalPosition = 0) {
@@ -102,14 +103,6 @@ export default class Mug extends Actor {
    * Life Cycles
    */
 
-  born() {
-    this.state.hidden = true;
-  }
-
-  appearOnStage() {
-    this.state.hidden = false;
-  }
-
   goDrug() {
     const { state } = this;
     if (state.faucet) {
@@ -121,11 +114,6 @@ export default class Mug extends Actor {
       placed: null,
     });
     this.setZIndex(80);
-  }
-
-  dropDown() {
-    this.setZIndex(90);
-    this.attachClassName('fallenMug');
   }
 
   placedToBeFilled(faucet) {
@@ -140,12 +128,7 @@ export default class Mug extends Actor {
     this.updateNextThreshold();
     this.setZIndex(75);
   }
-
-  carriedToCustomer() {
-    Object.assign(this.state, { placed: true, waitingSince: Date.now() });
-    this.setZIndex(75);
-    this.attachClassName('waitingMug');
-  }
 }
 
 addSetPositionXYMethod(Mug);
+addMugsLifeCyclesMethods(Mug);

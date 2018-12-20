@@ -7,7 +7,7 @@ import { whiskeyGlassParams, magsCreatingParams } from './mugs_params';
 import { tuneGame } from '../../../../stage/gameplay_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
-import { addSetPositionXYMethod } from '../../../../libs/class_decorators';
+import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
 
 const { img, volume, costOfFilledGlass } = whiskeyGlassParams;
 
@@ -57,25 +57,12 @@ export default class WhiskeyGlass extends Actor {
    * Life Cycles
    */
 
-  born() {
-    this.state.hidden = true;
-  }
-
-  appearOnStage() {
-    this.state.hidden = false;
-  }
-
   goDrug() {
     const { state } = this;
     Object.assign(state, {
       placed: null,
     });
     this.setZIndex(80);
-  }
-
-  dropDown() {
-    this.setZIndex(90);
-    this.attachClassName('fallenMug');
   }
 
   placedToBeFilled() {
@@ -90,12 +77,7 @@ export default class WhiskeyGlass extends Actor {
   showToBeFilled() {
     setImg(this, this.params.full);
   }
-
-  carriedToCustomer() {
-    Object.assign(this.state, { placed: true, waitingSince: Date.now() });
-    this.setZIndex(75);
-    this.attachClassName('waitingMug');
-  }
 }
 
 addSetPositionXYMethod(WhiskeyGlass);
+addMugsLifeCyclesMethods(WhiskeyGlass);

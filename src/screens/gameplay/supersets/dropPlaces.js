@@ -1,7 +1,6 @@
 /* eslint-env browser */
 import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
-import { fallenMug } from '../role_sets/fallenMug/fallenMug';
 import { pourOutArea } from '../role_sets/pourOutArea/pourOutArea';
 import { fillingMugs } from '../role_sets/fillingMugs/fillingMugs';
 import { hookPlace } from '../role_sets/hookPlace/hookPlace';
@@ -34,7 +33,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
         // Check if the mug was tested to be placed in all the possible places
         if (roleSet === signalSet) {
           if (!isPlaced) {
-            fallenMug.addElement(mug);
+            mug.dropDown();
           }
         } else if (percentOverlap(placeRect, mugRect) > 0.75) {
           switch (roleSet) {

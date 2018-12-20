@@ -4,7 +4,6 @@ import { dragMug } from '../screens/gameplay/role_sets/dragMug/dragMug';
 import { setA, resizeEverythingRole } from '../screens/gameplay/supersets/setA';
 import { registerActionOfType } from '../libs/actors_and_roles';
 import { onPulseTick, onResize } from './role_classes';
-import { fallenMug } from '../screens/gameplay/role_sets/fallenMug/fallenMug';
 import { setD } from '../debug/setD';
 import { stopBubbling } from '../libs/eventswork';
 import { debugPulse } from '../debug/fps';
@@ -63,7 +62,7 @@ export const dragRole = registerActionOfType('mousemove', stage, {
 export const dropMugRole = registerActionOfType('mouseleave', stage, {
   action() {
     if (dragMug.size === 1) {
-      fallenMug.addElement([...dragMug][0]);
+      [...dragMug][0].dropDown();
     }
   },
 });

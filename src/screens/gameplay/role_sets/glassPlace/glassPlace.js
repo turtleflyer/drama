@@ -1,7 +1,7 @@
 import { ActorsSet, Actor } from '../../../../libs/actors_and_roles';
 import { glassPlaceParams } from './glassPlace_params';
 import stage from '../../../../stage/stage';
-import { addWhereToPlaceMugMethod } from '../../../../libs/class_decorators';
+import { addWhereToPlaceMugMethod } from '../mugPlaces/mugPlaceClass_decorators';
 
 class GlassPlace extends Actor {
   constructor() {

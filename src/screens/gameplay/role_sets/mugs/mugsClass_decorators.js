@@ -1,21 +1,5 @@
-import stage from '../stage/stage';
-import { stageDimension } from '../stage/gameplay_params';
-
-export function addWhereToPlaceMugMethod(cl, params) {
-  cl.prototype.whereToPlaceMug = function () {
-    {
-      const { x: originX, y: originY } = stage.origin;
-      const { scaleF } = this.position;
-      const {
-        left, top, width, height,
-      } = this.node.getBoundingClientRect();
-      return {
-        x: (left - originX + width / 2) / scaleF,
-        y: (top - originY + height * params.mugLine) / scaleF,
-      };
-    }
-  };
-}
+import { stageDimension } from '../../../../stage/gameplay_params';
+import { fallenMug } from '../fallenMug/fallenMug';
 
 export function addSetPositionXYMethod(cl) {
   Object.defineProperties(cl.prototype, {
@@ -66,6 +50,36 @@ export function addSetPositionXYMethod(cl) {
           );
           Object.assign(this.position, position);
         }
+      },
+    },
+  });
+}
+
+export function addMugsLifeCyclesMethods(cl) {
+  Object.defineProperties(cl.prototype, {
+    born: {
+      value() {
+        this.state.hidden = true;
+      },
+    },
+
+    appearOnStage: {
+      value() {
+        this.state.hidden = false;
+      },
+    },
+
+    dropDown: {
+      value() {
+        fallenMug.addElement(this);
+      },
+    },
+
+    carriedToCustomer: {
+      value() {
+        Object.assign(this.state, { placed: true, waitingSince: Date.now() });
+        this.setZIndex(75);
+        this.attachClassName('waitingMug');
       },
     },
   });
