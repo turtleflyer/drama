@@ -1,8 +1,9 @@
 /* eslint-env browser */
 import { ActorsSet, registerActionOfType } from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
-import { tuneGame } from '../../../../stage/gameplay_params';
+import { tuneGame, stageDimension } from '../../../../stage/gameplay_params';
 import './styles.css';
+import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 
 // eslint-disable-next-line
 export const fallenMug = new ActorsSet();
@@ -13,6 +14,11 @@ fallenMug.onAddActorEvent(({ target: mug }) => {
   mug.setZIndex(90);
   mug.attachClassName('fallenMug');
   stage.state.reputation += tuneGame.reputationDecrement;
+  if (mug.state.total || mug.state.filled) {
+    window.setTimeout(() => {
+      totalsOnTable.createNew(false, { x: mug.position.x, y: stageDimension.height - 90 });
+    }, 1000);
+  }
 });
 
 registerActionOfType('animationend', fallenMug, {
