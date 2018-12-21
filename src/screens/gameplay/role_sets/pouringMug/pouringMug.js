@@ -2,6 +2,7 @@
 import { ActorsSet, registerActionOfType } from '../../../../libs/actors_and_roles';
 import './styles.css';
 import { dragMug } from '../dragMug/dragMug';
+import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 
 const emptyingPhaseStyle = 'pourOutArea--emptying';
 const revertingPhaseStyle = 'pourOutArea--reverting';
@@ -30,6 +31,11 @@ registerActionOfType('animationend', pouringMug, {
         mug.updateFillRepresentation();
         mug.node.classList.add(revertingPhaseStyle);
         animationStage = 1;
+        console.log('mug.position: ', mug.position);
+        totalsOnTable.createNew(false, {
+          x: mug.position.x,
+          y: mug.position.y - mug.position.height,
+        });
         break;
 
       case 1:
