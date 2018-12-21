@@ -37,7 +37,7 @@ export function addSetPositionXYMethod(cl) {
               bottom: stageDimension.height - y - height / 2,
             }),
           );
-          Object.assign(this.position, { x, y: this.position.bottom });
+          Object.assign(this.position, { x, y });
         } else {
           const {
             position: { width },
