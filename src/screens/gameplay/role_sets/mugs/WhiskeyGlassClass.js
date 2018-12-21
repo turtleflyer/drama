@@ -76,6 +76,14 @@ export default class WhiskeyGlass extends Actor {
     this.setZIndex(75);
   }
 
+  elevateToBeFilled() {
+    this.node.style.transform = 'translateY(-5px)';
+  }
+
+  backOnTable() {
+    this.node.style.transform = null;
+  }
+
   showToBeFilled() {
     setImg(this, this.params.full);
   }

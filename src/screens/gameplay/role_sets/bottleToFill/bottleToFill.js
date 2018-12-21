@@ -40,9 +40,10 @@ export const followMouseRoleBottleToFill = followMouse
               state: { filled: isGlassFilled },
             } = glass;
 
-            if (isGlassFilled || y > yp) {
+            if (isGlassFilled || y > yp - 5) {
               bottleNode.style.transform = null;
               bottle.detachJet();
+              glass.backOnTable();
             } else {
               const { fillingStartPoint } = stateOfBottle;
               if (
@@ -50,6 +51,7 @@ export const followMouseRoleBottleToFill = followMouse
                 && Math.abs(x - fillingStartPoint) < bottleFillParams.shiftAllowanceWhileFilling
               ) {
                 bottle.attachJet(yp - y);
+                glass.elevateToBeFilled();
               } else {
                 const {
                   start: startRotatePoint,
@@ -61,6 +63,7 @@ export const followMouseRoleBottleToFill = followMouse
                 if (distanceX > startRotatePoint || distanceX < endRotatePoint) {
                   bottleNode.style.transform = null;
                   bottle.detachJet();
+                  glass.backOnTable();
                 } else {
                   const angle = 360
                     - (bottleFillParams.maxPitch * (startRotatePoint - distanceX))
@@ -74,6 +77,7 @@ export const followMouseRoleBottleToFill = followMouse
                     stateOfBottle.fillingStartTime = performance.now();
                   } else {
                     bottle.detachJet();
+                    glass.backOnTable();
                   }
                 }
               }
@@ -110,6 +114,7 @@ export const watchFillingRole = onPulseTick.registerAction(bottleToFill, {
           glass.showToBeFilled();
           bottle.node.style.transform = null;
           bottle.detachJet();
+          glass.backOnTable();
           stage.state.money -= whiskeyGlassParams.costOfFilledGlass;
         }
       }
