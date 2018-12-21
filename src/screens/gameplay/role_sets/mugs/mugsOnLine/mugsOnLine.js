@@ -11,6 +11,9 @@ import { waitingMugs } from '../../waitingMugs/waitingMugs';
 import { magsCreatingParams } from '../mugs_params';
 import { resultOfGame } from '../../resultOfGame/resultOfGame';
 import WhiskeyGlass from '../WhiskeyGlassClass';
+import { fallenMug } from '../../fallenMug/fallenMug';
+import { fillingGlass } from '../../fillingGlass/fillingGlass';
+import { pouringMug } from '../../pouringMug/pouringMug';
 
 export const mugsOnLine = new ActorsSet();
 
@@ -142,6 +145,9 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
       dragMug.size === 0
       && waitingMugs.size === 0
       && fillingMugs.size === 0
+      && fillingGlass.size === 0
+      && fallenMug.size === 0
+      && pouringMug.size === 0
       && timeOfNextBirth
       && timeOfNextBirth - currTime > magsCreatingParams.maxDelayToGenerateNext * 1000
     ) {
