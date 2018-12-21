@@ -4,6 +4,7 @@ import stage from '../../../../stage/stage';
 import { tuneGame, stageDimension } from '../../../../stage/gameplay_params';
 import './styles.css';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
+import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
 
 // eslint-disable-next-line
 export const fallenMug = new ActorsSet();
@@ -22,8 +23,5 @@ fallenMug.onAddActorEvent(({ target: mug }) => {
 });
 
 registerActionOfType('animationend', fallenMug, {
-  action({ roleSet, target: mug }) {
-    mug.remove();
-    roleSet.deleteElement(mug);
-  },
+  action: removeElementWhenAnimationEnds,
 }).start();
