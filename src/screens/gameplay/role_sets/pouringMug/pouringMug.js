@@ -31,7 +31,6 @@ registerActionOfType('animationend', pouringMug, {
         mug.updateFillRepresentation();
         mug.node.classList.add(revertingPhaseStyle);
         animationStage = 1;
-        console.log('mug.position: ', mug.position);
         totalsOnTable.createNew(false, {
           x: mug.position.x,
           y: mug.position.y - mug.position.height,

@@ -14,8 +14,6 @@ export const followMouseRoleDraggable = followMouse
     action({ target, event: { x, y } }) {
       if (target instanceof Actor) {
         target.setPositionXY({ x, y }, true);
-        console.log(' x, y: ', x, y);
-        console.log('target.position: ', target.position);
         placeMugRole.fire({
           mug: target,
           // Just to check if mug in the boundary of the place
