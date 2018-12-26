@@ -18,7 +18,7 @@ registerActionOfType('animationend', waitingMugs, {
 
 waitingMugs.onAddActorEvent(({ target: mug }) => {
   mug.setPositionXY([...hookPlace][0].whereToPlaceMug());
-  Object.assign(mug.state, { placed: true, waitingSince: Date.now() });
+  Object.assign(mug.state, { waitingSince: Date.now() });
   mug.setZIndex(75);
   mug.attachClassName('waitingMug');
 });

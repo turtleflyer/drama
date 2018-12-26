@@ -78,6 +78,7 @@ export function addMugsLifeCyclesMethods(cl) {
 
     carriedToCustomer: {
       value() {
+        Object.assign(this.state, { placed: true });
         waitingMugs.addElement(this);
       },
     },

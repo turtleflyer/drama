@@ -289,7 +289,7 @@ export class RoleSet extends Set {
     });
     // eslint-disable-next-line
     fireEvent(
-      element,
+      new Set([element]),
       addElementEventType,
       managePropagation({}, { stopBubbling: true, stopPropagatingNested: true }),
     );
@@ -364,7 +364,7 @@ function waitGroupEvent(roleSet, type, eventID) {
  */
 export function fireEvent(target, type, event = {}) {
   applyDefaultPropagation(event);
-  if (target instanceof RoleSet) {
+  if (target instanceof Set) {
     let toProcess;
     if (target.size > 0) {
       toProcess = [...target];
