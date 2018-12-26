@@ -5,7 +5,6 @@ import { setA, resizeEverythingRole } from '../screens/gameplay/supersets/setA';
 import { registerActionOfType } from '../libs/actors_and_roles';
 import { onPulseTick, onResize } from './role_classes';
 import { setD } from '../debug/setD';
-import { stopBubbling } from '../libs/eventswork';
 import { debugPulse } from '../debug/fps';
 import Worker from '../webworkers/pulse.worker';
 import { defaultFontSize } from './gameplay_params';
@@ -18,11 +17,11 @@ const pulseWorker = new Worker();
 
 pulseWorker.onmessage = (e) => {
   if (!stage.state.paused) {
-    onPulseTick.fireAndWaitWhenExhausted(setA, stopBubbling({}))(() => {
+    onPulseTick.fireAndWaitWhenExhausted(setA)(() => {
       /**
        * Display debugging information
        */
-      onPulseTick.fire(setD, stopBubbling({}));
+      onPulseTick.fire(setD);
       if (e.data) {
         debugPulse.info = e.data;
       }
