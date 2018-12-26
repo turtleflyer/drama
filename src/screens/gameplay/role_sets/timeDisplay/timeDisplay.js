@@ -19,18 +19,14 @@ const timeBox = new Actor('div', timeDisplayParams.position, {
 
 const dayAndNight = new Actor('div', timeDisplayParams.dayAndNightPosition, {
   scaleF: stage.scaleF,
+  zIndex: 55,
 });
 
-setImg(dayAndNight, getDataURL(dayAndNightImg), {
-  height: '100%',
-  display: 'block',
-  position: 'static',
-  margin: 'auto',
-}).getAppendedAsChild(timeBox);
 timeBox.linkActor(dayAndNight);
 
 const timeProgressBar = new Actor('div', timeDisplayParams.progressBarPosition, {
   scaleF: stage.scaleF,
+  zIndex: 58,
 })
   .attachClassName('timeBox--progress-bar')
   .getAppendedAsChild(timeBox);
@@ -43,6 +39,12 @@ let startTime;
 
 timeDisplay.getInitializer(function () {
   this.addElement(timeBox);
+  setImg(dayAndNight, getDataURL(dayAndNightImg), {
+    height: '100%',
+    display: 'block',
+    position: 'static',
+    margin: 'auto',
+  }).getAppendedAsChild(timeBox);
   timeBox.getAppendedAsChild(stage);
   startTime = performance.now();
 });
