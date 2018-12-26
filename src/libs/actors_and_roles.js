@@ -175,10 +175,7 @@ export class RoleClass {
 
   fireAndWaitWhenExhausted(target, event) {
     fireEvent(target, this.type, event);
-    const waitPromise = waitWhenTypeExhausted(this.type);
-    return function (callback) {
-      return waitPromise.then(callback);
-    };
+    return waitWhenTypeExhausted(this.type);
   }
 }
 
