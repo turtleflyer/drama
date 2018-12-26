@@ -31,7 +31,7 @@ export default class Faucet extends Actor {
       },
       { scaleF: stage.scaleF, zIndex: 65 },
     );
-    setImg(this, imgPhases[0], {
+    setImg(this, getDataURL(imgPhases[0]), {
       height: '100%',
       width: '100%',
       left: '0',
@@ -60,7 +60,7 @@ export default class Faucet extends Actor {
   }
 
   switchState() {
-    setImg(this, this.params.imgPhases[this.state.phase]);
+    setImg(this, getDataURL(this.params.imgPhases[this.state.phase]));
   }
 
   runJet() {

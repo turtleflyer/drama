@@ -6,10 +6,13 @@ import { setImg } from '../../../../libs/helpers_lib';
 import barImg from './img/bar.png';
 import './styles.css';
 import { customersTablePosition, barPosition, objectivesParams } from './staticDecorations_params';
+import { getDataURL, imagesDataURL } from '../../../../libs/session_storage_lib';
+
+imagesDataURL.addElements([tableImg, barImg]);
 
 export const bar = setImg(
   new Actor('div', barPosition, { scaleF: stage.scaleF, zIndex: 60 }),
-  barImg,
+  getDataURL(barImg),
   {
     height: '100%',
     width: '100%',
@@ -19,7 +22,7 @@ export const bar = setImg(
 
 export const customersTable = setImg(
   new Actor('div', customersTablePosition, { scaleF: stage.scaleF, zIndex: 55 }),
-  tableImg,
+  getDataURL(tableImg),
   { width: '100%' },
 );
 

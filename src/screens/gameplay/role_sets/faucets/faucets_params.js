@@ -1,6 +1,7 @@
 /* eslint-env browser */
 import { beerTypes } from '../../../../stage/gameplay_params';
 import { importAll } from '../../../../libs/helpers_lib';
+import { imagesDataURL } from '../../../../libs/session_storage_lib';
 
 export const switchTypes = {
   NORMAL: '@@switchTypes/NORMAL',
@@ -14,7 +15,10 @@ export const faucetModels = {
       width: 110,
       height: 275,
     },
-    imgPhases: importAll(require.context('./img/normalIPA', false, /\.png$/)),
+    imgPhases: importAll(require.context('./img/normalIPA', false, /\.png$/)).map((img) => {
+      imagesDataURL.addElement(img);
+      return img;
+    }),
     beerTypes: [beerTypes.IPA],
     switchType: switchTypes.NORMAL,
     mugPlacePosition: {

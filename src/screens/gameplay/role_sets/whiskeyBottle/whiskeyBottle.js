@@ -7,6 +7,9 @@ import { setImg, updateStyle } from '../../../../libs/helpers_lib';
 import { bottleToFill } from '../bottleToFill/bottleToFill';
 import { addSetPositionXYMethod } from '../mugs/mugsClass_decorators';
 import './styles.css';
+import { getDataURL, imagesDataURL } from '../../../../libs/session_storage_lib';
+
+imagesDataURL.addElement(bottleImg);
 
 // eslint-disable-next-line
 export const whiskeyBottle = new ActorsSet();
@@ -22,7 +25,7 @@ class WhiskeyBottle extends Actor {
   constructor() {
     super('div', whiskeyBottleParams.position, { scaleF: stage.scaleF, zIndex: 50 });
     this.setPositionXY(whiskeyBottleParams.position);
-    setImg(this, bottleImg, { width: '100%', bottom: '0px' });
+    setImg(this, getDataURL(bottleImg), { width: '100%', bottom: '0px' });
     this.getAppendedAsChild(stage);
   }
 

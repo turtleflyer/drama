@@ -8,6 +8,9 @@ import './styles.css';
 import { timeDisplayParams, rotationAngleOfDayAndNight } from './timeDisplay_params';
 import { gameResultsTypes } from '../resultOfGame/resultOfGame_params';
 import { resultOfGame } from '../resultOfGame/resultOfGame';
+import { getDataURL, imagesDataURL } from '../../../../libs/session_storage_lib';
+
+imagesDataURL.addElement(dayAndNightImg);
 
 const timeBox = new Actor('div', timeDisplayParams.position, {
   scaleF: stage.scaleF,
@@ -18,7 +21,7 @@ const dayAndNight = new Actor('div', timeDisplayParams.dayAndNightPosition, {
   scaleF: stage.scaleF,
 });
 
-setImg(dayAndNight, dayAndNightImg, {
+setImg(dayAndNight, getDataURL(dayAndNightImg), {
   height: '100%',
   display: 'block',
   position: 'static',

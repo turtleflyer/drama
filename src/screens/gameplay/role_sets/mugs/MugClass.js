@@ -8,6 +8,7 @@ import { customerReactionsTypes } from '../customersReactions/customersReactions
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
 import { fillingMugs } from '../fillingMugs/fillingMugs';
+import { getDataURL } from '../../../../libs/session_storage_lib';
 
 export default class Mug extends Actor {
   constructor(beerType, horizontalPosition = 0) {
@@ -17,7 +18,7 @@ export default class Mug extends Actor {
     } = img;
     super('div', { width }, { scaleF: stage.scaleF, zIndex: 50 });
     this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase });
-    setImg(this, empty, { width: '100%', bottom: '0px' });
+    setImg(this, getDataURL(empty), { width: '100%', bottom: '0px' });
     this.beerType = beerType;
     this.params = {
       fillingPhasesImgs,
@@ -46,15 +47,15 @@ export default class Mug extends Actor {
       },
     } = this;
     if (overfilled) {
-      setImg(this, overfilledPhasesImgs[overfilledPhase]);
+      setImg(this, getDataURL(overfilledPhasesImgs[overfilledPhase]));
     } else if (!totalBeer) {
-      setImg(this, empty);
+      setImg(this, getDataURL(empty));
     } else {
       const numberOfSteps = totalBeer * (numberOfFillingPhases + 0.3) - 0.3;
       if (numberOfSteps < 0) {
-        setImg(this, empty);
+        setImg(this, getDataURL(empty));
       } else {
-        setImg(this, fillingPhasesImgs[Math.floor(numberOfSteps)]);
+        setImg(this, getDataURL(fillingPhasesImgs[Math.floor(numberOfSteps)]));
       }
     }
     return this;

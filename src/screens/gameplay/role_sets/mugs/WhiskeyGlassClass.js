@@ -8,6 +8,7 @@ import { customerReactionsTypes } from '../customersReactions/customersReactions
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
 import { fillingGlass } from '../fillingGlass/fillingGlass';
+import { getDataURL } from '../../../../libs/session_storage_lib';
 
 const { img, volume, costOfFilledGlass } = whiskeyGlassParams;
 
@@ -16,7 +17,7 @@ export default class WhiskeyGlass extends Actor {
     const { width, empty, full } = img;
     super('div', { width }, { scaleF: stage.scaleF, zIndex: 50 });
     this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase });
-    setImg(this, empty, { width: '100%', bottom: '0px' });
+    setImg(this, getDataURL(empty), { width: '100%', bottom: '0px' });
     this.params = {
       full,
       empty,
@@ -87,7 +88,7 @@ export default class WhiskeyGlass extends Actor {
   }
 
   showToBeFilled() {
-    setImg(this, this.params.full);
+    setImg(this, getDataURL(this.params.full));
   }
 }
 

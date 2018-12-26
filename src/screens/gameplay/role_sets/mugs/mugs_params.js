@@ -4,6 +4,11 @@ import { importAll } from '../../../../libs/helpers_lib';
 import { beerTypes } from '../../../../stage/gameplay_params';
 import emptyGlassImg from './img/whiskeyGlass/glass_empty.png';
 import fullGlassImg from './img/whiskeyGlass/glass_full.png';
+import { imagesDataURL } from '../../../../libs/session_storage_lib';
+
+imagesDataURL.addElements([emptyGlassImg, fullGlassImg]);
+
+imagesDataURL.addElement(imgIPAEmpty);
 
 export const mugTypes = {
   [beerTypes.IPA]: {
@@ -12,10 +17,16 @@ export const mugTypes = {
       empty: imgIPAEmpty,
       fillingPhasesImgs: importAll(
         require.context('./img/IPA/IPA_filling_states', false, /\.png$/),
-      ),
+      ).map((img) => {
+        imagesDataURL.addElement(img);
+        return img;
+      }),
       overfilledPhasesImgs: importAll(
         require.context('./img/IPA/IPA_overfilled_states', false, /\.png$/),
-      ),
+      ).map((img) => {
+        imagesDataURL.addElement(img);
+        return img;
+      }),
     },
     volume: 4,
   },
