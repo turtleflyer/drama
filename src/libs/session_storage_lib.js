@@ -1,9 +1,10 @@
+import { RoleSet, setActionOnAddElement } from './eventswork';
+
 /* eslint-env browser */
 const xhr = new XMLHttpRequest();
 const fileReader = new FileReader();
 
-// eslint-disable-next-line
-export async function retrieveDataURL(src) {
+async function retrieveDataURL(src) {
   let dataURL = sessionStorage.getItem(src);
   if (dataURL) {
     return dataURL;
@@ -52,4 +53,20 @@ export async function retrieveDataURL(src) {
   }
 
   return dataURL;
+}
+
+export const imagesDataURL = new RoleSet();
+
+const retrievingPromises = [];
+
+setActionOnAddElement(imagesDataURL, ({ target: src }) => {
+  retrievingPromises.push(retrieveDataURL(src));
+});
+
+export function whenAllURLRetrieved() {
+  return Promise.all(retrievingPromises);
+}
+
+export function getDataURL(src) {
+  return sessionStorage.getItem(src);
 }
