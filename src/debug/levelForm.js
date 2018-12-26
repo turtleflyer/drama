@@ -20,11 +20,13 @@ registerActionOfType('submit', stopButton, {
     event.preventDefault();
     const level = Number(event.srcElement[0].value);
     startStopLevel.stop();
-    setA.getCleaner().fireAndWaitWhenExhausted()(() => {
-      stage.defineLevel(level);
-      setA.getInitializer().fireAndWaitWhenExhausted()(() => {
-        startStopLevel.start();
-      });
-    });
+    setA
+      .getCleaner()
+      .fireAndWaitWhenExhausted()
+      .then(() => {
+        stage.defineLevel(level);
+        return setA.getInitializer().fireAndWaitWhenExhausted();
+      })
+      .then(() => startStopLevel.start());
   },
 }).start();

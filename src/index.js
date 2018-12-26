@@ -10,6 +10,4 @@ import { waitWhenTypeExhausted } from './libs/eventswork';
 waitWhenTypeExhausted('onAddElement')
   .then(whenAllURLRetrieved)
   .then(() => setA.getInitializer().fireAndWaitWhenExhausted())
-  .then(() => {
-    startStopLevel.start();
-  });
+  .then(() => startStopLevel.start());
