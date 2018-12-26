@@ -1,5 +1,6 @@
 /* eslint-env browser */
 import { importAll } from '../../../../libs/helpers_lib';
+import { imagesDataURL } from '../../../../libs/session_storage_lib';
 
 export const customersReactionsParams = {
   position: {
@@ -16,6 +17,9 @@ export const customerReactionsTypes = {
 };
 
 export const customerReactionsImgs = importAll(require.context('./img', false, /\.png$/)).reduce(
-  (imgs, r, i) => Object.assign(imgs, { [Object.values(customerReactionsTypes)[i]]: r }),
+  (imgs, src, i) => {
+    imagesDataURL.addElement(src);
+    return Object.assign(imgs, { [Object.values(customerReactionsTypes)[i]]: src });
+  },
   {},
 );

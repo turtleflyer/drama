@@ -4,6 +4,7 @@ import stage from '../../../../stage/stage';
 import { setImg } from '../../../../libs/helpers_lib';
 import './styles.css';
 import { customersReactionsParams, customerReactionsImgs } from './customersReactions_params';
+import { getDataURL } from '../../../../libs/session_storage_lib';
 
 let swayPosition = -10;
 
@@ -17,7 +18,7 @@ export default class CustomersReaction extends Actor {
     };
     swayPosition *= -1;
     super('div', actualPosition, { scaleF: stage.scaleF, zIndex: 78 });
-    setImg(this, customerReactionsImgs[reactionType], { width: '100%' });
+    setImg(this, getDataURL(customerReactionsImgs[reactionType]), { width: '100%' });
     this.attachClassName('customersReaction');
     this.getAppendedAsChild(stage);
     this.state.lastTime = Date.now();
