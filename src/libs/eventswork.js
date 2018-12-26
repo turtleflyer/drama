@@ -460,10 +460,17 @@ export function eventChain(description, eventID) {
 }
 
 export function waitWhenTypeExhausted(type) {
-  const { promise, promiseHandle } = invokePromiseHandle();
-  // Register the promise handle to exhaustTypesMap
-  exhaustTypesMap.set(type, promiseHandle);
-  return promise;
+  let getType = type;
+  if (type === 'onAddElement') {
+    getType = addElementEventType;
+  }
+  if (countTypesInQueue.get(getType)) {
+    const { promise, promiseHandle } = invokePromiseHandle();
+    // Register the promise handle to exhaustTypesMap
+    exhaustTypesMap.set(getType, promiseHandle);
+    return promise;
+  }
+  return Promise.resolve();
 }
 
 eventChain(
