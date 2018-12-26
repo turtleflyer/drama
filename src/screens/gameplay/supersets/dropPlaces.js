@@ -41,9 +41,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
                 const { faucet } = place;
                 if (!faucet.state.placedMug) {
                   mug.setPositionXY(place.whereToPlaceMug());
-                  faucet.placeMug(mug);
                   mug.placedToBeFilled(faucet);
-                  fillingMugs.addElement(mug);
                 }
               }
               break;
@@ -55,7 +53,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
             case glassPlace:
               if (mug instanceof WhiskeyGlass && fillingGlass.size === 0) {
                 mug.setPositionXY(place.whereToPlaceMug());
-                fillingGlass.addElement(mug);
+                mug.placedToBeFilled();
               }
               break;
 

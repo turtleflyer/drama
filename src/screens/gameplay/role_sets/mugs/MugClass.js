@@ -7,6 +7,7 @@ import { mugTypes, magsCreatingParams } from './mugs_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
+import { fillingMugs } from '../fillingMugs/fillingMugs';
 
 export default class Mug extends Actor {
   constructor(beerType, horizontalPosition = 0) {
@@ -127,6 +128,8 @@ export default class Mug extends Actor {
     });
     this.updateNextThreshold();
     this.setZIndex(75);
+    faucet.placeMug(this);
+    fillingMugs.addElement(this);
   }
 }
 

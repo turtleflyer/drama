@@ -5,7 +5,3 @@ import { ActorsSet } from '../../../../libs/actors_and_roles';
 export const fillingGlass = new ActorsSet();
 
 fillingGlass.name = 'fillingGlass';
-
-fillingGlass.onAddActorEvent(({ target: mug }) => {
-  mug.state.placed = true;
-});

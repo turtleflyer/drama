@@ -7,6 +7,7 @@ import { tuneGame } from '../../../../stage/gameplay_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
+import { fillingGlass } from '../fillingGlass/fillingGlass';
 
 const { img, volume, costOfFilledGlass } = whiskeyGlassParams;
 
@@ -74,6 +75,7 @@ export default class WhiskeyGlass extends Actor {
       filled: false,
     });
     this.setZIndex(75);
+    fillingGlass.addElement(this);
   }
 
   elevateToBeFilled() {
