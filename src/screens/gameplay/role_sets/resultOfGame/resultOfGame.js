@@ -1,7 +1,6 @@
 /* eslint-env browser */
 import {
   ActorsSet,
-  RoleClass,
   Actor,
   registerActionOfType,
 } from '../../../../libs/actors_and_roles';
