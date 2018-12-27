@@ -9,6 +9,7 @@ import { addSetPositionXYMethod } from '../mugs/mugsClass_decorators';
 import './styles.css';
 import { getDataURL, imagesDataURL } from '../../../../libs/session_storage_lib';
 import { glassType } from '../../../../stage/gameplay_params';
+import { fillingGlass } from '../fillingGlass/fillingGlass';
 
 imagesDataURL.addElement(bottleImg);
 
@@ -36,9 +37,11 @@ class WhiskeyBottle extends Actor {
   }
 
   getBackOnTable() {
+    const [glass] = [...fillingGlass];
     this.setPositionXY(whiskeyBottleParams.position);
     whiskeyBottle.addElement(this);
     this.detachJet();
+    glass.backOnTable();
   }
 
   startFilling() {
