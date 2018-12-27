@@ -8,6 +8,7 @@ import { bottleToFill } from '../bottleToFill/bottleToFill';
 import { addSetPositionXYMethod } from '../mugs/mugsClass_decorators';
 import './styles.css';
 import { getDataURL, imagesDataURL } from '../../../../libs/session_storage_lib';
+import { glassType } from '../../../../stage/gameplay_params';
 
 imagesDataURL.addElement(bottleImg);
 
@@ -78,7 +79,9 @@ class WhiskeyBottle extends Actor {
 addSetPositionXYMethod(WhiskeyBottle);
 
 whiskeyBottle.getInitializer(function () {
-  this.addElement(new WhiskeyBottle());
+  if (stage.params.levelParams.mugsDistribution[glassType]) {
+    this.addElement(new WhiskeyBottle());
+  }
 });
 
 registerActionOfType('mousedown', whiskeyBottle, {
