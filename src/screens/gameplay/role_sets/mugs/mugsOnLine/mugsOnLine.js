@@ -22,7 +22,7 @@ mugsOnLine.name = 'mugsOnLine';
 const { width: stageWidth } = stageDimension;
 let lastMug;
 let timeOfNextBirth;
-let lastReputationValue = stage.state.reputation;
+let lastReputationValue;
 let queueOfMugTypes;
 let lastCreatedType;
 
@@ -112,7 +112,6 @@ mugsOnLine.getInitializer(function () {
   mug.params.bornTime = performance.now() + magsCreatingParams.initialDelay * 1000;
   this.addElements([mug]);
   lastMug = mug;
-  refreshTimeOfNextBirth(this);
 });
 
 export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {

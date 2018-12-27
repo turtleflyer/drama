@@ -31,7 +31,6 @@ class Stage extends ActorsSet {
     this.origin = { x: left, y: top };
     Object.assign(this, stageDimension);
     this.params = {};
-    this.defineLevel(0);
   }
 
   get scaleF() {

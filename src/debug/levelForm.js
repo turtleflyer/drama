@@ -1,8 +1,7 @@
 /* eslint-env browser */
 import { ActorsSet, registerActionOfType } from '../libs/actors_and_roles';
 import { startStopLevel } from '../roles_manipulators';
-import { setA } from '../screens/gameplay/supersets/setA';
-import stage from '../stage/stage';
+import { startLevel } from '../stage/level_starter';
 
 document
   .querySelector('body')
@@ -20,13 +19,6 @@ registerActionOfType('submit', stopButton, {
     event.preventDefault();
     const level = Number(event.srcElement[0].value);
     startStopLevel.stop();
-    setA
-      .getCleaner()
-      .fireAndWaitWhenExhausted()
-      .then(() => {
-        stage.defineLevel(level);
-        return setA.getInitializer().fireAndWaitWhenExhausted();
-      })
-      .then(() => startStopLevel.start());
+    startLevel(level);
   },
 }).start();
