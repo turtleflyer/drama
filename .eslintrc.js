@@ -8,5 +8,6 @@ module.exports = {
     'no-multi-assign': 'off',
     'no-restricted-syntax': ['off', { selector: 'ForOfStatement' }],
     'no-plusplus': 'off',
+    'no-constant-condition': ["warn", { "checkLoops": false }]
   },
 };
