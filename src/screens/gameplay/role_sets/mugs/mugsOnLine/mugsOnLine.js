@@ -112,6 +112,7 @@ mugsOnLine.getInitializer(function () {
   mug.params.bornTime = performance.now() + magsCreatingParams.initialDelay * 1000;
   this.addElements([mug]);
   lastMug = mug;
+  lastReputationValue = null;
 });
 
 export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
