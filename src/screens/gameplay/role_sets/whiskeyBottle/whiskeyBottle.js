@@ -41,7 +41,9 @@ class WhiskeyBottle extends Actor {
     this.setPositionXY(whiskeyBottleParams.position);
     whiskeyBottle.addElement(this);
     this.detachJet();
-    glass.backOnTable();
+    if (glass) {
+      glass.backOnTable();
+    }
   }
 
   startFilling() {
