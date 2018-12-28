@@ -16,7 +16,7 @@ import {
 const pulseWorker = new Worker();
 
 pulseWorker.onmessage = (e) => {
-  if (!stage.state.paused) {
+  if (!(stage.state && stage.state.paused)) {
     onPulseTick.fireAndWaitWhenExhausted(setA).then(() => {
       /**
        * Display debugging information

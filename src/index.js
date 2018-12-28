@@ -8,4 +8,4 @@ import { startLevel } from './stage/level_starter';
 
 waitWhenTypeExhausted('onAddElement')
   .then(whenAllURLRetrieved)
-  .then(startLevel(0));
+  .then(() => startLevel(0));

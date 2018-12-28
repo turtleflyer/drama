@@ -12,14 +12,14 @@ export const levelsDescription = [
       mugsSpeed: 75,
       initMugDensity: 4,
       remainingTime: 50,
-      moneyToEarn: 300,
+      moneyToEarn: 150,
       faucets: [{ model: faucetModels.normalIPA, horizontalPosition: 140 }],
       mugsDistribution: {
         [beerTypes.IPA]: 100,
       },
     },
     initState: {
-      money: 100,
+      money: 30,
     },
   },
   {
