@@ -56,7 +56,9 @@ class Stage extends ActorsSet {
       calculatedDistribution[key] = currentCup;
     });
 
-    this.state = { ...commonInitState, ...levelEntry.initState, paused: false };
+    this.state = {
+      ...commonInitState, ...levelEntry.initState, paused: false, level,
+    };
     this.params.levelParams = { ...levelEntry.params, mugsDistribution: calculatedDistribution };
   }
 
