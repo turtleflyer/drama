@@ -14,6 +14,7 @@ import WhiskeyGlass from '../WhiskeyGlassClass';
 import { fallenMug } from '../../fallenMug/fallenMug';
 import { fillingGlass } from '../../fillingGlass/fillingGlass';
 import { pouringMug } from '../../pouringMug/pouringMug';
+import { startStopRoles } from '../../../../../roles_manipulators';
 
 export const mugsOnLine = new ActorsSet();
 
@@ -179,3 +180,5 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
     }
   },
 });
+
+startStopRoles.addElement(generateMugsRole);

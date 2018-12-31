@@ -7,6 +7,8 @@ import { waitingMugParams } from './waitingMugs_params';
 import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
 import { hookPlace } from '../hookPlace/hookPlace';
 import './styles.css';
+import { startStopRoles } from '../../../../roles_manipulators';
+import { setA } from '../../supersets/setA';
 
 export const waitingMugs = new ActorsSet();
 
@@ -37,3 +39,6 @@ export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {
     }
   },
 });
+
+startStopRoles.addElement(waitMugDisappearRole);
+setA.addElement(waitingMugs);

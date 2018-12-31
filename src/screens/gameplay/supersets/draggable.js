@@ -4,6 +4,7 @@ import { placeMugRole } from './dropPlaces';
 import { pouringMug } from '../role_sets/pouringMug/pouringMug';
 import { bottleToFill } from '../role_sets/bottleToFill/bottleToFill';
 import { stopDrag, followMouse } from '../../../stage/role_classes';
+import { setA } from './setA';
 
 export const draggable = new ActorsSet([dragMug, pouringMug, bottleToFill]);
 
@@ -37,3 +38,5 @@ export const stopDragRoleDraggable = stopDrag
     },
   })
   .start();
+
+setA.addElement(draggable);

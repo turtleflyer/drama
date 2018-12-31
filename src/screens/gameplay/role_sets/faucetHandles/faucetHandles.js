@@ -1,6 +1,7 @@
 import { faucets } from '../faucets/faucets';
 import FaucetHandle from './FaucetHandleClass';
 import { registerActionOfType, ActorsSet } from '../../../../libs/actors_and_roles';
+import { setA } from '../../supersets/setA';
 
 export const faucetHandles = new ActorsSet();
 faucetHandles.getInitializer(function () {
@@ -17,3 +18,5 @@ export const switchFaucetStateRole = registerActionOfType('click', faucetHandles
     faucets.switchFaucet(faucet);
   },
 }).start();
+
+setA.addElement(faucetHandles);

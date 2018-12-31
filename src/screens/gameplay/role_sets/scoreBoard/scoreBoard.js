@@ -1,6 +1,8 @@
 import { ActorsSet } from '../../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../../stage/role_classes';
 import ScoreBoard from './ScoreBoardClass';
+import { startStopRoles } from '../../../../roles_manipulators';
+import { setA } from '../../supersets/setA';
 
 // eslint-disable-next-line
 export const scoreBoard = new ActorsSet();
@@ -12,17 +14,11 @@ scoreBoard.getInitializer(function () {
 
 scoreBoard.name = 'scoreBoard';
 
-// let lastTime;
-
 export const updateMoneyRole = onPulseTick.registerAction(scoreBoard, {
   action({ target: scoreB }) {
     scoreB.refreshInformation();
-    // const currTime = Date.now();
-    // if (lastTime) {
-    //   stage.state.money -= ((currTime - lastTime) / 1000)
-    //     * stage.params.levelParams.loanExpenses;
-    //   scoreB.refreshInformation();
-    // }
-    // lastTime = currTime;
   },
 });
+
+startStopRoles.addElement(updateMoneyRole);
+setA.addElement(scoreBoard);

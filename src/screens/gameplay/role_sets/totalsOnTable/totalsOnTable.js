@@ -4,6 +4,8 @@ import { onPulseTick } from '../../../../stage/role_classes';
 import TotalOnTable from './TotalOnTableClass';
 import { totalsParams } from './totalsOnTable_params';
 import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
+import { startStopRoles } from '../../../../roles_manipulators';
+import { setA } from '../../supersets/setA';
 
 const signalElement = Symbol('@@totalsOnTable/signalElement');
 let elementsToCreate;
@@ -43,3 +45,6 @@ export const manageTotalsRole = onPulseTick.registerAction(totalsOnTable, {
     }
   },
 });
+
+startStopRoles.addElement(manageTotalsRole);
+setA.addElement(totalsOnTable);

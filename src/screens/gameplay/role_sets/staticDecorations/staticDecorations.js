@@ -7,25 +7,12 @@ import barImg from './img/bar.png';
 import './styles.css';
 import { customersTablePosition, barPosition, objectivesParams } from './staticDecorations_params';
 import { getDataURL, imagesDataURL } from '../../../../libs/session_storage_lib';
+import { setA } from '../../supersets/setA';
 
 imagesDataURL.addElements([tableImg, barImg]);
 
-// export const bar = setImg(
-//   new Actor('div', barPosition, { scaleF: stage.scaleF, zIndex: 60 }),
-//   getDataURL(barImg),
-//   {
-//     height: '100%',
-//     width: '100%',
-//     'object-fit': 'fill',
-//   },
-// );
 export const bar = new Actor('div', barPosition, { scaleF: stage.scaleF, zIndex: 60 });
 
-// export const customersTable = setImg(
-//   new Actor('div', customersTablePosition, { scaleF: stage.scaleF, zIndex: 55 }),
-//   getDataURL(tableImg),
-//   { width: '100%' },
-// );
 export const customersTable = new Actor('div', customersTablePosition, {
   scaleF: stage.scaleF,
   zIndex: 55,
@@ -58,3 +45,4 @@ staticDecorations.getInitializer(function () {
 });
 
 customersTable.name = 'customersTable';
+setA.addElement(staticDecorations);

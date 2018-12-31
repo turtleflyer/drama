@@ -4,6 +4,7 @@ import stage from '../../../../stage/stage';
 import { damagesParams } from './damages_params';
 import './styles.css';
 import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
+import { setA } from '../../supersets/setA';
 
 class Damage extends Actor {
   constructor(faucet, phase) {
@@ -26,3 +27,5 @@ damages.addDamage = function (faucet, phase) {
 registerActionOfType('animationend', damages, {
   action: removeElementWhenAnimationEnds,
 }).start();
+
+setA.addElement(damages);

@@ -6,6 +6,7 @@ import { glassPlace } from '../glassPlace/glassPlace';
 import { fillingGlass } from '../fillingGlass/fillingGlass';
 import stage from '../../../../stage/stage';
 import { whiskeyGlassParams } from '../mugs/mugs_params';
+import { startStopRoles } from '../../../../roles_manipulators';
 
 export const bottleToFill = new ActorsSet();
 
@@ -121,3 +122,5 @@ export const watchFillingRole = onPulseTick.registerAction(bottleToFill, {
     }
   },
 });
+
+startStopRoles.addElement(watchFillingRole);

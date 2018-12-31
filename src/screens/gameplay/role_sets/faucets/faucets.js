@@ -6,6 +6,8 @@ import { damages } from '../damages/damages';
 import { beerCost } from '../../../../stage/gameplay_params';
 import { switchTypes } from './faucets_params';
 import { damagesParams } from '../damages/damages_params';
+import { startStopRoles } from '../../../../roles_manipulators';
+import { setA } from '../../supersets/setA';
 
 // eslint-disable-next-line
 export const faucets = new ActorsSet();
@@ -73,3 +75,6 @@ export const countExpensesRole = onPulseTick.registerAction(faucets, {
     }
   },
 });
+
+startStopRoles.addElement(countExpensesRole);
+setA.addElement(faucets);

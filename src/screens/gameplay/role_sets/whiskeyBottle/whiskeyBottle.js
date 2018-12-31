@@ -10,6 +10,7 @@ import './styles.css';
 import { getDataURL, imagesDataURL } from '../../../../libs/session_storage_lib';
 import { glassType } from '../../../../stage/gameplay_params';
 import { fillingGlass } from '../fillingGlass/fillingGlass';
+import { setA } from '../../supersets/setA';
 
 imagesDataURL.addElement(bottleImg);
 
@@ -95,3 +96,5 @@ registerActionOfType('mousedown', whiskeyBottle, {
     bottle.goToFill();
   },
 }).start();
+
+setA.addElement(whiskeyBottle);

@@ -2,7 +2,6 @@
 import { ActorsSet, RoleClass } from '../../../libs/actors_and_roles';
 import { percentOverlap, updateStyle } from '../../../libs/helpers_lib';
 import { pourOutArea } from '../role_sets/pourOutArea/pourOutArea';
-import { fillingMugs } from '../role_sets/fillingMugs/fillingMugs';
 import { hookPlace } from '../role_sets/hookPlace/hookPlace';
 import { mugPlaces } from '../role_sets/mugPlaces/mugPlaces';
 import { pouringMug } from '../role_sets/pouringMug/pouringMug';
@@ -10,6 +9,7 @@ import { glassPlace } from '../role_sets/glassPlace/glassPlace';
 import Mug from '../role_sets/mugs/MugClass';
 import WhiskeyGlass from '../role_sets/mugs/WhiskeyGlassClass';
 import { fillingGlass } from '../role_sets/fillingGlass/fillingGlass';
+import { setA } from './setA';
 
 const signalSet = new ActorsSet();
 
@@ -82,3 +82,5 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
     },
   })
   .start();
+
+setA.addElement(dropPlaces);

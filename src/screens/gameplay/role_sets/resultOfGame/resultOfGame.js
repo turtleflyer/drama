@@ -4,6 +4,7 @@ import stage from '../../../../stage/stage';
 import './styles.css';
 import { gameResultsParams, gameResultsTypes } from './resultOfGame_params';
 import { startLevel } from '../../../../stage/level_starter';
+import { setA } from '../../supersets/setA';
 
 class GameResult extends Actor {
   constructor() {
@@ -78,3 +79,5 @@ resultOfGame.getResult = function (result) {
     resultOfGame.addElement(newElement);
   }
 };
+
+setA.addElement(resultOfGame);

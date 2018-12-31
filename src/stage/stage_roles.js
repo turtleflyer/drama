@@ -12,6 +12,7 @@ import {
   followMouseRoleDraggable,
   stopDragRoleDraggable,
 } from '../screens/gameplay/supersets/draggable';
+import { startStopRoles } from '../roles_manipulators';
 
 const pulseWorker = new Worker();
 
@@ -88,3 +89,5 @@ window.addEventListener('resize', () => {
     resizeStageRole.fire({ scaleF });
   }
 });
+
+startStopRoles.addElements([dragRole, stopCarryingRole, dropMugRole]);

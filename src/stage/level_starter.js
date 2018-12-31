@@ -1,6 +1,6 @@
 import stage from './stage';
 import { setA } from '../screens/gameplay/supersets/setA';
-import { startStopLevel } from '../roles_manipulators';
+import { startStopRoles } from '../roles_manipulators';
 
 // eslint-disable-next-line
 export function startLevel(level) {
@@ -11,5 +11,5 @@ export function startLevel(level) {
       stage.defineLevel(level);
       return setA.getInitializer().fireAndWaitWhenExhausted();
     })
-    .then(() => startStopLevel.start());
+    .then(() => startStopRoles.start());
 }

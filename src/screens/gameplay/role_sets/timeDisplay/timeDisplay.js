@@ -9,6 +9,8 @@ import { timeDisplayParams, rotationAngleOfDayAndNight } from './timeDisplay_par
 import { gameResultsTypes } from '../resultOfGame/resultOfGame_params';
 import { resultOfGame } from '../resultOfGame/resultOfGame';
 import { getDataURL, imagesDataURL } from '../../../../libs/session_storage_lib';
+import { startStopRoles } from '../../../../roles_manipulators';
+import { setA } from '../../supersets/setA';
 
 imagesDataURL.addElement(dayAndNightImg);
 
@@ -67,3 +69,6 @@ export const rotateDayAndNightRole = onPulseTick.registerAction(timeDisplay, {
     }
   },
 });
+
+startStopRoles.addElement(rotateDayAndNightRole);
+setA.addElement(timeDisplay);

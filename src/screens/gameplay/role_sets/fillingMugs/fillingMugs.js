@@ -2,6 +2,7 @@
 import { ActorsSet } from '../../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../../stage/role_classes';
 import { mugsParams } from '../mugs/mugs_params';
+import { startStopRoles } from '../../../../roles_manipulators';
 
 export const fillingMugs = new ActorsSet();
 
@@ -62,3 +63,5 @@ export const fillMugsRole = onPulseTick.registerAction(fillingMugs, {
     }
   },
 });
+
+startStopRoles.addElement(fillMugsRole);
