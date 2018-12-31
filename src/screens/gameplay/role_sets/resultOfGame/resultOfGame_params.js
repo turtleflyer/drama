@@ -12,4 +12,12 @@ export const gameResultsParams = {
     top: 200,
     height: 150,
   },
+  button: {
+    position: {
+      left: 190,
+      right: 190,
+      top: 85,
+      height: 45,
+    },
+  },
 };
