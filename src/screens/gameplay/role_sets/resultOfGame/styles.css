@@ -53,5 +53,5 @@
 }
 
 .gameResult--button--pushed {
-  animation: button-pushed 0.2s both;
+  animation: button-pushed 0.1s reverse;
 }
