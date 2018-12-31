@@ -57,14 +57,21 @@ export const followMouseRoleBottleToFill = followMouse
                 const {
                   start: startRotatePoint,
                   end: endRotatePoint,
+                  stillReady,
                 } = bottleFillParams.distancesXToRotateBottle;
 
                 const distanceX = x - xp;
 
                 if (distanceX > startRotatePoint || distanceX < endRotatePoint) {
-                  bottleNode.style.transform = null;
                   bottle.detachJet();
                   glass.backOnTable();
+                  if (distanceX < endRotatePoint && distanceX > stillReady) {
+                    bottleNode.style.transform = `rotate(${
+                      360 - bottleFillParams.pitchToBeReadyToFlow
+                    }deg)`;
+                  } else {
+                    bottleNode.style.transform = null;
+                  }
                 } else {
                   const angle = 360
                     - (bottleFillParams.maxPitch * (startRotatePoint - distanceX))
@@ -72,7 +79,7 @@ export const followMouseRoleBottleToFill = followMouse
 
                   bottleNode.style.transform = `rotate(${angle}deg)`;
 
-                  if (angle <= 360 - bottleFillParams.pitchWhenFlow) {
+                  if (angle <= 360 - bottleFillParams.pitchWhenFlowStart) {
                     bottle.attachJet(yp - y, angle);
                     stateOfBottle.fillingStartPoint = x;
                     stateOfBottle.fillingStartTime = performance.now();
