@@ -2,16 +2,14 @@
 import { Actor, ActorsSet } from '../../../../libs/actors_and_roles';
 import { pourOutAreaParams } from './pourOutArea_params';
 import stage from '../../../../stage/stage';
+import { makePlaceAbleHighlighting } from '../../../../debug/hilight_zone_class_decorator';
 
 const area = new Actor('div', pourOutAreaParams.position, {
   scaleF: stage.scaleF,
   zIndex: 30,
 });
 
-/**
- * Debugging purpose
- */
-area.node.style['background-color'] = 'rgba(255, 255, 255, 0.2)';
+makePlaceAbleHighlighting(area);
 
 // eslint-disable-next-line
 export const pourOutArea = new ActorsSet();

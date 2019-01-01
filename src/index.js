@@ -4,6 +4,7 @@ import { startLevel } from './stage/level_starter';
 import './debug/stopButton';
 import './debug/levelForm';
 import './debug/resultButton';
+import './debug/highlightZonesCheck';
 import './stage/stage_roles';
 import './stage/role_classes';
 import './screens/gameplay/supersets/mugs';

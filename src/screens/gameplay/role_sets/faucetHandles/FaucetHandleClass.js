@@ -8,10 +8,5 @@ export default class FaucetHandle extends Actor {
     this.faucet = faucet;
     faucet.switchHandle = this;
     faucet.node.appendChild(this.node);
-
-    /**
-     * Debugging purpose
-     */
-    this.node.style['background-color'] = 'rgba(255, 255, 255, 0.2)';
   }
 }

@@ -10,6 +10,7 @@ import Mug from '../role_sets/mugs/MugClass';
 import WhiskeyGlass from '../role_sets/mugs/WhiskeyGlassClass';
 import { fillingGlass } from '../role_sets/fillingGlass/fillingGlass';
 import { setA } from './setA';
+import { debugFlags, debugKeys } from '../../../debug/debug_flags';
 
 const signalSet = new ActorsSet();
 
@@ -71,13 +72,22 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
         pouringMug.addElement(mug);
       }
 
-      // Block existing only for the time of developing
-      if (roleSet !== signalSet) {
+      if (debugFlags[debugKeys.HIGHLIGHT_DROP_ZONES] && roleSet !== signalSet) {
         if (percentOverlap(placeRect, mugRect) > 0.75) {
           updateStyle(place.node, { 'background-color': 'rgba(255, 0, 0, 0.2)' });
         } else {
           updateStyle(place.node, { 'background-color': 'rgba(255, 255, 255, 0.2)' });
         }
+      }
+    },
+  })
+  .start();
+
+export const highlightPlacesRole = new RoleClass(Symbol('highlightPlacesRole'))
+  .registerAction(dropPlaces, {
+    action({ target: place }) {
+      if (place.highlight) {
+        place.highlight(debugFlags[debugKeys.HIGHLIGHT_DROP_ZONES]);
       }
     },
   })

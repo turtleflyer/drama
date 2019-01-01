@@ -2,6 +2,7 @@ import { ActorsSet, Actor } from '../../../../libs/actors_and_roles';
 import { glassPlaceParams } from './glassPlace_params';
 import stage from '../../../../stage/stage';
 import { addWhereToPlaceMugMethod } from '../mugPlaces/mugPlaceClass_decorators';
+import { makePlaceAbleHighlighting } from '../../../../debug/hilight_zone_class_decorator';
 
 class GlassPlace extends Actor {
   constructor() {
@@ -16,18 +17,11 @@ class GlassPlace extends Actor {
       x: ((left + right) / 2 - stage.origin.x) / stage.scaleF,
       y: ((top + bottom) / 2 - stage.origin.y) / stage.scaleF,
     };
-
-    /**
-     * Debugging purpose
-     */
-    this.node.style['background-color'] = 'rgba(255, 255, 255, 0.2)';
-    /**
-     *
-     */
   }
 }
 
 addWhereToPlaceMugMethod(GlassPlace, glassPlaceParams);
+makePlaceAbleHighlighting(GlassPlace);
 
 // eslint-disable-next-line
 export const glassPlace = new ActorsSet();
