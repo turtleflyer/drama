@@ -3,7 +3,7 @@ import { Actor } from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
 import { mugPlacesParams } from './mugPlaces_params';
 import { addWhereToPlaceMugMethod } from './mugPlaceClass_decorators';
-import { makePlaceAbleHighlighting } from '../../../../debug/hilight_zone_class_decorator';
+import { makePlaceAbleHighlighting } from '../../../../debug/highlight_zone_class_assets';
 
 export default class MugPlace extends Actor {
   constructor(faucet) {

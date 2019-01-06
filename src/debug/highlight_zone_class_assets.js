@@ -1,4 +1,6 @@
-// eslint-disable-next-line
+import { debugFlags, debugKeys } from './debug_flags';
+import { RoleClass } from '../libs/actors_and_roles';
+
 export function makePlaceAbleHighlighting(cl) {
   const getObj = cl.prototype || cl;
   Object.defineProperties(getObj, {
@@ -12,4 +14,12 @@ export function makePlaceAbleHighlighting(cl) {
       },
     },
   });
+}
+
+export const highlightPlaces = new RoleClass(Symbol('highlightPlaces'));
+
+export function highlightAction({ target: place }) {
+  if (place.highlight) {
+    place.highlight(debugFlags[debugKeys.HIGHLIGHT_DROP_ZONES]);
+  }
 }

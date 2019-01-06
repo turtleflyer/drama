@@ -2,7 +2,7 @@
 import { Actor, ActorsSet } from '../../../../libs/actors_and_roles';
 import { pourOutAreaParams } from './pourOutArea_params';
 import stage from '../../../../stage/stage';
-import { makePlaceAbleHighlighting } from '../../../../debug/hilight_zone_class_decorator';
+import { makePlaceAbleHighlighting } from '../../../../debug/highlight_zone_class_assets';
 
 const area = new Actor('div', pourOutAreaParams.position, {
   scaleF: stage.scaleF,

@@ -3,7 +3,7 @@ import { Actor } from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
 import { customersTable } from '../staticDecorations/staticDecorations';
 import { hookPlaceParams } from './hooksPlace_params';
-import { makePlaceAbleHighlighting } from '../../../../debug/hilight_zone_class_decorator';
+import { makePlaceAbleHighlighting } from '../../../../debug/highlight_zone_class_assets';
 
 export default class HookPlace extends Actor {
   constructor() {

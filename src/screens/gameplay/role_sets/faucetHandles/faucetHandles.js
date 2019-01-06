@@ -2,6 +2,7 @@ import { faucets } from '../faucets/faucets';
 import FaucetHandle from './FaucetHandleClass';
 import { registerActionOfType, ActorsSet } from '../../../../libs/actors_and_roles';
 import { setA } from '../../supersets/setA';
+import { highlightPlaces, highlightAction } from '../../../../debug/highlight_zone_class_assets';
 
 export const faucetHandles = new ActorsSet();
 faucetHandles.getInitializer(function () {
@@ -18,5 +19,11 @@ export const switchFaucetStateRole = registerActionOfType('click', faucetHandles
     faucets.switchFaucet(faucet);
   },
 }).start();
+
+export const highlightHandlesRole = highlightPlaces
+  .registerAction(faucetHandles, {
+    action: highlightAction,
+  })
+  .start();
 
 setA.addElement(faucetHandles);
