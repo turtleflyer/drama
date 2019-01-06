@@ -12,10 +12,14 @@ export const tuneGame = {
 
 export const defaultFontSize = 14;
 
-export const beerTypes = { IPA: '@@beerTypes/IPA' };
+export const beerTypes = {
+  IPA: '@@beerTypes/IPA',
+  LGR: '@@beerTypes/LGR',
+  PTR: '@@beerTypes/PTR',
+};
 
 export const glassType = '@@glassType';
 
-export const beerCost = { [beerTypes.IPA]: 2.5 };
+export const beerCost = { [beerTypes.IPA]: 2.5, [beerTypes.LGR]: 2, [beerTypes.PTR]: 3.5 };
 
 export const pulseTimeout = 16;

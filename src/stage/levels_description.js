@@ -19,21 +19,22 @@ export const levelsDescription = [
       },
     },
     initState: {
-      money: 30,
+      money: 50,
     },
   },
   {
     params: {
       mugsSpeed: 75,
       initMugDensity: 4.5,
-      remainingTime: 60,
-      moneyToEarn: 600,
+      remainingTime: 80,
+      moneyToEarn: 400,
       faucets: [
         { model: faucetModels.normalIPA, horizontalPosition: 40 },
-        { model: faucetModels.normalIPA, horizontalPosition: 190 },
+        { model: faucetModels.normalPTR, horizontalPosition: 190 },
       ],
       mugsDistribution: {
-        [beerTypes.IPA]: 100,
+        [beerTypes.IPA]: 80,
+        [beerTypes.PTR]: 20,
       },
     },
     initState: {

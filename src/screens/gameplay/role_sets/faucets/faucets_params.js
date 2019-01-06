@@ -39,4 +39,62 @@ export const faucetModels = {
       left: 17,
     },
   },
+  normalLGR: {
+    size: {
+      width: 110,
+      height: 275,
+    },
+    imgPhases: importAll(require.context('./img/normalLGR', false, /\.png$/)).map((img) => {
+      imagesDataURL.addElement(img);
+      return img;
+    }),
+    beerTypes: [beerTypes.LGR],
+    switchType: switchTypes.NORMAL,
+    mugPlacePosition: {
+      width: 90,
+      height: 90,
+      bottom: 0,
+      left: -20,
+    },
+    switchPlacePosition: {
+      width: 47,
+      height: 44,
+      top: 0,
+      left: 29,
+    },
+    jetPlacePosition: {
+      height: 80,
+      top: 130,
+      left: 17,
+    },
+  },
+  normalPTR: {
+    size: {
+      width: 110,
+      height: 275,
+    },
+    imgPhases: importAll(require.context('./img/normalPTR', false, /\.png$/)).map((img) => {
+      imagesDataURL.addElement(img);
+      return img;
+    }),
+    beerTypes: [beerTypes.PTR],
+    switchType: switchTypes.NORMAL,
+    mugPlacePosition: {
+      width: 90,
+      height: 90,
+      bottom: 0,
+      left: -20,
+    },
+    switchPlacePosition: {
+      width: 47,
+      height: 44,
+      top: 0,
+      left: 29,
+    },
+    jetPlacePosition: {
+      height: 80,
+      top: 130,
+      left: 17,
+    },
+  },
 };
