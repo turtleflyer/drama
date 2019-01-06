@@ -70,7 +70,9 @@ export default class Mug extends Actor {
     const {
       reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
     } = tuneGame;
-    const targetBeer = this.state.beers ? this.state.beers[targetBeerType] : 0;
+    // prettier-ignore
+    const targetBeer = this.state.beers && this.state.beers[targetBeerType]
+      ? this.state.beers[targetBeerType] : 0;
 
     const totalsPosition = { x: this.position.x, y: this.position.y - this.position.height };
 
