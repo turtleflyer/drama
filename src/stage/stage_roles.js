@@ -7,7 +7,7 @@ import { onPulseTick, onResize } from './role_classes';
 import { setD } from '../debug/setD';
 import { debugPulse } from '../debug/fps';
 import Worker from '../webworkers/pulse.worker';
-import { defaultFontSize } from './gameplay_params';
+import { defaultFontSize, stageDimension } from './gameplay_params';
 import {
   followMouseRoleDraggable,
   stopDragRoleDraggable,
@@ -51,17 +51,31 @@ export const dragRole = registerActionOfType('mousemove', stage, {
     event.preventDefault();
     const { clientX, clientY } = event;
 
-    const { scaleF } = stage;
+    const {
+      scaleF,
+      origin: { x: originX, y: originY },
+    } = stage;
     followMouseRoleDraggable.fire({
-      x: (clientX - stage.origin.x) / scaleF,
-      y: (clientY - stage.origin.y) / scaleF,
+      x: (clientX - originX) / scaleF,
+      y: (clientY - originY) / scaleF,
     });
   },
 });
 
 export const dropMugRole = registerActionOfType('mouseleave', stage, {
-  action() {
-    if (dragMug.size === 1) {
+  action({ event: { clientX, clientY } }) {
+    const {
+      scaleF,
+      origin: { x: originX, y: originY },
+    } = stage;
+    const { width: stageWidth, height: stageHeight } = stageDimension;
+    if (
+      dragMug.size === 1
+      && (clientX < originX
+        || clientY < originY
+        || (clientX - originX) / scaleF >= stageWidth
+        || (clientY - originY) / scaleF >= stageHeight)
+    ) {
       [...dragMug][0].dropDown();
     }
   },
