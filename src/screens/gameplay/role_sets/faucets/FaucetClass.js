@@ -5,7 +5,6 @@ import jetImg from './img/jet.gif';
 import stage from '../../../../stage/stage';
 import { switchTypes, faucetParams } from './faucets_params';
 import { imagesDataURL, getDataURL } from '../../../../libs/session_storage_lib';
-import { frontOfStage } from '../staticDecorations/staticDecorations';
 
 imagesDataURL.addElement(jetImg);
 
@@ -22,7 +21,7 @@ export default class Faucet extends Actor {
     } = model;
     super('div', Object.assign({ left: horizontalPosition }, size, faucetParams.position), {
       scaleF: stage.scaleF,
-      zIndex: 65,
+      zIndex: 68,
     });
     setImg(this, getDataURL(imgPhases[0]), { bottom: '0px', width: '100%' });
     const jet = new Actor('div', jetPlacePosition, { scaleF: stage.scaleF });

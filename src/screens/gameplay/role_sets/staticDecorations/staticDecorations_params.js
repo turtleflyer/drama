@@ -13,6 +13,12 @@ export const frontOfStagePosition = {
   bottom: 0,
 };
 
+export const barPosition = {
+  left: 87,
+  bottom: 101,
+  width: 405,
+};
+
 export const objectivesParams = {
   position: {
     right: 17,
