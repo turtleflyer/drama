@@ -17,7 +17,7 @@ export default class Faucet extends Actor {
       beerTypes,
       switchType,
       mugPlacePosition,
-      switchPlacePosition,
+      handlePlacePosition,
       jetPlacePosition,
     } = model;
     super('div', Object.assign({ left: horizontalPosition }, size, faucetParams.position), {
@@ -33,7 +33,7 @@ export default class Faucet extends Actor {
       beerTypes,
       switchType,
       mugPlacePosition,
-      switchPlacePosition,
+      handlePlacePosition,
       jet,
     };
     this.state = { beer: beerTypes[0], phase: 0 };

@@ -5,7 +5,7 @@ import { makePlaceAbleHighlighting } from '../../../../debug/highlight_zone_clas
 
 export default class FaucetHandle extends Actor {
   constructor(faucet) {
-    super('div', faucet.params.switchPlacePosition, { scaleF: stage.scaleF, zIndex: 70 });
+    super('div', faucet.params.handlePlacePosition, { scaleF: stage.scaleF, zIndex: 70 });
     this.faucet = faucet;
     faucet.switchHandle = this;
     faucet.node.appendChild(this.node);

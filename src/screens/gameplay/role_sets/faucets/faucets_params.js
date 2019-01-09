@@ -3,6 +3,15 @@ import { beerTypes } from '../../../../stage/gameplay_params';
 import { importAll } from '../../../../libs/helpers_lib';
 import { imagesDataURL } from '../../../../libs/session_storage_lib';
 
+const handlesTypes = {
+  normal: {
+    left: 8,
+    width: 50,
+    height: 42,
+    bottom: 219,
+  },
+};
+
 export const switchTypes = {
   NORMAL: '@@switchTypes/NORMAL',
   BROKEN: '@@switchTypes/BROKEN',
@@ -40,12 +49,7 @@ export const faucetModels = {
       bottom: 0,
       left: -20,
     },
-    switchPlacePosition: {
-      width: 47,
-      height: 44,
-      top: 0,
-      left: 29,
-    },
+    handlePlacePosition: handlesTypes.normal,
     jetPlacePosition: {
       height: 80,
       top: 130,
@@ -68,12 +72,7 @@ export const faucetModels = {
       bottom: 0,
       left: -20,
     },
-    switchPlacePosition: {
-      width: 47,
-      height: 44,
-      top: 0,
-      left: 29,
-    },
+    handlePlacePosition: handlesTypes.normal,
     jetPlacePosition: {
       height: 80,
       top: 130,
@@ -96,12 +95,7 @@ export const faucetModels = {
       bottom: 0,
       left: -20,
     },
-    switchPlacePosition: {
-      width: 47,
-      height: 44,
-      top: 0,
-      left: 29,
-    },
+    handlePlacePosition: handlesTypes.normal,
     jetPlacePosition: {
       height: 80,
       top: 130,
