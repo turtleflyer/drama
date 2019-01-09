@@ -76,7 +76,7 @@ export const mugsParams = {
 };
 
 export const magsCreatingParams = {
-  lineBase: 300,
+  lineBase: 389,
   initialDelay: 1,
   maxDelayToGenerateNext: 8,
 };
