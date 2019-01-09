@@ -3,9 +3,9 @@ import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
 import jetImg from './img/jet.gif';
 import stage from '../../../../stage/stage';
-import { bar } from '../staticDecorations/staticDecorations';
-import { switchTypes } from './faucets_params';
+import { switchTypes, faucetParams } from './faucets_params';
 import { imagesDataURL, getDataURL } from '../../../../libs/session_storage_lib';
+import { frontOfStage } from '../staticDecorations/staticDecorations';
 
 imagesDataURL.addElement(jetImg);
 
@@ -20,24 +20,11 @@ export default class Faucet extends Actor {
       switchPlacePosition,
       jetPlacePosition,
     } = model;
-    const { width, height } = size;
-    super(
-      'div',
-      {
-        width,
-        height,
-        left: horizontalPosition,
-        bottom: 0,
-      },
-      { scaleF: stage.scaleF, zIndex: 65 },
-    );
-    setImg(this, getDataURL(imgPhases[0]), {
-      height: '100%',
-      width: '100%',
-      left: '0',
-      right: '0',
-      'object-fit': 'contain',
+    super('div', Object.assign({ left: horizontalPosition }, size, faucetParams.position), {
+      scaleF: stage.scaleF,
+      zIndex: 65,
     });
+    setImg(this, getDataURL(imgPhases[0]), { bottom: '0px', width: '100%' });
     const jet = new Actor('div', jetPlacePosition, { scaleF: stage.scaleF });
     setImg(jet, getDataURL(jetImg), { height: '100%' });
     this.linkActor(jet);
@@ -56,7 +43,7 @@ export default class Faucet extends Actor {
     } else {
       this.state.isOpened = false;
     }
-    this.getAppendedAsChild(bar);
+    this.getAppendedAsChild(stage);
   }
 
   switchState() {

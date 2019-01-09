@@ -9,11 +9,24 @@ export const switchTypes = {
   DUAL: '@@switchTypes/DUAL',
 };
 
+export const faucetParams = {
+  position: {
+    bottom: 92,
+  },
+};
+
+export const faucetsPlaces = {
+  0: 264,
+  1: 176,
+  2: 336,
+  3: 144,
+  4: 384,
+};
+
 export const faucetModels = {
   normalIPA: {
     size: {
-      width: 110,
-      height: 275,
+      width: 80,
     },
     imgPhases: importAll(require.context('./img/normalIPA', false, /\.png$/)).map((img) => {
       imagesDataURL.addElement(img);
@@ -41,8 +54,7 @@ export const faucetModels = {
   },
   normalLGR: {
     size: {
-      width: 110,
-      height: 275,
+      width: 80,
     },
     imgPhases: importAll(require.context('./img/normalLGR', false, /\.png$/)).map((img) => {
       imagesDataURL.addElement(img);
@@ -70,8 +82,7 @@ export const faucetModels = {
   },
   normalPTR: {
     size: {
-      width: 110,
-      height: 275,
+      width: 80,
     },
     imgPhases: importAll(require.context('./img/normalPTR', false, /\.png$/)).map((img) => {
       imagesDataURL.addElement(img);
