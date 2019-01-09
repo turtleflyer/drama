@@ -1,23 +1,23 @@
 /* eslint-env browser */
 
-export const barPosition = {
-  left: 75,
-  top: 210,
-  width: 350,
-  height: 285,
+export const backOfStagePosition = {
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
 };
 
-export const customersTablePosition = {
-  left: 50,
-  top: 80,
-  width: 250,
+export const frontOfStagePosition = {
+  left: 0,
+  right: 0,
+  bottom: 0,
 };
 
 export const objectivesParams = {
   position: {
-    left: 500,
-    top: 20,
-    width: 140,
-    height: 60,
+    right: 17,
+    bottom: 146,
+    width: 75,
+    height: 82,
   },
 };
