@@ -26,7 +26,7 @@ const whiskeyJet = new Actor('div', whiskeyJetParams.position, {
 
 class WhiskeyBottle extends Actor {
   constructor() {
-    super('div', whiskeyBottleParams.position, { scaleF: stage.scaleF, zIndex: 50 });
+    super('div', whiskeyBottleParams.position, { scaleF: stage.scaleF, zIndex: 67 });
     this.setPositionXY(whiskeyBottleParams.position);
     setImg(this, getDataURL(bottleImg), { width: '100%', bottom: '0px' });
     this.getAppendedAsChild(stage);
@@ -40,6 +40,7 @@ class WhiskeyBottle extends Actor {
   getBackOnTable() {
     const [glass] = [...fillingGlass];
     this.setPositionXY(whiskeyBottleParams.position);
+    this.setZIndex(67);
     whiskeyBottle.addElement(this);
     this.detachJet();
     if (glass) {

@@ -1,8 +1,8 @@
 export const whiskeyBottleParams = {
   position: {
     width: 40,
-    x: 660,
-    y: 500,
+    x: 685,
+    y: 549,
   },
 };
 
