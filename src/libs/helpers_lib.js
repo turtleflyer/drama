@@ -33,8 +33,8 @@ export function setImg(element, newImg, style) {
 
 export function percentOverlap(targetBound, dragBound) {
   function linearOverlap(s1, e1, s2, e2) {
-    const c = Math.min(e1 - s2, e2 - s1);
-    return c < 0 ? 0 : c;
+    const o = Math.min(e1, e2) - Math.max(s1, s2);
+    return o < 0 ? 0 : o;
   }
 
   const {
@@ -47,7 +47,7 @@ export function percentOverlap(targetBound, dragBound) {
   // prettier-ignore
   const overlapArea = linearOverlap(tLeft, tRight, dLeft, dRight)
     * linearOverlap(tTop, tBottom, dTop, dBottom);
-  return overlapArea / dragArea;
+  return overlapArea && overlapArea / dragArea;
 }
 
 export function removeElementWhenAnimationEnds({ roleSet, target }) {
