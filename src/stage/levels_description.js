@@ -69,6 +69,26 @@ export const levelsDescription = {
       money: 100,
     },
   },
+  3: {
+    params: {
+      mugsSpeed: 75,
+      initMugDensity: 4,
+      remainingTime: 50,
+      moneyToEarn: 300,
+      faucetsDescription: {
+        models: [faucetModels.normalIPA, faucetModels.normalLGR, faucetModels.normalPTR],
+        placedScheme: placedFaucetsSchemes.threeNormals,
+      },
+      mugsDistribution: {
+        [beerTypes.IPA]: 40,
+        [beerTypes.LGR]: 50,
+        [beerTypes.PTR]: 60,
+      },
+    },
+    initState: {
+      money: 100,
+    },
+  },
 
   /**
    * For debugging purpose

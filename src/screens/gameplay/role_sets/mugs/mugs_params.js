@@ -14,7 +14,7 @@ imagesDataURL.addElements([imgIPAEmpty, imgLGREmpty, imgPTREmpty, emptyGlassImg,
 export const mugTypes = {
   [beerTypes.IPA]: {
     img: {
-      width: 50,
+      width: 59,
       empty: imgIPAEmpty,
       fillingPhasesImgs: importAll(
         require.context('./img/IPA/IPA_filling_states', false, /\.png$/),
@@ -33,7 +33,7 @@ export const mugTypes = {
   },
   [beerTypes.LGR]: {
     img: {
-      width: 55,
+      width: 65,
       empty: imgLGREmpty,
       fillingPhasesImgs: importAll(
         require.context('./img/LGR/LGR_filling_states', false, /\.png$/),
@@ -52,7 +52,7 @@ export const mugTypes = {
   },
   [beerTypes.PTR]: {
     img: {
-      width: 45,
+      width: 52,
       empty: imgPTREmpty,
       fillingPhasesImgs: importAll(
         require.context('./img/PTR/PTR_filling_states', false, /\.png$/),
