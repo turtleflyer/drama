@@ -1,10 +1,10 @@
 // eslint-disable-next-line
 export const hookPlaceParams = {
   position: {
-    top: 11,
-    height: 90,
-    left: 58,
-    right: 58,
+    top: 44,
+    left: 194,
+    width: 298,
+    height: 112,
   },
-  mugLine: 0.75,
+  mugLine: 0.72,
 };
