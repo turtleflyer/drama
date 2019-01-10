@@ -6,7 +6,7 @@ import { makePlaceAbleHighlighting } from '../../../../debug/highlight_zone_clas
 
 const area = new Actor('div', pourOutAreaParams.position, {
   scaleF: stage.scaleF,
-  zIndex: 30,
+  zIndex: 70,
 });
 
 makePlaceAbleHighlighting(area);
