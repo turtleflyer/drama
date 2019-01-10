@@ -6,7 +6,7 @@ import { makePlaceAbleHighlighting } from '../../../../debug/highlight_zone_clas
 
 class GlassPlace extends Actor {
   constructor() {
-    super('div', glassPlaceParams.position, { scaleF: stage.scaleF, zIndex: 30 });
+    super('div', glassPlaceParams.position, { scaleF: stage.scaleF, zIndex: 70 });
     this.getAppendedAsChild(stage);
     this.setPosition();
     const {

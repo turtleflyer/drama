@@ -1,10 +1,10 @@
 // eslint-disable-next-line
 export const glassPlaceParams = {
   position: {
-    width: 90,
-    height: 60,
-    bottom: 145,
-    right: 465,
+    width: 89,
+    height: 41,
+    bottom: 87,
+    right: 419,
   },
-  mugLine: 1,
+  mugLine: 0.83,
 };
