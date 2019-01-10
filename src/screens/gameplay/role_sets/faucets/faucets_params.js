@@ -12,6 +12,23 @@ const handlesTypes = {
   },
 };
 
+const jetPlacePositions = {
+  normal: {
+    left: 6,
+    bottom: 71,
+    height: 68,
+  },
+};
+
+const mugPlacePositions = {
+  normal: {
+    bottom: 0,
+    left: -24,
+    right: 24,
+    height: 95,
+  },
+};
+
 export const switchTypes = {
   NORMAL: '@@switchTypes/NORMAL',
   BROKEN: '@@switchTypes/BROKEN',
@@ -43,18 +60,9 @@ export const faucetModels = {
     }),
     beerTypes: [beerTypes.IPA],
     switchType: switchTypes.NORMAL,
-    mugPlacePosition: {
-      width: 90,
-      height: 90,
-      bottom: 0,
-      left: -20,
-    },
+    mugPlacePosition: mugPlacePositions.normal,
     handlePlacePosition: handlesTypes.normal,
-    jetPlacePosition: {
-      height: 80,
-      top: 130,
-      left: 17,
-    },
+    jetPlacePosition: jetPlacePositions.normal,
   },
   normalLGR: {
     size: {
@@ -66,18 +74,9 @@ export const faucetModels = {
     }),
     beerTypes: [beerTypes.LGR],
     switchType: switchTypes.NORMAL,
-    mugPlacePosition: {
-      width: 90,
-      height: 90,
-      bottom: 0,
-      left: -20,
-    },
+    mugPlacePosition: mugPlacePositions.normal,
     handlePlacePosition: handlesTypes.normal,
-    jetPlacePosition: {
-      height: 80,
-      top: 130,
-      left: 17,
-    },
+    jetPlacePosition: jetPlacePositions.normal,
   },
   normalPTR: {
     size: {
@@ -89,17 +88,8 @@ export const faucetModels = {
     }),
     beerTypes: [beerTypes.PTR],
     switchType: switchTypes.NORMAL,
-    mugPlacePosition: {
-      width: 90,
-      height: 90,
-      bottom: 0,
-      left: -20,
-    },
+    mugPlacePosition: mugPlacePositions.normal,
     handlePlacePosition: handlesTypes.normal,
-    jetPlacePosition: {
-      height: 80,
-      top: 130,
-      left: 17,
-    },
+    jetPlacePosition: jetPlacePositions.normal,
   },
 };
