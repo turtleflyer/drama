@@ -2,7 +2,7 @@
 import { ActorsSet } from '../../../../libs/actors_and_roles';
 import { followMouse, stopDrag, onPulseTick } from '../../../../stage/role_classes';
 import { bottleFillParams } from './bottleFill_params';
-import { glassPlace } from '../glassPlace/glassPlace';
+import { glassPlaceSet } from '../glassPlace/glassPlace';
 import { fillingGlass } from '../fillingGlass/fillingGlass';
 import stage from '../../../../stage/stage';
 import { whiskeyGlassParams } from '../mugs/mugs_params';
@@ -25,7 +25,7 @@ export const followMouseRoleBottleToFill = followMouse
       event: { x, y },
     }) {
       if (roleSet.size > 0) {
-        const { x: xp, y: yp } = glassPlace.centerOfGlassPlace;
+        const { x: xp, y: yp } = glassPlaceSet.centerXY;
         if (
           // eslint-disable-next-line
           Math.sqrt((xp - x) ** 2 + (yp - y) ** 2) > bottleFillParams.distanceToGetBackBottle
@@ -66,9 +66,8 @@ export const followMouseRoleBottleToFill = followMouse
                   bottle.detachJet();
                   glass.backOnTable();
                   if (distanceX < endRotatePoint && distanceX > stillReady) {
-                    bottleNode.style.transform = `rotate(${
-                      360 - bottleFillParams.pitchToBeReadyToFlow
-                    }deg)`;
+                    bottleNode.style.transform = `rotate(${360
+                      - bottleFillParams.pitchToBeReadyToFlow}deg)`;
                   } else {
                     bottleNode.style.transform = null;
                   }

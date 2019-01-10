@@ -5,7 +5,7 @@ import { pourOutArea } from '../role_sets/pourOutArea/pourOutArea';
 import { hookPlace } from '../role_sets/hookPlace/hookPlace';
 import { mugPlaces } from '../role_sets/mugPlaces/mugPlaces';
 import { pouringMug } from '../role_sets/pouringMug/pouringMug';
-import { glassPlace } from '../role_sets/glassPlace/glassPlace';
+import { glassPlaceSet } from '../role_sets/glassPlace/glassPlace';
 import Mug from '../role_sets/mugs/MugClass';
 import WhiskeyGlass from '../role_sets/mugs/WhiskeyGlassClass';
 import { fillingGlass } from '../role_sets/fillingGlass/fillingGlass';
@@ -17,7 +17,7 @@ const signalSet = new ActorsSet();
 
 signalSet.name = 'signalSet';
 
-export const dropPlaces = new ActorsSet([hookPlace, mugPlaces, pourOutArea, glassPlace, signalSet]);
+export const dropPlaces = new ActorsSet([hookPlace, mugPlaces, pourOutArea, glassPlaceSet, signalSet]);
 
 dropPlaces.name = 'dropPlaces';
 
@@ -52,7 +52,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
               mug.carriedToCustomer();
               break;
 
-            case glassPlace:
+            case glassPlaceSet:
               if (mug instanceof WhiskeyGlass && fillingGlass.size === 0) {
                 mug.setPositionXY(place.whereToPlaceMug());
                 mug.placedToBeFilled();

@@ -13,7 +13,7 @@ class GlassPlace extends Actor {
       left, right, top, bottom,
     } = this.node.getBoundingClientRect();
 
-    this.centerOfGlassPlace = {
+    this.centerXY = {
       x: ((left + right) / 2 - stage.origin.x) / stage.scaleF,
       y: ((top + bottom) / 2 - stage.origin.y) / stage.scaleF,
     };
@@ -24,11 +24,11 @@ addWhereToPlaceMugMethod(GlassPlace, glassPlaceParams);
 makePlaceAbleHighlighting(GlassPlace);
 
 // eslint-disable-next-line
-export const glassPlace = new ActorsSet();
-glassPlace.getInitializer(function () {
-  const newGlassPlace = new GlassPlace();
-  this.addElement(newGlassPlace);
-  this.centerOfGlassPlace = newGlassPlace.centerOfGlassPlace;
+export const glassPlaceSet = new ActorsSet();
+glassPlaceSet.getInitializer(function () {
+  const glassPlace = new GlassPlace();
+  this.addElement(glassPlace);
+  this.centerXY = glassPlace.centerXY;
 });
 
-glassPlace.name = 'glassPlace';
+glassPlaceSet.name = 'glassPlace';
