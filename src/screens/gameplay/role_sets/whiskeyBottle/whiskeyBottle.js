@@ -48,14 +48,6 @@ class WhiskeyBottle extends Actor {
     }
   }
 
-  startFilling() {
-    this.state.whenBeginFilling = performance.now();
-  }
-
-  stopFilling() {
-    this.state.whenBeginFilling = null;
-  }
-
   attachJet(l, angle = this.state.pitch) {
     this.state.pitch = angle;
     const angleInRad = ((angle - 270) * Math.PI) / 180;
@@ -70,16 +62,22 @@ class WhiskeyBottle extends Actor {
     });
     if (!whiskeyJet.state.isJetAttached) {
       whiskeyJet.getAppendedAsChild(this);
-      whiskeyJet.state.isJetAttached = true;
     }
   }
 
   detachJet() {
     this.linkActor(whiskeyJet, false);
     whiskeyJet.remove();
-    whiskeyJet.state.isJetAttached = false;
-    this.state.fillingStartPoint = null;
+  }
+
+  startFilling() {
+    this.state.fillingStartTime = performance.now();
+  }
+
+  stopFilling() {
+    this.node.style.transform = null;
     this.state.fillingStartTime = null;
+    this.detachJet();
   }
 }
 
