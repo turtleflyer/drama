@@ -1,5 +1,5 @@
 .scoreBoard {
-  background-color: rgb(202, 209, 208);
   text-align: center;
-  font-size: 120%;
+  font: 700 300%/80% sans-serif;
+  color: #10a317;
 }

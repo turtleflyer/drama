@@ -1,9 +1,9 @@
-/* eslint-env browser */
-
 // eslint-disable-next-line
-export const scorePosition = {
-  right: 10,
-  top: 10,
-  width: 100,
-  height: 20,
+export const scoreBoardParams = {
+  position: {
+    left: 207,
+    bottom: 17,
+    width: 166,
+    height: 37,
+  },
 };
