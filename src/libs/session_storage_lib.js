@@ -57,16 +57,14 @@ async function retrieveDataURL(src) {
 
 export const imagesDataURL = new RoleSet();
 
-const retrievingPromises = [Promise.resolve()];
+let retrievingPromises = Promise.resolve();
 
 setActionOnAddElement(imagesDataURL, ({ target: src }) => {
-  retrievingPromises.push(
-    retrievingPromises[retrievingPromises.length - 1].then(() => retrieveDataURL(src)),
-  );
+  retrievingPromises = retrievingPromises.then(() => retrieveDataURL(src));
 });
 
 export function whenAllURLRetrieved() {
-  return Promise.all(retrievingPromises);
+  return retrievingPromises;
 }
 
 export function getDataURL(src) {
