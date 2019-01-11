@@ -84,8 +84,9 @@ export const followMouseRoleBottleToFill = followMouse
                   bottleNode.style.transform = null;
                 }
               } else {
-                const angle = 360
-                  - (maxPitch * (startRotatePoint - distanceX)) / (startRotatePoint - endRotatePoint);
+                // prettier-ignore
+                const angle = 360 - (maxPitch * (startRotatePoint - distanceX))
+                  / (startRotatePoint - endRotatePoint);
 
                 bottleNode.style.transform = `rotate(${angle}deg)`;
 
