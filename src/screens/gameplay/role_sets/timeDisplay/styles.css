@@ -1,18 +1,35 @@
-.timeBox--wrapper {
-  background-color: rgb(34, 8, 39);
-  overflow: hidden;
+.timeCircle {
+  --background-color: white;
+  --alert-color: rgb(250, 169, 169);
+  border-radius: 50%;
+  background-color: var(--background-color);
 }
 
-@keyframes play-colors-progress-bar {
-  50% {
-    background-color: rgb(120, 12, 163);
-  }
-  100% {
-    background-color: rgb(105, 7, 145);
-  }
+.centerPoint {
+  margin: auto;
+  border-radius: 50%;
+  background-color: black;
 }
 
-.timeBox--progress-bar {
-  background-color: rgb(105, 7, 145);
-  animation: play-colors-progress-bar 1s infinite;
+.bigArrow,
+.smallArrow {
+  bottom: 50%;
+  width: 100%;
+  margin: auto;
+}
+
+.bigArrow {
+  height: 50%;
+}
+
+.smallArrow {
+  height: 35%;
+}
+
+.bigArrow img,
+.smallArrow img {
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  object-fit: contain;
 }

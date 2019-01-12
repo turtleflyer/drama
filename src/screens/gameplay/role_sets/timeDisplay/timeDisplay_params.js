@@ -1,26 +1,31 @@
-/* eslint-env browser */
-
-export const rotationAngleOfDayAndNight = 160;
-
+// eslint-disable-next-line
 export const timeDisplayParams = {
-  position: {
-    right: 10,
-    top: 80,
-    width: 140,
-    height: 50,
+  timeCircle: {
+    position: {
+      right: 108,
+      top: 41,
+      width: 80,
+      height: 80,
+    },
   },
 
-  dayAndNightPosition: {
-    top: 10,
-    left: 0,
-    right: 0,
-    height: 120,
+  centerPoint: {
+    position: {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: 7,
+      height: 7,
+    },
   },
 
-  progressBarPosition: {
-    top: 45,
-    right: 0,
-    width: 140,
-    height: 5,
+  bigArrow: {
+    position: {
+      left: 0,
+      right: 0,
+    },
   },
+
+  maxRemainingTime: 100,
 };
