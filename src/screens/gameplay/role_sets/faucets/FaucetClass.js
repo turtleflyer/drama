@@ -3,10 +3,26 @@ import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
 import jetImg from './img/jet.gif';
 import stage from '../../../../stage/stage';
-import { switchTypes, faucetParams } from './faucets_params';
+import { faucetParams, switchTypes } from './faucets_params';
 import { imagesDataURL, getDataURL } from '../../../../libs/session_storage_lib';
 
 imagesDataURL.addElement(jetImg);
+
+
+function switchNormalFaucet() {
+  const {
+    state,
+    params: { jet },
+  } = this;
+  state.phase = 1 - state.phase;
+  this.switchState();
+  state.isOpened = !state.isOpened;
+  if (state.isOpened) {
+    jet.getAppendedAsChild(this);
+  } else {
+    jet.remove();
+  }
+}
 
 export default class Faucet extends Actor {
   constructor(model, horizontalPosition) {
@@ -24,23 +40,20 @@ export default class Faucet extends Actor {
       zIndex: 68,
     });
     setImg(this, getDataURL(imgPhases[0]), { bottom: '0px', width: '100%' });
-    const jet = new Actor('div', jetPlacePosition, { scaleF: stage.scaleF });
-    setImg(jet, getDataURL(jetImg), { height: '100%' });
-    this.linkActor(jet);
     this.params = {
       imgPhases,
       beerTypes,
       switchType,
       mugPlacePosition,
       handlePlacePosition,
-      jet,
     };
-    this.state = { beer: beerTypes[0], phase: 0 };
-
-    if (switchType === switchTypes.BROKEN || switchType === switchTypes.DUAL) {
-      this.state.isOpened = true;
-    } else {
-      this.state.isOpened = false;
+    this.state = { beer: beerTypes[0], phase: 0, isOpened: false };
+    if (switchType === switchTypes.NORMAL) {
+      this.switch = switchNormalFaucet;
+      const jet = new Actor('div', jetPlacePosition, { scaleF: stage.scaleF });
+      setImg(jet, getDataURL(jetImg), { height: '100%' });
+      this.linkActor(jet);
+      Object.assign(this.params, { jet });
     }
     this.getAppendedAsChild(stage);
   }

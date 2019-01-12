@@ -16,7 +16,7 @@ export const switchFaucetStateRole = registerActionOfType('click', faucetHandles
     event.preventDefault();
     event.stopPropagation();
     const { faucet } = handle;
-    faucets.switchFaucet(faucet);
+    faucet.switch();
   },
 }).start();
 
