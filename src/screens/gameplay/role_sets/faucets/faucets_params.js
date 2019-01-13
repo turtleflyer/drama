@@ -35,6 +35,8 @@ export const switchTypes = {
   DUAL: '@@switchTypes/DUAL',
 };
 
+export const brokenSwitchTimeToTry = 150;
+
 export const faucetParams = {
   position: {
     bottom: 92,
@@ -49,47 +51,63 @@ export const faucetsPlaces = {
   4: 384,
 };
 
+const normalFaucet = {
+  size: {
+    width: 80,
+  },
+  switchType: switchTypes.NORMAL,
+  mugPlacePosition: mugPlacePositions.normal,
+  handlePlacePosition: handlesTypes.normal,
+  jetPlacePosition: jetPlacePositions.normal,
+};
+
+const normalIPA = {
+  ...normalFaucet,
+  beerTypes: [beerTypes.IPA],
+  imgPhases: importAll(require.context('./img/normalIPA', false, /\.png$/)).map((img) => {
+    imagesDataURL.addElement(img);
+    return img;
+  }),
+};
+
+const normalLGR = {
+  ...normalFaucet,
+  beerTypes: [beerTypes.LGR],
+  imgPhases: importAll(require.context('./img/normalLGR', false, /\.png$/)).map((img) => {
+    imagesDataURL.addElement(img);
+    return img;
+  }),
+};
+
+const normalPTR = {
+  ...normalFaucet,
+  beerTypes: [beerTypes.PTR],
+  imgPhases: importAll(require.context('./img/normalPTR', false, /\.png$/)).map((img) => {
+    imagesDataURL.addElement(img);
+    return img;
+  }),
+};
+
+const brokenIPA = {
+  ...normalIPA,
+  switchType: switchTypes.BROKEN,
+};
+
+const brokenLGR = {
+  ...normalLGR,
+  switchType: switchTypes.BROKEN,
+};
+
+const brokenPTR = {
+  ...normalPTR,
+  switchType: switchTypes.BROKEN,
+};
+
 export const faucetModels = {
-  normalIPA: {
-    size: {
-      width: 80,
-    },
-    imgPhases: importAll(require.context('./img/normalIPA', false, /\.png$/)).map((img) => {
-      imagesDataURL.addElement(img);
-      return img;
-    }),
-    beerTypes: [beerTypes.IPA],
-    switchType: switchTypes.NORMAL,
-    mugPlacePosition: mugPlacePositions.normal,
-    handlePlacePosition: handlesTypes.normal,
-    jetPlacePosition: jetPlacePositions.normal,
-  },
-  normalLGR: {
-    size: {
-      width: 80,
-    },
-    imgPhases: importAll(require.context('./img/normalLGR', false, /\.png$/)).map((img) => {
-      imagesDataURL.addElement(img);
-      return img;
-    }),
-    beerTypes: [beerTypes.LGR],
-    switchType: switchTypes.NORMAL,
-    mugPlacePosition: mugPlacePositions.normal,
-    handlePlacePosition: handlesTypes.normal,
-    jetPlacePosition: jetPlacePositions.normal,
-  },
-  normalPTR: {
-    size: {
-      width: 80,
-    },
-    imgPhases: importAll(require.context('./img/normalPTR', false, /\.png$/)).map((img) => {
-      imagesDataURL.addElement(img);
-      return img;
-    }),
-    beerTypes: [beerTypes.PTR],
-    switchType: switchTypes.NORMAL,
-    mugPlacePosition: mugPlacePositions.normal,
-    handlePlacePosition: handlesTypes.normal,
-    jetPlacePosition: jetPlacePositions.normal,
-  },
+  normalIPA,
+  normalLGR,
+  normalPTR,
+  brokenIPA,
+  brokenLGR,
+  brokenPTR,
 };
