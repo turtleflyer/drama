@@ -44,7 +44,6 @@ staticDecorations.getInitializer(function () {
   this.addElements([
     setImg(backOfStage, getDataURL(backOfStageImg), { width: '100%' }),
     setImg(frontOfStage, getDataURL(frontOfStageImg), { width: '100%', bottom: '0px' }),
-    postedSign,
     setImg(bar, getDataURL(barImg), { width: '100%', bottom: '0px' }),
     postedSign,
   ]);
