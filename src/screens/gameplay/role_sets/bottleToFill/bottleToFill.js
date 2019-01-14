@@ -57,7 +57,7 @@ export const followMouseRoleBottleToFill = followMouse
             // Check if filling is active.
             if (stateOfBottle.fillingStartTime) {
               // Check if the bottle position too low
-              // or too far for filling continuing or starting.
+              // or too far for filling to be continue or start.
               // Then filling stops.
               if (
                 y > yp - bottleYPositionElevationLimit
@@ -73,7 +73,8 @@ export const followMouseRoleBottleToFill = followMouse
             }
 
             // Check if filling is not active (it can be changed in the pervious block)
-            if (!stateOfBottle.fillingStartTime) {
+            // and the bottle is at sufficient height
+            if (!stateOfBottle.fillingStartTime && y < yp - bottleYPositionElevationLimit) {
               // Check if the bottle is outside the boundaries where it is leaning over the glass
               if (distanceX > startRotatePoint || distanceX < endRotatePoint) {
                 // Check if the bottle is in the distance where it leans at the angle defined
