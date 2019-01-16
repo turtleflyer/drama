@@ -25,4 +25,4 @@ import './screens/gameplay/role_sets/whiskeyBottle/whiskeyBottle';
 
 waitWhenTypeExhausted('onAddElement')
   .then(whenAllURLRetrieved)
-  .then(() => startLevel(0));
+  .then(() => startLevel(4));

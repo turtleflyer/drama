@@ -64,7 +64,7 @@ export default class WhiskeyGlass extends Actor {
   goDrug() {
     const { state } = this;
     Object.assign(state, {
-      placed: null,
+      place: null,
     });
     this.setZIndex(80);
   }
@@ -72,7 +72,7 @@ export default class WhiskeyGlass extends Actor {
   placedToBeFilled() {
     const { state } = this;
     Object.assign(state, {
-      placed: true,
+      place: true,
       filled: false,
     });
     this.setZIndex(75);

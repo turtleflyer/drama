@@ -78,7 +78,7 @@ export function addMugsLifeCyclesMethods(cl) {
 
     carriedToCustomer: {
       value() {
-        this.state.placed = true;
+        this.state.place = true;
         waitingMugs.addElement(this);
       },
     },

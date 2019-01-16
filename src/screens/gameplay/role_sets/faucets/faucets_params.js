@@ -3,30 +3,65 @@ import { beerTypes } from '../../../../stage/gameplay_params';
 import { importAll } from '../../../../libs/helpers_lib';
 import { imagesDataURL } from '../../../../libs/session_storage_lib';
 
-const handlesTypes = {
+const handlePositions = {
   normal: {
     left: 8,
     width: 50,
     height: 42,
     bottom: 219,
   },
+
+  dual: {
+    left: 36,
+    width: 72,
+    height: 42,
+    bottom: 219,
+  },
 };
 
-const jetPlacePositions = {
-  normal: {
+const jetPositions = {
+  normal: [{
     left: 6,
     bottom: 71,
     height: 68,
-  },
+  }],
+
+  dual: [
+    {
+      left: 20,
+      bottom: 71,
+      height: 68,
+    },
+    {
+      left: 122,
+      bottom: 71,
+      height: 68,
+    },
+  ],
 };
 
 const mugPlacePositions = {
-  normal: {
+  normal: [{
     bottom: 0,
     left: -24,
-    right: 24,
+    width: 80,
     height: 95,
-  },
+  }],
+
+  dual: [
+    {
+      bottom: 0,
+      left: -13,
+      width: 80,
+      height: 95,
+    },
+    {
+      bottom: 0,
+      left: 89,
+      width: 80,
+      height: 95,
+    },
+  ],
 };
 
 export const switchTypes = {
@@ -56,9 +91,19 @@ const normalFaucet = {
     width: 80,
   },
   switchType: switchTypes.NORMAL,
-  mugPlacePosition: mugPlacePositions.normal,
-  handlePlacePosition: handlesTypes.normal,
-  jetPlacePosition: jetPlacePositions.normal,
+  mugPlacePositions: mugPlacePositions.normal,
+  handlePosition: handlePositions.normal,
+  jetPositions: jetPositions.normal,
+};
+
+const dualFaucet = {
+  size: {
+    width: 146,
+  },
+  switchType: switchTypes.DUAL,
+  mugPlacePositions: mugPlacePositions.dual,
+  handlePosition: handlePositions.dual,
+  jetPositions: jetPositions.dual,
 };
 
 const normalIPA = {
@@ -103,6 +148,15 @@ const brokenPTR = {
   switchType: switchTypes.BROKEN,
 };
 
+const dualIPALGR = {
+  ...dualFaucet,
+  beerTypes: [beerTypes.IPA, beerTypes.LGR],
+  imgPhases: importAll(require.context('./img/dualIPA_LGR', false, /\.png$/)).map((img) => {
+    imagesDataURL.addElement(img);
+    return img;
+  }),
+};
+
 export const faucetModels = {
   normalIPA,
   normalLGR,
@@ -110,4 +164,5 @@ export const faucetModels = {
   brokenIPA,
   brokenLGR,
   brokenPTR,
+  dualIPALGR,
 };

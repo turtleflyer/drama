@@ -31,6 +31,7 @@ export const levelsDescription = {
       money: 50,
     },
   },
+
   1: {
     params: {
       mugsSpeed: 75,
@@ -50,6 +51,7 @@ export const levelsDescription = {
       money: 100,
     },
   },
+
   2: {
     params: {
       mugsSpeed: 75,
@@ -69,6 +71,7 @@ export const levelsDescription = {
       money: 100,
     },
   },
+
   3: {
     params: {
       mugsSpeed: 75,
@@ -83,6 +86,47 @@ export const levelsDescription = {
         [beerTypes.IPA]: 40,
         [beerTypes.LGR]: 50,
         [beerTypes.PTR]: 60,
+      },
+    },
+    initState: {
+      money: 100,
+    },
+  },
+
+  4: {
+    params: {
+      mugsSpeed: 75,
+      initMugDensity: 4,
+      remainingTime: 100,
+      moneyToEarn: 300,
+      faucetsDescription: {
+        models: [faucetModels.dualIPALGR],
+        placedScheme: placedFaucetsSchemes.oneNormal,
+      },
+      mugsDistribution: {
+        [beerTypes.IPA]: 50,
+        [beerTypes.LGR]: 50,
+
+      },
+    },
+    initState: {
+      money: 100,
+    },
+  },
+
+  5: {
+    params: {
+      mugsSpeed: 75,
+      initMugDensity: 4,
+      remainingTime: 100,
+      moneyToEarn: 300,
+      faucetsDescription: {
+        models: [faucetModels.brokenLGR],
+        placedScheme: placedFaucetsSchemes.oneNormal,
+      },
+      mugsDistribution: {
+        [beerTypes.LGR]: 100,
+
       },
     },
     initState: {

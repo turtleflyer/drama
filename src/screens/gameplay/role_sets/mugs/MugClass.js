@@ -109,29 +109,27 @@ export default class Mug extends Actor {
 
   goDrug() {
     const { state } = this;
-    if (state.faucet) {
-      state.faucet.releaseMug();
+    if (state.place) {
+      state.place.releaseMug();
     }
     Object.assign(state, {
-      faucet: null,
+      place: null,
       lastTime: null,
-      placed: null,
     });
     this.setZIndex(80);
   }
 
-  placedToBeFilled(faucet) {
+  placedToBeFilled(place) {
     const { state } = this;
     Object.assign(state, {
-      placed: true,
-      faucet,
+      place,
       beers: state.beers || {},
       total: state.total || 0,
       overfilled: state.overfilled || false,
     });
     this.updateNextThreshold();
     this.setZIndex(75);
-    faucet.placeMug(this);
+    place.placeMug(this);
     fillingMugs.addElement(this);
   }
 }

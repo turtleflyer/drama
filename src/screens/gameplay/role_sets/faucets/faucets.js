@@ -29,40 +29,44 @@ faucets.name = 'faucets';
 export const countExpensesRole = onPulseTick.registerAction(faucets, {
   action({ target: faucet }) {
     const currTime = Date.now();
-    if (faucet.state.isOpened) {
-      if (faucet.state.lastTime) {
+    const {
+      state: stateOfFaucet,
+      state: { descriptionOfRunningState, lastRenderedDamage },
+    } = faucet;
+    if (descriptionOfRunningState) {
+      if (stateOfFaucet.lastTime) {
         stage.state.money
-          -= ((currTime - faucet.state.lastTime) / 1000) * beerCost[faucet.state.beer];
+          -= ((currTime - stateOfFaucet.lastTime) / 1000) * beerCost[stateOfFaucet.beer];
       }
-      faucet.state.lastTime = currTime;
-      let isWasting = false;
-      const { placedMug } = faucet.state;
+      stateOfFaucet.lastTime = currTime;
+      const {
+        place,
+        place: {
+          state: { placedMug },
+        },
+      } = descriptionOfRunningState;
+
+      // Check if beer is wasting (condition of non existing or overfilled mug)
       if (!placedMug || placedMug.state.overfilled) {
-        isWasting = true;
-      }
-      if (isWasting) {
-        const { lastRenderedDamage } = faucet.state;
         if (lastRenderedDamage) {
+          const { whenStartToCount, alreadyCountedMoney } = lastRenderedDamage;
+          const { quant } = damagesParams;
           // prettier-ignore
-          const wastingMoney = ((currTime - lastRenderedDamage.created) / 1000)
-            * beerCost[faucet.state.beer];
-          if (wastingMoney > damagesParams.quant) {
-            damages.addDamage(faucet, lastRenderedDamage.phase);
-            // this.renderDamage(target, countWastingMoney % 2);
-            faucet.state.lastRenderedDamage = {
-              phase: 1 - lastRenderedDamage.phase,
-              created: currTime,
-            };
+          const wastedMoney = ((currTime - whenStartToCount) / 1000)
+            * beerCost[stateOfFaucet.beer];
+          if (Math.floor(wastedMoney / quant) > Math.floor(alreadyCountedMoney / quant)) {
+            damages.addDamage(place, Math.floor(wastedMoney / quant) % 2);
+            lastRenderedDamage.alreadyCountedMoney = wastedMoney;
           }
         } else {
-          faucet.state.lastRenderedDamage = { phase: 0, created: currTime };
+          stateOfFaucet.lastRenderedDamage = { whenStartToCount: currTime, alreadyCountedMoney: 0 };
         }
       } else {
-        faucet.state.lastRenderedDamage = null;
+        stateOfFaucet.lastRenderedDamage = null;
       }
     } else {
-      faucet.state.lastTime = null;
-      faucet.state.lastRenderedDamage = null;
+      stateOfFaucet.lastTime = null;
+      stateOfFaucet.lastRenderedDamage = null;
     }
   },
 });

@@ -1,8 +1,23 @@
 import { faucets } from '../faucets/faucets';
-import FaucetHandle from './FaucetHandleClass';
-import { registerActionOfType, ActorsSet } from '../../../../libs/actors_and_roles';
+import { registerActionOfType, ActorsSet, Actor } from '../../../../libs/actors_and_roles';
 import { setA } from '../../supersets/setA';
-import { highlightPlaces, highlightAction } from '../../../../debug/highlight_zone_class_assets';
+import {
+  highlightPlaces,
+  highlightAction,
+  makePlaceAbleHighlighting,
+} from '../../../../debug/highlight_zone_class_assets';
+import stage from '../../../../stage/stage';
+
+export default class FaucetHandle extends Actor {
+  constructor(faucet) {
+    super('div', faucet.params.handlePosition, { scaleF: stage.scaleF, zIndex: 70 });
+    this.faucet = faucet;
+    faucet.switchHandle = this;
+    faucet.node.appendChild(this.node);
+  }
+}
+
+makePlaceAbleHighlighting(FaucetHandle);
 
 export const faucetHandles = new ActorsSet();
 faucetHandles.getInitializer(function () {

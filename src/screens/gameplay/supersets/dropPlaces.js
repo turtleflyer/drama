@@ -17,7 +17,13 @@ const signalSet = new ActorsSet();
 
 signalSet.name = 'signalSet';
 
-export const dropPlaces = new ActorsSet([hookPlace, mugPlaces, pourOutArea, glassPlaceSet, signalSet]);
+export const dropPlaces = new ActorsSet([
+  hookPlace,
+  mugPlaces,
+  pourOutArea,
+  glassPlaceSet,
+  signalSet,
+]);
 
 dropPlaces.name = 'dropPlaces';
 
@@ -27,23 +33,23 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
       const placeRect = place.node && place.node.getBoundingClientRect();
       const mugRect = mug.getBoundingRect();
       const {
-        state: { placed: isPlaced, pouring },
+        state: stateOfMug,
+        state: { place: wherePlaced, pouring },
       } = mug;
 
       if (gotToPlace) {
         // Check if the mug was tested to be placed in all the possible places
         if (roleSet === signalSet) {
-          if (!isPlaced) {
+          if (!wherePlaced) {
             mug.dropDown();
           }
         } else if (percentOverlap(placeRect, mugRect) > 0.75) {
           switch (roleSet) {
             case mugPlaces:
               if (mug instanceof Mug) {
-                const { faucet } = place;
-                if (!faucet.state.placedMug) {
+                if (!place.placedMug) {
                   mug.setPositionXY(place.whereToPlaceMug());
-                  mug.placedToBeFilled(faucet);
+                  mug.placedToBeFilled(place);
                 }
               }
               break;
@@ -67,7 +73,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
         roleSet === pourOutArea
         && !pouring
         && mug instanceof Mug
-        && mug.state.total
+        && stateOfMug.total
         && percentOverlap(placeRect, mugRect) > 0.75
       ) {
         pouringMug.addElement(mug);

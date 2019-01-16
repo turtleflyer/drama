@@ -6,16 +6,16 @@ export const damagesParams = {
 
   position: [
     {
-      bottom: 70,
+      bottom: 80,
       width: 50,
       height: 50,
-      left: -50,
+      left: -30,
     },
     {
-      bottom: 70,
+      bottom: 80,
       width: 50,
       height: 50,
-      right: 30,
+      right: -10,
     },
   ],
 };

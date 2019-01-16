@@ -7,10 +7,10 @@ import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
 import { setA } from '../../supersets/setA';
 
 class Damage extends Actor {
-  constructor(faucet, phase) {
+  constructor(place, phase) {
     super('div', damagesParams.position[phase], { scaleF: stage.scaleF, zIndex: 72 });
     this.node.textContent = '-$5';
-    this.getAppendedAsChild(faucet);
+    this.getAppendedAsChild(place);
     this.attachClassName('damages');
   }
 }
@@ -20,8 +20,8 @@ export const damages = new ActorsSet();
 
 damages.name = 'damages';
 
-damages.addDamage = function (faucet, phase) {
-  this.addElement(new Damage(faucet, phase));
+damages.addDamage = function (place, phase) {
+  this.addElement(new Damage(place, phase));
 };
 
 registerActionOfType('animationend', damages, {

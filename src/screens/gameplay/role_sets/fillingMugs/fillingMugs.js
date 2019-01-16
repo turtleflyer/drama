@@ -20,13 +20,16 @@ export const fillMugsRole = onPulseTick.registerAction(fillingMugs, {
           lastTime,
           total: totalBeer,
           beers: fillingBeers,
-          faucet: {
-            state: stateOfFaucet,
-            state: { beer: activeBeer },
+          place,
+          place: {
+            faucet: {
+              state: { descriptionOfRunningState },
+            },
           },
         },
       } = mug;
-      if (stateOfFaucet.isOpened) {
+      if (descriptionOfRunningState && descriptionOfRunningState.place === place) {
+        const { beer: activeBeer } = descriptionOfRunningState;
         const currTime = performance.now();
         if (stateOfMug.overfilled) {
           if (timeStarted) {
