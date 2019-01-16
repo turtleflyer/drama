@@ -47,7 +47,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
           switch (roleSet) {
             case mugPlaces:
               if (mug instanceof Mug) {
-                if (!place.placedMug) {
+                if (!place.state.placedMug) {
                   mug.setPositionXY(place.whereToPlaceMug());
                   mug.placedToBeFilled(place);
                 }
