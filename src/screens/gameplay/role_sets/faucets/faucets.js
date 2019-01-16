@@ -4,7 +4,7 @@ import stage from '../../../../stage/stage';
 import { onPulseTick } from '../../../../stage/role_classes';
 import { damages } from '../damages/damages';
 import { beerCost } from '../../../../stage/gameplay_params';
-import { switchTypes, faucetsPlaces } from './faucets_params';
+import { faucetsPlaces } from './faucets_params';
 import { damagesParams } from '../damages/damages_params';
 import { startStopRoles } from '../../../../roles_manipulators';
 import { setA } from '../../supersets/setA';
