@@ -83,9 +83,9 @@ export const levelsDescription = {
         placedScheme: placedFaucetsSchemes.threeNormals,
       },
       mugsDistribution: {
-        [beerTypes.IPA]: 40,
-        [beerTypes.LGR]: 50,
-        [beerTypes.PTR]: 60,
+        [beerTypes.IPA]: 10,
+        [beerTypes.LGR]: 55,
+        [beerTypes.PTR]: 35,
       },
     },
     initState: {

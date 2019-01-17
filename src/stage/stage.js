@@ -46,18 +46,17 @@ class Stage extends ActorsSet {
     const {
       params: { mugsDistribution },
     } = levelEntry;
-    const totalDistributionCap = Object.values(mugsDistribution).reduce(
-      (total, next) => total + next,
-    );
+    const totalVolume = Object.values(mugsDistribution).reduce((total, next) => total + next);
     const calculatedDistribution = {};
-    let currentCup = 0;
-    Object.keys(mugsDistribution).forEach((key) => {
-      currentCup += mugsDistribution[key] / totalDistributionCap;
-      calculatedDistribution[key] = currentCup;
+    Object.entries(mugsDistribution).forEach(([key, volume]) => {
+      calculatedDistribution[key] = volume / totalVolume;
     });
 
     this.state = {
-      ...commonInitState, ...levelEntry.initState, paused: false, level,
+      ...commonInitState,
+      ...levelEntry.initState,
+      paused: false,
+      level,
     };
     this.params.levelParams = { ...levelEntry.params, mugsDistribution: calculatedDistribution };
   }

@@ -8,7 +8,7 @@ import { tuneGame, stageDimension, glassType } from '../../../../../stage/gamepl
 import { gameResultsTypes } from '../../resultOfGame/resultOfGame_params';
 import { fillingMugs } from '../../fillingMugs/fillingMugs';
 import { waitingMugs } from '../../waitingMugs/waitingMugs';
-import { magsCreatingParams } from '../mugs_params';
+import { magsCreatingParams, sequenceLengthDistrToBeConsistent } from '../mugs_params';
 import { resultOfGame } from '../../resultOfGame/resultOfGame';
 import WhiskeyGlass from '../WhiskeyGlassClass';
 import { fallenMug } from '../../fallenMug/fallenMug';
@@ -24,80 +24,54 @@ const { width: stageWidth } = stageDimension;
 let lastMug;
 let timeOfNextBirth;
 let lastReputationValue;
-let queueOfMugTypes;
-let lastCreatedType;
+let determineTypeOfBeer;
 
-function determineTypeOfBeer() {
-  const {
-    params: {
-      levelParams: { mugsDistribution },
-    },
-  } = stage;
+function* mugTypesGenerator() {
+  const currentDistribution = { ...stage.params.levelParams.mugsDistribution };
+  const howManyTypes = Object.keys(currentDistribution).length;
+  let stop = false;
 
-  if (Object.keys(mugsDistribution).length === 1) {
-    return Object.keys(mugsDistribution)[0];
-  }
-
-  const tempPlace = [];
-  let getType;
-
-  function probeGetType(type) {
-    const { type: lastType, count: lastCount } = lastCreatedType;
-    if (!lastCount || lastCount < 2 || lastType !== type) {
-      getType = type;
-      lastCreatedType = { type, count: lastType === type ? lastCount + 1 : 1 };
-      return true;
-    }
-    return false;
-  }
-
-  while (queueOfMugTypes.length > 0) {
-    const nextFromQueue = queueOfMugTypes.shift();
-    if (probeGetType(nextFromQueue)) {
-      break;
+  while (!stop) {
+    if (howManyTypes === 1) {
+      stop = yield Object.keys(currentDistribution)[0];
     } else {
-      tempPlace.push(nextFromQueue);
-    }
-  }
-  queueOfMugTypes.splice(0, 0, ...tempPlace);
-
-  if (!getType) {
-    while (true) {
-      const random = Math.random();
-      let randomType;
-      for (const key in mugsDistribution) {
-        if (Object.prototype.hasOwnProperty.call(mugsDistribution, key)) {
-          const threshold = mugsDistribution[key];
-          if (random <= threshold) {
-            randomType = key;
+      let rndm = Math.random();
+      let getType;
+      for (const type in currentDistribution) {
+        if (Object.prototype.hasOwnProperty.call(currentDistribution, type)) {
+          rndm -= currentDistribution[type];
+          if (rndm < 0) {
+            getType = type;
             break;
           }
         }
       }
-      if (probeGetType(randomType)) {
-        break;
-      } else {
-        queueOfMugTypes.push(randomType);
-      }
+
+      Object.keys(currentDistribution).forEach((type) => {
+        if (type === getType) {
+          currentDistribution[type] -= 1 / sequenceLengthDistrToBeConsistent;
+        } else {
+          currentDistribution[type] += 1 / sequenceLengthDistrToBeConsistent / (howManyTypes - 1);
+        }
+      });
+      stop = yield getType;
     }
   }
-
-  return getType;
 }
 
-function refreshTimeOfNextBirth(takeThis) {
+function refreshTimeOfNextBirth() {
   if (stage.state.reputation < 0) {
     timeOfNextBirth = Infinity;
   } else {
     // prettier-ignore
-    const delay = (stageWidth * 0.6) / (takeThis.params.initMugDensity * stage.state.reputation)
-    / (takeThis.params.mugsSpeed / 1000);
+    const delay = (stageWidth * 0.6) / (mugsOnLine.params.initMugDensity * stage.state.reputation)
+      / (mugsOnLine.params.mugsSpeed / 1000);
     timeOfNextBirth = delay ? lastMug.params.bornTime + delay : Infinity;
   }
 }
 
 function createNewMug() {
-  const typeOfMug = determineTypeOfBeer();
+  const typeOfMug = determineTypeOfBeer.next().value;
   if (typeOfMug === glassType) {
     return new WhiskeyGlass(stageWidth + 1000);
   }
@@ -105,8 +79,7 @@ function createNewMug() {
 }
 
 mugsOnLine.getInitializer(function () {
-  queueOfMugTypes = [];
-  lastCreatedType = {};
+  determineTypeOfBeer = mugTypesGenerator();
   const { mugsSpeed, initMugDensity } = stage.params.levelParams;
   Object.assign((this.params = {}), { mugsSpeed, initMugDensity });
   const mug = createNewMug();
@@ -121,22 +94,22 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
     const currTime = performance.now();
 
     if (lastReputationValue !== stage.state.reputation) {
-      refreshTimeOfNextBirth(this.roleSet);
+      refreshTimeOfNextBirth();
       lastReputationValue = stage.state.reputation;
     }
 
-    if (this.roleSet.size > 0) {
+    if (mugsOnLine.size > 0) {
       const {
         params: { bornTime },
       } = mug;
 
       // eslint-disable-next-line
       const calculatedPosition =
-        stageWidth - (currTime - bornTime) * (this.roleSet.params.mugsSpeed / 1000);
+        stageWidth - (currTime - bornTime) * (mugsOnLine.params.mugsSpeed / 1000);
 
       // Check if the mug disappeared from the stage
       if (calculatedPosition < -(mug.position.width / 2)) {
-        this.roleSet.deleteElement(mug);
+        mugsOnLine.deleteElement(mug);
         mug.remove();
         stage.state.reputation += tuneGame.reputationDecrement;
       } else {
@@ -160,8 +133,8 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
       const generatedMug = createNewMug();
       generatedMug.params.bornTime = timeOfNextBirth;
       lastMug = generatedMug;
-      this.roleSet.addElement(generatedMug);
-      refreshTimeOfNextBirth(this.roleSet);
+      mugsOnLine.addElement(generatedMug);
+      refreshTimeOfNextBirth(mugsOnLine);
 
       /**
        *
@@ -175,8 +148,8 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
       //   gen.params.bornTime = timeOfNextBirth;
       //   lastMug = gen;
       // }
-      // this.roleSet.addElements(generatedMugs);
-      // refreshTimeOfNextBirth(this.roleSet);
+      // mugsOnLine.addElements(generatedMugs);
+      // refreshTimeOfNextBirth(mugsOnLine);
     }
   },
 });
