@@ -9,7 +9,7 @@ import { hookPlace } from '../hookPlace/hookPlace';
 import './styles.css';
 import { startStopRoles } from '../../../../roles_manipulators';
 import { setA } from '../../supersets/setA';
-import { folkIllustration } from '../folk/folk';
+import { folk } from '../folk/folk';
 
 export const waitingMugs = new ActorsSet();
 
@@ -34,7 +34,7 @@ export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {
         const { money, reaction } = mug.turnIntoMoney();
         stage.state.money += money;
         customersReactions.createNew(reaction);
-        folkIllustration.checkProgress();
+        folk.checkProgress();
       }
     }
   },

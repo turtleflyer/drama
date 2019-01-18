@@ -22,6 +22,7 @@ import './screens/gameplay/role_sets/totalsOnTable/totalsOnTable';
 import './screens/gameplay/role_sets/customersReactions/customersReactions';
 import './screens/gameplay/role_sets/waitingMugs/waitingMugs';
 import './screens/gameplay/role_sets/whiskeyBottle/whiskeyBottle';
+import './screens/gameplay/role_sets/folk/folk';
 
 waitWhenTypeExhausted('onAddElement')
   .then(whenAllURLRetrieved)
