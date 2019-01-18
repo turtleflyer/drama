@@ -1,9 +1,9 @@
 /* eslint-env browser */
-import { ActorsSet, registerActionOfType } from '../../../../libs/actors_and_roles';
+import { ActorsSet } from '../../../../libs/actors_and_roles';
 import { onPulseTick } from '../../../../stage/role_classes';
 import TotalOnTable from './TotalOnTableClass';
 import { totalsParams } from './totalsOnTable_params';
-import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
+import { removeAfterAnimationEnds } from '../../../../libs/helpers_lib';
 import { startStopRoles } from '../../../../roles_manipulators';
 import { setA } from '../../supersets/setA';
 
@@ -26,9 +26,7 @@ totalsOnTable.createNew = function (isPositive, position) {
   });
 };
 
-registerActionOfType('animationend', totalsOnTable, {
-  action: removeElementWhenAnimationEnds,
-}).start();
+removeAfterAnimationEnds(totalsOnTable);
 
 export const manageTotalsRole = onPulseTick.registerAction(totalsOnTable, {
   action({ target: totalPiece, roleSet }) {

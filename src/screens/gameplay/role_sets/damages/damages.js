@@ -1,9 +1,9 @@
 /* eslint-env browser */
-import { ActorsSet, registerActionOfType, Actor } from '../../../../libs/actors_and_roles';
+import { ActorsSet, Actor } from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
 import { damagesParams } from './damages_params';
 import './styles.css';
-import { removeElementWhenAnimationEnds } from '../../../../libs/helpers_lib';
+import { removeAfterAnimationEnds } from '../../../../libs/helpers_lib';
 import { setA } from '../../supersets/setA';
 
 class Damage extends Actor {
@@ -24,8 +24,6 @@ damages.addDamage = function (place, phase) {
   this.addElement(new Damage(place, phase));
 };
 
-registerActionOfType('animationend', damages, {
-  action: removeElementWhenAnimationEnds,
-}).start();
+removeAfterAnimationEnds(damages);
 
 setA.addElement(damages);

@@ -1,6 +1,6 @@
-import { Actor } from './actors_and_roles';
-
 /* eslint-env browser */
+import { Actor, registerActionOfType } from './actors_and_roles';
+
 export function importAll(r) {
   const a = [];
   r.keys().forEach((p) => {
@@ -50,17 +50,11 @@ export function percentOverlap(targetBound, dragBound) {
   return overlapArea && overlapArea / dragArea;
 }
 
-export function removeElementWhenAnimationEnds({ roleSet, target }) {
-  roleSet.deleteElement(target);
-  target.remove();
-}
-
-export function getXYInTransformedNode(node, { x, y }) {
-  const matrixString = window.getComputedStyle(node).getPropertyValue('transform');
-  const matrix = matrixString
-    .replace(/([^\-\d\.]+)/g, ' ')
-    .replace(/^ (.*) $/, '$1')
-    .split(' ')
-    .map(e => Number(e));
-  return { x: x * matrix[0] + y * matrix[2], y: x * matrix[1] + y * matrix[3] };
+export function removeAfterAnimationEnds(rs) {
+  registerActionOfType('animationend', rs, {
+    action({ roleSet, target }) {
+      roleSet.deleteElement(target);
+      target.remove();
+    },
+  }).start();
 }
