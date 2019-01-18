@@ -40,6 +40,8 @@ const postedSign = new Actor('div', objectivesParams.position, {
 // eslint-disable-next-line
 export const staticDecorations = new ActorsSet();
 
+staticDecorations.name = 'staticDecorations';
+
 staticDecorations.getInitializer(function () {
   this.addElements([
     setImg(backOfStage, getDataURL(backOfStageImg), { width: '100%' }),
