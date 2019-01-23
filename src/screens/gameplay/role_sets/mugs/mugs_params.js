@@ -89,5 +89,3 @@ export const whiskeyGlassParams = {
   volume: 2,
   costOfFilledGlass: 15,
 };
-
-export const sequenceLengthDistrToBeConsistent = 5;

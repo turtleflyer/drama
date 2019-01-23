@@ -8,7 +8,7 @@ import { tuneGame, stageDimension, glassType } from '../../../../../stage/gamepl
 import { gameResultsTypes } from '../../resultOfGame/resultOfGame_params';
 import { fillingMugs } from '../../fillingMugs/fillingMugs';
 import { waitingMugs } from '../../waitingMugs/waitingMugs';
-import { magsCreatingParams, sequenceLengthDistrToBeConsistent } from '../mugs_params';
+import { magsCreatingParams } from '../mugs_params';
 import { resultOfGame } from '../../resultOfGame/resultOfGame';
 import WhiskeyGlass from '../WhiskeyGlassClass';
 import { fallenMug } from '../../fallenMug/fallenMug';
@@ -27,14 +27,33 @@ let lastReputationValue;
 let determineTypeOfBeer;
 
 function* mugTypesGenerator() {
-  const currentDistribution = { ...stage.params.levelParams.mugsDistribution };
-  const howManyTypes = Object.keys(currentDistribution).length;
+  const {
+    params: {
+      levelParams: { mugsDistribution },
+    },
+  } = stage;
+  const { sequenceLengthDistrToBeConsistent, distributionCoefficientAdjustment } = tuneGame;
+  const lastSequence = [];
   let stop = false;
 
   while (!stop) {
-    if (howManyTypes === 1) {
-      stop = yield Object.keys(currentDistribution)[0];
+    if (Object.keys(mugsDistribution).length === 1) {
+      stop = yield Object.keys(mugsDistribution)[0];
     } else {
+      const currentDistribution = lastSequence.reduce(
+        (distr, type) => {
+          Object.keys(distr).forEach((key) => {
+            if (key === type) {
+              distr[key] -= (1 - mugsDistribution[key]) * distributionCoefficientAdjustment;
+            } else {
+              distr[key] += mugsDistribution[key] * distributionCoefficientAdjustment;
+            }
+          });
+          return distr;
+        },
+        { ...mugsDistribution },
+      );
+
       let rndm = Math.random();
       let getType;
       for (const type in currentDistribution) {
@@ -47,13 +66,12 @@ function* mugTypesGenerator() {
         }
       }
 
-      Object.keys(currentDistribution).forEach((type) => {
-        if (type === getType) {
-          currentDistribution[type] -= 1 / sequenceLengthDistrToBeConsistent;
-        } else {
-          currentDistribution[type] += 1 / sequenceLengthDistrToBeConsistent / (howManyTypes - 1);
-        }
-      });
+      lastSequence.push(getType);
+
+      if (lastSequence.length > sequenceLengthDistrToBeConsistent) {
+        lastSequence.shift();
+      }
+
       stop = yield getType;
     }
   }
