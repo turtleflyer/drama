@@ -10,24 +10,24 @@ export default function* mugTypesGenerator() {
   const { sequenceLengthDistrToBeConsistent, distributionCoefficientAdjustment } = tuneGame;
   const lastSequence = [];
   let stop = false;
+  const currentDistribution = { ...mugsDistribution };
 
   while (!stop) {
     if (Object.keys(mugsDistribution).length === 1) {
       stop = yield Object.keys(mugsDistribution)[0];
     } else {
-      const currentDistribution = lastSequence.reduce(
-        (distr, type) => {
-          Object.keys(distr).forEach((key) => {
-            if (key === type) {
-              distr[key] -= (1 - mugsDistribution[key]) * distributionCoefficientAdjustment;
-            } else {
-              distr[key] += mugsDistribution[key] * distributionCoefficientAdjustment;
-            }
+      const lastType = lastSequence[lastSequence.length - 1];
+      if (lastType) {
+        if (lastSequence.length > sequenceLengthDistrToBeConsistent) {
+          const oldestType = lastSequence.shift();
+          currentDistribution[oldestType] += distributionCoefficientAdjustment;
+        } else {
+          Object.keys(mugsDistribution).forEach((type) => {
+            currentDistribution[type] += mugsDistribution[type] * distributionCoefficientAdjustment;
           });
-          return distr;
-        },
-        { ...mugsDistribution },
-      );
+        }
+        currentDistribution[lastType] -= distributionCoefficientAdjustment;
+      }
 
       let rndm = Math.random();
       let getType;
@@ -43,10 +43,6 @@ export default function* mugTypesGenerator() {
       }
 
       lastSequence.push(getType);
-
-      if (lastSequence.length > sequenceLengthDistrToBeConsistent) {
-        lastSequence.shift();
-      }
 
       stop = yield getType;
     }
