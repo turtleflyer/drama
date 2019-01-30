@@ -15,6 +15,7 @@ import { fallenMug } from '../../fallenMug/fallenMug';
 import { fillingGlass } from '../../fillingGlass/fillingGlass';
 import { pouringMug } from '../../pouringMug/pouringMug';
 import { startStopRoles } from '../../../../../roles_manipulators';
+import mugTypesGenerator from './mugTypesGenerator';
 
 export const mugsOnLine = new ActorsSet();
 
@@ -25,57 +26,6 @@ let lastMug;
 let timeOfNextBirth;
 let lastReputationValue;
 let determineTypeOfBeer;
-
-function* mugTypesGenerator() {
-  const {
-    params: {
-      levelParams: { mugsDistribution },
-    },
-  } = stage;
-  const { sequenceLengthDistrToBeConsistent, distributionCoefficientAdjustment } = tuneGame;
-  const lastSequence = [];
-  let stop = false;
-
-  while (!stop) {
-    if (Object.keys(mugsDistribution).length === 1) {
-      stop = yield Object.keys(mugsDistribution)[0];
-    } else {
-      const currentDistribution = lastSequence.reduce(
-        (distr, type) => {
-          Object.keys(distr).forEach((key) => {
-            if (key === type) {
-              distr[key] -= (1 - mugsDistribution[key]) * distributionCoefficientAdjustment;
-            } else {
-              distr[key] += mugsDistribution[key] * distributionCoefficientAdjustment;
-            }
-          });
-          return distr;
-        },
-        { ...mugsDistribution },
-      );
-
-      let rndm = Math.random();
-      let getType;
-      for (const type in currentDistribution) {
-        if (Object.prototype.hasOwnProperty.call(currentDistribution, type)) {
-          rndm -= currentDistribution[type];
-          if (rndm < 0) {
-            getType = type;
-            break;
-          }
-        }
-      }
-
-      lastSequence.push(getType);
-
-      if (lastSequence.length > sequenceLengthDistrToBeConsistent) {
-        lastSequence.shift();
-      }
-
-      stop = yield getType;
-    }
-  }
-}
 
 function refreshTimeOfNextBirth() {
   if (stage.state.reputation < 0) {
