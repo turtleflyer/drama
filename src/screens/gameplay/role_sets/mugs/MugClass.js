@@ -9,6 +9,7 @@ import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
 import { fillingMugs } from '../fillingMugs/fillingMugs';
 import { getDataURL } from '../../../../libs/session_storage_lib';
+import './styles.css';
 
 export default class Mug extends Actor {
   constructor(beerType, horizontalPosition = 0) {
@@ -16,9 +17,10 @@ export default class Mug extends Actor {
     const {
       width, empty, fillingPhasesImgs, overfilledPhasesImgs,
     } = img;
+    const { beerMarkup } = tuneGame;
     super('div', { width }, { scaleF: stage.scaleF, zIndex: 50 });
     this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase });
-    setImg(this, getDataURL(empty), { width: '100%', bottom: '0px' });
+    this.imageElement = setImg(this, getDataURL(empty), { width: '100%', bottom: '0px' });
     this.beerType = beerType;
     this.params = {
       fillingPhasesImgs,
@@ -27,6 +29,7 @@ export default class Mug extends Actor {
       numberOfOverfilledPhases: overfilledPhasesImgs.length,
       volume,
       empty,
+      profit: volume * beerCost[beerType] * (beerMarkup - 1),
     };
     this.getAppendedAsChild(stage);
     this.born();
@@ -63,16 +66,17 @@ export default class Mug extends Actor {
 
   turnIntoMoney() {
     const {
-      beerType: targetBeerType,
+      beerType,
       state: { total: beerTotalAmount },
+      params: { volume: mugVolume },
     } = this;
     const { drunkFactor } = stage.state;
     const {
       reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
     } = tuneGame;
     // prettier-ignore
-    const targetBeer = this.state.beers && this.state.beers[targetBeerType]
-      ? this.state.beers[targetBeerType] : 0;
+    const targetBeer = this.state.beers && this.state.beers[beerType]
+      ? this.state.beers[beerType] : 0;
 
     const totalsPosition = { x: this.position.x, y: this.position.y - this.position.height };
 
@@ -97,7 +101,7 @@ export default class Mug extends Actor {
     totalsOnTable.createNew(true, totalsPosition);
 
     return {
-      money: beerTotalAmount * this.params.volume * beerCost[targetBeerType] * beerMarkup,
+      money: mugVolume * beerCost[beerType] * beerMarkup,
       reaction: customerReactionsTypes.OK,
     };
   }
@@ -117,6 +121,7 @@ export default class Mug extends Actor {
       lastTime: null,
     });
     this.setZIndex(80);
+    this.moneyHint.remove();
   }
 
   placedToBeFilled(place) {

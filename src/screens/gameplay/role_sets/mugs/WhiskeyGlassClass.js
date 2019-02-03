@@ -15,13 +15,15 @@ const { img, volume, costOfFilledGlass } = whiskeyGlassParams;
 export default class WhiskeyGlass extends Actor {
   constructor(horizontalPosition = 0) {
     const { width, empty, full } = img;
+    const { beerMarkup } = tuneGame;
     super('div', { width }, { scaleF: stage.scaleF, zIndex: 50 });
     this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase });
-    setImg(this, getDataURL(empty), { width: '100%', bottom: '0px' });
+    this.imageElement = setImg(this, getDataURL(empty), { width: '100%', bottom: '0px' });
     this.params = {
       full,
       empty,
       volume,
+      profit: costOfFilledGlass * (beerMarkup - 1),
     };
     this.getAppendedAsChild(stage);
     this.born();
@@ -67,6 +69,7 @@ export default class WhiskeyGlass extends Actor {
       place: null,
     });
     this.setZIndex(80);
+    this.moneyHint.remove();
   }
 
   placedToBeFilled() {

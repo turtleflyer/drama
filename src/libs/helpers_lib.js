@@ -18,17 +18,18 @@ export function updateStyle(obj, style) {
 }
 
 export function setImg(element, newImg, style) {
-  if (!element.img) {
-    const img = document.createElement('img');
+  let { img } = element;
+  if (!img) {
+    img = document.createElement('img');
     img.src = newImg;
     updateStyle(img, style);
     element.node.appendChild(img);
     element.img = img;
   } else {
-    element.img.src = newImg;
-    updateStyle(element.img, style);
+    img.src = newImg;
+    updateStyle(img, style);
   }
-  return element;
+  return img;
 }
 
 export function percentOverlap(targetBound, dragBound) {

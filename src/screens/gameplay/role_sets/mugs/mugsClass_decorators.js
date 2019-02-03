@@ -1,6 +1,8 @@
 import { stageDimension } from '../../../../stage/gameplay_params';
 import { fallenMug } from '../fallenMug/fallenMug';
 import { waitingMugs } from '../waitingMugs/waitingMugs';
+import stage from '../../../../stage/stage';
+import { Actor } from '../../../../libs/actors_and_roles';
 
 export function addSetPositionXYMethod(cl) {
   Object.defineProperties(cl.prototype, {
@@ -53,6 +55,24 @@ export function addSetPositionXYMethod(cl) {
         }
       },
     },
+
+    showMoneyHint: {
+      value() {
+        const { imageElement } = this;
+        imageElement.onload = () => {
+          const { width: mugWidth, height: mugHeight } = this.rectSize();
+          const hint = new Actor(
+            'div',
+            { width: mugWidth, bottom: mugHeight + 5, height: 15 },
+            { scaleF: stage.scaleF, zIndex: 50 },
+          ).attachClassName('mug--money-hint');
+          hint.node.innerText = `\$${Math.round(this.params.profit)}`;
+          hint.getAppendedAsChild(this);
+          this.moneyHint = hint;
+          imageElement.onload = null;
+        };
+      },
+    },
   });
 }
 
@@ -61,6 +81,7 @@ export function addMugsLifeCyclesMethods(cl) {
     born: {
       value() {
         this.state.hidden = true;
+        this.showMoneyHint();
       },
     },
 
