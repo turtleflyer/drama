@@ -73,7 +73,7 @@ export function addSetPositionXYMethod(cl) {
             { width: mugWidth, bottom: mugHeight + 5, height: 15 },
             { scaleF: stage.scaleF, zIndex: 50 },
           ).attachClassName('mug--money-hint');
-          hint.node.innerText = `\$${Math.round(this.params.profit)}`;
+          hint.node.innerText = `$${Math.round(this.params.profit)}`;
           hint.getAppendedAsChild(this);
           this.moneyHint = hint;
           imageElement.onload = null;
