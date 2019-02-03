@@ -14,11 +14,18 @@ export function addSetPositionXYMethod(cl) {
 
     rectSize: {
       value() {
-        const boundRect = this.getBoundingRect();
-        return {
-          height: boundRect.height / this.position.scaleF,
-          width: boundRect.width / this.position.scaleF,
-        };
+        const {
+          params,
+          position: { scaleF },
+        } = this;
+        if (!params.rectSize) {
+          const boundRect = this.getBoundingRect();
+          params.rectSize = {
+            height: boundRect.height / scaleF,
+            width: boundRect.width / scaleF,
+          };
+        }
+        return params.rectSize;
       },
     },
 
