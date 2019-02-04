@@ -12,7 +12,7 @@ debugPanel.appendChild(fpsInfo);
 debugPanel.appendChild(stopButton);
 debugPanel.appendChild(levelForm);
 debugPanel.appendChild(resultButton);
-debugPanel.appendChild(highlightZonesCheck)
+debugPanel.appendChild(highlightZonesCheck);
 document.querySelector('body').appendChild(debugPanel);
 
 export default debugPanel;
