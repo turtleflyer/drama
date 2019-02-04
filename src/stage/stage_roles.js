@@ -13,6 +13,7 @@ import {
   stopDragRoleDraggable,
 } from '../screens/gameplay/supersets/draggable';
 import { startStopRoles } from '../roles_manipulators';
+import { debugFlags, debugKeys } from '../debug/debug_flags';
 
 const pulseWorker = new Worker();
 
@@ -22,9 +23,11 @@ pulseWorker.onmessage = (e) => {
       /**
        * Display debugging information
        */
-      onPulseTick.fire(setD);
-      if (e.data) {
-        debugPulse.info = e.data;
+      if (debugFlags[debugKeys.SHOW_DEBUG_PANEL]) {
+        onPulseTick.fire(setD);
+        if (e.data) {
+          debugPulse.info = e.data;
+        }
       }
       /**
        *
