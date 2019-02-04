@@ -2,7 +2,7 @@ import { ActorsSet, Actor } from '../../../../libs/actors_and_roles';
 import { glassPlaceParams } from './glassPlace_params';
 import stage from '../../../../stage/stage';
 import { addWhereToPlaceMugMethod } from '../mugPlaces/mugPlaceClass_decorators';
-import { makePlaceAbleHighlighting } from '../../../../debug/highlight_zone_class_assets';
+import { makePlaceAbleHighlighting } from '../../../../debug/highlightZonesCheck_lib';
 
 class GlassPlace extends Actor {
   constructor() {

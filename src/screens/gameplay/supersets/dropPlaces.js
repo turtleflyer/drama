@@ -11,7 +11,7 @@ import WhiskeyGlass from '../role_sets/mugs/WhiskeyGlassClass';
 import { fillingGlass } from '../role_sets/fillingGlass/fillingGlass';
 import { setA } from './setA';
 import { debugFlags, debugKeys } from '../../../debug/debug_flags';
-import { highlightPlaces, highlightAction } from '../../../debug/highlight_zone_class_assets';
+import { highlightPlaces, highlightAction } from '../../../debug/highlightZonesCheck_lib';
 
 const signalSet = new ActorsSet();
 

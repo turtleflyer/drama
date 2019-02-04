@@ -5,7 +5,7 @@ import {
   highlightPlaces,
   highlightAction,
   makePlaceAbleHighlighting,
-} from '../../../../debug/highlight_zone_class_assets';
+} from '../../../../debug/highlightZonesCheck_lib';
 import stage from '../../../../stage/stage';
 
 export default class FaucetHandle extends Actor {
