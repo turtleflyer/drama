@@ -2,10 +2,8 @@
 import { ActorsSet } from '../libs/actors_and_roles';
 import { onPulseTick } from '../stage/role_classes';
 
-const fps = document.createElement('div');
-document.querySelector('body').appendChild(fps);
-
-export const fpsSet = new ActorsSet([fps]);
+export const fpsInfo = document.createElement('div');
+export const fpsSet = new ActorsSet([fpsInfo]);
 export const debugPulse = { info: '\r\n' };
 
 let lastTime;
@@ -26,7 +24,7 @@ onPulseTick
           amount: counter,
         });
         if (collectFps.length > 200) {
-          fps.innerText = `${Math.round(
+          fpsInfo.innerText = `${Math.round(
             (collectFps.reduce((count, { amount }) => count + amount, 0)
               / (currTime - collectFps[0].time))
               * 1000,
@@ -35,7 +33,7 @@ onPulseTick
           )}\r\n${debugPulse.info}`;
           collectFps.shift();
         } else {
-          fps.innerText = `\r\n${debugPulse.info}`;
+          fpsInfo.innerText = `\r\n${debugPulse.info}`;
         }
         counter = 0;
         lastTime = currTime;

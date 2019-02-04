@@ -4,12 +4,9 @@ import stage from '../stage/stage';
 import { onPulseTick } from '../stage/role_classes';
 import { fillingMugs } from '../screens/gameplay/role_sets/fillingMugs/fillingMugs';
 
-const info = document.createElement('div');
-document.querySelector('body').appendChild(info);
+export const displayInfo = document.createElement('div');
 
-const infoSet = new ActorsSet([info]);
-
-export default infoSet;
+export const infoSet = new ActorsSet([displayInfo]);
 
 onPulseTick
   .registerAction(infoSet, {
@@ -21,7 +18,7 @@ onPulseTick
             beerType: [...fillingMugs][0].beerType,
           }),
   )}`;
-      info.innerText = textToDisplay;
+      displayInfo.innerText = textToDisplay;
     },
   })
   .start();

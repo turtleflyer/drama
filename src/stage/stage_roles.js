@@ -5,7 +5,7 @@ import { setA, resizeEverythingRole } from '../screens/gameplay/supersets/setA';
 import { registerActionOfType } from '../libs/actors_and_roles';
 import { onPulseTick, onResize } from './role_classes';
 import { setD } from '../debug/setD';
-import { debugPulse } from '../debug/fps';
+import { debugPulse } from '../debug/fpsInfo';
 import Worker from '../webworkers/pulse.worker';
 import { defaultFontSize, stageDimension } from './gameplay_params';
 import {
