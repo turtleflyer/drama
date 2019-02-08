@@ -1,34 +1,16 @@
 /* eslint-env browser */
 import { pulseTimeout } from '../stage/gameplay_params';
+import { calculateFPS } from '../libs/helpers_lib';
 
-let lastTime;
-let counter = -1;
-const collectFps = [];
+const fpsGen = calculateFPS(63, 50);
+fpsGen.next();
 
 setInterval(() => {
   let toPost = null;
-  counter++;
-  const currTime = Date.now();
-  if (!lastTime) {
-    lastTime = currTime;
-  } else if (currTime - lastTime > 17) {
-    collectFps.push({
-      value: (counter / (currTime - lastTime)) * 1000,
-      time: currTime,
-      amount: counter,
-    });
-    if (collectFps.length > 200) {
-      toPost = `${Math.round(
-        (collectFps.reduce((count, { amount }) => count + amount, 0)
-          / (currTime - collectFps[0].time))
-          * 1000,
-      )}fps, min: ${Math.round(
-        collectFps.reduce((min, { value }) => (min < value ? min : value), Infinity),
-      )}`;
-      collectFps.shift();
-    }
-    counter = 0;
-    lastTime = currTime;
+  const fpsData = fpsGen.next(performance.now()).value;
+  if (fpsData) {
+    const { averageFPS, minFPS } = fpsData;
+    toPost = `${Math.round(averageFPS)}fps, min: ${Math.round(minFPS)}fps`;
   }
   postMessage(toPost);
 }, pulseTimeout);

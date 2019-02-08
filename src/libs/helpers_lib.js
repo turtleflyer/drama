@@ -59,3 +59,39 @@ export function removeAfterAnimationEnds(rs) {
     },
   }).start();
 }
+
+export function* calculateFPS(length, intervalForMin) {
+  const seq = [];
+  let time = yield null;
+  while (typeof time === 'number') {
+    seq.push(time);
+    if (seq.length < length) {
+      time = yield null;
+    } else {
+      if (seq.length > length) {
+        seq.shift();
+      }
+      const averageFPS = ((length - 1) / (seq[length - 1] - seq[0])) * 1000;
+      const minFPS = seq.reduce(
+        ({ min, curSeq }, t) => {
+          let startI = curSeq.length - 1;
+          let checkFPS;
+          let newSeq;
+          while (typeof curSeq[startI] === 'number' && t - curSeq[startI] < intervalForMin) {
+            startI--;
+          }
+          if (typeof curSeq[startI] === 'number') {
+            newSeq = curSeq.slice(startI);
+            checkFPS = (newSeq.length / (t - newSeq[0])) * 1000;
+          } else {
+            newSeq = [...curSeq];
+          }
+          newSeq.push(t);
+          return { min: !checkFPS || (min && min < checkFPS) ? min : checkFPS, curSeq: newSeq };
+        },
+        { min: null, curSeq: [] },
+      ).min;
+      time = yield { averageFPS, minFPS };
+    }
+  }
+}
