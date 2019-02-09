@@ -65,7 +65,7 @@ export function addSetPositionXYMethod(cl) {
 
     showMoneyHint: {
       value() {
-        const { imageElement } = this;
+        const { img: imageElement } = this;
         imageElement.onload = () => {
           const { width: mugWidth, height: mugHeight } = this.rectSize();
           const hint = new Actor(

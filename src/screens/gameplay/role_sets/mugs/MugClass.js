@@ -20,7 +20,7 @@ export default class Mug extends Actor {
     const { beerMarkup } = tuneGame;
     super('div', { width }, { scaleF: stage.scaleF, zIndex: 50 });
     this.setPositionXY({ x: horizontalPosition, y: magsCreatingParams.lineBase });
-    this.imageElement = setImg(this, getDataURL(empty), { width: '100%', bottom: '0px' });
+    setImg(this, getDataURL(empty), { width: '100%', bottom: '0px' });
     this.beerType = beerType;
     this.params = {
       fillingPhasesImgs,
