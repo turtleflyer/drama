@@ -1,28 +1,30 @@
 /* eslint-env browser */
 import { ActorsSet } from '../libs/actors_and_roles';
-import { onPulseTick } from '../stage/role_classes';
-import { calculateFPS } from '../libs/helpers_lib';
+import { updateDebugInfo, setD } from './setD';
 
 export const fpsInfo = document.createElement('div');
+fpsInfo.style.color = 'orange';
+fpsInfo.style['font-weight'] = 'bold';
+
 export const fpsSet = new ActorsSet([fpsInfo]);
+fpsSet.name = 'fpsSet';
+setD.addElement(fpsSet);
+
 export const debugPulse = {};
 
-const fpsGen = calculateFPS(63, 50);
-fpsGen.next();
+function composeFpsInfo(prefix, data) {
+  return `${prefix} ${
+    data ? `${Math.round(data.averageFPS)}fps, min: ${Math.round(data.minFPS)}fps` : 'evaluating...'
+  }`;
+}
 
-onPulseTick
+updateDebugInfo
   .registerAction(fpsSet, {
-    action() {
-      const fpsData = fpsGen.next(performance.now()).value;
-      if (fpsData) {
-        const { averageFPS, minFPS } = fpsData;
-        fpsInfo.innerText = `Actual fps: ${Math.round(averageFPS)}fps, min: ${Math.round(
-          minFPS,
-        )}fps\r\nGenerated fps: ${debugPulse.info || 'evaluating'}`;
-      } else {
-        fpsInfo.innerText = `Actual fps: evaluating\r\nGenerated fps: ${debugPulse.info
-          || 'evaluating'}`;
-      }
+    action({ event: { fpsGen } }) {
+      fpsInfo.innerText = `${composeFpsInfo('Generated fps:', debugPulse.info)}\r\n${composeFpsInfo(
+        'Actual fps:',
+        fpsGen && fpsGen.next(performance.now()).value,
+      )}`;
     },
   })
   .start();

@@ -4,7 +4,6 @@ import { dragMug } from '../screens/gameplay/role_sets/dragMug/dragMug';
 import { setA, resizeEverythingRole } from '../screens/gameplay/supersets/setA';
 import { registerActionOfType } from '../libs/actors_and_roles';
 import { onPulseTick, onResize } from './role_classes';
-import { setD } from '../debug/setD';
 import { debugPulse } from '../debug/fpsInfo';
 import Worker from '../webworkers/pulse.worker';
 import { defaultFontSize, stageDimension } from './gameplay_params';
@@ -14,25 +13,39 @@ import {
 } from '../screens/gameplay/supersets/draggable';
 import { startStopRoles } from '../roles_manipulators';
 import { debugFlags, debugKeys } from '../debug/debug_flags';
+import { calculateFPS } from '../libs/helpers_lib';
+import { updateDebugInfo, setD } from '../debug/setD';
 
 const pulseWorker = new Worker();
 
-pulseWorker.onmessage = (e) => {
+let fpsGen;
+
+pulseWorker.onmessage = (message) => {
   if (!(stage.state && stage.state.paused)) {
     onPulseTick.fireAndWaitWhenExhausted(setA).then(() => {
-      /**
-       * Display debugging information
-       */
+      // Display debugging information
       if (debugFlags[debugKeys.SHOW_DEBUG_PANEL]) {
-        onPulseTick.fire(setD);
-        if (e.data) {
-          debugPulse.info = e.data;
+        if (!fpsGen) {
+          fpsGen = calculateFPS(63, 50);
+          fpsGen.next();
+
+          // Send command to pulseWorker to calculate fps
+          pulseWorker.postMessage({ evaluateFps: true });
         }
+        debugPulse.info = message.data;
+        updateDebugInfo.fire(setD, { fpsGen });
+      } else if (fpsGen) {
+        fpsGen = null;
+
+        // Send command to pulseWorker to not calculate fps
+        pulseWorker.postMessage({ evaluateFps: false });
       }
-      /**
-       *
-       */
     });
+  } else if (fpsGen) {
+    fpsGen = null;
+    pulseWorker.postMessage({ evaluateFps: false });
+    debugPulse.info = null;
+    updateDebugInfo.fire(setD);
   }
 };
 
