@@ -75,6 +75,7 @@ export function addSetPositionXYMethod(cl) {
           ).attachClassName('mug--money-hint');
           hint.node.innerText = `$${Math.round(this.params.profit)}`;
           hint.getAppendedAsChild(this);
+          this.linkActor(hint);
           this.moneyHint = hint;
           imageElement.onload = null;
         };
