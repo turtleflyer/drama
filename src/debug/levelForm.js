@@ -1,5 +1,8 @@
 /* eslint-env browser */
 import { startLevel } from '../stage/level_starter';
+import { setD, updateDebugInfo } from './setD';
+import stage from '../stage/stage';
+import { ActorsSet } from '../libs/actors_and_roles';
 
 const levelForm = document.createElement('form');
 levelForm.style.margin = '10px';
@@ -16,6 +19,17 @@ levelForm.addEventListener('submit', (event) => {
 });
 
 export default levelForm;
-// window.setTimeout(() => {
-//   LevelForm.querySelector('input[type="number"').value = stage.state.level;
-// }, 2000);
+
+const formSet = new ActorsSet([levelForm]);
+formSet.name = 'formSet';
+setD.addElement(formSet);
+
+updateDebugInfo
+  .registerAction(formSet, {
+    action({ event: { updateLevel } }) {
+      if (updateLevel) {
+        levelForm.querySelector('input[type="number"').value = stage.state.level;
+      }
+    },
+  })
+  .start();

@@ -31,6 +31,7 @@ pulseWorker.onmessage = (message) => {
 
           // Send command to pulseWorker to calculate fps
           pulseWorker.postMessage({ evaluateFps: true });
+          updateDebugInfo.fire(setD, { updateLevel: true });
         }
         debugPulse.info = message.data;
         updateDebugInfo.fire(setD, { fpsGen });
