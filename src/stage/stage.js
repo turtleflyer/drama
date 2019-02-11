@@ -27,10 +27,13 @@ class Stage extends ActorsSet {
     super([new Actor(stageNode, stageDimension, { scaleF, zIndex: 10 })]);
     stageNode.style['font-size'] = `${defaultFontSize * scaleF}px`;
     this.stageNode = stageNode;
-    const { left, top } = this.getBoundingRect();
-    this.origin = { x: left, y: top };
     Object.assign(this, stageDimension);
     this.params = {};
+  }
+
+  get origin() {
+    const { left, top } = this.getBoundingRect();
+    return { x: left, y: top };
   }
 
   get scaleF() {
