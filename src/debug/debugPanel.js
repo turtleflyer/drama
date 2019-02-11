@@ -1,8 +1,8 @@
 /* eslint-env browser */
 import stopButton from './stopButton';
 import levelForm from './levelForm';
-import { displayInfo } from './displayInfo';
-import { fpsInfo } from './fpsInfo';
+import displayInfo from './displayInfo';
+import fpsInfo from './fpsInfo';
 import resultButton from './resultButton';
 import highlightZonesCheck from './highlightZonesCheck';
 import { debugFlags, debugKeys } from './debug_flags';

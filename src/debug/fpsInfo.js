@@ -2,11 +2,12 @@
 import { ActorsSet } from '../libs/actors_and_roles';
 import { updateDebugInfo, setD } from './setD';
 
-export const fpsInfo = document.createElement('div');
+const fpsInfo = document.createElement('div');
+export default fpsInfo;
 fpsInfo.style.color = 'orange';
 fpsInfo.style['font-weight'] = 'bold';
 
-export const fpsSet = new ActorsSet([fpsInfo]);
+const fpsSet = new ActorsSet([fpsInfo]);
 fpsSet.name = 'fpsSet';
 setD.addElement(fpsSet);
 

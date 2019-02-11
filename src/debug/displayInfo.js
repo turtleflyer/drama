@@ -4,9 +4,11 @@ import stage from '../stage/stage';
 import { fillingMugs } from '../screens/gameplay/role_sets/fillingMugs/fillingMugs';
 import { setD, updateDebugInfo } from './setD';
 
-export const displayInfo = document.createElement('div');
+const displayInfo = document.createElement('div');
 
-export const infoSet = new ActorsSet([displayInfo]);
+export default displayInfo;
+
+const infoSet = new ActorsSet([displayInfo]);
 infoSet.name = 'infoSet';
 setD.addElement(infoSet);
 
