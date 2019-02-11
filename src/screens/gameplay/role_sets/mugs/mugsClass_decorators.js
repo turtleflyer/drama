@@ -18,6 +18,7 @@ export function addSetPositionXYMethod(cl) {
           params,
           position: { scaleF },
         } = this;
+        console.log('params: ', params);
         if (!params.rectSize) {
           const boundRect = this.getBoundingRect();
           params.rectSize = {

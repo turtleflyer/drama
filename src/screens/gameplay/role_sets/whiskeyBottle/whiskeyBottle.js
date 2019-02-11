@@ -30,6 +30,7 @@ class WhiskeyBottle extends Actor {
     this.setPositionXY(whiskeyBottleParams.position);
     setImg(this, getDataURL(bottleImg), { width: '100%', bottom: '0px' });
     this.getAppendedAsChild(stage);
+    this.params = {};
   }
 
   goToFill() {
