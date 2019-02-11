@@ -23,7 +23,7 @@ export default class WhiskeyGlass extends Actor {
       full,
       empty,
       volume,
-      profit: costOfFilledGlass * (beerMarkup - 1),
+      cost: costOfFilledGlass * beerMarkup,
     };
     this.getAppendedAsChild(stage);
     this.born();
@@ -32,12 +32,11 @@ export default class WhiskeyGlass extends Actor {
   turnIntoMoney() {
     const {
       state: { filled: isGlassFilled },
+      params: { cost },
     } = this;
 
     const { state: stateOfStage } = stage;
-    const {
-      reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
-    } = tuneGame;
+    const { reputationDecrement, reputationIncrement, drunkFactorIncrement } = tuneGame;
 
     if (isGlassFilled) {
       stateOfStage.drunkFactor += drunkFactorIncrement;
@@ -48,7 +47,7 @@ export default class WhiskeyGlass extends Actor {
       });
 
       return {
-        money: costOfFilledGlass * beerMarkup,
+        money: cost,
         reaction: customerReactionsTypes.OK,
       };
     }

@@ -29,7 +29,7 @@ export default class Mug extends Actor {
       numberOfOverfilledPhases: overfilledPhasesImgs.length,
       volume,
       empty,
-      profit: volume * beerCost[beerType] * (beerMarkup - 1),
+      cost: volume * beerCost[beerType] * beerMarkup,
     };
     this.getAppendedAsChild(stage);
     this.born();
@@ -68,12 +68,10 @@ export default class Mug extends Actor {
     const {
       beerType,
       state: { total: beerTotalAmount },
-      params: { volume: mugVolume },
+      params: { cost },
     } = this;
     const { drunkFactor } = stage.state;
-    const {
-      reputationDecrement, reputationIncrement, drunkFactorIncrement, beerMarkup,
-    } = tuneGame;
+    const { reputationDecrement, reputationIncrement, drunkFactorIncrement } = tuneGame;
     // prettier-ignore
     const targetBeer = this.state.beers && this.state.beers[beerType]
       ? this.state.beers[beerType] : 0;
@@ -101,7 +99,7 @@ export default class Mug extends Actor {
     totalsOnTable.createNew(true, totalsPosition);
 
     return {
-      money: mugVolume * beerCost[beerType] * beerMarkup,
+      money: cost,
       reaction: customerReactionsTypes.OK,
     };
   }
