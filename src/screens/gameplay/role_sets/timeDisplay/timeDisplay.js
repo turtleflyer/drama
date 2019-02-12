@@ -100,6 +100,7 @@ export const timeMovesRole = onPulseTick.registerAction(timeDisplay, {
   action() {
     const { startTime } = moduleState;
     const lifeTime = (performance.now() - startTime) / 1000;
+    stage.state.lifeTime = lifeTime;
     const { remainingTime } = stage.params.levelParams;
     if (lifeTime < remainingTime) {
       const { bigAngle, smallAngle } = moduleState;

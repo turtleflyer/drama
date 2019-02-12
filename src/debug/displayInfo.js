@@ -15,7 +15,18 @@ setD.addElement(infoSet);
 updateDebugInfo
   .registerAction(infoSet, {
     action() {
-      const textToDisplay = `stage.state: ${JSON.stringify(stage.state)}
+      const textToDisplay = `stage.state: ${JSON.stringify(
+        {
+          ...stage.state,
+          remainingTime: stage.params.levelParams.remainingTime,
+        },
+        (_, value) => {
+          if (typeof value === 'number') {
+            return Math.round(value * 1000) / 1000;
+          }
+          return value;
+        },
+      )}
       [...fillingMugs][0]: ${JSON.stringify(
     [...fillingMugs][0]
           && Object.assign([...fillingMugs][0].state.beers, {
