@@ -1,9 +1,6 @@
 import { whenAllURLRetrieved } from './libs/session_storage_lib';
 import { waitWhenTypeExhausted } from './libs/eventswork';
 import { startLevel } from './stage/level_starter';
-import './debug/debugPanel';
-import './debug/resultButton';
-import './debug/highlightZonesCheck';
 import './stage/stage_roles';
 import './stage/role_classes';
 import './screens/gameplay/supersets/mugs';
@@ -22,7 +19,12 @@ import './screens/gameplay/role_sets/customersReactions/customersReactions';
 import './screens/gameplay/role_sets/waitingMugs/waitingMugs';
 import './screens/gameplay/role_sets/whiskeyBottle/whiskeyBottle';
 import './screens/gameplay/role_sets/folk/folk';
+import { debugFlags, debugKeys } from './debug/debug_flags';
+import { updateDebugPanelStatus } from './debug/debugPanel';
+
+debugFlags[debugKeys.SHOW_DEBUG_PANEL] = true;
 
 waitWhenTypeExhausted('onAddElement')
   .then(whenAllURLRetrieved)
-  .then(() => startLevel(3));
+  .then(() => startLevel(0))
+  .then(updateDebugPanelStatus);

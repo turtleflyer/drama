@@ -41,3 +41,9 @@ window.addEventListener('keyup', (event) => {
 });
 
 export default debugPanel;
+
+export function updateDebugPanelStatus() {
+  if (debugFlags[debugKeys.SHOW_DEBUG_PANEL]) {
+    document.querySelector('body').appendChild(debugPanel);
+  }
+}
