@@ -81,7 +81,7 @@ timeDisplay.getInitializer(function () {
   timeCircle.getAppendedAsChild(stage);
   moduleState.startTime = performance.now();
   const { remainingTime } = stage.params.levelParams;
-  const { maxRemainingTime } = timeDisplayParams;
+  const maxRemainingTime = Math.ceil((remainingTime + 15) / 30) * 30;
   const bigAngle = 360 * (1 - remainingTime / maxRemainingTime);
   const smallAngle = 330 + bigAngle / 12;
   Object.assign(moduleState, { bigAngle, smallAngle });

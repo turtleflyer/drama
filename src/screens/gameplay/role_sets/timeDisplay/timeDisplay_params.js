@@ -26,6 +26,4 @@ export const timeDisplayParams = {
       right: 0,
     },
   },
-
-  maxRemainingTime: 100,
 };
