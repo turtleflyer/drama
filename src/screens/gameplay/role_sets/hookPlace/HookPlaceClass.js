@@ -10,10 +10,13 @@ export default class HookPlace extends Actor {
     this.getAppendedAsChild(stage);
   }
 
-  whereToPlaceMug() {
-    const { y: originY } = stage.origin;
-    const { top, height } = this.node.getBoundingClientRect();
-    return { y: (top - originY + height * hookPlaceParams.mugLine) / this.position.scaleF };
+  whereToPlaceMug({ position: { y: mugY }, rectHeight }) {
+    const {
+      position: { top, height },
+    } = this;
+    return {
+      y: (mugY - rectHeight / 2 - top - height / 2) * 0.5 + top + height / 2 + rectHeight / 2,
+    };
   }
 }
 

@@ -18,7 +18,7 @@ waitingMugs.name = 'waitingMugs';
 removeAfterAnimationEnds(waitingMugs);
 
 waitingMugs.onAddActorEvent(({ target: mug }) => {
-  mug.setPositionXY([...hookPlace][0].whereToPlaceMug());
+  mug.setPositionXY([...hookPlace][0].whereToPlaceMug(mug));
   mug.state.waitingSince = Date.now();
   mug.setZIndex(75);
   mug.attachClassName('waitingMug');
