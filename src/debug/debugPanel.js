@@ -6,14 +6,20 @@ import fpsInfo from './fpsInfo';
 import resultButton from './resultButton';
 import highlightZonesCheck from './highlightZonesCheck';
 import { debugFlags, debugKeys } from './debug_flags';
+import pauseButton from './pauseButton';
 
 const debugPanel = document.createElement('div');
 debugPanel.appendChild(displayInfo);
 debugPanel.appendChild(fpsInfo);
-debugPanel.appendChild(stopButton);
+debugPanel.appendChild(highlightZonesCheck);
+
+const wrapDiv = document.createElement('div');
+debugPanel.appendChild(wrapDiv);
+wrapDiv.appendChild(stopButton);
+wrapDiv.appendChild(pauseButton);
+
 debugPanel.appendChild(levelForm);
 debugPanel.appendChild(resultButton);
-debugPanel.appendChild(highlightZonesCheck);
 
 const debugKeysSequence = ['d', 'e', 'b', 'u', 'g'];
 let sequenceIndex = null;
