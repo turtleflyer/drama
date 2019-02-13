@@ -46,24 +46,24 @@ const mugPlacePositions = {
   normal: [
     {
       bottom: 0,
-      left: -24,
-      width: 80,
-      height: 95,
+      left: -28,
+      width: 88,
+      height: 99,
     },
   ],
 
   dual: [
     {
       bottom: 0,
-      left: -13,
-      width: 80,
-      height: 95,
+      left: -17,
+      width: 88,
+      height: 99,
     },
     {
       bottom: 0,
-      left: 89,
-      width: 80,
-      height: 95,
+      left: 85,
+      width: 88,
+      height: 99,
     },
   ],
 };
