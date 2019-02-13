@@ -38,7 +38,6 @@ function determineFaucetScheme(models) {
       faucetsPlaces.thirdNormalOfThree,
     );
   }
-  console.log('placedScheme: ', placedScheme);
   return placedScheme;
 }
 
