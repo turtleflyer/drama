@@ -13,7 +13,7 @@ imagesDataURL.addElements([imgIPAEmpty, imgLGREmpty, imgPTREmpty, emptyGlassImg,
 export const mugTypes = {
   [beerTypes.IPA]: {
     img: {
-      width: 59,
+      width: 63,
       empty: imgIPAEmpty,
       fillingPhasesImgs: importAll(
         require.context('./img/IPA/IPA_filling_states', false, /\.png$/),
@@ -28,11 +28,11 @@ export const mugTypes = {
         return img;
       }),
     },
-    volume: 4,
+    volume: 6.75,
   },
   [beerTypes.LGR]: {
     img: {
-      width: 65,
+      width: 70,
       empty: imgLGREmpty,
       fillingPhasesImgs: importAll(
         require.context('./img/LGR/LGR_filling_states', false, /\.png$/),
@@ -47,11 +47,11 @@ export const mugTypes = {
         return img;
       }),
     },
-    volume: 5,
+    volume: 9,
   },
   [beerTypes.PTR]: {
     img: {
-      width: 52,
+      width: 55,
       empty: imgPTREmpty,
       fillingPhasesImgs: importAll(
         require.context('./img/PTR/PTR_filling_states', false, /\.png$/),
@@ -66,7 +66,7 @@ export const mugTypes = {
         return img;
       }),
     },
-    volume: 3,
+    volume: 4.5,
   },
 };
 
@@ -87,5 +87,4 @@ export const whiskeyGlassParams = {
     full: fullGlassImg,
   },
   volume: 2,
-  costOfFilledGlass: 15,
 };
