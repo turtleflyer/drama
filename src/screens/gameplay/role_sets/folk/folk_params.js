@@ -12,5 +12,5 @@ export const folkParams = {
     imagesDataURL.addElement(img);
     return img;
   }),
-  drunkBrackets: [1.075, 1.15],
+  drunkBrackets: [1.15, 1.3],
 };
