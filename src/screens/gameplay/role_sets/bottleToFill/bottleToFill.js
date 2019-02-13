@@ -8,6 +8,7 @@ import { whiskeyGlassParams } from '../mugs/mugs_params';
 import { startStopRoles } from '../../../../roles_manipulators';
 import { whiskeyBottleParams } from '../whiskeyBottle/whiskeyBottle_params';
 import { glassPlaceSet } from '../glassPlace/glassPlace';
+import { beerCost, glassType } from '../../../../stage/gameplay_params';
 
 export const bottleToFill = new ActorsSet();
 
@@ -132,7 +133,7 @@ export const watchFillingRole = onPulseTick.registerAction(bottleToFill, {
           bottle.stopFilling();
           glass.showToBeFilled();
           glass.backOnTable();
-          stage.state.money -= whiskeyGlassParams.costOfFilledGlass;
+          stage.state.money -= beerCost[glassType];
         }
       }
     }
