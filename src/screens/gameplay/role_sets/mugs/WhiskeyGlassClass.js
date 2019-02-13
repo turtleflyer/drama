@@ -3,14 +3,14 @@ import { Actor } from '../../../../libs/actors_and_roles';
 import { setImg } from '../../../../libs/helpers_lib';
 import stage from '../../../../stage/stage';
 import { whiskeyGlassParams, magsCreatingParams } from './mugs_params';
-import { tuneGame } from '../../../../stage/gameplay_params';
+import { tuneGame, beerCost, glassType } from '../../../../stage/gameplay_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
 import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
 import { fillingGlass } from '../fillingGlass/fillingGlass';
 import { getDataURL } from '../../../../libs/session_storage_lib';
 
-const { img, volume, costOfFilledGlass } = whiskeyGlassParams;
+const { img, volume } = whiskeyGlassParams;
 
 export default class WhiskeyGlass extends Actor {
   constructor(horizontalPosition = 0) {
@@ -23,7 +23,7 @@ export default class WhiskeyGlass extends Actor {
       full,
       empty,
       volume,
-      cost: costOfFilledGlass * beerMarkup,
+      cost: beerCost[glassType] * beerMarkup,
     };
     this.getAppendedAsChild(stage);
     this.born();

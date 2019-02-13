@@ -4,10 +4,10 @@ export const stageDimension = {
 };
 
 export const tuneGame = {
-  reputationDecrement: -0.15,
-  reputationIncrement: 0.06,
-  drunkFactorIncrement: 0.02,
-  beerMarkup: 3.5,
+  reputationDecrement: -0.22,
+  reputationIncrement: 0.15,
+  drunkFactorIncrement: 0.04,
+  beerMarkup: 1.8,
 
   // With following parameters if probability of appearance of a mug is 0.15
   // then max possible existence in the sequence is 1 (no more than 1 existence).
@@ -31,6 +31,11 @@ export const beerTypes = {
 
 export const glassType = '@@glassType';
 
-export const beerCost = { [beerTypes.IPA]: 2.5, [beerTypes.LGR]: 2, [beerTypes.PTR]: 3.5 };
+export const beerCost = {
+  [beerTypes.IPA]: 1.6,
+  [beerTypes.LGR]: 0.6,
+  [beerTypes.PTR]: 1.9,
+  [glassType]: 11,
+};
 
 export const pulseTimeout = 16;
