@@ -20,11 +20,13 @@ const handlePositions = {
 };
 
 const jetPositions = {
-  normal: [{
-    left: 6,
-    bottom: 71,
-    height: 68,
-  }],
+  normal: [
+    {
+      left: 6,
+      bottom: 71,
+      height: 68,
+    },
+  ],
 
   dual: [
     {
@@ -41,12 +43,14 @@ const jetPositions = {
 };
 
 const mugPlacePositions = {
-  normal: [{
-    bottom: 0,
-    left: -24,
-    width: 80,
-    height: 95,
-  }],
+  normal: [
+    {
+      bottom: 0,
+      left: -24,
+      width: 80,
+      height: 95,
+    },
+  ],
 
   dual: [
     {
@@ -76,14 +80,6 @@ export const faucetParams = {
   position: {
     bottom: 92,
   },
-};
-
-export const faucetsPlaces = {
-  0: 264,
-  1: 176,
-  2: 336,
-  3: 144,
-  4: 384,
 };
 
 const normalFaucet = {
@@ -157,6 +153,24 @@ const dualIPALGR = {
   }),
 };
 
+const dualIPAPTR = {
+  ...dualFaucet,
+  beerTypes: [beerTypes.IPA, beerTypes.LGR],
+  imgPhases: importAll(require.context('./img/dualIPA_PTR', false, /\.png$/)).map((img) => {
+    imagesDataURL.addElement(img);
+    return img;
+  }),
+};
+
+const dualLGRPTR = {
+  ...dualFaucet,
+  beerTypes: [beerTypes.IPA, beerTypes.LGR],
+  imgPhases: importAll(require.context('./img/dualLGR_PTR', false, /\.png$/)).map((img) => {
+    imagesDataURL.addElement(img);
+    return img;
+  }),
+};
+
 export const faucetModels = {
   normalIPA,
   normalLGR,
@@ -165,4 +179,17 @@ export const faucetModels = {
   brokenLGR,
   brokenPTR,
   dualIPALGR,
+  dualIPAPTR,
+  dualLGRPTR,
+};
+
+export const faucetsPlaces = {
+  centerNormal: 264,
+  centerDual: 220,
+  firstNormalOfTwo: 176,
+  secondNormalOfTwo: 336,
+  firstNormalOfThree: 144,
+  thirdNormalOfThree: 384,
+  firstDualOfTwo: 130,
+  secondDualOfTwo: 305,
 };

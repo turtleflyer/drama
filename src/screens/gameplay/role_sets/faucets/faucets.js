@@ -4,10 +4,43 @@ import stage from '../../../../stage/stage';
 import { onPulseTick } from '../../../../stage/role_classes';
 import { damages } from '../damages/damages';
 import { beerCost } from '../../../../stage/gameplay_params';
-import { faucetsPlaces } from './faucets_params';
+import { faucetsPlaces, switchTypes } from './faucets_params';
 import { damagesParams } from '../damages/damages_params';
 import { startStopRoles } from '../../../../roles_manipulators';
 import { setA } from '../../supersets/setA';
+
+function determineFaucetScheme(models) {
+  const modelsTypes = models.map(f => f.switchType);
+  const placedScheme = [];
+  if (models.length === 1) {
+    if (modelsTypes[0] === switchTypes.DUAL) {
+      placedScheme.push(faucetsPlaces.centerDual);
+    } else {
+      placedScheme.push(faucetsPlaces.centerNormal);
+    }
+  } else if (models.length === 2) {
+    if (modelsTypes[0] === switchTypes.DUAL) {
+      placedScheme.push(faucetsPlaces.firstDualOfTwo);
+    } else {
+      placedScheme.push(faucetsPlaces.firstNormalOfTwo);
+    }
+    if (modelsTypes[1] === switchTypes.DUAL) {
+      placedScheme.push(faucetsPlaces.secondDualOfTwo);
+    } else {
+      placedScheme.push(faucetsPlaces.secondNormalOfTwo);
+    }
+  } else {
+    placedScheme.splice(
+      0,
+      0,
+      faucetsPlaces.firstNormalOfThree,
+      faucetsPlaces.centerNormal,
+      faucetsPlaces.thirdNormalOfThree,
+    );
+  }
+  console.log('placedScheme: ', placedScheme);
+  return placedScheme;
+}
 
 // eslint-disable-next-line
 export const faucets = new ActorsSet();
@@ -15,12 +48,13 @@ faucets.getInitializer(function () {
   const {
     params: {
       levelParams: {
-        faucetsDescription: { models, placedScheme },
+        faucetsDescription: { models },
       },
     },
   } = stage;
+  const placedScheme = determineFaucetScheme(models);
   models.forEach((faucet, i) => {
-    this.addElement(new Faucet(faucet, faucetsPlaces[placedScheme[i]]));
+    this.addElement(new Faucet(faucet, placedScheme[i]));
   });
 });
 
