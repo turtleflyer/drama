@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { debugFlags, debugKeys } from './debug_flags';
-import debugPanel, { updateDebugPanelStatus } from './debugPanel/debugPanel';
+import { updateDebugPanelStatus } from './debugPanel/debugPanel';
 
 const debugKeysSequence = ['d', 'e', 'b', 'u', 'g'];
 let sequenceIndex = null;
@@ -22,5 +22,3 @@ window.addEventListener('keyup', (event) => {
     sequenceIndex = null;
   }
 });
-
-export default debugPanel;
