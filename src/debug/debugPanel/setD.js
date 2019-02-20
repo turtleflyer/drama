@@ -1,4 +1,4 @@
-import { ActorsSet, RoleClass } from '../libs/actors_and_roles';
+import { ActorsSet, RoleClass } from '../../libs/actors_and_roles';
 
 // eslint-disable-next-line
 export const setD = new ActorsSet([]);

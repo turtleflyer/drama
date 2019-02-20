@@ -1,7 +1,7 @@
 /* eslint-env browser */
-import { debugFlags, debugKeys } from './debug_flags';
-import { highlightPlacesRole } from '../screens/gameplay/supersets/dropPlaces';
-import { highlightHandlesRole } from '../screens/gameplay/role_sets/faucetHandles/faucetHandles';
+import { debugFlags, debugKeys } from '../debug_flags';
+import { highlightPlacesRole } from '../../screens/gameplay/supersets/dropPlaces';
+import { highlightHandlesRole } from '../../screens/gameplay/role_sets/faucetHandles/faucetHandles';
 
 const highlightZonesCheck = document.createElement('form');
 

@@ -1,6 +1,6 @@
 /* eslint-env browser */
-import { resultOfGame } from '../screens/gameplay/role_sets/resultOfGame/resultOfGame';
-import { gameResultsTypes } from '../screens/gameplay/role_sets/resultOfGame/resultOfGame_params';
+import { resultOfGame } from '../../screens/gameplay/role_sets/resultOfGame/resultOfGame';
+import { gameResultsTypes } from '../../screens/gameplay/role_sets/resultOfGame/resultOfGame_params';
 
 const resultButton = document.createElement('button');
 Object.assign(resultButton.style, { width: '100px', height: '20px', margin: '5px' });

@@ -1,7 +1,7 @@
 /* eslint-env browser */
-import { ActorsSet } from '../libs/actors_and_roles';
-import stage from '../stage/stage';
-import { fillingMugs } from '../screens/gameplay/role_sets/fillingMugs/fillingMugs';
+import { ActorsSet } from '../../libs/actors_and_roles';
+import stage from '../../stage/stage';
+import { fillingMugs } from '../../screens/gameplay/role_sets/fillingMugs/fillingMugs';
 import { setD, updateDebugInfo } from './setD';
 
 const displayInfo = document.createElement('div');

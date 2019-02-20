@@ -4,7 +4,7 @@ import { dragMug } from '../screens/gameplay/role_sets/dragMug/dragMug';
 import { setA, resizeEverythingRole } from '../screens/gameplay/supersets/setA';
 import { registerActionOfType } from '../libs/actors_and_roles';
 import { onPulseTick, onResize } from './role_classes';
-import { debugPulse } from '../debug/fpsInfo';
+import { debugPulse } from '../debug/debugPanel/fpsInfo';
 import Worker from '../webworkers/pulse.worker';
 import { defaultFontSize, stageDimension } from './gameplay_params';
 import {
@@ -14,7 +14,7 @@ import {
 import { startStopRoles } from '../roles_manipulators';
 import { debugFlags, debugKeys } from '../debug/debug_flags';
 import { calculateFPS } from '../libs/helpers_lib';
-import { updateDebugInfo, setD } from '../debug/setD';
+import { updateDebugInfo, setD } from '../debug/debugPanel/setD';
 
 const pulseWorker = new Worker();
 

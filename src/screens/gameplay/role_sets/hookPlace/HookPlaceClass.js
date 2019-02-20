@@ -2,7 +2,7 @@
 import { Actor } from '../../../../libs/actors_and_roles';
 import stage from '../../../../stage/stage';
 import { hookPlaceParams } from './hooksPlace_params';
-import { makePlaceAbleHighlighting } from '../../../../debug/highlightZonesCheck_lib';
+import { makePlaceAbleHighlighting } from '../../../../debug/debugPanel/highlightZonesCheck_lib';
 
 export default class HookPlace extends Actor {
   constructor() {

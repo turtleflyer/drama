@@ -1,8 +1,8 @@
 /* eslint-env browser */
-import { startLevel } from '../stage/level_starter';
+import { startLevel } from '../../stage/level_starter';
 import { setD, updateDebugInfo } from './setD';
-import stage from '../stage/stage';
-import { ActorsSet } from '../libs/actors_and_roles';
+import stage from '../../stage/stage';
+import { ActorsSet } from '../../libs/actors_and_roles';
 
 const levelForm = document.createElement('form');
 levelForm.style.margin = '2px 10px';

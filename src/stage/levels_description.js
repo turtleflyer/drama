@@ -1,12 +1,6 @@
 import { faucetModels } from '../screens/gameplay/role_sets/faucets/faucets_params';
 import { beerTypes, glassType } from './gameplay_params';
 
-const placedFaucetsSchemes = {
-  oneNormal: [0],
-  twoNormals: [1, 2],
-  threeNormals: [3, 0, 4],
-};
-
 export const commonInitState = {
   reputation: 1,
   drunkFactor: 1,
@@ -16,12 +10,11 @@ export const levelsDescription = {
   0: {
     params: {
       mugsSpeed: 75,
-      initMugDensity: 4,
+      initMugDensity: 3,
       remainingTime: 50,
-      moneyToEarn: 150,
+      moneyToEarn: 80,
       faucetsDescription: {
         models: [faucetModels.normalIPA],
-        placedScheme: placedFaucetsSchemes.oneNormal,
       },
       mugsDistribution: {
         [beerTypes.IPA]: 100,
@@ -35,16 +28,15 @@ export const levelsDescription = {
   1: {
     params: {
       mugsSpeed: 75,
-      initMugDensity: 4.5,
+      initMugDensity: 3,
       remainingTime: 80,
-      moneyToEarn: 400,
+      moneyToEarn: 160,
       faucetsDescription: {
-        models: [faucetModels.normalIPA, faucetModels.normalPTR],
-        placedScheme: placedFaucetsSchemes.twoNormals,
+        models: [faucetModels.normalIPA, faucetModels.normalLGR],
       },
       mugsDistribution: {
         [beerTypes.IPA]: 80,
-        [beerTypes.PTR]: 20,
+        [beerTypes.LGR]: 20,
       },
     },
     initState: {
@@ -55,16 +47,15 @@ export const levelsDescription = {
   2: {
     params: {
       mugsSpeed: 75,
-      initMugDensity: 4,
+      initMugDensity: 3,
       remainingTime: 50,
-      moneyToEarn: 300,
+      moneyToEarn: 140,
       faucetsDescription: {
-        models: [faucetModels.normalIPA],
-        placedScheme: placedFaucetsSchemes.oneNormal,
+        models: [faucetModels.normalPTR, faucetModels.brokenLGR],
       },
       mugsDistribution: {
-        [beerTypes.IPA]: 50,
-        [glassType]: 50,
+        [beerTypes.LGR]: 35,
+        [beerTypes.PTR]: 65,
       },
     },
     initState: {
@@ -75,64 +66,97 @@ export const levelsDescription = {
   3: {
     params: {
       mugsSpeed: 75,
-      initMugDensity: 4,
+      initMugDensity: 2,
       remainingTime: 50,
-      moneyToEarn: 300,
+      moneyToEarn: 100,
       faucetsDescription: {
-        models: [faucetModels.normalIPA, faucetModels.normalLGR, faucetModels.normalPTR],
-        placedScheme: placedFaucetsSchemes.threeNormals,
+        models: [faucetModels.normalLGR],
       },
       mugsDistribution: {
-        [beerTypes.IPA]: 15,
-        [beerTypes.LGR]: 25,
-        [beerTypes.PTR]: 60,
+        [beerTypes.LGR]: 60,
+        [glassType]: 40,
       },
     },
     initState: {
-      money: 100,
+      money: 50,
     },
   },
 
   4: {
     params: {
       mugsSpeed: 75,
-      initMugDensity: 4,
-      remainingTime: 100,
-      moneyToEarn: 300,
+      initMugDensity: 2,
+      remainingTime: 70,
+      moneyToEarn: 250,
       faucetsDescription: {
-        models: [faucetModels.dualIPALGR],
-        placedScheme: placedFaucetsSchemes.oneNormal,
+        models: [faucetModels.dualLGRPTR],
       },
       mugsDistribution: {
-        [beerTypes.IPA]: 50,
-        [beerTypes.LGR]: 50,
-
+        [beerTypes.LGR]: 65,
+        [beerTypes.PTR]: 35,
       },
     },
     initState: {
-      money: 100,
+      money: 165,
     },
   },
 
-  5: {
-    params: {
-      mugsSpeed: 75,
-      initMugDensity: 4,
-      remainingTime: 100,
-      moneyToEarn: 300,
-      faucetsDescription: {
-        models: [faucetModels.brokenLGR],
-        placedScheme: placedFaucetsSchemes.oneNormal,
-      },
-      mugsDistribution: {
-        [beerTypes.LGR]: 100,
+  // 5: {
+  //   params: {
+  //     mugsSpeed: 75,
+  //     initMugDensity: 3.8,
+  //     remainingTime: 55,
+  //     moneyToEarn: 80,
+  //     faucetsDescription: {
+  //       models: [faucetModels.normalIPA, faucetModels.normalLGR, faucetModels.normalPTR],
+  //     },
+  //     mugsDistribution: {
+  //       [beerTypes.IPA]: 30,
+  //       [beerTypes.LGR]: 45,
+  //       [beerTypes.PTR]: 25,
+  //     },
+  //   },
+  //   initState: {
+  //     money: 25,
+  //   },
+  // },
 
-      },
-    },
-    initState: {
-      money: 100,
-    },
-  },
+  // 4: {
+  //   params: {
+  //     mugsSpeed: 75,
+  //     initMugDensity: 4,
+  //     remainingTime: 100,
+  //     moneyToEarn: 300,
+  //     faucetsDescription: {
+  //       models: [faucetModels.dualIPALGR],
+  //     },
+  //     mugsDistribution: {
+  //       [beerTypes.IPA]: 30,
+  //       [beerTypes.LGR]: 70,
+  //     },
+  //   },
+  //   initState: {
+  //     money: 100,
+  //   },
+  // },
+
+  // 5: {
+  //   params: {
+  //     mugsSpeed: 75,
+  //     initMugDensity: 4,
+  //     remainingTime: 100,
+  //     moneyToEarn: 300,
+  //     faucetsDescription: {
+  //       models: [faucetModels.brokenLGR],
+  //     },
+  //     mugsDistribution: {
+  //       [beerTypes.LGR]: 100,
+  //     },
+  //   },
+  //   initState: {
+  //     money: 100,
+  //   },
+  // },
 
   /**
    * For debugging purpose
@@ -145,7 +169,6 @@ export const levelsDescription = {
       moneyToEarn: Infinity,
       faucetsDescription: {
         models: [faucetModels.normalIPA],
-        placedScheme: placedFaucetsSchemes.oneNormal,
       },
     },
     initState: {

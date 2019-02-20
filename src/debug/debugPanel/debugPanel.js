@@ -5,7 +5,7 @@ import displayInfo from './displayInfo';
 import fpsInfo from './fpsInfo';
 import resultButton from './resultButton';
 import highlightZonesCheck from './highlightZonesCheck';
-import { debugFlags, debugKeys } from './debug_flags';
+import { debugFlags, debugKeys } from '../debug_flags';
 import pauseButton from './pauseButton';
 
 const debugPanel = document.createElement('div');

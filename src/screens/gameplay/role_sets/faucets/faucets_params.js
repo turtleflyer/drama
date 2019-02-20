@@ -155,7 +155,7 @@ const dualIPALGR = {
 
 const dualIPAPTR = {
   ...dualFaucet,
-  beerTypes: [beerTypes.IPA, beerTypes.LGR],
+  beerTypes: [beerTypes.IPA, beerTypes.PTR],
   imgPhases: importAll(require.context('./img/dualIPA_PTR', false, /\.png$/)).map((img) => {
     imagesDataURL.addElement(img);
     return img;
@@ -164,7 +164,7 @@ const dualIPAPTR = {
 
 const dualLGRPTR = {
   ...dualFaucet,
-  beerTypes: [beerTypes.IPA, beerTypes.LGR],
+  beerTypes: [beerTypes.LGR, beerTypes.PTR],
   imgPhases: importAll(require.context('./img/dualLGR_PTR', false, /\.png$/)).map((img) => {
     imagesDataURL.addElement(img);
     return img;

@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { ActorsSet } from '../libs/actors_and_roles';
+import { ActorsSet } from '../../libs/actors_and_roles';
 import { updateDebugInfo, setD } from './setD';
 
 const fpsInfo = document.createElement('div');

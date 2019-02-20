@@ -20,11 +20,11 @@ import './screens/gameplay/role_sets/waitingMugs/waitingMugs';
 import './screens/gameplay/role_sets/whiskeyBottle/whiskeyBottle';
 import './screens/gameplay/role_sets/folk/folk';
 import { debugFlags, debugKeys } from './debug/debug_flags';
-import { updateDebugPanelStatus } from './debug/debugPanel';
+import { updateDebugPanelStatus } from './debug/debugPanel/debugPanel';
 
 debugFlags[debugKeys.SHOW_DEBUG_PANEL] = true;
 
 waitWhenTypeExhausted('onAddElement')
   .then(whenAllURLRetrieved)
-  .then(() => startLevel(0))
+  .then(() => startLevel(4))
   .then(updateDebugPanelStatus);

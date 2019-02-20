@@ -1,5 +1,5 @@
-import { debugFlags, debugKeys } from './debug_flags';
-import { RoleClass } from '../libs/actors_and_roles';
+import { debugFlags, debugKeys } from '../debug_flags';
+import { RoleClass } from '../../libs/actors_and_roles';
 
 export function makePlaceAbleHighlighting(cl) {
   const getObj = cl.prototype || cl;

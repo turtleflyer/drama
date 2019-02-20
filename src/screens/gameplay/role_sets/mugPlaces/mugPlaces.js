@@ -3,7 +3,7 @@ import { faucets } from '../faucets/faucets';
 import stage from '../../../../stage/stage';
 import { mugPlacesParams } from './mugPlaces_params';
 import { addWhereToPlaceMugMethod } from './mugPlaceClass_decorators';
-import { makePlaceAbleHighlighting } from '../../../../debug/highlightZonesCheck_lib';
+import { makePlaceAbleHighlighting } from '../../../../debug/debugPanel/highlightZonesCheck_lib';
 
 class MugPlace extends Actor {
   constructor(faucet, position) {
