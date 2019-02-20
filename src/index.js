@@ -20,8 +20,8 @@ import './screens/gameplay/role_sets/waitingMugs/waitingMugs';
 import './screens/gameplay/role_sets/whiskeyBottle/whiskeyBottle';
 import './screens/gameplay/role_sets/folk/folk';
 import { debugFlags, debugKeys } from './debug/debug_flags';
-import { updateDebugPanelStatus } from './debug/debugPanel/debugPanel';
 import './debug/debugKeySeqListener';
+import { updateDebugPanelStatus } from './debug/tabsWrapper';
 
 debugFlags[debugKeys.SHOW_DEBUG_PANEL] = true;
 

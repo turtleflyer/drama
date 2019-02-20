@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import { debugFlags, debugKeys } from './debug_flags';
-import { updateDebugPanelStatus } from './debugPanel/debugPanel';
+import { updateDebugPanelStatus } from './tabsWrapper';
 
 const debugKeysSequence = ['d', 'e', 'b', 'u', 'g'];
 let sequenceIndex = null;

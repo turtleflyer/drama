@@ -1,6 +1,22 @@
+.tab-head,
 .tab-panel {
   border: solid 2px;
   border-color: lightgray;
+}
+
+.tab-head {
+  padding: 2px;
+  margin: 5px 0px 0px;
+  color: darkgray;
+  display: inline-block;
+  border-bottom: 0px;
+  cursor: pointer;
+}
+
+.tab-head--selected {
+  color: black;
+}
+
+.tab-panel {
   padding: 5px;
-  margin: 5px 0px;
 }

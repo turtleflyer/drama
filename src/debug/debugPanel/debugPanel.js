@@ -5,7 +5,6 @@ import displayInfo from './displayInfo';
 import fpsInfo from './fpsInfo';
 import resultButton from './resultButton';
 import highlightZonesCheck from './highlightZonesCheck';
-import { debugFlags, debugKeys } from '../debug_flags';
 import pauseButton from './pauseButton';
 import '../tabs.css';
 
@@ -24,11 +23,3 @@ debugPanel.appendChild(levelForm);
 debugPanel.appendChild(resultButton);
 
 export default debugPanel;
-
-export function updateDebugPanelStatus() {
-  if (debugFlags[debugKeys.SHOW_DEBUG_PANEL]) {
-    document.querySelector('body').appendChild(debugPanel);
-  } else {
-    debugPanel.remove();
-  }
-}
