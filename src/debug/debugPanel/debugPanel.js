@@ -7,8 +7,10 @@ import resultButton from './resultButton';
 import highlightZonesCheck from './highlightZonesCheck';
 import { debugFlags, debugKeys } from '../debug_flags';
 import pauseButton from './pauseButton';
+import './debugPanel.css';
 
 const debugPanel = document.createElement('div');
+debugPanel.className = 'tab-panel';
 debugPanel.appendChild(displayInfo);
 debugPanel.appendChild(fpsInfo);
 debugPanel.appendChild(highlightZonesCheck);
