@@ -9,7 +9,7 @@ import { setA } from '../../supersets/setA';
 class Damage extends Actor {
   constructor(place, phase) {
     super('div', damagesParams.position[phase], { scaleF: stage.scaleF, zIndex: 72 });
-    this.node.textContent = '-$5';
+    this.node.textContent = `-$${damagesParams.quant}`;
     this.getAppendedAsChild(place);
     this.attachClassName('damages');
   }

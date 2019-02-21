@@ -2,7 +2,7 @@
 
 // eslint-disable-next-line
 export const damagesParams = {
-  quant: 5,
+  quant: 1,
 
   position: [
     {
