@@ -22,17 +22,19 @@ totalsOnTable.createNew = function (isPositive, position) {
   elementsToCreate.push({
     value: isPositive ? totalsParams.valueToCreate : -totalsParams.valueToCreate,
     position,
-    nextQuant: Date.now(),
+    nextQuant: performance.now(),
   });
 };
 
 removeAfterAnimationEnds(totalsOnTable);
 
 export const manageTotalsRole = onPulseTick.registerAction(totalsOnTable, {
-  action({ target: totalPiece, roleSet }) {
-    const currTime = Date.now();
+  action({ target: totalPiece, roleSet, event }) {
     if (totalPiece === signalElement && elementsToCreate.length > 0) {
+      const currTime = performance.now();
+      const timeToAdjustDueBeenPaused = (event && event.beenOnPause) || 0;
       elementsToCreate = elementsToCreate.filter((entry) => {
+        entry.nextQuant += timeToAdjustDueBeenPaused;
         if (entry.nextQuant < currTime) {
           roleSet.addElement(new TotalOnTable(entry.position, entry.value > 0));
           entry.value = entry.value > 0 ? entry.value - 1 : entry.value + 1;

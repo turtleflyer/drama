@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import { ActorsSet } from '../../../../libs/actors_and_roles';
 import Faucet from './FaucetClass';
 import stage from '../../../../stage/stage';
@@ -60,12 +61,18 @@ faucets.getInitializer(function () {
 faucets.name = 'faucets';
 
 export const countExpensesRole = onPulseTick.registerAction(faucets, {
-  action({ target: faucet }) {
-    const currTime = Date.now();
+  action({ target: faucet, event }) {
     const {
       state: stateOfFaucet,
       state: { descriptionOfRunningState, lastRenderedDamage },
     } = faucet;
+
+    if (event && event.beenOnPause && stateOfFaucet.lastTime) {
+      stateOfFaucet.lastTime += event.beenOnPause;
+      lastRenderedDamage.whenStartToCount += event.beenOnPause;
+    }
+
+    const currTime = performance.now();
     if (descriptionOfRunningState) {
       if (stateOfFaucet.lastTime) {
         stage.state.money

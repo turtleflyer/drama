@@ -66,10 +66,12 @@ class Stage extends ActorsSet {
 
   pause() {
     this.state.paused = true;
+    this.state.pausedSince = performance.now();
   }
 
   resume() {
     this.state.paused = false;
+    this.state.beenOnPause = performance.now() - this.state.pausedSince;
   }
 }
 

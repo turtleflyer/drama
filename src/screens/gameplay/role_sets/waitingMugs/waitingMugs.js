@@ -19,18 +19,21 @@ removeAfterAnimationEnds(waitingMugs);
 
 waitingMugs.onAddActorEvent(({ target: mug }) => {
   mug.setPositionXY([...hookPlace][0].whereToPlaceMug(mug));
-  mug.state.waitingSince = Date.now();
+  mug.state.waitingSince = performance.now();
   mug.setZIndex(75);
-  mug.attachClassName('waitingMug');
 });
 
 export const waitMugDisappearRole = onPulseTick.registerAction(waitingMugs, {
-  action({ target: mug }) {
+  action({ target: mug, event }) {
     if (this.roleSet.size > 0) {
-      const currTime = Date.now();
+      if (event && event.beenOnPause) {
+        mug.state.waitingSince += event.beenOnPause;
+      }
+      const currTime = performance.now();
       const { waitingSince } = mug.state;
       if (currTime - waitingSince >= waitingMugParams.timeWhenMoneyFly) {
         mug.state.waitingSince = Infinity;
+        mug.attachClassName('waitingMug');
         const { money, reaction } = mug.turnIntoMoney();
         stage.state.money += money;
         customersReactions.createNew(reaction);

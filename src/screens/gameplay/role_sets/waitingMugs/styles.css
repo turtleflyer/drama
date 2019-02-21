@@ -1,8 +1,5 @@
 @keyframes fade-waitingMug {
-  50% {
-    opacity: 1;
-  }
-  80% {
+  10% {
     opacity: 0.9;
   }
   100% {
@@ -11,5 +8,5 @@
 }
 
 .waitingMug {
-  animation: fade-waitingMug 3s forwards;
+  animation: fade-waitingMug 1s forwards;
 }

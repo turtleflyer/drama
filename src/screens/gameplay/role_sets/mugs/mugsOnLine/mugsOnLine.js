@@ -58,7 +58,14 @@ mugsOnLine.getInitializer(function () {
 });
 
 export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
-  action({ target: mug }) {
+  action({ target: mug, event }) {
+    if (event && event.beenOnPause) {
+      mug.params.bornTime += event.beenOnPause;
+      if (mug === [...mugsOnLine][0]) {
+        timeOfNextBirth += event.beenOnPause;
+      }
+    }
+
     const currTime = performance.now();
 
     if (lastReputationValue !== stage.state.reputation) {
@@ -97,12 +104,12 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
       resultOfGame.getResult(gameResultsTypes.LOST);
     }
 
-    if (timeOfNextBirth && timeOfNextBirth - 200 < currTime) {
+    if (timeOfNextBirth && timeOfNextBirth - 1000 < currTime) {
       const generatedMug = createNewMug();
       generatedMug.params.bornTime = timeOfNextBirth;
       lastMug = generatedMug;
       mugsOnLine.addElement(generatedMug);
-      refreshTimeOfNextBirth(mugsOnLine);
+      refreshTimeOfNextBirth();
 
       /**
        *

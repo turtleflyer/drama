@@ -22,7 +22,12 @@ let fpsGen;
 
 pulseWorker.onmessage = (message) => {
   if (!(stage.state && stage.state.paused)) {
-    onPulseTick.fireAndWaitWhenExhausted(setA).then(() => {
+    const eventMessage = {};
+    if (stage.state.beenOnPause) {
+      eventMessage.beenOnPause = stage.state.beenOnPause;
+      stage.state.beenOnPause = null;
+    }
+    onPulseTick.fireAndWaitWhenExhausted(setA, eventMessage).then(() => {
       // Display debugging information
       if (debugFlags[debugKeys.SHOW_DEBUG_PANEL]) {
         if (!fpsGen) {

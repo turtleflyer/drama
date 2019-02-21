@@ -120,8 +120,12 @@ export const stopDragRoleDraggable = stopDrag
   .start();
 
 export const watchFillingRole = onPulseTick.registerAction(bottleToFill, {
-  action({ target: bottle, roleSet }) {
+  action({ target: bottle, roleSet, event }) {
     if (roleSet.size > 0 && fillingGlass.size > 0) {
+      if (event && event.beenOnPause) {
+        bottle.state.fillingStartTime += event.beenOnPause;
+      }
+
       const {
         state: { fillingStartTime },
       } = bottle;

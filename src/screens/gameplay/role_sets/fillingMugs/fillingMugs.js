@@ -9,7 +9,7 @@ export const fillingMugs = new ActorsSet();
 fillingMugs.name = 'fillingMugs';
 
 export const fillMugsRole = onPulseTick.registerAction(fillingMugs, {
-  action({ target: mug }) {
+  action({ target: mug, event }) {
     if (this.roleSet.size > 0) {
       const {
         params: paramsOfMug,
@@ -17,7 +17,6 @@ export const fillMugsRole = onPulseTick.registerAction(fillingMugs, {
         state: stateOfMug,
         state: {
           timeStarted,
-          lastTime,
           total: totalBeer,
           beers: fillingBeers,
           place,
@@ -28,6 +27,13 @@ export const fillMugsRole = onPulseTick.registerAction(fillingMugs, {
           },
         },
       } = mug;
+
+      if (event && event.beenOnPause && stateOfMug.lastTime) {
+        stateOfMug.lastTime += event.beenOnPause;
+      }
+
+      const { lastTime } = stateOfMug;
+
       if (descriptionOfRunningState && descriptionOfRunningState.place === place) {
         const { beer: activeBeer } = descriptionOfRunningState;
         const currTime = performance.now();

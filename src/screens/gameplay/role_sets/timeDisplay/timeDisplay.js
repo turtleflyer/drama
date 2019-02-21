@@ -97,7 +97,11 @@ function adjustAngle(angle, ratio) {
 }
 
 export const timeMovesRole = onPulseTick.registerAction(timeDisplay, {
-  action() {
+  action({ event }) {
+    if (event && event.beenOnPause) {
+      moduleState.startTime += event.beenOnPause;
+    }
+
     const { startTime } = moduleState;
     const lifeTime = (performance.now() - startTime) / 1000;
     stage.state.lifeTime = lifeTime;
