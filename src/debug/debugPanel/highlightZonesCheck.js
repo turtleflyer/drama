@@ -8,7 +8,6 @@ const highlightZonesCheck = document.createElement('form');
 highlightZonesCheck.innerHTML = `
     <input type="checkbox" name="highlight-drop-zones">
       Highlight drop zones
-    </input>
 `;
 
 highlightZonesCheck.querySelector('input').onchange = function (e) {
