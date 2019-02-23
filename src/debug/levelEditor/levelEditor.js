@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import '../tabs.css';
+import '../style.css';
 
 const levelEditor = document.createElement('div');
 levelEditor.className = 'tab-panel';
