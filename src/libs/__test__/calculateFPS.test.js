@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-import { calculateFPS } from '../src/libs/helpers_lib';
+import { calculateFPS } from '../helpers_lib';
 
 expect.extend({ toBeDeepCloseTo });
 

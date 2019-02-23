@@ -1,8 +1,8 @@
 /* eslint-env jest */
-import mugTypesGenerator from '../src/screens/gameplay/role_sets/mugs/mugsOnLine/mugTypesGenerator';
-import stage from '../src/stage/stage';
+import mugTypesGenerator from '../mugTypesGenerator';
+import stage from '../../../../../../stage/stage';
 
-jest.mock('../src/stage/stage');
+jest.mock('../../../../../../stage/stage');
 const nAttempts = 10000;
 
 describe('Distribution is close to expected', () => {
