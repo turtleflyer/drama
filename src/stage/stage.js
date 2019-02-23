@@ -3,6 +3,7 @@ import { ActorsSet, Actor } from '../libs/actors_and_roles';
 import './styles.css';
 import { defaultFontSize, stageDimension } from './gameplay_params';
 import { levelsDescription, commonInitState } from './levels_description';
+import { initializeLevelEditor } from '../debug/levelEditor/levelEditor';
 
 export function defineScaleF() {
   const innerSize = document.querySelector('body').getBoundingClientRect();
@@ -62,6 +63,7 @@ class Stage extends ActorsSet {
       level,
     };
     this.params.levelParams = { ...levelEntry.params, mugsDistribution: calculatedDistribution };
+    initializeLevelEditor(levelsDescription[level]);
   }
 
   pause() {
