@@ -17,6 +17,10 @@ describe('Testing object structure traversing library', () => {
       a: { value: null },
       b: { c: { value: ['foo', 'bar'] } },
     });
+    expect(createObjStructureImage({ a: null, b: { mugsDistribution: { c: 'foo' } } })).toEqual({
+      a: { value: null },
+      b: { mugsDistribution: { value: { c: 'foo' } } },
+    });
   });
 
   test('should revert to original structure', () => {
@@ -40,5 +44,16 @@ describe('Testing object structure traversing library', () => {
         b: { c: { value: ['foo', 'bar'] } },
       }),
     ).toEqual({ a: null, b: { c: ['foo', 'bar'] } });
+    expect(
+      revertToOriginalStructure({
+        a: { value: null },
+        b: { mugsDistribution: { value: { c: 'foo' } } },
+      }),
+    ).toEqual({ a: null, b: { mugsDistribution: { c: 'foo' } } });
+    expect(revertToOriginalStructure({ a: null, b: 3, c: NaN })).toEqual({
+      a: null,
+      b: undefined,
+      c: NaN,
+    });
   });
 });
