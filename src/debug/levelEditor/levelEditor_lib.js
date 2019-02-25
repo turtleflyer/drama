@@ -1,32 +1,28 @@
-function traverseObjectStructure(action) {
+function traverseObjectStructure(action, condition) {
   return function (obj, ...args) {
-    function goDeep(subObj) {
-      if (typeof subObj === 'object' && subObj !== null && !Array.isArray(subObj)) {
-        const resObj = {};
-        for (const key in subObj) {
-          if (Object.prototype.hasOwnProperty.call(subObj, key)) {
-            resObj[key] = action(key, goDeep(subObj[key]), ...args);
-          }
-        }
-        return resObj;
-      }
-      return action(null, subObj, ...args);
+    if (typeof obj !== 'object' || obj === null) {
+      return action(obj, ...args);
     }
-
-    return goDeep(obj);
+    const resObj = {};
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        if (condition(obj[key], key)) {
+          resObj[key] = action(obj[key], ...args);
+        } else {
+          resObj[key] = traverseObjectStructure(action, condition)(obj[key], ...args);
+        }
+      }
+    }
+    return resObj;
   };
 }
 
-export const createObjStructureImage = traverseObjectStructure((key, subObj) => {
-  if (key === null) {
-    return { value: subObj };
-  }
-  return subObj;
-});
+export const createObjStructureImage = traverseObjectStructure(
+  obj => ({ value: obj }),
+  (obj, key) => Array.isArray(obj) || key === 'mugsDistribution',
+);
 
-export const revertToOriginalStructure = traverseObjectStructure((_, subObj) => {
-  if (subObj && (subObj.value || subObj.value === null)) {
-    return subObj.value;
-  }
-  return subObj;
-});
+export const revertToOriginalStructure = traverseObjectStructure(
+  obj => obj && obj.value,
+  obj => obj && (obj.value || obj.value === null),
+);
