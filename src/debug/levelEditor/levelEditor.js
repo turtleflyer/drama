@@ -28,7 +28,6 @@ export function initializeLevelEditor(levelDescription) {
   levelEditor.appendChild(moneyToEarn);
   levelEditor.appendChild(document.createElement('br'));
 
-  console.log('levelParams: ', levelParams);
   const faucetsCheckBoxes = faucetsRelatedForm(levelParams.faucetsDescription.models);
   levelEditor.appendChild(faucetsCheckBoxes);
 }
