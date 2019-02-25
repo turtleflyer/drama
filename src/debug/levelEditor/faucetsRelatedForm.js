@@ -13,7 +13,6 @@ function createCheckBox(name) {
 
 const checkBoxes = [];
 export default function faucetsRelatedForm(valueKeeper) {
-  console.log('valueKeeper: ', valueKeeper);
   const form = document.createElement('div');
   form.className = 'level-form';
   checkBoxes.length = 0;
