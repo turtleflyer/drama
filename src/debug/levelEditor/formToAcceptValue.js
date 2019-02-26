@@ -7,7 +7,7 @@ export default function formToAcceptValue(name, valueKeeper, key) {
   form.innerHTML = `
     <label>${name}&nbsp&nbsp</label>
     <input type="number" name="${name}" ${
-  valueKeeper.value ? `value="${valueKeeper[key]}"` : ''
+  valueKeeper[key] ? `value="${valueKeeper[key]}"` : ''
 } class="level-form__input">
   `;
 
