@@ -17,7 +17,6 @@ export default function faucetsRelatedForm(valueKeeper) {
   const checkBoxes = [];
   const form = document.createElement('div');
   form.className = 'level-form';
-  checkBoxes.length = 0;
   Object.entries(faucetModels).forEach(([k, f]) => {
     const cb = createCheckBox(k);
     cb.checked = valueKeeper.value.includes(f);
