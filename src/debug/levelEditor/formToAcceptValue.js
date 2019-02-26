@@ -1,15 +1,20 @@
 /* eslint-env browser */
 import './style.css';
 
-export default function formToAcceptValue(name, valueKeeper) {
+export default function formToAcceptValue(name, valueKeeper, key) {
   const form = document.createElement('form');
   form.className = 'level-form';
   form.innerHTML = `
     <label>${name}&nbsp&nbsp</label>
     <input type="number" name="${name}" ${
-  valueKeeper.value ? `value="${valueKeeper.value}"` : ''
+  valueKeeper.value ? `value="${valueKeeper[key]}"` : ''
 } class="level-form__input">
   `;
 
-  return form;
+  return {
+    form,
+    set value(v) {
+      valueKeeper[key] = v;
+    },
+  };
 }

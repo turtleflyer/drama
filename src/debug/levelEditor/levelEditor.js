@@ -15,24 +15,24 @@ export function initializeLevelEditor(levelDescription) {
 
   const { params: levelParams, initState } = state;
 
-  const mugSpeedInput = formToAcceptValue('Mugs Speed', levelParams.mugsSpeed);
-  levelEditor.appendChild(mugSpeedInput);
+  const mugSpeedInput = formToAcceptValue('Mugs Speed', levelParams.mugsSpeed, 'value');
+  levelEditor.appendChild(mugSpeedInput.form);
 
-  const initMugDensity = formToAcceptValue('Init Mug Density', levelParams.initMugDensity);
-  levelEditor.appendChild(initMugDensity);
+  const initMugDensity = formToAcceptValue('Init Mug Density', levelParams.initMugDensity, 'value');
+  levelEditor.appendChild(initMugDensity.form);
 
-  const remainingTime = formToAcceptValue('Remaining Time', levelParams.remainingTime);
-  levelEditor.appendChild(remainingTime);
+  const remainingTime = formToAcceptValue('Remaining Time', levelParams.remainingTime, 'value');
+  levelEditor.appendChild(remainingTime.form);
 
-  const moneyToEarn = formToAcceptValue('Money To Earn', levelParams.moneyToEarn);
-  levelEditor.appendChild(moneyToEarn);
+  const moneyToEarn = formToAcceptValue('Money To Earn', levelParams.moneyToEarn, 'value');
+  levelEditor.appendChild(moneyToEarn.form);
 
-  const initMoney = formToAcceptValue('Money in Beginning', initState.money);
-  levelEditor.appendChild(initMoney);
+  const initMoney = formToAcceptValue('Money in Beginning', initState.money, 'value');
+  levelEditor.appendChild(initMoney.form);
   levelEditor.appendChild(document.createElement('br'));
 
   const faucetsCheckBoxes = faucetsRelatedForm(levelParams.faucetsDescription.models);
-  levelEditor.appendChild(faucetsCheckBoxes);
+  levelEditor.appendChild(faucetsCheckBoxes.form);
 }
 
 export default levelEditor;

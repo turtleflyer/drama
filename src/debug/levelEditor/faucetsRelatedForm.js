@@ -11,18 +11,31 @@ function createCheckBox(name) {
   return checkBox;
 }
 
-const checkBoxes = [];
+export const faucetModelKey = Symbol('faucetModelKey');
+
 export default function faucetsRelatedForm(valueKeeper) {
+  const checkBoxes = [];
   const form = document.createElement('div');
   form.className = 'level-form';
   checkBoxes.length = 0;
   Object.entries(faucetModels).forEach(([k, f]) => {
     const cb = createCheckBox(k);
     cb.checked = valueKeeper.value.includes(f);
+    cb[faucetModelKey] = k;
     checkBoxes.push(cb);
     form.appendChild(cb);
     form.appendChild(document.createTextNode(`${cb.name}\u00A0\u00A0`));
   });
 
-  return form;
+  return {
+    form,
+    checkBoxes,
+    checkValue(key, check = true) {
+      if (check) {
+        valueKeeper.value.push(faucetModels[key]);
+      } else {
+        valueKeeper.value = valueKeeper.value.filter(f => f !== faucetModels[key]);
+      }
+    },
+  };
 }
