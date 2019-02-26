@@ -29,7 +29,7 @@ export default function faucetsRelatedForm(valueKeeper) {
   return {
     form,
     checkBoxes,
-    checkValue(key, check = true) {
+    checkState(key, check = true) {
       if (check) {
         valueKeeper.value.push(faucetModels[key]);
       } else {
