@@ -13,7 +13,7 @@ export function initializeLevelEditor(levelDescription) {
   levelEditor.innerHTML = '';
   state = createObjStructureImage(levelDescription);
 
-  const { params: levelParams } = state;
+  const { params: levelParams, initState } = state;
 
   const mugSpeedInput = formToAcceptValue('Mugs Speed', levelParams.mugsSpeed);
   levelEditor.appendChild(mugSpeedInput);
@@ -26,6 +26,9 @@ export function initializeLevelEditor(levelDescription) {
 
   const moneyToEarn = formToAcceptValue('Money To Earn', levelParams.moneyToEarn);
   levelEditor.appendChild(moneyToEarn);
+
+  const initMoney = formToAcceptValue('Money in Beginning', initState.money);
+  levelEditor.appendChild(initMoney);
   levelEditor.appendChild(document.createElement('br'));
 
   const faucetsCheckBoxes = faucetsRelatedForm(levelParams.faucetsDescription.models);
