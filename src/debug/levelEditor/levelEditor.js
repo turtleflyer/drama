@@ -3,6 +3,7 @@ import '../style.css';
 import { createObjStructureImage } from './levelEditor_lib';
 import formToAcceptValue from './formToAcceptValue';
 import faucetsRelatedForm from './faucetsRelatedForm';
+import mugsDistributionForm from './mugsDistributionForm';
 
 const levelEditor = document.createElement('div');
 levelEditor.className = 'tab-panel';
@@ -33,6 +34,10 @@ export function initializeLevelEditor(levelDescription) {
 
   const faucetsCheckBoxes = faucetsRelatedForm(levelParams.faucetsDescription.models);
   levelEditor.appendChild(faucetsCheckBoxes.form);
+  levelEditor.appendChild(document.createElement('br'));
+
+  const mugsDistribution = mugsDistributionForm(levelParams.mugsDistribution);
+  levelEditor.appendChild(mugsDistribution.form);
 }
 
 export default levelEditor;
