@@ -20,3 +20,9 @@
 .tab-panel {
   padding: 5px;
 }
+
+.debug-panel-button {
+  width: 100px;
+  height: 20px;
+  margin: 5px;
+}

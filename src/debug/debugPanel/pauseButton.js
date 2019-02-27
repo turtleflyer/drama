@@ -1,8 +1,9 @@
 /* eslint-env browser */
 import stage from '../../stage/stage';
+import '../styles.css';
 
 const pauseButton = document.createElement('button');
-Object.assign(pauseButton.style, { width: '100px', height: '20px', margin: '5px' });
+pauseButton.className = 'debug-panel-button';
 pauseButton.innerText = 'pause';
 pauseButton.addEventListener('click', () => {
   if (stage.state.paused) {
