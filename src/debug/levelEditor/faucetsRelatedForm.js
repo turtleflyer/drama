@@ -1,6 +1,7 @@
 /* eslint-env browser */
 import './style.css';
 import { faucetModels } from '../../screens/gameplay/role_sets/faucets/faucets_params';
+import { formTypes } from './formSet';
 
 function createCheckBox(name) {
   const checkBox = document.createElement('input');
@@ -36,5 +37,6 @@ export default function faucetsRelatedForm(valueKeeper) {
         valueKeeper.value = valueKeeper.value.filter(f => f !== faucetModels[key]);
       }
     },
+    type: formTypes.FAUCETS_RELATED_FORM,
   };
 }

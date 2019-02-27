@@ -1,5 +1,6 @@
 /* eslint-env browser */
 import './style.css';
+import { formTypes } from './formSet';
 
 export default function formToAcceptValue(name, valueKeeper, key) {
   const form = document.createElement('form');
@@ -14,7 +15,8 @@ export default function formToAcceptValue(name, valueKeeper, key) {
   return {
     form,
     set value(v) {
-      valueKeeper[key] = v;
+      valueKeeper[key] = Number(v);
     },
+    type: formTypes.FORM_TO_ACCEPT_VALUE,
   };
 }

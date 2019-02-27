@@ -4,6 +4,7 @@ import { createObjStructureImage } from './levelEditor_lib';
 import formToAcceptValue from './formToAcceptValue';
 import faucetsRelatedForm from './faucetsRelatedForm';
 import mugsDistributionForm from './mugsDistributionForm';
+import formsSet from './formSet';
 
 const levelEditor = document.createElement('div');
 levelEditor.className = 'tab-panel';
@@ -38,6 +39,17 @@ export function initializeLevelEditor(levelDescription) {
 
   const mugsDistribution = mugsDistributionForm(levelParams.mugsDistribution);
   levelEditor.appendChild(mugsDistribution.form);
+
+  formsSet.clearElements();
+  formsSet.addElements([
+    mugSpeedInput,
+    initMugDensity,
+    remainingTime,
+    moneyToEarn,
+    initMoney,
+    faucetsCheckBoxes,
+  ]);
+  formsSet.addElements(mugsDistribution.mugForms);
 }
 
 export default levelEditor;
