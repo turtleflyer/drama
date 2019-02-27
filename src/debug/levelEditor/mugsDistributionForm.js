@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import './style.css';
+import './styles.css';
 import { beerTypes } from '../../stage/gameplay_params';
 import formToAcceptValue from './formToAcceptValue';
 

@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import './style.css';
+import './styles.css';
 import { formTypes } from './formSet';
 
 export default function formToAcceptValue(name, valueKeeper, key) {

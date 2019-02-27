@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import '../style.css';
+import '../styles.css';
 import { createObjStructureImage } from './levelEditor_lib';
 import formToAcceptValue from './formToAcceptValue';
 import faucetsRelatedForm from './faucetsRelatedForm';

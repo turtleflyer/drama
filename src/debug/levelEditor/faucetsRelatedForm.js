@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import './style.css';
+import './styles.css';
 import { faucetModels, switchTypes } from '../../screens/gameplay/role_sets/faucets/faucets_params';
 import { formTypes } from './formSet';
 

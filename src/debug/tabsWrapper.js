@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import './style.css';
+import './styles.css';
 import debugPanel from './debugPanel/debugPanel';
 import { debugFlags, debugKeys } from './debug_flags';
 import levelEditor from './levelEditor/levelEditor';

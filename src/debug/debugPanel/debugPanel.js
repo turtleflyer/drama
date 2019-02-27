@@ -6,7 +6,7 @@ import fpsInfo from './fpsInfo';
 import resultButton from './resultButton';
 import highlightZonesCheck from './highlightZonesCheck';
 import pauseButton from './pauseButton';
-import '../style.css';
+import '../styles.css';
 
 const debugPanel = document.createElement('div');
 debugPanel.className = 'tab-panel';
