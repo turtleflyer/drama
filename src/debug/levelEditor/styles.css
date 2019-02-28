@@ -17,3 +17,8 @@
   height: 20px;
   margin-right: 10px;
 }
+
+.copy-alert-text {
+  font: 900 italic 100% serif;
+  color: rgb(17, 197, 47);
+}
