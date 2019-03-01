@@ -3,10 +3,9 @@ import '../styles.css';
 import { createObjStructureImage, revertToOriginalStructure } from './levelEditor_lib';
 import formToAcceptValue from './formToAcceptValue';
 import faucetsRelatedForm from './faucetsRelatedForm';
-import mugsDistributionForm from './mugsDistributionForm';
+import mugsDistributionForm, { mugsTypes } from './mugsDistributionForm';
 import formsSet from './formSet';
 import { faucetModels } from '../../screens/gameplay/role_sets/faucets/faucets_params';
-import { beerTypes } from '../../stage/gameplay_params';
 
 const levelEditor = document.createElement('div');
 levelEditor.className = 'tab-panel';
@@ -76,7 +75,7 @@ export function initializeLevelEditor(levelDescription) {
 
     descriptionToCopy.params.mugsDistribution = Object.entries(mugsDistribution).reduce(
       (r, [k, v]) => {
-        r[`[beerTypes.${Object.entries(beerTypes).filter(entr => k === entr[1])[0][0]}]`] = v;
+        r[`[${Object.entries(mugsTypes).filter(entr => k === entr[1])[0][0]}]`] = v;
         return r;
       },
       {},
