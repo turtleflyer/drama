@@ -110,21 +110,6 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
       lastMug = generatedMug;
       mugsOnLine.addElement(generatedMug);
       refreshTimeOfNextBirth();
-
-      /**
-       *
-       * Block to debug
-       *
-       */
-      // const generatedMugs = [];
-      // for (let i = 0; i < 1; i++) {
-      //   const gen = new Mug(determineTypeOfBeer(), stageWidth + 1000);
-      //   generatedMugs.push(gen);
-      //   gen.params.bornTime = timeOfNextBirth;
-      //   lastMug = gen;
-      // }
-      // mugsOnLine.addElements(generatedMugs);
-      // refreshTimeOfNextBirth(mugsOnLine);
     }
   },
 });
