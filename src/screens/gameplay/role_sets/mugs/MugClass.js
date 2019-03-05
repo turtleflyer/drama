@@ -6,7 +6,7 @@ import { tuneGame, beerCost } from '../../../../stage/gameplay_params';
 import { mugTypes, magsCreatingParams } from './mugs_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
-import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
+import { addMugsLifeCyclesMethods, addShowMoneyHint } from './mugsClass_decorators';
 import { fillingMugs } from '../fillingMugs/fillingMugs';
 import { getDataURL } from '../../../../libs/session_storage_lib';
 import './styles.css';
@@ -137,5 +137,5 @@ export default class Mug extends Actor {
   }
 }
 
-addSetPositionXYMethod(Mug);
+addShowMoneyHint(Mug);
 addMugsLifeCyclesMethods(Mug);

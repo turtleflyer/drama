@@ -6,7 +6,7 @@ import { whiskeyGlassParams, magsCreatingParams } from './mugs_params';
 import { tuneGame, beerCost, glassType } from '../../../../stage/gameplay_params';
 import { customerReactionsTypes } from '../customersReactions/customersReactions_params';
 import { totalsOnTable } from '../totalsOnTable/totalsOnTable';
-import { addSetPositionXYMethod, addMugsLifeCyclesMethods } from './mugsClass_decorators';
+import { addMugsLifeCyclesMethods, addShowMoneyHint } from './mugsClass_decorators';
 import { fillingGlass } from '../fillingGlass/fillingGlass';
 import { getDataURL } from '../../../../libs/session_storage_lib';
 
@@ -94,5 +94,5 @@ export default class WhiskeyGlass extends Actor {
   }
 }
 
-addSetPositionXYMethod(WhiskeyGlass);
+addShowMoneyHint(WhiskeyGlass);
 addMugsLifeCyclesMethods(WhiskeyGlass);

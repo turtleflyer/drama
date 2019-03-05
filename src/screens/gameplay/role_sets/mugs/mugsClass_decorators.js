@@ -62,11 +62,31 @@ export function addSetPositionXYMethod(cl) {
         }
       },
     },
+  });
+}
 
+export function addCreatePromiseWhenLoaded(cl) {
+  Object.defineProperties(cl.prototype, {
+    createPromiseWhenLoaded: {
+      value() {
+        this.whenLoaded = new Promise((resolve) => {
+          this.img.addEventListener('load', () => {
+            resolve(this.img);
+          });
+        });
+      },
+    },
+  });
+}
+
+export function addShowMoneyHint(cl) {
+  addSetPositionXYMethod(cl);
+  addCreatePromiseWhenLoaded(cl);
+  Object.defineProperties(cl.prototype, {
     showMoneyHint: {
       value() {
-        const { img: imageElement } = this;
-        imageElement.onload = () => {
+        this.createPromiseWhenLoaded();
+        this.whenLoaded.then((imageElement) => {
           const { width: mugWidth, height: mugHeight } = this.rectSize();
           const hint = new Actor(
             'div',
@@ -78,7 +98,7 @@ export function addSetPositionXYMethod(cl) {
           this.linkActor(hint);
           this.moneyHint = hint;
           imageElement.onload = null;
-        };
+        });
       },
     },
   });

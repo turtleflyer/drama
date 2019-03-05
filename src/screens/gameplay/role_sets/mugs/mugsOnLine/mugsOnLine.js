@@ -66,8 +66,14 @@ mugsOnLine.getInitializer(function () {
   determineTypeOfBeer = mugTypesGenerator();
   const { mugsSpeed, initMugDensity } = stage.params.levelParams;
   Object.assign((this.params = {}), { mugsSpeed, initMugDensity });
+  if (nextMug) {
+    nextMug.remove();
+  }
   nextMug = createNewMug();
-  timeOfNextBirth = performance.now() + magsCreatingParams.initialDelay * 1000;
+  timeOfNextBirth = null;
+  nextMug.whenLoaded.then(() => {
+    timeOfNextBirth = performance.now() + magsCreatingParams.initialDelay * 1000;
+  });
   lastReputationValue = stage.state.reputation;
 });
 
@@ -119,12 +125,13 @@ export const generateMugsRole = onPulseTick.registerAction(mugsOnLine, {
       resultOfGame.getResult(gameResultsTypes.LOST);
     }
 
-    if (currTime > timeWhenNextMugAppearsOnStage()) {
+    if (timeOfNextBirth && currTime > timeWhenNextMugAppearsOnStage()) {
       nextMug.params.bornTime = timeOfNextBirth;
       lastMug = nextMug;
       mugsOnLine.addElement(nextMug);
       nextMug = createNewMug();
-      refreshTimeOfNextBirth();
+      timeOfNextBirth = null;
+      nextMug.whenLoaded.then(refreshTimeOfNextBirth);
     }
   },
 });
