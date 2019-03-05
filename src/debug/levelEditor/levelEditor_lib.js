@@ -18,7 +18,12 @@ function traverseObjectStructure(action, condition) {
 }
 
 export const createObjStructureImage = traverseObjectStructure(
-  obj => ({ value: obj }),
+  (obj) => {
+    if (typeof obj === 'object' && obj !== null) {
+      return { value: Array.isArray(obj) ? [...obj] : { ...obj } };
+    }
+    return { value: obj };
+  },
   (obj, key) => Array.isArray(obj) || key === 'mugsDistribution',
 );
 

@@ -6,6 +6,7 @@ import faucetsRelatedForm from './faucetsRelatedForm';
 import mugsDistributionForm from './mugsDistributionForm';
 import formsSet from './formSet';
 import copyButton from './copyButton';
+import startLevelButton from './startLevelButton';
 
 const levelEditor = document.createElement('div');
 levelEditor.className = 'tab-panel';
@@ -55,6 +56,7 @@ export function initializeLevelEditor(levelDescription) {
   levelEditor.appendChild(mugsDistrForm.form);
   levelEditor.appendChild(document.createElement('br'));
 
+  levelEditor.appendChild(startLevelButton(levelEdit));
   levelEditor.appendChild(copyButton(levelEdit));
 
   formsSet.clearElements();

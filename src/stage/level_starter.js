@@ -3,6 +3,7 @@ import { setA } from '../screens/gameplay/supersets/setA';
 import { startStopRoles } from '../roles_manipulators';
 import { highlightPlacesRole } from '../screens/gameplay/supersets/dropPlaces';
 import { highlightHandlesRole } from '../screens/gameplay/role_sets/faucetHandles/faucetHandles';
+import { wrapStarter } from '../debug/levelEditor/levelRunnerWrapper';
 
 // eslint-disable-next-line
 export function startLevel(level) {
@@ -19,3 +20,5 @@ export function startLevel(level) {
       highlightHandlesRole.fire();
     });
 }
+
+wrapStarter(startLevel);

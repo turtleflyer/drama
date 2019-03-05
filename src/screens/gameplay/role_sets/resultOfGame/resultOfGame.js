@@ -5,6 +5,7 @@ import './styles.css';
 import { gameResultsParams, gameResultsTypes } from './resultOfGame_params';
 import { startLevel } from '../../../../stage/level_starter';
 import { setA } from '../../supersets/setA';
+import { debugFlags, debugKeys } from '../../../../debug/debug_flags';
 
 class GameResult extends Actor {
   constructor() {
@@ -16,12 +17,10 @@ class GameResult extends Actor {
     }).getAppendedAsChild(this);
     this.linkActor(this.button);
     this.button.node.classList.add('gameResult--button');
-    const memorizeOnClick = this.onClick.bind(this);
-    this.onClick = () => {
+    this.button.node.addEventListener('click', () => {
       this.button.node.classList.add('gameResult--button--pushed');
-      window.setTimeout(memorizeOnClick, 1000);
-    };
-    this.button.node.addEventListener('click', this.onClick);
+      window.setTimeout(this.onClick.bind(this), 1000);
+    });
   }
 }
 
@@ -36,7 +35,9 @@ class WinResult extends GameResult {
 
   // eslint-disable-next-line
   onClick() {
-    startLevel(stage.state.level + 1);
+    startLevel(
+      debugFlags[debugKeys.CUSTOM_LEVEL_RUNNING] ? stage.state.level : stage.state.level + 1,
+    );
   }
 }
 

@@ -3,6 +3,7 @@ import { startLevel } from '../../stage/level_starter';
 import { setD, updateDebugInfo } from './setD';
 import stage from '../../stage/stage';
 import { ActorsSet } from '../../libs/actors_and_roles';
+import { debugFlags, debugKeys } from '../debug_flags';
 
 const levelForm = document.createElement('form');
 levelForm.style.margin = '2px 10px';
@@ -28,7 +29,7 @@ setD.addElement(formSet);
 updateDebugInfo
   .registerAction(formSet, {
     action({ event: { updateLevel } }) {
-      if (updateLevel) {
+      if (updateLevel && !debugFlags[debugKeys.CUSTOM_LEVEL_RUNNING]) {
         levelForm.querySelector('input[type="number"').value = stage.state.level;
       }
     },

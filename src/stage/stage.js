@@ -4,6 +4,7 @@ import './styles.css';
 import { defaultFontSize, stageDimension } from './gameplay_params';
 import { levelsDescription, commonInitState } from './levels_description';
 import { initializeLevelEditor } from '../debug/levelEditor/levelEditor';
+import { debugFlags, debugKeys } from '../debug/debug_flags';
 
 export function defineScaleF() {
   const innerSize = document.querySelector('body').getBoundingClientRect();
@@ -46,7 +47,15 @@ class Stage extends ActorsSet {
   }
 
   defineLevel(level) {
-    const levelEntry = levelsDescription[level];
+    let levelEntry;
+    if (typeof level === 'number') {
+      levelEntry = levelsDescription[level];
+      initializeLevelEditor(levelEntry);
+      debugFlags[debugKeys.CUSTOM_LEVEL_RUNNING] = false;
+    } else {
+      levelEntry = level;
+      debugFlags[debugKeys.CUSTOM_LEVEL_RUNNING] = true;
+    }
     const {
       params: { mugsDistribution },
     } = levelEntry;
@@ -63,7 +72,6 @@ class Stage extends ActorsSet {
       level,
     };
     this.params.levelParams = { ...levelEntry.params, mugsDistribution: calculatedDistribution };
-    initializeLevelEditor(levelsDescription[level]);
   }
 
   pause() {
