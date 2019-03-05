@@ -21,7 +21,7 @@ const pulseWorker = new Worker();
 let fpsGen;
 
 pulseWorker.onmessage = (message) => {
-  if (!(stage.state && stage.state.paused)) {
+  if (stage.state && !stage.state.paused) {
     const eventMessage = {};
     if (stage.state.beenOnPause) {
       eventMessage.beenOnPause = stage.state.beenOnPause;
