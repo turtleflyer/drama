@@ -88,3 +88,5 @@ export const whiskeyGlassParams = {
   },
   volume: 2,
 };
+
+export const stageWidthAdjustmentCoefficient = 0.6;
