@@ -101,25 +101,29 @@ export const levelsDescription = {
     },
   },
 
-  // 5: {
-  //   params: {
-  //     mugsSpeed: 75,
-  //     initMugDensity: 3.8,
-  //     remainingTime: 55,
-  //     moneyToEarn: 80,
-  //     faucetsDescription: {
-  //       models: [faucetModels.normalIPA, faucetModels.normalLGR, faucetModels.normalPTR],
-  //     },
-  //     mugsDistribution: {
-  //       [beerTypes.IPA]: 30,
-  //       [beerTypes.LGR]: 45,
-  //       [beerTypes.PTR]: 25,
-  //     },
-  //   },
-  //   initState: {
-  //     money: 25,
-  //   },
-  // },
+  7: {
+    params: {
+      mugsSpeed: 75,
+      initMugDensity: 2,
+      remainingTime: 70,
+      moneyToEarn: 250,
+      faucetsDescription: {
+        models: [
+          faucetModels.dualLGRPTR,
+          faucetModels.normalIPA
+        ]
+      },
+      mugsDistribution: {
+        [beerTypes.LGR]: 65,
+        [beerTypes.PTR]: 35,
+        [beerTypes.IPA]: 22,
+        [glassType]: 22
+      }
+    },
+    initState: {
+      money: 165
+    }
+  },
 
   // 4: {
   //   params: {
