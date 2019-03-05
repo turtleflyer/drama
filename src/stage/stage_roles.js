@@ -12,7 +12,7 @@ import {
   stopDragRoleDraggable,
 } from '../screens/gameplay/supersets/draggable';
 import { startStopRoles } from '../roles_manipulators';
-import { debugFlags, debugKeys } from '../debug/debug_flags';
+import debugFlags from '../debug/debug_flags';
 import { calculateFPS } from '../libs/helpers_lib';
 import { updateDebugInfo, setD } from '../debug/debugPanel/setD';
 
@@ -29,7 +29,7 @@ pulseWorker.onmessage = (message) => {
     }
     onPulseTick.fireAndWaitWhenExhausted(setA, eventMessage).then(() => {
       // Display debugging information
-      if (debugFlags[debugKeys.SHOW_DEBUG_PANEL]) {
+      if (debugFlags.SHOW_DEBUG_PANEL) {
         if (!fpsGen) {
           fpsGen = calculateFPS(63, 50);
           fpsGen.next();

@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { debugFlags, debugKeys } from './debug_flags';
+import debugFlags from './debug_flags';
 import { updateDebugPanelStatus } from './tabsWrapper';
 
 const debugKeysSequence = ['d', 'e', 'b', 'u', 'g'];
@@ -12,7 +12,7 @@ window.addEventListener('keydown', (event) => {
     sequenceIndex++;
   }
   if (sequenceIndex === debugKeysSequence.length) {
-    debugFlags[debugKeys.SHOW_DEBUG_PANEL] = !debugFlags[debugKeys.SHOW_DEBUG_PANEL];
+    debugFlags.SHOW_DEBUG_PANEL = !debugFlags.SHOW_DEBUG_PANEL;
     updateDebugPanelStatus();
   }
 });

@@ -19,11 +19,11 @@ import './screens/gameplay/role_sets/customersReactions/customersReactions';
 import './screens/gameplay/role_sets/waitingMugs/waitingMugs';
 import './screens/gameplay/role_sets/whiskeyBottle/whiskeyBottle';
 import './screens/gameplay/role_sets/folk/folk';
-import { debugFlags, debugKeys } from './debug/debug_flags';
+import debugFlags from './debug/debug_flags';
 import './debug/debugKeySeqListener';
 import { updateDebugPanelStatus } from './debug/tabsWrapper';
 
-debugFlags[debugKeys.SHOW_DEBUG_PANEL] = true;
+debugFlags.SHOW_DEBUG_PANEL = true;
 
 waitWhenTypeExhausted('onAddElement')
   .then(whenAllURLRetrieved)

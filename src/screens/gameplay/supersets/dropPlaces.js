@@ -10,7 +10,7 @@ import Mug from '../role_sets/mugs/MugClass';
 import WhiskeyGlass from '../role_sets/mugs/WhiskeyGlassClass';
 import { fillingGlass } from '../role_sets/fillingGlass/fillingGlass';
 import { setA } from './setA';
-import { debugFlags, debugKeys } from '../../../debug/debug_flags';
+import debugFlags from '../../../debug/debug_flags';
 import {
   highlightPlaces,
   highlightAction,
@@ -82,7 +82,7 @@ export const placeMugRole = new RoleClass(Symbol('placeMug'))
         pouringMug.addElement(mug);
       }
 
-      if (debugFlags[debugKeys.HIGHLIGHT_DROP_ZONES] && roleSet !== signalSet) {
+      if (debugFlags.HIGHLIGHT_DROP_ZONES && roleSet !== signalSet) {
         if (percentOverlap(placeRect, mugRect) > 0.75) {
           updateStyle(place.node, { 'background-color': 'rgba(255, 0, 0, 0.2)' });
         } else {

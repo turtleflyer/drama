@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import { debugFlags, debugKeys } from '../debug_flags';
+import debugFlags from '../debug_flags';
 import { highlightPlacesRole } from '../../screens/gameplay/supersets/dropPlaces';
 import { highlightHandlesRole } from '../../screens/gameplay/role_sets/faucetHandles/faucetHandles';
 
@@ -11,7 +11,7 @@ highlightZonesCheck.innerHTML = `
 `;
 
 highlightZonesCheck.querySelector('input').onchange = function (e) {
-  debugFlags[debugKeys.HIGHLIGHT_DROP_ZONES] = e.target.checked;
+  debugFlags.HIGHLIGHT_DROP_ZONES = e.target.checked;
   highlightPlacesRole.fire();
   highlightHandlesRole.fire();
 };

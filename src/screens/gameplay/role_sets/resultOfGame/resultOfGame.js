@@ -5,7 +5,7 @@ import './styles.css';
 import { gameResultsParams, gameResultsTypes } from './resultOfGame_params';
 import { startLevel } from '../../../../stage/level_starter';
 import { setA } from '../../supersets/setA';
-import { debugFlags, debugKeys } from '../../../../debug/debug_flags';
+import debugFlags from '../../../../debug/debug_flags';
 
 class GameResult extends Actor {
   constructor() {
@@ -35,9 +35,7 @@ class WinResult extends GameResult {
 
   // eslint-disable-next-line
   onClick() {
-    startLevel(
-      debugFlags[debugKeys.CUSTOM_LEVEL_RUNNING] ? stage.state.level : stage.state.level + 1,
-    );
+    startLevel(debugFlags.CUSTOM_LEVEL_RUNNING ? stage.state.level : stage.state.level + 1);
   }
 }
 

@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import './styles.css';
 import debugPanel from './debugPanel/debugPanel';
-import { debugFlags, debugKeys } from './debug_flags';
+import debugFlags from './debug_flags';
 import levelEditor from './levelEditor/levelEditor';
 
 const tabsWrapper = document.createElement('div');
@@ -36,7 +36,7 @@ levelEditorTab.addEventListener('mousedown', tabPicker);
 
 // eslint-disable-next-line
 export function updateDebugPanelStatus() {
-  if (debugFlags[debugKeys.SHOW_DEBUG_PANEL]) {
+  if (debugFlags.SHOW_DEBUG_PANEL) {
     document.querySelector('body').appendChild(tabsWrapper);
   } else {
     tabsWrapper.remove();
