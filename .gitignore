@@ -1,7 +1,4 @@
 node_modules
 .vscode
-package-lock.json
-old-src
-log.txt
 .history
-design_edit/Backup_of_*.cdr
+__temp_location__

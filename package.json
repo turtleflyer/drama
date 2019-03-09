@@ -1,25 +1,8 @@
 {
-  "name": "Beer-Bar-game",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest",
-    "start": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/turtleflyer/Beer-Bar-game.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/turtleflyer/Beer-Bar-game/issues"
-  },
-  "homepage": "https://github.com/turtleflyer/Beer-Bar-game#readme",
+  "name": "root",
+  "private": true,
   "devDependencies": {
+    "lerna": "^3.13.1",
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",
     "babel-preset-env": "^1.7.0",
@@ -40,5 +23,8 @@
     "webpack-dev-server": "^3.2.0",
     "webpack-merge": "^4.2.1",
     "worker-loader": "^2.0.0"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }

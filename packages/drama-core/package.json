@@ -1,0 +1,24 @@
+{
+  "name": "drama-core",
+  "version": "0.0.1",
+  "description": "Initial release of an event-driven asynchronous library. No dependencies. This is an alpha version. Use caution while using.",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/turtleflyer/drama.git",
+    "directory": "packages/drama-core"
+  },
+  "keywords": [
+    "events",
+    "asynchronous"
+  ],
+  "author": "Andrei Kovalev (turtlefly@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/turtleflyer/drama/issues"
+  },
+  "homepage": "https://github.com/turtleflyer/drama#readme"
+}
