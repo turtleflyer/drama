@@ -326,6 +326,9 @@ class EventsWork {
        * @param {Element} element
        */
       addElement(element) {
+        if (this.has(element)) {
+          return this;
+        }
         this.add(element);
         // prettier-ignore
         const elementEntry = EventsWork.getSomeFromDeep(
