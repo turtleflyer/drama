@@ -1,6 +1,6 @@
 {
   "name": "drama-core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Initial release of an event-driven asynchronous library. No dependencies. This is an alpha version. Use caution while using.",
   "main": "index.js",
   "scripts": {},
