@@ -131,7 +131,5 @@ eventChain({
 
 restartButton.onclick = () => {
   gameMatrix.forEach(cell => cell.resetCell());
-  console.log('emptyCells: ', emptyCells);
   emptyCells.addElements(gameMatrix);
-  console.log('emptyCells: ', emptyCells);
 };
