@@ -18,7 +18,7 @@ export function resetCell() {
   return this;
 }
 
-export function setX() {
+export function markX() {
   const commonStyle = {
     position: 'absolute',
     left: '-0.24em',
@@ -39,7 +39,7 @@ export function setX() {
   return this;
 }
 
-export function setO() {
+export function markO() {
   const o = document.createElement('div');
   const oStyle = {
     position: 'absolute',
