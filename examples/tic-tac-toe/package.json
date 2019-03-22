@@ -12,6 +12,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "drama-core": "^0.0.1"
+    "drama-core": "^0.0.2"
   }
 }
