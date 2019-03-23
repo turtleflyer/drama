@@ -135,7 +135,12 @@ eventChain({
   action: ((firstTurn) => {
     // Store the current turn in closure
     let currentTurn = firstTurn;
-    return ({ target }) => {
+    return ({ target, roleSet }) => {
+      // Check if the game has just begun and reset the
+      // first turn
+      if (roleSet.size === 9) {
+        currentTurn = firstTurn;
+      }
       currentTurn = setCell(currentTurn, target);
     };
   })(0),
