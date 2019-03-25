@@ -7,7 +7,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    app: './src/index.js',
+    ttt: './src/index.js',
   },
   module: {
     rules: [
@@ -40,7 +40,7 @@ module.exports = {
   ],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../../dist/ttt'),
     globalObject: 'this',
   },
 };
