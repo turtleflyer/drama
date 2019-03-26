@@ -3,3 +3,7 @@ node_modules
 .history
 __temp_location__
 /dist
+
+# gatsby files
+.cache/
+public
