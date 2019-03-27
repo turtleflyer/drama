@@ -1,13 +1,23 @@
 module.exports = {
-  extends: 'airbnb-base',
+  env: {
+    browser: true,
+    es6: true,
+  },
+  extends: 'airbnb',
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2018,
+    sourceType: 'module',
+  },
+  plugins: ['react'],
   rules: {
-    'linebreak-style': ['off'],
-    'no-underscore-dangle': ['error', { allowAfterThis: true }],
-    'no-param-reassign': 'off',
-    'func-names': 'off',
-    'no-multi-assign': 'off',
-    'no-restricted-syntax': ['off', { selector: 'ForOfStatement' }],
-    'no-plusplus': 'off',
-    'no-constant-condition': ["warn", { "checkLoops": false }]
+    'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx'] }],
+    'linebreak-style': 'off',
   },
 };
