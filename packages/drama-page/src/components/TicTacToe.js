@@ -1,5 +1,5 @@
 import React from 'react';
-import ticTacToe from 'tic-tac-toe';
+import ticTacToe from '@drama-examples/tic-tac-toe';
 
 export default class TicTacToe extends React.Component {
   constructor(props) {
