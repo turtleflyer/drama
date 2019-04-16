@@ -1,9 +1,9 @@
 {
   "name": "drama-page",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3-alpha.0",
   "dependencies": {
-    "@drama-examples/tic-tac-toe": "^1.1.0",
+    "@drama-examples/tic-tac-toe": "^2.0.0",
     "gatsby": "^2.2.11",
     "gatsby-image": "^2.0.34",
     "gatsby-plugin-manifest": "^2.0.24",
