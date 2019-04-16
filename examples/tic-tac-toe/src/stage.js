@@ -3,7 +3,7 @@ import { matrixContainer } from './matrix';
 import { messageContainer } from './messages';
 import restartButton from './restartButton';
 
-export default function createStage(placeholder) {
+export default function createStage() {
   const stageStyle = { 'line-height': '0', 'box-sizing': 'content-box' };
   const stage = document.createElement('div');
   Object.assign(stage.style, stageStyle);
@@ -11,8 +11,6 @@ export default function createStage(placeholder) {
   stage.appendChild(matrixContainer);
   stage.appendChild(messageContainer);
   stage.appendChild(restartButton);
-
-  placeholder.parentNode.replaceChild(stage, placeholder);
 
   return stage;
 }
