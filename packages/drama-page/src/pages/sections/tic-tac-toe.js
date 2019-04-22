@@ -1,8 +1,11 @@
 import React from 'react';
 import { graphql } from 'gatsby';
+import Layout from '../../components/Layout';
 
 export default ({ data }) => (
-  <div dangerouslySetInnerHTML={{ __html: data.allMarkdownRemark.edges[0].node.html }} />
+  <Layout>
+    <div dangerouslySetInnerHTML={{ __html: data.allMarkdownRemark.edges[0].node.html }} />
+  </Layout>
 );
 
 export const query = graphql`
