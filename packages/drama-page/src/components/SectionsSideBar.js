@@ -3,7 +3,7 @@ import { graphql, Link, StaticQuery } from 'gatsby';
 
 function SectionsSideBar({ data }) {
   return (
-    <ul>
+    <ul style={{ width: '10em' }}>
       {data.allMarkdownRemark.edges.map(({ node }) => (
         <li key={node.fields.sectionPath}>
           <Link to={node.fields.sectionPath}>{node.frontmatter.title}</Link>
