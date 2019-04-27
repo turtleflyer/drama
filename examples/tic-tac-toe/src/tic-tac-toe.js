@@ -10,7 +10,8 @@ import postTextMessage from './messages';
 import analyzePossibleWin from './analyzePossibleWin';
 import restartButton from './restartButton';
 
-// Define the class of cells that the board of tic-tac-toe game consists of
+// Define the class of cells that the board of tic-tac-toe
+// game consists of
 class Cell {
   constructor() {
     this.node = createCell();
