@@ -6,7 +6,8 @@ title: Examples of drama library use
 ### Example of Tic-tac-toe game
 
 ```javascript
-// Define the class of cells that the board of tic-tac-toe game consists of
+// Define the class of cells that the board of tic-tac-toe
+// game consists of
 class Cell {
   constructor() {
     this.node = createCell();

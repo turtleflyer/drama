@@ -8,23 +8,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StaticQuery, graphql } from 'gatsby';
-
 import { ResponsiveContext, Grommet } from 'grommet';
+import styled from '@emotion/styled';
 import Header from './header';
 import './layout.css';
 import SectionsSideBar from './SectionsSideBar';
-import styled from '@emotion/styled';
 
 const LayoutContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  min-width: 768px;
 `;
 
-const ContentContainer = styled.div`
-  margin: 0px auto;
+const LayoutBox = styled.div`
   width: 960px;
+  display: flex;
+`;
+
+const ContentContainer = styled.main`
+  margin: 0px auto;
   padding: 0px 1.0875rem 1.45rem;
-  paddingtop: 0px;
+  flex: 1;
+  width: 0;
 `;
 
 const Layout = ({ children }) => (
@@ -45,17 +50,17 @@ const Layout = ({ children }) => (
             <>
               <Header siteTitle={data.site.siteMetadata.title} />
               <LayoutContainer>
-                {size !== 'small' ? <SectionsSideBar /> : null}
-                <ContentContainer>
-                  <main>{children}</main>
-                  <footer>
-                    {'©'}
-                    {new Date().getFullYear()}
-                    {', Built with '}
-                    <a href="https://www.gatsbyjs.org">Gatsby</a>
-                  </footer>
-                </ContentContainer>
+                <LayoutBox>
+                  {size !== 'small' ? <SectionsSideBar /> : null}
+                  <ContentContainer>{children}</ContentContainer>
+                </LayoutBox>
               </LayoutContainer>
+              <footer>
+                {'©'}
+                {new Date().getFullYear()}
+                {', Built with '}
+                <a href="https://www.gatsbyjs.org">Gatsby</a>
+              </footer>
             </>
           )}
         </ResponsiveContext.Consumer>

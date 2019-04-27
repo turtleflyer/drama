@@ -4,21 +4,30 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 
-const HeaderSection = styled.header`
+const HeaderContainer = styled.div`
   background: rebeccapurple;
   margin-bottom: 1.45rem;
+  display: flex;
+  justify-content: center;
+`;
+
+const HeaderBox = styled.header`
+  width: 960px;
+  height: 5rem;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 `;
 
 const Header = ({ siteTitle }) => (
-  <HeaderSection>
-    <div
-      css={css`
-        margin: 0 auto;
-        max-width: 960px;
-        padding: 1.45rem 1.0875rem;
-      `}
-    >
-      <h1 style={{ margin: 0 }}>
+  <HeaderContainer>
+    <HeaderBox>
+      <h1
+        css={css`
+          display: block;
+          margin: 0;
+        `}
+      >
         <Link
           to="/"
           css={css`
@@ -29,8 +38,8 @@ const Header = ({ siteTitle }) => (
           {siteTitle}
         </Link>
       </h1>
-    </div>
-  </HeaderSection>
+    </HeaderBox>
+  </HeaderContainer>
 );
 
 Header.propTypes = {
