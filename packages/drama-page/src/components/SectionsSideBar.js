@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
 
@@ -42,3 +43,18 @@ export default props => (
     render={data => <SectionsSideBar data={data} {...props} />}
   />
 );
+
+SectionsSideBar.propTypes = {
+  data: PropTypes.shape({
+    allMarkdownRemark: PropTypes.shape({
+      edges: PropTypes.shape({
+        fields: PropTypes.shape({
+          sectionPath: PropTypes.string.isRequired,
+        }).isRequired,
+        frontmatter: PropTypes.shape({
+          title: PropTypes.string.isRequired,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
