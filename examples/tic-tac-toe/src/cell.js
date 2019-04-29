@@ -2,8 +2,8 @@
 
 const cellStyle = {
   border: '1px solid black',
-  width: '3em',
-  height: '3em',
+  width: '3rem',
+  height: '3rem',
   position: 'relative',
   display: 'inline-block',
   'background-color': 'white',
@@ -21,13 +21,13 @@ export function resetCell() {
 export function markX() {
   const commonStyle = {
     position: 'absolute',
-    left: '-0.24em',
-    top: '1.24em',
-    width: '3em',
+    left: '-0.24rem',
+    top: '1.24rem',
+    width: '3rem',
     height: '0',
-    border: '0.3em solid RoyalBlue',
+    border: '0.3rem solid RoyalBlue',
     margin: '0',
-    'border-radius': '0.3em',
+    'border-radius': '0.3rem',
   };
   const first = document.createElement('div');
   const second = document.createElement('div');
@@ -43,13 +43,13 @@ export function markO() {
   const o = document.createElement('div');
   const oStyle = {
     position: 'absolute',
-    left: '0.15em',
-    top: '0.15em',
-    width: '1.5em',
-    height: '1.5em',
-    border: '0.6em solid Red',
+    left: '0.15rem',
+    top: '0.15rem',
+    width: '1.5rem',
+    height: '1.5rem',
+    border: '0.6rem solid Red',
     margin: '0',
-    'border-radius': '2.1em',
+    'border-radius': '2.1rem',
   };
   Object.assign(o.style, oStyle);
   this.resetCell();

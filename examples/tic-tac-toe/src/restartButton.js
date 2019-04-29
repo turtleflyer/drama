@@ -1,8 +1,8 @@
 /* eslint-env browser */
 
 const buttonStyle = {
-  width: '7em',
-  height: '2em',
+  width: '7rem',
+  height: '2rem',
 };
 const restartButton = document.createElement('button');
 restartButton.innerText = 'Restart';

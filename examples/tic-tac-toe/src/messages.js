@@ -1,13 +1,13 @@
 /* eslint-env browser */
 const messageContainerStyle = {
-  height: '3em',
+  height: '3rem',
 };
 
 const textMessageStyle = {
-  'line-height': '2em',
+  'line-height': '2rem',
   'font-style': 'italic',
   color: 'Red',
-  'font-size': '1.5em',
+  'font-size': '1.5rem',
 };
 
 export const messageContainer = document.createElement('div');
