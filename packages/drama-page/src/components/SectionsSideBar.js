@@ -47,14 +47,18 @@ export default props => (
 SectionsSideBar.propTypes = {
   data: PropTypes.shape({
     allMarkdownRemark: PropTypes.shape({
-      edges: PropTypes.shape({
-        fields: PropTypes.shape({
-          sectionPath: PropTypes.string.isRequired,
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            fields: PropTypes.shape({
+              sectionPath: PropTypes.string.isRequired,
+            }).isRequired,
+            frontmatter: PropTypes.shape({
+              title: PropTypes.string.isRequired,
+            }).isRequired,
+          }).isRequired,
         }).isRequired,
-        frontmatter: PropTypes.shape({
-          title: PropTypes.string.isRequired,
-        }).isRequired,
-      }).isRequired,
+      ).isRequired,
     }).isRequired,
   }).isRequired,
 };
