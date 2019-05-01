@@ -12,11 +12,15 @@ function SectionsSideBar({ data }) {
   return (
     <SidebarContainer>
       <ul>
-        {data.allMarkdownRemark.edges.map(({ node }) => (
+        {data.allMarkdownRemark.edges.map(({ node }) => (node.frontmatter.title || node.frontmatter.sectionTitle ? (
           <li key={node.fields.sectionPath}>
-            <Link to={node.fields.sectionPath}>{node.frontmatter.title}</Link>
+            {node.frontmatter.title ? (
+              <Link to={node.fields.sectionPath}>{node.frontmatter.title}</Link>
+            ) : (
+              node.frontmatter.sectionTitle
+            )}
           </li>
-        ))}
+        ) : null))}
       </ul>
     </SidebarContainer>
   );
@@ -34,6 +38,7 @@ export default props => (
               }
               frontmatter {
                 title
+                sectionTitle
               }
             }
           }

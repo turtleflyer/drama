@@ -24,11 +24,14 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   }
 };
 
-exports.onCreatePage = ({ page, actions }) => {
-  const { createPage, deletePage } = actions;
+exports.onCreatePage = ({ page, actions: { createPage, deletePage } }) => {
+  const newPath = removeSectionsPartFromPath(page.path);
   deletePage(page);
   createPage({
     ...page,
-    path: removeSectionsPartFromPath(page.path),
+    path: newPath,
+    context: {
+      slug: newPath,
+    },
   });
 };
