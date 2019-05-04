@@ -7,15 +7,18 @@
 // You can delete this file if you're not using it
 
 const { createFilePath } = require('gatsby-source-filesystem');
-
-function removeSectionsPartFromPath(oldPath) {
-  return oldPath.replace('/sections', '');
-}
+const { removeSectionsPartFromPath, extractBeforeFirstSlash } = require('./pathModification');
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
   if (node.internal.type === 'MarkdownRemark') {
-    const path = removeSectionsPartFromPath(createFilePath({ node, getNode, basePath: 'pages' }));
+    const originalPath = createFilePath({ node, getNode, basePath: 'pages' });
+    let path = '';
+    if (node.frontmatter.parentTitle) {
+      path = extractBeforeFirstSlash(removeSectionsPartFromPath(originalPath));
+    } else if (node.frontmatter.title) {
+      path = removeSectionsPartFromPath(originalPath);
+    }
     createNodeField({
       node,
       name: 'sectionPath',
