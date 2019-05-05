@@ -24,11 +24,6 @@ function SectionsSideBar({ data }) {
         },
       },
     ) => {
-      console.log('parentTitle: ', parentTitle);
-      console.log('title: ', title);
-      console.log('title.length: ', title.length);
-      console.log('orderIndex: ', orderIndex);
-      console.log('sectionPath: ', sectionPath);
       if (sectionPath.length === 0) {
         return bringStructureMap;
       }
@@ -40,7 +35,6 @@ function SectionsSideBar({ data }) {
           ...bringStructureMap,
           [sectionPath]: { ...parentEntry, parentTitle, orderIndex },
         };
-        console.log('sendStructureMap: ', sendStructureMap);
       } else if (title) {
         sendStructureMap = {
           ...bringStructureMap,
@@ -54,8 +48,6 @@ function SectionsSideBar({ data }) {
     },
     {},
   );
-
-  console.log('allSections: ', allSections);
 
   return (
     <SidebarContainer>
