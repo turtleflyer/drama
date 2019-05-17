@@ -53,11 +53,11 @@ function SectionsSideBar({ data }) {
     <SidebarContainer>
       <ul>
         {sortEntries(allSections).map(parentPath => (
-          <li>
+          <li key={parentPath}>
             <ul>
               <Link to={parentPath}>{allSections[parentPath].parentTitle}</Link>
               {(subsections => sortEntries(subsections).map(sectionPath => (
-                <li>
+                <li key={sectionPath}>
                   <Link to={sectionPath}>{subsections[sectionPath].title}</Link>
                 </li>
               )))(allSections[parentPath].subsections)}
