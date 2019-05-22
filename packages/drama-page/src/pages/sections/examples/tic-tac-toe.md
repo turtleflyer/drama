@@ -1,6 +1,7 @@
 ---
 title: Examples of drama library use
 orderIndex: 0
+inject: ['tic-tac-toe']
 ---
 # Examples of drama library use
 
