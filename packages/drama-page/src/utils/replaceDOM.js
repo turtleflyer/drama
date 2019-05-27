@@ -1,20 +1,24 @@
 import React from 'react';
 
 export default function replaceDOM(buildDOM) {
-  return class TicTacToe extends React.Component {
+  return class Replaced extends React.Component {
     constructor(props) {
       super(props);
       this.myRef = React.createRef();
     }
 
     componentDidMount() {
-      const DOM = buildDOM();
-      const placeholder = this.myRef.current;
-      placeholder.parentNode.replaceChild(DOM, placeholder);
+      this.placeholder.parentNode.replaceChild(buildDOM(), this.placeholder);
     }
 
     render() {
-      return <div ref={this.myRef} />;
+      return (
+        <div
+          ref={(el) => {
+            this.placeholder = el;
+          }}
+        />
+      );
     }
   };
 }
