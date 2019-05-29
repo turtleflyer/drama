@@ -6,7 +6,7 @@ import restartButton from './restartButton';
 export default function createStage() {
   const stageStyle = {
     'line-height': '0',
-    'box-sizing': 'border-box',
+    'box-sizing': 'content-box',
   };
   const stage = document.createElement('div');
   Object.assign(stage.style, stageStyle);

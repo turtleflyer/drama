@@ -26,6 +26,7 @@ export function markX() {
     width: '3rem',
     height: '0',
     border: '0.3rem solid RoyalBlue',
+    backgroundColor: 'RoyalBlue',
     margin: '0',
     'border-radius': '0.3rem',
   };
