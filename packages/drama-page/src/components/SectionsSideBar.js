@@ -19,7 +19,9 @@ function SectionsSideBar({ data }) {
       bringStructureMap,
       {
         node: {
-          frontmatter: { parentTitle, title, orderIndex },
+          frontmatter: {
+            parentTitle, title, orderIndex, noContent,
+          },
           fields: { sectionPath },
         },
       },
@@ -27,16 +29,21 @@ function SectionsSideBar({ data }) {
       if (sectionPath.length === 0) {
         return bringStructureMap;
       }
-      let sendStructureMap;
+      let conductStructureMap;
       const parentPathSegment = extractBeforeFirstSlash(sectionPath);
       const parentEntry = bringStructureMap[parentPathSegment] || { subsections: {} };
       if (parentTitle) {
-        sendStructureMap = {
+        conductStructureMap = {
           ...bringStructureMap,
-          [sectionPath]: { ...parentEntry, parentTitle, orderIndex },
+          [sectionPath]: {
+            ...parentEntry,
+            parentTitle,
+            orderIndex,
+            noContent: noContent && true,
+          },
         };
       } else if (title) {
-        sendStructureMap = {
+        conductStructureMap = {
           ...bringStructureMap,
           [parentPathSegment]: {
             ...parentEntry,
@@ -44,7 +51,7 @@ function SectionsSideBar({ data }) {
           },
         };
       }
-      return sendStructureMap;
+      return conductStructureMap;
     },
     {},
   );
@@ -52,18 +59,21 @@ function SectionsSideBar({ data }) {
   return (
     <SidebarContainer>
       <ul>
-        {sortEntries(allSections).map(parentPath => (
-          <li key={parentPath}>
-            <ul>
-              <Link to={parentPath}>{allSections[parentPath].parentTitle}</Link>
-              {(subsections => sortEntries(subsections).map(sectionPath => (
-                <li key={sectionPath}>
-                  <Link to={sectionPath}>{subsections[sectionPath].title}</Link>
-                </li>
-              )))(allSections[parentPath].subsections)}
-            </ul>
-          </li>
-        ))}
+        {sortEntries(allSections).map((parentPath) => {
+          const { parentTitle, subsections, noContent } = allSections[parentPath];
+          return (
+            <li key={parentPath}>
+              <ul>
+                {noContent ? parentTitle : <Link to={parentPath}>{parentTitle}</Link>}
+                {sortEntries(subsections).map(sectionPath => (
+                  <li key={sectionPath}>
+                    <Link to={sectionPath}>{subsections[sectionPath].title}</Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          );
+        })}
       </ul>
     </SidebarContainer>
   );
@@ -83,6 +93,7 @@ export default props => (
                 title
                 parentTitle
                 orderIndex
+                noContent
               }
             }
           }
