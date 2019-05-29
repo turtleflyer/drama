@@ -7,3 +7,4 @@ __temp_location__
 # gatsby files
 .cache/
 public
+lerna-debug.log
