@@ -1,12 +1,11 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { graphql } from 'gatsby';
 import Layout from '../components/layout';
-import replaceDOM from '../utils/replaceDOM';
 
 export default class Page extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
     const {
       data: {
         markdownRemark: {
@@ -14,14 +13,22 @@ export default class Page extends React.Component {
         },
       },
     } = this.props;
-    import(/* webpackMode: "eager" */ `../pieces/${inject[0]}.js`).then(({ default: piece }) => {
-      console.log('piece: ', piece);
-      this.setState({ pieceComponent: replaceDOM(piece) });
+    this.inject = inject;
+    this.pieces = inject.map(pieceKey =>
+      import(/* webpackMode: "eager" */ `../pieces/${pieceKey}.js`),
+    );
+  }
+
+  componentDidMount() {
+    Promise.all(this.pieces).then(pieces => {
+      pieces.forEach(({ default: PieceComponent }, i) => {
+        const piecePlaceholder = this.markdownContainer.querySelector(`#${this.inject[i]}`);
+        ReactDOM.render(<PieceComponent />, piecePlaceholder);
+      });
     });
   }
 
   render() {
-    const { pieceComponent: PieceComponent } = this.state;
     const {
       data: {
         markdownRemark: { html },
@@ -30,8 +37,12 @@ export default class Page extends React.Component {
     return (
       <>
         <Layout>
-          {PieceComponent && <PieceComponent />}
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: html }}
+            ref={el => {
+              this.markdownContainer = el;
+            }}
+          />
         </Layout>
       </>
     );

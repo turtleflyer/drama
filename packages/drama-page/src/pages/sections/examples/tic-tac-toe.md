@@ -7,6 +7,8 @@ inject: ['tic-tac-toe']
 
 ### Example of Tic-tac-toe game
 
+<div id="tic-tac-toe"></div>
+
 ```javascript
 // Define the class of cells that the board of tic-tac-toe
 // game consists of
