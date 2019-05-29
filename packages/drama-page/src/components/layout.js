@@ -11,7 +11,6 @@ import { StaticQuery, graphql } from 'gatsby';
 import { ResponsiveContext, Grommet } from 'grommet';
 import styled from '@emotion/styled';
 import Header from './header';
-import './layout.css';
 import SectionsSideBar from './SectionsSideBar';
 
 const LayoutContainer = styled.div`
