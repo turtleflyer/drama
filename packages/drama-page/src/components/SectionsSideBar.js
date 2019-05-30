@@ -2,11 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
+import { Global, css } from '@emotion/core';
 import { extractBeforeFirstSlash } from '../../pathModification';
 
 const SidebarContainer = styled.nav`
   width: 180px;
   flex: initial;
+`;
+
+const ParentNavTitle = styled.div`
+  text-transform: uppercase;
 `;
 
 function sortEntries(list) {
@@ -58,13 +63,36 @@ function SectionsSideBar({ data }) {
 
   return (
     <SidebarContainer>
+      <Global
+        styles={css`
+          nav {
+            color: #a0a0a0;
+          }
+
+          nav a {
+            color: #742a86;
+            text-decoration: none;
+          }
+
+          nav ul {
+            list-style: none;
+            margin: 0.7em 0;
+          }
+
+          nav li {
+            margin: 0 0 0.3em 0.4em;
+          }
+        `}
+      />
       <ul>
         {sortEntries(allSections).map((parentPath) => {
           const { parentTitle, subsections, noContent } = allSections[parentPath];
           return (
             <li key={parentPath}>
               <ul>
-                {noContent ? parentTitle : <Link to={parentPath}>{parentTitle}</Link>}
+                <ParentNavTitle>
+                  {noContent ? parentTitle : <Link to={parentPath}>{parentTitle}</Link>}
+                </ParentNavTitle>
                 {sortEntries(subsections).map(sectionPath => (
                   <li key={sectionPath}>
                     <Link to={sectionPath}>{subsections[sectionPath].title}</Link>
