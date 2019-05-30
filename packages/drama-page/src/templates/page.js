@@ -14,18 +14,20 @@ export default class Page extends React.Component {
       },
     } = this.props;
     this.inject = inject;
-    this.pieces = inject.map(pieceKey =>
-      import(/* webpackMode: "eager" */ `../pieces/${pieceKey}.js`),
-    );
+    this.pieces =
+      inject &&
+      inject.map(pieceKey => import(/* webpackMode: "eager" */ `../pieces/${pieceKey}.js`));
   }
 
   componentDidMount() {
-    Promise.all(this.pieces).then(pieces => {
-      pieces.forEach(({ default: PieceComponent }, i) => {
-        const piecePlaceholder = this.markdownContainer.querySelector(`#${this.inject[i]}`);
-        ReactDOM.render(<PieceComponent />, piecePlaceholder);
+    if (this.inject) {
+      Promise.all(this.pieces).then(pieces => {
+        pieces.forEach(({ default: PieceComponent }, i) => {
+          const piecePlaceholder = this.markdownContainer.querySelector(`#${this.inject[i]}`);
+          ReactDOM.render(<PieceComponent />, piecePlaceholder);
+        });
       });
-    });
+    }
   }
 
   render() {
