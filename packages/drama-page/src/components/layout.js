@@ -1,32 +1,27 @@
-/**
- * Layout component that queries for data
- * with Gatsby's StaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/static-query/
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StaticQuery, graphql } from 'gatsby';
 import { ResponsiveContext, Grommet } from 'grommet';
 import styled from '@emotion/styled';
+import { css, Global } from '@emotion/core';
 import Header from './header';
 import SectionsSideBar from './SectionsSideBar';
+import Footer from './Footer';
+import flexContainer from '../utils/flexContainer';
 
-const LayoutContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  min-width: 768px;
-`;
-
-const LayoutBox = styled.div`
-  width: 960px;
-  display: flex;
-`;
+const LayoutContainer = flexContainer('div', {
+  addContainerStyle: css`
+    min-width: 768px;
+    min-height: 75vh;
+  `,
+  addBoxStyle: css`
+    align-items: flex-start;
+  `,
+});
 
 const ContentContainer = styled.main`
   margin: 0px auto;
-  padding: 0px 1.0875rem 1.45rem;
+  padding: 0px 1.3rem 1.5rem;
   flex: 1;
   width: 0;
 `;
@@ -44,22 +39,28 @@ const Layout = ({ children }) => (
     `}
     render={data => (
       <Grommet>
+        <Global
+          styles={css`
+            html,
+            body {
+              height: 100%;
+            }
+          `}
+        />
         <ResponsiveContext.Consumer>
           {size => (
             <>
               <Header siteTitle={data.site.siteMetadata.title} />
               <LayoutContainer>
-                <LayoutBox>
-                  {size !== 'small' ? <SectionsSideBar /> : null}
-                  <ContentContainer>{children}</ContentContainer>
-                </LayoutBox>
+                {size !== 'small' ? <SectionsSideBar /> : null}
+                <ContentContainer>{children}</ContentContainer>
               </LayoutContainer>
-              <footer>
+              <Footer>
                 {'©'}
                 {new Date().getFullYear()}
                 {', Built with '}
                 <a href="https://www.gatsbyjs.org">Gatsby</a>
-              </footer>
+              </Footer>
             </>
           )}
         </ResponsiveContext.Consumer>
@@ -69,7 +70,11 @@ const Layout = ({ children }) => (
 );
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+};
+
+Layout.defaultProps = {
+  children: [],
 };
 
 export default Layout;

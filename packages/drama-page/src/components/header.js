@@ -1,27 +1,22 @@
 import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import React from 'react';
-import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import flexContainer from '../utils/flexContainer';
 
-const HeaderContainer = styled.div`
-  background: rebeccapurple;
-  margin-bottom: 1.45rem;
-  display: flex;
-  justify-content: center;
-`;
+const HeaderContainer = flexContainer('header', {
+  addContainerStyle: css`
+    background: rebeccapurple;
+    margin-bottom: 1.45rem;
+  `,
+  addBoxStyle: css`
+    height: 5rem;
+  `,
+});
 
-const HeaderBox = styled.header`
-  width: 960px;
-  height: 5rem;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-`;
-
-const Header = ({ siteTitle }) => (
-  <HeaderContainer>
-    <HeaderBox>
+export default function Header({ siteTitle }) {
+  return (
+    <HeaderContainer>
       <h1
         css={css`
           display: block;
@@ -38,9 +33,9 @@ const Header = ({ siteTitle }) => (
           {siteTitle}
         </Link>
       </h1>
-    </HeaderBox>
-  </HeaderContainer>
-);
+    </HeaderContainer>
+  );
+}
 
 Header.propTypes = {
   siteTitle: PropTypes.string,
@@ -49,5 +44,3 @@ Header.propTypes = {
 Header.defaultProps = {
   siteTitle: '',
 };
-
-export default Header;
