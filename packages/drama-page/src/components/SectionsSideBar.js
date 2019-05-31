@@ -14,11 +14,15 @@ const ParentNavTitle = styled.div`
   text-transform: uppercase;
 `;
 
+const ActiveEntry = styled.span`
+  color: #d64444;
+`;
+
 function sortEntries(list) {
   return Object.keys(list).sort((key1, key2) => list[key1].orderIndex - list[key2].orderIndex);
 }
 
-function SectionsSideBar({ data }) {
+function SectionsSideBar({ data, active }) {
   const allSections = data.allMarkdownRemark.edges.reduce(
     (
       bringStructureMap,
@@ -91,11 +95,27 @@ function SectionsSideBar({ data }) {
             <li key={parentPath}>
               <ul>
                 <ParentNavTitle>
-                  {noContent ? parentTitle : <Link to={parentPath}>{parentTitle}</Link>}
+                  {noContent ? (
+                    parentTitle
+                  ) : (
+                    <Link to={parentPath}>
+                      {parentPath === active ? (
+                        <ActiveEntry>{parentTitle}</ActiveEntry>
+                      ) : (
+                        parentTitle
+                      )}
+                    </Link>
+                  )}
                 </ParentNavTitle>
                 {sortEntries(subsections).map(sectionPath => (
                   <li key={sectionPath}>
-                    <Link to={sectionPath}>{subsections[sectionPath].title}</Link>
+                    <Link to={sectionPath}>
+                      {sectionPath === active ? (
+                        <ActiveEntry>{subsections[sectionPath].title}</ActiveEntry>
+                      ) : (
+                        subsections[sectionPath].title
+                      )}
+                    </Link>
                   </li>
                 ))}
               </ul>

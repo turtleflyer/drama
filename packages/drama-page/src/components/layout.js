@@ -26,7 +26,7 @@ const ContentContainer = styled.main`
   width: 0;
 `;
 
-const Layout = ({ children }) => (
+const Layout = ({ children, active }) => (
   <StaticQuery
     query={graphql`
       query SiteTitleQuery {
@@ -52,7 +52,7 @@ const Layout = ({ children }) => (
             <>
               <Header siteTitle={data.site.siteMetadata.title} />
               <LayoutContainer>
-                {size !== 'small' ? <SectionsSideBar /> : null}
+                {size !== 'small' ? <SectionsSideBar active={active} /> : null}
                 <ContentContainer>{children}</ContentContainer>
               </LayoutContainer>
               <Footer>
@@ -71,6 +71,7 @@ const Layout = ({ children }) => (
 
 Layout.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  active: PropTypes.string.isRequired,
 };
 
 Layout.defaultProps = {

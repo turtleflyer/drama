@@ -33,12 +33,15 @@ export default class Page extends React.Component {
   render() {
     const {
       data: {
-        markdownRemark: { html },
+        markdownRemark: {
+          html,
+          fields: { sectionPath },
+        },
       },
     } = this.props;
     return (
       <>
-        <Layout>
+        <Layout active={sectionPath}>
           <div
             dangerouslySetInnerHTML={{ __html: html }}
             ref={el => {
@@ -57,6 +60,9 @@ export const query = graphql`
       html
       frontmatter {
         inject
+      }
+      fields {
+        sectionPath
       }
     }
   }
