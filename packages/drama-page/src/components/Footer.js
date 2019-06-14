@@ -8,6 +8,7 @@ const FooterContainer = flexContainer('footer', {
     display: block;
     text-align: center;
     padding-left: 180px;
+    padding-bottom: 1rem;
   `,
 });
 

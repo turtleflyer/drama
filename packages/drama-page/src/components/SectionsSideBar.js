@@ -8,6 +8,11 @@ import { extractBeforeFirstSlash } from '../../pathModification';
 const SidebarContainer = styled.nav`
   width: 180px;
   flex: initial;
+  position: sticky;
+  z-index: 0.5;
+  top: 5rem;
+  left: 0;
+  padding-top: 1rem;
 `;
 
 const ParentNavTitle = styled.div`

@@ -11,6 +11,7 @@ import flexContainer from '../utils/flexContainer';
 
 const LayoutContainer = flexContainer('div', {
   addContainerStyle: css`
+    margin-top: 5rem;
     min-width: 768px;
     min-height: 75vh;
   `,
@@ -20,7 +21,7 @@ const LayoutContainer = flexContainer('div', {
 });
 
 const ContentContainer = styled.main`
-  margin: 0px auto;
+  margin: 1rem auto 0;
   padding: 0px 1.3rem 1.5rem;
   flex: 1;
   width: 0;

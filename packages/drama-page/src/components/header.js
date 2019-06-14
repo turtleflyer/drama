@@ -8,6 +8,11 @@ const HeaderContainer = flexContainer('header', {
   addContainerStyle: css`
     background: rebeccapurple;
     margin-bottom: 1.45rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
   `,
   addBoxStyle: css`
     height: 5rem;
