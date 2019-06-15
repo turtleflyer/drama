@@ -2,17 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
-import { Global, css } from '@emotion/core';
+import { css } from '@emotion/core';
 import { extractBeforeFirstSlash } from '../../pathModification';
 
-const SidebarContainer = styled.nav`
+const sidebarStyle = css`
   width: 180px;
   flex: initial;
-  position: sticky;
-  z-index: 0.5;
+  z-index: 15;
   top: 5rem;
   left: 0;
   padding-top: 1rem;
+  background-color: white;
+`;
+
+const SidebarContainerSticky = styled.nav`
+  position: sticky;
+  ${sidebarStyle}
+`;
+
+const SidebarContainerFixed = styled.nav`
+  position: fixed;
+  overflow-y: scroll;
+  height: 100%;
+  ${sidebarStyle}
 `;
 
 const ParentNavTitle = styled.div`
@@ -27,7 +39,7 @@ function sortEntries(list) {
   return Object.keys(list).sort((key1, key2) => list[key1].orderIndex - list[key2].orderIndex);
 }
 
-function SectionsSideBar({ data, active }) {
+function SectionsSideBar({ data, active, fixed }) {
   const allSections = data.allMarkdownRemark.edges.reduce(
     (
       bringStructureMap,
@@ -70,67 +82,65 @@ function SectionsSideBar({ data, active }) {
     {},
   );
 
-  return (
-    <SidebarContainer>
-      <Global
-        styles={css`
-          nav {
-            color: #a0a0a0;
-          }
+  const insideBar = (
+    <ul>
+      {sortEntries(allSections).map((parentPath) => {
+        const { parentTitle, subsections, noContent } = allSections[parentPath];
+        return (
+          <li key={parentPath}>
+            <ul>
+              <ParentNavTitle>
+                {noContent ? (
+                  parentTitle
+                ) : (
+                  <Link to={parentPath}>
+                    {parentPath === active ? <ActiveEntry>{parentTitle}</ActiveEntry> : parentTitle}
+                  </Link>
+                )}
+              </ParentNavTitle>
+              {sortEntries(subsections).map(sectionPath => (
+                <li key={sectionPath}>
+                  <Link to={sectionPath}>
+                    {sectionPath === active ? (
+                      <ActiveEntry>{subsections[sectionPath].title}</ActiveEntry>
+                    ) : (
+                      subsections[sectionPath].title
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </li>
+        );
+      })}
+    </ul>
+  );
 
-          nav a {
-            color: #742a86;
-            text-decoration: none;
-          }
-
-          nav ul {
-            list-style: none;
-            margin: 0.7em 0;
-          }
-
-          nav li {
-            margin: 0 0 0.3em 0.4em;
-          }
-        `}
-      />
-      <ul>
-        {sortEntries(allSections).map((parentPath) => {
-          const { parentTitle, subsections, noContent } = allSections[parentPath];
-          return (
-            <li key={parentPath}>
-              <ul>
-                <ParentNavTitle>
-                  {noContent ? (
-                    parentTitle
-                  ) : (
-                    <Link to={parentPath}>
-                      {parentPath === active ? (
-                        <ActiveEntry>{parentTitle}</ActiveEntry>
-                      ) : (
-                        parentTitle
-                      )}
-                    </Link>
-                  )}
-                </ParentNavTitle>
-                {sortEntries(subsections).map(sectionPath => (
-                  <li key={sectionPath}>
-                    <Link to={sectionPath}>
-                      {sectionPath === active ? (
-                        <ActiveEntry>{subsections[sectionPath].title}</ActiveEntry>
-                      ) : (
-                        subsections[sectionPath].title
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
-    </SidebarContainer>
+  return fixed ? (
+    <SidebarContainerFixed>{insideBar}</SidebarContainerFixed>
+  ) : (
+    <SidebarContainerSticky>{insideBar}</SidebarContainerSticky>
   );
 }
+
+SectionsSideBar.propTypes = {
+  data: PropTypes.shape({
+    allMarkdownRemark: PropTypes.shape({
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          node: PropTypes.shape({
+            fields: PropTypes.shape({
+              sectionPath: PropTypes.string.isRequired,
+            }).isRequired,
+            frontmatter: PropTypes.shape({
+              title: PropTypes.string.isRequired,
+            }).isRequired,
+          }).isRequired,
+        }).isRequired,
+      ).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default props => (
   <StaticQuery
@@ -156,22 +166,3 @@ export default props => (
     render={data => <SectionsSideBar data={data} {...props} />}
   />
 );
-
-SectionsSideBar.propTypes = {
-  data: PropTypes.shape({
-    allMarkdownRemark: PropTypes.shape({
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          node: PropTypes.shape({
-            fields: PropTypes.shape({
-              sectionPath: PropTypes.string.isRequired,
-            }).isRequired,
-            frontmatter: PropTypes.shape({
-              title: PropTypes.string.isRequired,
-            }).isRequired,
-          }).isRequired,
-        }).isRequired,
-      ).isRequired,
-    }).isRequired,
-  }).isRequired,
-};

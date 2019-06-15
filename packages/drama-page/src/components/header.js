@@ -12,7 +12,7 @@ const HeaderContainer = flexContainer('header', {
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 17;
   `,
   addBoxStyle: css`
     height: 5rem;
