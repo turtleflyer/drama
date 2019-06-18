@@ -1,22 +1,7 @@
-import React, { useReducer, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import styled from '@emotion/styled';
 import SectionsSideBar from './SectionsSideBar';
-
-const OPEN_SIDE_BAR = Symbol('@slideSideBar/OPEN_SIDE_BAR');
-const CLOSE_SIDE_BAR = Symbol('@slideSideBar/CLOSE_SIDE_BAR');
-
-const slideSideBarReducer = (state, action) => {
-  switch (action.type) {
-    case OPEN_SIDE_BAR:
-      return { ...state, sideBarOpen: true };
-
-    case CLOSE_SIDE_BAR:
-      return { ...state, sideBarOpen: false };
-
-    default:
-      return state;
-  }
-};
+import { useLayoutReducer, OPEN_SIDE_BAR, CLOSE_SIDE_BAR } from './LayoutReducerProvider';
 
 const IconContainer = styled.div`
   z-index: 20;
@@ -31,7 +16,7 @@ const SideBarIcon = ({ sideBarOpen, openSideBarCallback, closeSideBarCallback })
 ));
 
 const SlideSideBar = ({ active }) => {
-  const [state, dispatch] = useReducer(slideSideBarReducer, { sideBarOpen: false });
+  const [state, dispatch] = useLayoutReducer();
   const { sideBarOpen } = state;
 
   const callback = useCallback(

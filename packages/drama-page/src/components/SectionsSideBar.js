@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { extractBeforeFirstSlash } from '../../pathModification';
 
-const sidebarStyle = css`
+const SidebarContainer = styled.nav`
   width: 180px;
   flex: initial;
   z-index: 15;
@@ -13,18 +13,17 @@ const sidebarStyle = css`
   left: 0;
   padding-top: 1rem;
   background-color: white;
-`;
-
-const SidebarContainerSticky = styled.nav`
-  position: sticky;
-  ${sidebarStyle}
-`;
-
-const SidebarContainerFixed = styled.nav`
-  position: fixed;
-  overflow-y: scroll;
-  height: 100%;
-  ${sidebarStyle}
+  overflow-y: auto;
+  ${({ fixed }) => (fixed
+    ? css`
+          position: fixed;
+          height: 100%;
+        `
+    : css`
+          position: sticky;
+          height: calc(100vh - 5rem);
+          top-margin: 5rem;
+        `)}
 `;
 
 const ParentNavTitle = styled.div`
@@ -116,11 +115,7 @@ function SectionsSideBar({ data, active, fixed }) {
     </ul>
   );
 
-  return fixed ? (
-    <SidebarContainerFixed>{insideBar}</SidebarContainerFixed>
-  ) : (
-    <SidebarContainerSticky>{insideBar}</SidebarContainerSticky>
-  );
+  return <SidebarContainer {...{ fixed }}>{insideBar}</SidebarContainer>;
 }
 
 SectionsSideBar.propTypes = {
