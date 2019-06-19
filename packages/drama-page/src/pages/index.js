@@ -1,6 +1,5 @@
 import React from 'react';
-import TicTacTot from '../components/TicTacToe';
 
-const IndexPage = () => <TicTacTot />;
+const IndexPage = () => <div>Index page placeholder</div>;
 
 export default IndexPage;
