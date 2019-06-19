@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{168:function(n,e,c){"use strict";c.r(e);var d=c(12);c(0);e.default=function(){return Object(d.d)("div",null,"Index page placeholder")}}}]);
+//# sourceMappingURL=component---src-pages-index-js-e152f7d813423ea6d69f.js.map
