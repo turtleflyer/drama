@@ -21,7 +21,7 @@ const SidebarContainer = styled.nav`
         `
     : css`
           position: sticky;
-          height: calc(100vh - 5rem);
+          max-height: calc(100vh - 5rem);
           top-margin: 5rem;
         `)}
 `;

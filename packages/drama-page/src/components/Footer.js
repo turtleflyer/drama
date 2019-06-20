@@ -7,8 +7,7 @@ const FooterContainer = flexContainer('footer', {
   addBoxStyle: css`
     display: block;
     text-align: center;
-    padding-left: 180px;
-    padding-bottom: 1rem;
+    height: 3rem;
   `,
 });
 

@@ -14,8 +14,6 @@ import LayoutReducerProvider, { ProvideLayoutState } from './LayoutReducerProvid
 const LayoutContainer = flexContainer('div', {
   addContainerStyle: css`
     margin-top: 5rem;
-    min-width: 768px;
-    min-height: 75vh;
   `,
   addBoxStyle: css`
     align-items: flex-start;
@@ -34,15 +32,15 @@ const ContentContainer = ({ children }) => {
   return (
     <main
       css={css`
-        margin: 1rem auto 0;
-        padding: 0px 1.3rem 1.5rem;
+        margin: 0 auto;
+        padding: 0 1.3rem;
         flex: 1;
         z-index: 10;
         ${sideBarOpen
         ? css`
               position: fixed;
               width: 100%;
-              ${scrollY
+              ${typeof scrollY === 'number'
           ? css`
                     top: calc(5rem - ${scrollY}px);
                   `
@@ -55,7 +53,20 @@ const ContentContainer = ({ children }) => {
             `}
       `}
     >
-      {children}
+      <div
+        css={css`
+          min-height: calc(100vh - 8rem);
+          padding-top: 1rem;
+        `}
+      >
+        {children}
+      </div>
+      <Footer>
+        {'©'}
+        {new Date().getFullYear()}
+        {', Built with '}
+        <a href="https://www.gatsbyjs.org">Gatsby</a>
+      </Footer>
     </main>
   );
 };
@@ -77,7 +88,11 @@ const Layout = ({ children, active }) => (
         <LayoutReducerProvider>
           <ResponsiveContext.Consumer>
             {size => (
-              <>
+              <div
+                css={css`
+                  min-height: calc(100vh - 5rem);
+                `}
+              >
                 <Header siteTitle={data.site.siteMetadata.title} />
                 <LayoutContainer>
                   {size === 'small' ? (
@@ -87,13 +102,7 @@ const Layout = ({ children, active }) => (
                   )}
                   <ContentContainer>{children}</ContentContainer>
                 </LayoutContainer>
-                <Footer>
-                  {'©'}
-                  {new Date().getFullYear()}
-                  {', Built with '}
-                  <a href="https://www.gatsbyjs.org">Gatsby</a>
-                </Footer>
-              </>
+              </div>
             )}
           </ResponsiveContext.Consumer>
         </LayoutReducerProvider>

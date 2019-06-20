@@ -7,7 +7,6 @@ import flexContainer from '../utils/flexContainer';
 const HeaderContainer = flexContainer('header', {
   addContainerStyle: css`
     background: rebeccapurple;
-    margin-bottom: 1.45rem;
     position: fixed;
     width: 100%;
     top: 0;
