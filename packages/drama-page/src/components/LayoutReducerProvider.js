@@ -20,7 +20,10 @@ const LayoutReducer = (state, action) => {
 };
 
 const LayoutReducerProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(LayoutReducer, { sideBarOpen: false });
+  const [state, dispatch] = useReducer(LayoutReducer, {
+    sideBarOpen: false,
+    scroll: window.scrollY,
+  });
 
   return (
     <ProvideLayoutState.Provider value={state}>
