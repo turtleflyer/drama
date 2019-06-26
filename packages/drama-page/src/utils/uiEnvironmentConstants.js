@@ -5,5 +5,7 @@ export const global = {
 
 export const sideBar = {
   activeSectionColor: '#d64444',
-  icon: { size: '1.2rem', padding: '0.25rem' },
+  icon: {
+    size: '2rem', padding: '0.5rem', horizontalPosition: '0.5rem', verticalPosition: '0.8rem',
+  },
 };

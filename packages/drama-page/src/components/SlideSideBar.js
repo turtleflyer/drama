@@ -1,19 +1,14 @@
-import React, { useCallback } from 'react';
-import styled from '@emotion/styled';
+import React, { useContext, useCallback } from 'react';
+import css from '@emotion/css';
 import SectionsSideBar from './SectionsSideBar';
-import { useLayoutReducer, OPEN_SIDE_BAR, CLOSE_SIDE_BAR } from './LayoutReducerProvider';
-
-const IconContainer = styled.div`
-  z-index: 20;
-  position: fixed;
-  left: 0;
-`;
-
-const SideBarIcon = ({ sideBarOpen, openSideBarCallback, closeSideBarCallback }) => (sideBarOpen ? (
-  <IconContainer onClick={closeSideBarCallback}>O</IconContainer>
-) : (
-  <IconContainer onClick={openSideBarCallback}>C</IconContainer>
-));
+import {
+  ProvideLayoutState,
+  useLayoutReducer,
+  CLOSE_SIDE_BAR,
+  OPEN_SIDE_BAR,
+} from './LayoutReducerProvider';
+import SideBarIcon from './SideBarIcon';
+import { global, sideBar } from '../utils/uiEnvironmentConstants';
 
 const SlideSideBar = ({ active }) => {
   const [state, dispatch] = useLayoutReducer();
@@ -28,14 +23,18 @@ const SlideSideBar = ({ active }) => {
 
   return (
     <>
+      <div
+        css={css`
+          position: fixed;
+          z-index: 20;
+          top: calc(${global.headHeight} - ${sideBar.icon.size} - ${sideBar.icon.verticalPosition});
+          left: ${sideBar.icon.horizontalPosition};
+        `}
+        onClick={callback(sideBarOpen ? CLOSE_SIDE_BAR : OPEN_SIDE_BAR)}
+      >
+        <SideBarIcon open={sideBarOpen} />
+      </div>
       {sideBarOpen ? <SectionsSideBar {...{ active }} fixed /> : null}
-      <SideBarIcon
-        {...{
-          sideBarOpen,
-          openSideBarCallback: callback(OPEN_SIDE_BAR),
-          closeSideBarCallback: callback(CLOSE_SIDE_BAR),
-        }}
-      />
     </>
   );
 };
