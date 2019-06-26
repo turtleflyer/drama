@@ -7,7 +7,6 @@ import { extractBeforeFirstSlash } from '../../pathModification';
 import { sideBar, global } from '../utils/uiEnvironmentConstants';
 
 const SidebarContainer = styled.nav`
-  width: 180px;
   flex: initial;
   z-index: 15;
   top: ${global.headHeight};
@@ -18,11 +17,11 @@ const SidebarContainer = styled.nav`
   ${({ fixed }) => (fixed
     ? css`
           position: fixed;
+          width: ${sideBar.widthFixed};
           height: 100%;
         `
     : css`
-          position: sticky;
-          max-height: calc(100vh - ${global.headHeight});
+          width: ${sideBar.widthDefault};
           top-margin: ${global.headHeight};
         `)}
 `;
