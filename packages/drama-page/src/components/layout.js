@@ -10,10 +10,11 @@ import flexContainer from '../utils/flexContainer';
 import SlideSideBar from './SlideSideBar';
 import GlobalStyle from './GlobalStyle';
 import LayoutReducerProvider, { ProvideLayoutState } from './LayoutReducerProvider';
+import { global } from '../utils/uiEnvironmentConstants';
 
 const LayoutContainer = flexContainer('div', {
   addContainerStyle: css`
-    margin-top: 5rem;
+    margin-top: ${global.headHeight};
   `,
   addBoxStyle: css`
     align-items: flex-start;
@@ -61,7 +62,7 @@ const ContentContainer = ({ children }) => {
                 filter: blur(5px);
                 ${typeof scrollY === 'number'
             ? css`
-                      top: calc(5rem - ${scrollY}px);
+                      top: calc(${global.headHeight} - ${scrollY}px);
                     `
             : css`
                       top: 0;
@@ -111,7 +112,7 @@ const Layout = ({ children, active }) => (
             {size => (
               <div
                 css={css`
-                  min-height: calc(100vh - 5rem);
+                  min-height: calc(100vh - ${global.headHeight});
                 `}
               >
                 <Header siteTitle={data.site.siteMetadata.title} />

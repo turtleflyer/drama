@@ -1,5 +1,6 @@
 export const global = {
   headerColor: 'rebeccapurple',
+  headHeight: '5rem',
 };
 
 export const sideBar = {

@@ -4,13 +4,13 @@ import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { extractBeforeFirstSlash } from '../../pathModification';
-import { sideBar } from '../utils/uiEnvironmentConstants';
+import { sideBar, global } from '../utils/uiEnvironmentConstants';
 
 const SidebarContainer = styled.nav`
   width: 180px;
   flex: initial;
   z-index: 15;
-  top: 5rem;
+  top: ${global.headHeight};
   left: 0;
   padding-top: 1rem;
   background-color: white;
@@ -22,8 +22,8 @@ const SidebarContainer = styled.nav`
         `
     : css`
           position: sticky;
-          max-height: calc(100vh - 5rem);
-          top-margin: 5rem;
+          max-height: calc(100vh - ${global.headHeight});
+          top-margin: ${global.headHeight};
         `)}
 `;
 

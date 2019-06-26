@@ -15,7 +15,7 @@ const HeaderContainer = flexContainer('header', {
     z-index: 17;
   `,
   addBoxStyle: css`
-    height: 5rem;
+    height: ${global.headHeight};
   `,
 });
 
