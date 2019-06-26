@@ -4,6 +4,7 @@ import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { extractBeforeFirstSlash } from '../../pathModification';
+import { sideBar } from '../utils/uiEnvironmentConstants';
 
 const SidebarContainer = styled.nav`
   width: 180px;
@@ -31,7 +32,7 @@ const ParentNavTitle = styled.div`
 `;
 
 const ActiveEntry = styled.span`
-  color: #d64444;
+  color: ${sideBar.activeSectionColor};
 `;
 
 function sortEntries(list) {
