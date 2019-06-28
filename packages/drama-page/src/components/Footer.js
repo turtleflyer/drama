@@ -1,19 +1,20 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { css } from '@emotion/core';
-import flexContainer from '../utils/flexContainer';
+import FlexContainer from './FlexContainer';
 
-const FooterContainer = flexContainer('footer', {
-  addBoxStyle: css`
-    display: block;
-    text-align: center;
-    height: 3rem;
-  `,
-});
-
-export default function Footer({ children }) {
-  return <FooterContainer>{children}</FooterContainer>;
-}
+const Footer = ({ children }) => (
+  <FlexContainer
+    nodeType="footer"
+    addBoxStyle={css`
+      display: block;
+      text-align: center;
+      height: 3rem;
+    `}
+  >
+    {children}
+  </FlexContainer>
+);
 
 Footer.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
@@ -22,3 +23,5 @@ Footer.propTypes = {
 Footer.defaultProps = {
   children: [],
 };
+
+export default Footer;

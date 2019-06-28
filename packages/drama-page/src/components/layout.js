@@ -5,21 +5,12 @@ import { ResponsiveContext, Grommet } from 'grommet';
 import { css } from '@emotion/core';
 import Header from './header';
 import SectionsSideBar from './SectionsSideBar';
-import flexContainer from '../utils/flexContainer';
 import SlideSideBar from './SlideSideBar';
 import GlobalStyle from './GlobalStyle';
 import LayoutReducerProvider from './LayoutReducerProvider';
 import { global } from '../utils/uiEnvironmentConstants';
 import ContentContainer from './ContentContainer';
-
-const LayoutContainer = flexContainer('div', {
-  addContainerStyle: css`
-    margin-top: ${global.headHeight};
-  `,
-  addBoxStyle: css`
-    align-items: flex-start;
-  `,
-});
+import FlexContainer from './FlexContainer';
 
 const Layout = ({ children, active }) => (
   <StaticQuery
@@ -44,14 +35,21 @@ const Layout = ({ children, active }) => (
                 `}
               >
                 <Header siteTitle={data.site.siteMetadata.title} />
-                <LayoutContainer>
+                <FlexContainer
+                  addContainerStyle={css`
+                    margin-top: ${global.headHeight};
+                  `}
+                  addBoxStyle={css`
+                    align-items: flex-start;
+                  `}
+                >
                   {size === 'small' ? (
                     <SlideSideBar active={active} />
                   ) : (
                     <SectionsSideBar active={active} />
                   )}
                   <ContentContainer>{children}</ContentContainer>
-                </LayoutContainer>
+                </FlexContainer>
               </div>
             )}
           </ResponsiveContext.Consumer>

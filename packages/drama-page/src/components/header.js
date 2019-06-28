@@ -2,45 +2,42 @@ import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { css } from '@emotion/core';
-import flexContainer from '../utils/flexContainer';
 import { global } from '../utils/uiEnvironmentConstants';
+import FlexContainer from './FlexContainer';
 
-const HeaderContainer = flexContainer('header', {
-  addContainerStyle: css`
-    background: ${global.headerColor};
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 17;
-  `,
-  addBoxStyle: css`
-    height: ${global.headHeight};
-  `,
-});
-
-export default function Header({ siteTitle }) {
-  return (
-    <HeaderContainer>
-      <h1
+const Header = ({ siteTitle }) => (
+  <FlexContainer
+    nodeType="header"
+    addContainerStyle={css`
+      background: ${global.headerColor};
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 17;
+    `}
+    addBoxStyle={css`
+      height: ${global.headHeight};
+    `}
+  >
+    <h1
+      css={css`
+        display: block;
+        margin: 0;
+      `}
+    >
+      <Link
+        to="/"
         css={css`
-          display: block;
-          margin: 0;
+          color: white;
+          text-decoration: none;
         `}
       >
-        <Link
-          to="/"
-          css={css`
-            color: white;
-            text-decoration: none;
-          `}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </HeaderContainer>
-  );
-}
+        {siteTitle}
+      </Link>
+    </h1>
+  </FlexContainer>
+);
 
 Header.propTypes = {
   siteTitle: PropTypes.string,
@@ -49,3 +46,5 @@ Header.propTypes = {
 Header.defaultProps = {
   siteTitle: '',
 };
+
+export default Header;
