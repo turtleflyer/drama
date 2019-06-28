@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { global, sideBar } from '../utils/uiEnvironmentConstants';
-import { useLayoutReducer, CLOSE_SIDE_BAR, OPEN_SIDE_BAR } from './LayoutReducerProvider';
 
 const WhiteLine = styled.div`
   border: 1px solid white;
