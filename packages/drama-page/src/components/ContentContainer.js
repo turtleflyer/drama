@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import { css } from '@emotion/core';
-import Footer from './Footer';
 import { ProvideLayoutState } from './LayoutReducerProvider';
+import { global } from '../utils/uiEnvironmentConstants';
 
 const ContentContainer = ({ children }) => {
   const { sideBarOpen, scrollY } = useContext(ProvideLayoutState);
@@ -34,9 +34,10 @@ const ContentContainer = ({ children }) => {
       <main
         css={css`
           margin: 0 auto;
-          padding: 0 1.3rem;
+          padding: 1rem 1.3rem 0;
           flex: 1;
           z-index: 10;
+          min-height: calc(100vh - 8rem);
           ${sideBarOpen
           ? css`
                 position: fixed;
@@ -56,20 +57,7 @@ const ContentContainer = ({ children }) => {
         `}
         ref={layoutRef}
       >
-        <div
-          css={css`
-            min-height: calc(100vh - 8rem);
-            padding-top: 1rem;
-          `}
-        >
-          {children}
-        </div>
-        <Footer>
-          {'©'}
-          {new Date().getFullYear()}
-          {', Built with '}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </Footer>
+        {children}
       </main>
     </>
   );

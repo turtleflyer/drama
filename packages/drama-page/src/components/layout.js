@@ -11,6 +11,7 @@ import LayoutReducerProvider from './LayoutReducerProvider';
 import { global } from '../utils/uiEnvironmentConstants';
 import ContentContainer from './ContentContainer';
 import FlexContainer from './FlexContainer';
+import Footer from './Footer';
 
 const Layout = ({ children, active }) => (
   <StaticQuery
@@ -50,6 +51,12 @@ const Layout = ({ children, active }) => (
                   )}
                   <ContentContainer>{children}</ContentContainer>
                 </FlexContainer>
+                <Footer>
+                  {'©'}
+                  {new Date().getFullYear()}
+                  {', Built with '}
+                  <a href="https://www.gatsbyjs.org">Gatsby</a>
+                </Footer>
               </div>
             )}
           </ResponsiveContext.Consumer>
