@@ -42,7 +42,7 @@ export default class Page extends React.Component {
     return (
       <>
         <Layout active={sectionPath}>
-          <div
+          <article
             dangerouslySetInnerHTML={{ __html: html }}
             ref={el => {
               this.markdownContainer = el;
