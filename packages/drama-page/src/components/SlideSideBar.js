@@ -1,12 +1,7 @@
-import React, { useContext, useCallback } from 'react';
-import css from '@emotion/css';
+import React, { useCallback } from 'react';
+import { css } from '@emotion/core';
 import SectionsSideBar from './SectionsSideBar';
-import {
-  ProvideLayoutState,
-  useLayoutReducer,
-  CLOSE_SIDE_BAR,
-  OPEN_SIDE_BAR,
-} from './LayoutReducerProvider';
+import { useLayoutReducer, CLOSE_SIDE_BAR, OPEN_SIDE_BAR } from './LayoutReducerProvider';
 import SideBarIcon from './SideBarIcon';
 import { global, sideBar } from '../utils/uiEnvironmentConstants';
 
