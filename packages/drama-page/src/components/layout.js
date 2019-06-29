@@ -1,17 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StaticQuery, graphql } from 'gatsby';
-import { ResponsiveContext, Grommet } from 'grommet';
-import { css } from '@emotion/core';
-import Header from './header';
-import SectionsSideBar from './SectionsSideBar';
-import SlideSideBar from './SlideSideBar';
+import { Grommet } from 'grommet';
 import GlobalStyle from './GlobalStyle';
 import LayoutReducerProvider from './LayoutReducerProvider';
-import { global } from '../utils/uiEnvironmentConstants';
-import ContentContainer from './ContentContainer';
-import FlexContainer from './FlexContainer';
-import Footer from './Footer';
+import PageBody from './PageBody';
 
 const Layout = ({ children, active }) => (
   <StaticQuery
@@ -26,40 +19,9 @@ const Layout = ({ children, active }) => (
     `}
     render={data => (
       <Grommet>
-        <GlobalStyle />
         <LayoutReducerProvider>
-          <ResponsiveContext.Consumer>
-            {size => (
-              <div
-                css={css`
-                  min-height: calc(100vh - ${global.headHeight});
-                `}
-              >
-                <Header siteTitle={data.site.siteMetadata.title} />
-                <FlexContainer
-                  addContainerStyle={css`
-                    margin-top: ${global.headHeight};
-                  `}
-                  addBoxStyle={css`
-                    align-items: flex-start;
-                  `}
-                >
-                  {size === 'small' ? (
-                    <SlideSideBar active={active} />
-                  ) : (
-                    <SectionsSideBar active={active} />
-                  )}
-                  <ContentContainer>{children}</ContentContainer>
-                </FlexContainer>
-                <Footer>
-                  {'©'}
-                  {new Date().getFullYear()}
-                  {', Built with '}
-                  <a href="https://www.gatsbyjs.org">Gatsby</a>
-                </Footer>
-              </div>
-            )}
-          </ResponsiveContext.Consumer>
+          <GlobalStyle />
+          <PageBody {...{ children, active, data }} />
         </LayoutReducerProvider>
       </Grommet>
     )}
