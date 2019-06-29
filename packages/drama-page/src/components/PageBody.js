@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { css } from '@emotion/core';
 import { ResponsiveContext } from 'grommet';
 import Header from './header';
@@ -13,12 +13,9 @@ import { ProvideLayoutDispatch, CLOSE_SIDE_BAR } from './LayoutReducerProvider';
 const PageBody = ({ children, active, data }) => {
   const size = useContext(ResponsiveContext);
   const dispatch = useContext(ProvideLayoutDispatch);
-
-  useEffect(() => {
-    if (size !== 'small') {
-      dispatch({ type: CLOSE_SIDE_BAR });
-    }
-  }, [size, dispatch]);
+  if (size !== 'small') {
+    dispatch({ type: CLOSE_SIDE_BAR });
+  }
 
   return (
     <>
