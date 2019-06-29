@@ -7,11 +7,11 @@ const ContentContainer = ({ children }) => {
   const { sideBarOpen, scrollY } = useContext(ProvideLayoutState);
   const layoutRef = useRef(null);
 
-  const stayOnScrollPosition = () => {
-    window.scrollTo(0, scrollY);
-  };
-
   useEffect(() => {
+    const stayOnScrollPosition = () => {
+      window.scrollTo(0, scrollY);
+    };
+
     if (sideBarOpen) {
       window.addEventListener('scroll', stayOnScrollPosition);
       return () => {
