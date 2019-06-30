@@ -58,7 +58,7 @@ Page.propTypes = {
   data: PropTypes.shape({
     markdownRemark: PropTypes.shape({
       frontmatter: PropTypes.shape({
-        inject: PropTypes.arrayOf(PropTypes.string).isRequired,
+        inject: PropTypes.arrayOf(PropTypes.string),
       }).isRequired,
       html: PropTypes.string.isRequired,
       fields: PropTypes.shape({
