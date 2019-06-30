@@ -1,9 +1,11 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { graphql } from 'gatsby';
 import Layout from '../components/layout';
 
-export default class Page extends React.Component {
+class Page extends React.Component {
   constructor(props) {
     super(props);
     const {
@@ -14,18 +16,14 @@ export default class Page extends React.Component {
       },
     } = this.props;
     this.inject = inject;
-    this.pieces =
-      inject &&
-      inject.map(pieceKey => import(/* webpackMode: "eager" */ `../pieces/${pieceKey}.js`));
+    this.pieces = inject && inject.map(pieceKey => require(`../pieces/${pieceKey}.js`));
   }
 
   componentDidMount() {
     if (this.inject) {
-      Promise.all(this.pieces).then(pieces => {
-        pieces.forEach(({ default: PieceComponent }, i) => {
-          const piecePlaceholder = this.markdownContainer.querySelector(`#${this.inject[i]}`);
-          ReactDOM.render(<PieceComponent />, piecePlaceholder);
-        });
+      this.pieces.forEach((PieceComponent, i) => {
+        const piecePlaceholder = this.markdownContainer.querySelector(`#${this.inject[i]}`);
+        ReactDOM.render(<PieceComponent />, piecePlaceholder);
       });
     }
   }
@@ -44,7 +42,7 @@ export default class Page extends React.Component {
         <Layout active={sectionPath}>
           <article
             dangerouslySetInnerHTML={{ __html: html }}
-            ref={el => {
+            ref={(el) => {
               this.markdownContainer = el;
             }}
           />
@@ -67,3 +65,5 @@ export const query = graphql`
     }
   }
 `;
+
+export default Page;
