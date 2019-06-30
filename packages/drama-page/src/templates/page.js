@@ -1,56 +1,44 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
-import React from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { graphql } from 'gatsby';
+import PropTypes from 'prop-types';
 import Layout from '../components/layout';
 
-class Page extends React.Component {
-  constructor(props) {
-    super(props);
-    const {
-      data: {
-        markdownRemark: {
-          frontmatter: { inject },
-        },
-      },
-    } = this.props;
-    this.inject = inject;
-    this.pieces = inject && inject.map(pieceKey => require(`../pieces/${pieceKey}.js`));
-  }
+const Page = ({ data }) => {
+  const {
+    markdownRemark: {
+      frontmatter: { inject },
+      html,
+      fields: { sectionPath },
+    },
+  } = data;
 
-  componentDidMount() {
-    if (this.inject) {
-      this.pieces.forEach((PieceComponent, i) => {
-        const piecePlaceholder = this.markdownContainer.querySelector(`#${this.inject[i]}`);
+  const pieces = useMemo(
+    () => inject && inject.map(pieceKey => require(`../pieces/${pieceKey}.js`)),
+    [inject],
+  );
+
+  const markdownContainer = useRef(null);
+
+  useEffect(() => {
+    if (inject) {
+      pieces.forEach((PieceComponent, i) => {
+        const piecePlaceholder = markdownContainer.current.querySelector(`#${inject[i]}`);
         ReactDOM.render(<PieceComponent />, piecePlaceholder);
       });
     }
-  }
+  }, [inject, pieces]);
 
-  render() {
-    const {
-      data: {
-        markdownRemark: {
-          html,
-          fields: { sectionPath },
-        },
-      },
-    } = this.props;
-    return (
-      <>
-        <Layout active={sectionPath}>
-          <article
-            dangerouslySetInnerHTML={{ __html: html }}
-            ref={(el) => {
-              this.markdownContainer = el;
-            }}
-          />
-        </Layout>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Layout active={sectionPath}>
+        <article dangerouslySetInnerHTML={{ __html: html }} ref={markdownContainer} />
+      </Layout>
+    </>
+  );
+};
 
 export const query = graphql`
   query($slug: String!) {
@@ -65,5 +53,19 @@ export const query = graphql`
     }
   }
 `;
+
+Page.propTypes = {
+  data: PropTypes.shape({
+    markdownRemark: PropTypes.shape({
+      frontmatter: PropTypes.shape({
+        inject: PropTypes.arrayOf(PropTypes.string).isRequired,
+      }).isRequired,
+      html: PropTypes.string.isRequired,
+      fields: PropTypes.shape({
+        sectionPath: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default Page;
