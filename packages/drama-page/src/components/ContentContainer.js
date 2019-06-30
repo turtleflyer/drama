@@ -1,5 +1,6 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import { css } from '@emotion/core';
+import PropTypes from 'prop-types';
 import { ProvideLayoutState } from './LayoutReducerProvider';
 import { global } from '../utils/uiEnvironmentConstants';
 
@@ -61,6 +62,14 @@ const ContentContainer = ({ children }) => {
       </main>
     </>
   );
+};
+
+ContentContainer.propTypes = {
+  children: PropTypes.node,
+};
+
+ContentContainer.defaultProps = {
+  children: null,
 };
 
 export default ContentContainer;

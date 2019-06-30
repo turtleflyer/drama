@@ -29,12 +29,12 @@ const Layout = ({ children, active }) => (
 );
 
 Layout.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.node,
   active: PropTypes.string.isRequired,
 };
 
 Layout.defaultProps = {
-  children: [],
+  children: null,
 };
 
 export default Layout;

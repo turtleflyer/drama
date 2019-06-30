@@ -1,4 +1,5 @@
 import React, { createContext, useReducer, useContext } from 'react';
+import PropTypes from 'prop-types';
 
 export const ProvideLayoutState = createContext({ sideBarOpen: false, scrollY: null });
 export const ProvideLayoutDispatch = createContext(() => null);
@@ -36,6 +37,14 @@ export const useLayoutReducer = () => {
   const state = useContext(ProvideLayoutState);
   const dispatch = useContext(ProvideLayoutDispatch);
   return [state, dispatch];
+};
+
+LayoutReducerProvider.propTypes = {
+  children: PropTypes.node,
+};
+
+LayoutReducerProvider.defaultProps = {
+  children: null,
 };
 
 export default LayoutReducerProvider;

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { css } from '@emotion/core';
 import { ResponsiveContext } from 'grommet';
+import PropTypes from 'prop-types';
 import Header from './header';
 import FlexContainer from './FlexContainer';
 import SlideSideBar from './SlideSideBar';
@@ -39,6 +40,22 @@ const PageBody = ({ children, active, data }) => {
       </Footer>
     </>
   );
+};
+
+PageBody.propTypes = {
+  children: PropTypes.node,
+  active: PropTypes.string.isRequired,
+  data: PropTypes.shape({
+    site: PropTypes.shape({
+      siteMetadata: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
+PageBody.defaultProps = {
+  children: null,
 };
 
 export default PageBody;

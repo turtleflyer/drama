@@ -17,11 +17,11 @@ const Footer = ({ children }) => (
 );
 
 Footer.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.node,
 };
 
 Footer.defaultProps = {
-  children: [],
+  children: null,
 };
 
 export default Footer;

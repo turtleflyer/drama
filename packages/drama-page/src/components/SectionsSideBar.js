@@ -135,6 +135,12 @@ SectionsSideBar.propTypes = {
       ).isRequired,
     }).isRequired,
   }).isRequired,
+  active: PropTypes.string.isRequired,
+  fixed: PropTypes.bool,
+};
+
+SectionsSideBar.defaultProps = {
+  fixed: false,
 };
 
 export default props => (

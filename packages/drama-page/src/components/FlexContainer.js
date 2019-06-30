@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
@@ -28,11 +29,17 @@ const FlexContainer = ({
 );
 
 FlexContainer.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  nodeType: PropTypes.string,
+  addContainerStyle: PropTypes.object,
+  addBoxStyle: PropTypes.object,
+  children: PropTypes.node,
 };
 
 FlexContainer.defaultProps = {
-  children: [],
+  nodeType: 'div',
+  addContainerStyle: {},
+  addBoxStyle: {},
+  children: null,
 };
 
 export default FlexContainer;
