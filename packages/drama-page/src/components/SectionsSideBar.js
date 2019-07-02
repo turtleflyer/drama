@@ -26,10 +26,6 @@ const SidebarContainer = styled.nav`
         `)}
 `;
 
-const ParentNavTitle = styled.div`
-  text-transform: uppercase;
-`;
-
 const ActiveEntry = styled.span`
   color: ${sideBar.activeSectionColor};
 `;
@@ -88,7 +84,11 @@ function SectionsSideBar({ data, active, fixed }) {
         return (
           <li key={parentPath}>
             <ul>
-              <ParentNavTitle>
+              <div
+                css={css`
+                  text-transform: uppercase;
+                `}
+              >
                 {noContent ? (
                   parentTitle
                 ) : (
@@ -96,7 +96,7 @@ function SectionsSideBar({ data, active, fixed }) {
                     {parentPath === active ? <ActiveEntry>{parentTitle}</ActiveEntry> : parentTitle}
                   </Link>
                 )}
-              </ParentNavTitle>
+              </div>
               {sortEntries(subsections).map(sectionPath => (
                 <li key={sectionPath}>
                   <Link to={sectionPath}>
