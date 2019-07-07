@@ -37,6 +37,8 @@
     "worker-loader": "^2.0.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "jest-dp-debug": "lerna run jest-debug --scope=drama-page --stream -- --",
+    "test-dp": "lerna run test --scope=drama-page --stream -- -- --watch"
   }
 }

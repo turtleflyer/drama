@@ -37,6 +37,7 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "deploy": "gatsby build --prefix-paths && gh-pages -d public",
-    "test": "jest"
+    "test": "jest",
+    "jest-debug": "node --inspect-brk ../../node_modules/jest/bin/jest.js --runInBand"
   }
 }
