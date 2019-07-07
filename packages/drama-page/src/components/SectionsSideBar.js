@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import { extractBeforeFirstSlash } from '../../pathModification';
 import { sideBar, global } from '../utils/uiEnvironmentConstants';
+import sectionsStructure from '../utils/sectionsStructure';
 
 const SidebarContainer = styled.nav`
   flex: initial;
@@ -30,57 +30,13 @@ const ActiveEntry = styled.span`
   color: ${sideBar.activeSectionColor};
 `;
 
-function sortEntries(list) {
-  return Object.keys(list).sort((key1, key2) => list[key1].orderIndex - list[key2].orderIndex);
-}
-
 function SectionsSideBar({ data, active, fixed }) {
-  const allSections = data.allMarkdownRemark.edges.reduce(
-    (
-      bringStructureMap,
-      {
-        node: {
-          frontmatter: {
-            parentTitle, title, orderIndex, noContent,
-          },
-          fields: { sectionPath },
-        },
-      },
-    ) => {
-      if (sectionPath.length === 0) {
-        return bringStructureMap;
-      }
-      let conductStructureMap;
-      const parentPathSegment = extractBeforeFirstSlash(sectionPath);
-      const parentEntry = bringStructureMap[parentPathSegment] || { subsections: {} };
-      if (parentTitle) {
-        conductStructureMap = {
-          ...bringStructureMap,
-          [sectionPath]: {
-            ...parentEntry,
-            parentTitle,
-            orderIndex,
-            noContent: noContent && true,
-          },
-        };
-      } else if (title) {
-        conductStructureMap = {
-          ...bringStructureMap,
-          [parentPathSegment]: {
-            ...parentEntry,
-            subsections: { ...parentEntry.subsections, [sectionPath]: { title, orderIndex } },
-          },
-        };
-      }
-      return conductStructureMap;
-    },
-    {},
-  );
+  const allSections = sectionsStructure(data.allMarkdownRemark.edges);
 
   const insideBar = (
     <ul>
-      {sortEntries(allSections).map((parentPath) => {
-        const { parentTitle, subsections, noContent } = allSections[parentPath];
+      {Object.keys(allSections).map((parentPath) => {
+        const { title, subsections, noContent } = allSections[parentPath];
         return (
           <li key={parentPath}>
             <ul>
@@ -90,14 +46,14 @@ function SectionsSideBar({ data, active, fixed }) {
                 `}
               >
                 {noContent ? (
-                  parentTitle
+                  title
                 ) : (
                   <Link to={parentPath}>
-                    {parentPath === active ? <ActiveEntry>{parentTitle}</ActiveEntry> : parentTitle}
+                    {parentPath === active ? <ActiveEntry>{title}</ActiveEntry> : title}
                   </Link>
                 )}
               </div>
-              {sortEntries(subsections).map(sectionPath => (
+              {Object.keys(subsections).map(sectionPath => (
                 <li key={sectionPath}>
                   <Link to={sectionPath}>
                     {sectionPath === active ? (
@@ -155,7 +111,6 @@ export default props => (
               }
               frontmatter {
                 title
-                parentTitle
                 orderIndex
                 noContent
               }

@@ -3,7 +3,8 @@ function removeSectionsPartFromPath(path) {
 }
 
 function extractBeforeFirstSlash(path) {
-  return path.match(/\/.*?\//)[0];
+  const extract = path.match(/\/.*?\//);
+  return extract && extract[0];
 }
 
 module.exports = { removeSectionsPartFromPath, extractBeforeFirstSlash };

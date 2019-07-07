@@ -20,14 +20,11 @@ exports.onCreateNode = ({
 }) => {
   const { createNodeField } = actions;
   if (internalType === 'MarkdownRemark') {
-    const {
-      frontmatter: { parentTitle, title },
-    } = node;
     const originalPath = createFilePath({ node, getNode, basePath: 'pages' });
     let sectionPath = '';
-    if (parentTitle) {
+    if (/\/parent\/$/.test(originalPath)) {
       sectionPath = extractBeforeFirstSlash(removeSectionsPartFromPath(originalPath));
-    } else if (title) {
+    } else {
       sectionPath = removeSectionsPartFromPath(originalPath);
     }
     createNodeField({
