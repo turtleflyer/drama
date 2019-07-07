@@ -8,7 +8,6 @@
 
 const path = require('path');
 const { createFilePath } = require('gatsby-source-filesystem');
-const { removeSectionsPartFromPath, extractBeforeFirstSlash } = require('./pathModification');
 
 exports.onCreateNode = ({
   node,
@@ -20,13 +19,8 @@ exports.onCreateNode = ({
 }) => {
   const { createNodeField } = actions;
   if (internalType === 'MarkdownRemark') {
-    const originalPath = createFilePath({ node, getNode, basePath: 'pages' });
-    let sectionPath = '';
-    if (/\/parent\/$/.test(originalPath)) {
-      sectionPath = extractBeforeFirstSlash(removeSectionsPartFromPath(originalPath));
-    } else {
-      sectionPath = removeSectionsPartFromPath(originalPath);
-    }
+    const originalPath = createFilePath({ node, getNode });
+    const sectionPath = originalPath.replace(/parent\/$/, '').match(/^\/sections(\/.*\/)/)[1];
     createNodeField({
       node,
       name: 'sectionPath',
