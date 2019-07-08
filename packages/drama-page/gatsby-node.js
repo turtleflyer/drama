@@ -20,7 +20,7 @@ exports.onCreateNode = ({
   const { createNodeField } = actions;
   if (internalType === 'MarkdownRemark') {
     const originalPath = createFilePath({ node, getNode });
-    const sectionPath = originalPath.replace(/parent\/$/, '').match(/^\/sections(\/.*\/)/)[1];
+    const sectionPath = originalPath.replace(/parent\/$/, '').match(/^(\/sections)?(\/.*\/)/)[2];
     createNodeField({
       node,
       name: 'sectionPath',

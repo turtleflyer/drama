@@ -30,52 +30,134 @@ const ActiveEntry = styled.span`
   color: ${sideBar.activeSectionColor};
 `;
 
+function getSubsectionComponent(componentsOfDepth, exception = () => false) {
+  function ComponentOfDepth({ depth, ...props }) {
+    const Component = componentsOfDepth[depth];
+    return <Component {...props} />;
+  }
+
+  ComponentOfDepth.propTypes = {
+    depth: PropTypes.number.isRequired,
+  };
+
+  function Subsection({
+    subsections, depth = 0, propagatingProps, ...props
+  }) {
+    const actualDepth = exception(depth, subsections) || depth;
+    return actualDepth < componentsOfDepth.length ? (
+      <ComponentOfDepth depth={actualDepth} {...{ propagatingProps, ...props }}>
+        {subsections && typeof subsections === 'object' && !Array.isArray(subsections)
+          ? Object.keys(subsections).map(path => (
+            <Subsection
+              key={path}
+              {...subsections[path]}
+              depth={actualDepth + 1}
+              {...{ propagatingProps, path }}
+            />
+          ))
+          : null}
+      </ComponentOfDepth>
+    ) : null;
+  }
+
+  Subsection.propTypes = {
+    subsections: PropTypes.objectOf(
+      PropTypes.shape({
+        title: PropTypes.string,
+        noContent: PropTypes.bool,
+        subsections: PropTypes.object,
+      }).isRequired,
+    ),
+    depth: PropTypes.number,
+    propagatingProps: PropTypes.any,
+  };
+
+  Subsection.defaultProps = {
+    subsections: undefined,
+    depth: 0,
+    propagatingProps: undefined,
+  };
+
+  return Subsection;
+}
+
+const SubsectionComponent = getSubsectionComponent(
+  [
+    Object.assign(({ children }) => <ul>{children}</ul>, {
+      propTypes: { children: PropTypes.node },
+      defaultProps: { children: null },
+    }),
+
+    Object.assign(
+      ({
+        title, noContent, path, propagatingProps: { active: activeSection }, children,
+      }) => (
+        <li>
+          <div
+            css={css`
+              text-transform: uppercase;
+            `}
+          >
+            {noContent ? (
+              title
+            ) : (
+              <Link to={path}>
+                {path === activeSection ? <ActiveEntry>{title}</ActiveEntry> : title}
+              </Link>
+            )}
+          </div>
+          <ul>{children}</ul>
+        </li>
+      ),
+      {
+        propTypes: {
+          title: PropTypes.string.isRequired,
+          noContent: PropTypes.bool.isRequired,
+          propagatingProps: PropTypes.exact({
+            active: PropTypes.string.isRequired,
+          }).isRequired,
+          children: PropTypes.node,
+        },
+        defaultProps: { children: undefined },
+      },
+    ),
+
+    Object.assign(
+      ({ title, path, propagatingProps: { active: activeSection } }) => (
+        <li>
+          <Link to={path}>
+            {path === activeSection ? <ActiveEntry>{title}</ActiveEntry> : title}
+          </Link>
+        </li>
+      ),
+      {
+        propTypes: {
+          title: PropTypes.string.isRequired,
+          propagatingProps: PropTypes.exact({
+            active: PropTypes.string.isRequired,
+          }).isRequired,
+          children: PropTypes.node,
+        },
+        defaultProps: { children: undefined },
+      },
+    ),
+  ],
+
+  (depth, subsections) => (depth === 1 && !subsections ? 2 : false),
+);
+
 function SectionsSideBar({ data, active, fixed }) {
   const allSections = sectionsStructure(data.allMarkdownRemark.edges);
 
-  const insideBar = (
-    <ul>
-      {Object.keys(allSections).map((parentPath) => {
-        const { title, subsections, noContent } = allSections[parentPath];
-        return (
-          <li key={parentPath}>
-            <ul>
-              <div
-                css={css`
-                  text-transform: uppercase;
-                `}
-              >
-                {noContent ? (
-                  title
-                ) : (
-                  <Link to={parentPath}>
-                    {parentPath === active ? <ActiveEntry>{title}</ActiveEntry> : title}
-                  </Link>
-                )}
-              </div>
-              {Object.keys(subsections).map(sectionPath => (
-                <li key={sectionPath}>
-                  <Link to={sectionPath}>
-                    {sectionPath === active ? (
-                      <ActiveEntry>{subsections[sectionPath].title}</ActiveEntry>
-                    ) : (
-                      subsections[sectionPath].title
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </li>
-        );
-      })}
-    </ul>
+  return (
+    <SidebarContainer {...{ fixed }}>
+      <SubsectionComponent subsections={allSections} propagatingProps={{ active }} />
+    </SidebarContainer>
   );
-
-  return <SidebarContainer {...{ fixed }}>{insideBar}</SidebarContainer>;
 }
 
 SectionsSideBar.propTypes = {
-  data: PropTypes.shape({
+  data: PropTypes.exact({
     allMarkdownRemark: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
