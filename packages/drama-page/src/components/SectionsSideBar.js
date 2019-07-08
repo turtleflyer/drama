@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
@@ -147,7 +147,7 @@ const SubsectionComponent = getSubsectionComponent(
 );
 
 function SectionsSideBar({ data, active, fixed }) {
-  const allSections = sectionsStructure(data.allMarkdownRemark.edges);
+  const allSections = useMemo(() => sectionsStructure(data.allMarkdownRemark.edges), [data]);
 
   return (
     <SidebarContainer {...{ fixed }}>
