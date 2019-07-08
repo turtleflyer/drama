@@ -69,6 +69,7 @@ function getSubsectionComponent(componentsOfDepth, exception = () => false) {
       }).isRequired,
     ),
     depth: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
     propagatingProps: PropTypes.any,
   };
 
