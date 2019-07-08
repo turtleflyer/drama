@@ -173,20 +173,6 @@ const GlobalStyle = () => (
         padding-top: 0;
         margin-bottom: 1.45rem;
       }
-      nav {
-        color: #a0a0a0;
-      }
-      nav a {
-        color: #742a86;
-        text-decoration: none;
-      }
-      nav ul {
-        list-style: none;
-        margin: 0.7em 0;
-      }
-      nav li {
-        margin: 0 0 0.3em 0.4em;
-      }
     `}
   />
 );

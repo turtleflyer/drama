@@ -14,6 +14,7 @@ const SidebarContainer = styled.nav`
   padding-top: 1rem;
   background-color: white;
   overflow-y: auto;
+  color: #a0a0a0;
   ${({ fixed }) => (fixed
     ? css`
           position: fixed;
@@ -24,6 +25,17 @@ const SidebarContainer = styled.nav`
           width: ${sideBar.widthDefault};
           top-margin: ${global.headHeight};
         `)}
+  & a {
+    color: #742a86;
+    text-decoration: none;
+  }
+  & ul {
+    list-style: none;
+    margin: 0.7em 0;
+  }
+  & li {
+    margin: 0 0 0.3em 0.4em;
+  }
 `;
 
 const ActiveEntry = styled.span`
