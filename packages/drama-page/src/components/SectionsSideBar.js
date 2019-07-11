@@ -14,8 +14,9 @@ const ParentEntryTitle = styled.span`
 const ToggleActiveEntry = styled.span`
   display: block;
   padding: 0.2rem;
-  &, li &{
-  margin: 0.2rem 0;
+  &,
+  li & {
+    margin: 0.2rem 0;
   }
   ul *:first-child + li & {
     margin-top: 0;
@@ -24,12 +25,11 @@ const ToggleActiveEntry = styled.span`
     margin-bottom: 0;
   }
   width: 100%;
-    ${({ activate }) => (activate
+  ${({ activate }) => (activate
     ? css`
-            background-color: ${sideBar.activeSectionColor};
-          `
+          background-color: ${sideBar.activeSectionColor};
+        `
     : null)}
-  }
 `;
 
 const SidebarContainer = styled.nav`
