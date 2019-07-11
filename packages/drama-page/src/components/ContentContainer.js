@@ -8,6 +8,7 @@ const ContentContainer = ({ children }) => {
   const { sideBarOpen, scrollY } = useContext(ProvideLayoutState);
   const layoutRef = useRef(null);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const stayOnScrollPosition = () => {
       window.scrollTo(0, scrollY);
