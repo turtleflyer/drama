@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useCallback } from 'react';
 import { css } from '@emotion/core';
 import SectionsSideBar from './SectionsSideBar';

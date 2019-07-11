@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/core';
 import styled from '@emotion/styled';
+import PropTypes from 'prop-types';
 import { global, sideBar } from '../utils/uiEnvironmentConstants';
 
 const WhiteLine = styled.div`
@@ -22,6 +23,10 @@ const DiagonalWhiteLine = ({ diagonal }) => (
   />
 );
 
+DiagonalWhiteLine.propTypes = {
+  diagonal: PropTypes.oneOf([1, -1]).isRequired,
+};
+
 const SideBarIconBox = styled.div`
   width: ${sideBar.icon.size};
   height: ${sideBar.icon.size};
@@ -39,7 +44,7 @@ const SideBarIconBox = styled.div`
 `;
 
 const SideBarIcon = ({ open }) => (
-  <SideBarIconBox {...{ open }}>
+  <SideBarIconBox role="button" {...{ open }}>
     {open
       ? [<DiagonalWhiteLine key="1" diagonal={-1} />, <DiagonalWhiteLine key="2" diagonal={1} />]
       : [
@@ -49,5 +54,9 @@ const SideBarIcon = ({ open }) => (
       ]}
   </SideBarIconBox>
 );
+
+SideBarIcon.propTypes = {
+  open: PropTypes.bool.isRequired,
+};
 
 export default SideBarIcon;
