@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useCallback } from 'react';
 import { css } from '@emotion/core';
+import PropTypes from 'prop-types';
 import SectionsSideBar from './SectionsSideBar';
 import { useLayoutReducer, CLOSE_SIDE_BAR, OPEN_SIDE_BAR } from './LayoutReducerProvider';
 import SideBarIcon from './SideBarIcon';
@@ -34,6 +35,10 @@ const SlideSideBar = ({ active }) => {
       {sideBarOpen ? <SectionsSideBar {...{ active }} fixed /> : null}
     </>
   );
+};
+
+SlideSideBar.propTypes = {
+  active: PropTypes.string.isRequired,
 };
 
 export default SlideSideBar;
