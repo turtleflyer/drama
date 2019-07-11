@@ -6,15 +6,42 @@ import { css } from '@emotion/core';
 import { sideBar, global } from '../utils/uiEnvironmentConstants';
 import sectionsStructure from '../utils/sectionsStructure';
 
+const ParentEntryTitle = styled.span`
+  text-transform: uppercase;
+  font-size: 110%;
+`;
+
+const ToggleActiveEntry = styled.span`
+  display: block;
+  padding: 0.2rem;
+  &, li &{
+  margin: 0.2rem 0;
+  }
+  ul *:first-child + li & {
+    margin-top: 0;
+  }
+  ul > & {
+    margin-bottom: 0;
+  }
+  width: 100%;
+    ${({ activate }) => (activate
+    ? css`
+            background-color: ${sideBar.activeSectionColor};
+          `
+    : null)}
+  }
+`;
+
 const SidebarContainer = styled.nav`
   flex: initial;
   z-index: 15;
   top: ${global.headHeight};
   left: 0;
-  padding-top: 1rem;
+  padding: 1.5rem 0.5rem;
   background-color: white;
   overflow-y: auto;
-  color: #a0a0a0;
+  color: ${sideBar.noContentColor};
+  line-height: 95%;
   ${({ fixed }) => (fixed
     ? css`
           position: fixed;
@@ -23,23 +50,24 @@ const SidebarContainer = styled.nav`
         `
     : css`
           width: ${sideBar.widthDefault};
-          top-margin: ${global.headHeight};
         `)}
-  & a {
-    color: #742a86;
+  a {
+    color: ${sideBar.entryColor};
     text-decoration: none;
   }
-  & ul {
+  ul {
     list-style: none;
-    margin: 0.7em 0;
+    margin: 0;
   }
-  & li {
-    margin: 0 0 0.3em 0.4em;
+  li {
+    margin: 0;
   }
-`;
-
-const ActiveEntry = styled.span`
-  color: ${sideBar.activeSectionColor};
+  & > ul li ul li {
+    padding-left: ${sideBar.indent};
+  }
+  & > ul li ul {
+    margin-top: 0.8rem;
+  }
 `;
 
 function getSubsectionComponent(componentsOfDepth, exception = () => false) {
@@ -103,23 +131,17 @@ const SubsectionComponent = getSubsectionComponent(
 
     Object.assign(
       ({
-        title, noContent, path, propagatingProps: { active: activeSection }, children,
+        title, noContent, path, propagatingProps: { active }, children,
       }) => (
         <li>
-          <div
-            css={css`
-              text-transform: uppercase;
-            `}
-          >
-            {noContent ? (
-              title
-            ) : (
-              <Link to={path}>
-                {path === activeSection ? <ActiveEntry>{title}</ActiveEntry> : title}
-              </Link>
-            )}
-          </div>
-          <ul>{children}</ul>
+          <ul>
+            <ToggleActiveEntry activate={active === path}>
+              <ParentEntryTitle>
+                {noContent ? title : <Link to={path}>{title}</Link>}
+              </ParentEntryTitle>
+            </ToggleActiveEntry>
+            {children}
+          </ul>
         </li>
       ),
       {
@@ -136,11 +158,11 @@ const SubsectionComponent = getSubsectionComponent(
     ),
 
     Object.assign(
-      ({ title, path, propagatingProps: { active: activeSection } }) => (
+      ({ title, path, propagatingProps: { active } }) => (
         <li>
-          <Link to={path}>
-            {path === activeSection ? <ActiveEntry>{title}</ActiveEntry> : title}
-          </Link>
+          <ToggleActiveEntry activate={active === path}>
+            <Link to={path}>{title}</Link>
+          </ToggleActiveEntry>
         </li>
       ),
       {

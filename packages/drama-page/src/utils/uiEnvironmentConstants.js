@@ -4,9 +4,12 @@ export const global = {
 };
 
 export const sideBar = {
+  indent: '0',
   widthDefault: '180px',
   widthFixed: '220px',
-  activeSectionColor: '#d64444',
+  entryColor: '#1e0075',
+  activeSectionColor: '#ebe4ff',
+  noContentColor: '#777679',
   icon: {
     size: '2rem',
     padding: '0.5rem',
