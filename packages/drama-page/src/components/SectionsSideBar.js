@@ -21,7 +21,7 @@ const ToggleActiveEntry = styled.span`
   li & {
     margin: 0.2rem 0;
   }
-  ul *:first-child + li & {
+  ul li:first-of-type & {
     margin-top: 0;
   }
   ul > & {
