@@ -49,7 +49,7 @@ const SidebarContainer = styled.nav`
     ? css`
           position: fixed;
           width: ${sideBar.widthFixed};
-          height: 100%;
+          height: calc(100% - ${global.headHeight});
         `
     : css`
           width: ${sideBar.widthDefault};
