@@ -1,10 +1,13 @@
-import React, { useMemo } from 'react';
+import React, {
+  useMemo, useState, useEffect, useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import { sideBar, global } from '../utils/uiEnvironmentConstants';
+import { sideBar, global, goUpButton } from '../utils/uiEnvironmentConstants';
 import sectionsStructure from '../utils/sectionsStructure';
+import BackToTopButton from './BackToTopButton';
 
 const ParentEntryTitle = styled.span`
   text-transform: uppercase;
@@ -37,7 +40,7 @@ const SidebarContainer = styled.nav`
   z-index: 15;
   top: ${global.headHeight};
   left: 0;
-  padding: 1.5rem 0.5rem;
+  padding: 1.5rem ${sideBar.horizontalPadding};
   background-color: white;
   overflow-y: auto;
   color: ${sideBar.noContentColor};
@@ -183,11 +186,42 @@ const SubsectionComponent = getSubsectionComponent(
 
 function SectionsSideBar({ data, active, fixed }) {
   const allSections = useMemo(() => sectionsStructure(data.allMarkdownRemark.edges), [data]);
+  const [toggleUpButton, setToggleUpButton] = useState(false);
+  const sideBarRef = useRef(null);
+  const rem = useMemo(() => parseInt(getComputedStyle(document.documentElement).fontSize, 10), []);
+
+  useEffect(() => {
+    let detectScrollEnough;
+    if (!fixed) {
+      detectScrollEnough = () => {
+        if (
+          sideBarRef.current
+          && window.scrollY
+            > sideBarRef.current.getBoundingClientRect().height
+              - window.innerHeight
+              + goUpButton.verticalLengthDelay * rem
+        ) {
+          setToggleUpButton(true);
+        } else {
+          setToggleUpButton(false);
+        }
+      };
+      detectScrollEnough();
+      window.addEventListener('scroll', detectScrollEnough);
+    }
+
+    return () => {
+      window.removeEventListener('scroll', detectScrollEnough);
+    };
+  }, [fixed, rem]);
 
   return (
-    <SidebarContainer {...{ fixed }}>
-      <SubsectionComponent subsections={allSections} propagatingProps={{ active }} />
-    </SidebarContainer>
+    <>
+      <SidebarContainer {...{ fixed }} ref={sideBarRef}>
+        <SubsectionComponent subsections={allSections} propagatingProps={{ active }} />
+        {toggleUpButton ? <BackToTopButton /> : null}
+      </SidebarContainer>
+    </>
   );
 }
 
