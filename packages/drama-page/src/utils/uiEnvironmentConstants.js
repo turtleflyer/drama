@@ -19,7 +19,7 @@ export const sideBar = {
   },
 };
 
-export const goUpButton = {
+export const backToTopButton = {
   size: '2.5rem',
   marginBottom: '1.5rem',
   verticalLengthDelay: 10,
