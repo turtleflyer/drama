@@ -2,10 +2,10 @@ import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { css } from '@emotion/core';
-import { global } from '../utils/uiEnvironmentConstants';
+import { global, sideBar } from '../utils/uiEnvironmentConstants';
 import FlexContainer from './FlexContainer';
 
-const Header = ({ siteTitle }) => (
+const Header = ({ siteTitle, narrow }) => (
   <FlexContainer
     nodeType="header"
     addContainerStyle={css`
@@ -18,6 +18,10 @@ const Header = ({ siteTitle }) => (
     `}
     addBoxStyle={css`
       height: ${global.headHeight};
+      ${!narrow
+        && css`
+          padding-left: ${sideBar.widthDefault};
+        `}
     `}
   >
     <h1
@@ -41,10 +45,12 @@ const Header = ({ siteTitle }) => (
 
 Header.propTypes = {
   siteTitle: PropTypes.string,
+  narrow: PropTypes.bool,
 };
 
 Header.defaultProps = {
   siteTitle: '',
+  narrow: false,
 };
 
 export default Header;
