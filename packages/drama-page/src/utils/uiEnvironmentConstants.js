@@ -2,6 +2,8 @@ export const global = {
   mainWidth: '960px',
   headerColor: 'rebeccapurple',
   headHeight: '5rem',
+  footerHeight: '3rem',
+  bottomNavigationHeight: '3rem',
 };
 
 export const sideBar = {

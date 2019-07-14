@@ -2,6 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { css } from '@emotion/core';
 import AddNarrow from './AddNarrow';
+import { global } from '../utils/uiEnvironmentConstants';
 
 const Footer = ({ children, narrow }) => (
   <AddNarrow
@@ -9,7 +10,7 @@ const Footer = ({ children, narrow }) => (
     addBoxStyle={css`
       display: block;
       text-align: center;
-      height: 3rem;
+      height: ${global.footerHeight};
     `}
     {...{ narrow }}
   >

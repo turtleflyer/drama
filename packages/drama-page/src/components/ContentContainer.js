@@ -39,7 +39,9 @@ const ContentContainer = ({ children }) => {
           padding: 1rem 1.3rem 0;
           flex: 1;
           z-index: 10;
-          min-height: calc(100vh - 8rem);
+          min-height: calc(
+            100vh - ${global.headHeight} - ${global.footerHeight} - ${global.bottomNavigationHeight}
+          );
           ${sideBarOpen
           ? css`
                 position: fixed;

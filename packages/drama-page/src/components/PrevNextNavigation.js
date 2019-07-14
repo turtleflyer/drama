@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import AddNarrow from './AddNarrow';
 import { siblingSections } from '../utils/sectionsStructure';
-import { sideBar } from '../utils/uiEnvironmentConstants';
+import { sideBar, global } from '../utils/uiEnvironmentConstants';
 
 // eslint-disable-next-line no-unused-vars
 const Triangle = ({ left, right }) => (
@@ -55,7 +55,7 @@ const PrevNextNavigation = ({ narrow, active }) => {
     <AddNarrow
       {...{ narrow }}
       addContainerStyle={css`
-        height: 5rem;
+        height: ${global.bottomNavigationHeight};
       `}
     >
       {siblings && (
