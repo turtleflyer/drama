@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import { sideBar, global, goUpButton } from '../utils/uiEnvironmentConstants';
-import sectionsStructure from '../utils/sectionsStructure';
+import { sideBar, global, backToTopButton } from '../utils/uiEnvironmentConstants';
+import { sectionsStructure } from '../utils/sectionsStructure';
 import BackToTopButton from './BackToTopButton';
 
 const ParentEntryTitle = styled.span`
@@ -199,7 +199,7 @@ function SectionsSideBar({ data, active, fixed }) {
           && window.scrollY
             > sideBarRef.current.getBoundingClientRect().height
               - window.innerHeight
-              + goUpButton.verticalLengthDelay * rem
+              + backToTopButton.verticalLengthDelay * rem
         ) {
           setToggleUpButton(true);
         } else {

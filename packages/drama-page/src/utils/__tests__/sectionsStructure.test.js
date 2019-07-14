@@ -5,7 +5,7 @@ let sectionsStructure;
 
 describe('Test sectionStructure function', () => {
   beforeEach(() => {
-    sectionsStructure = require('../sectionsStructure').default;
+    ({ sectionsStructure } = require('../sectionsStructure'));
   });
 
   test('Test 1', () => {

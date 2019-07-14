@@ -10,6 +10,7 @@ import ContentContainer from './ContentContainer';
 import Footer from './Footer';
 import { global } from '../utils/uiEnvironmentConstants';
 import { ProvideLayoutDispatch, CLOSE_SIDE_BAR } from './LayoutReducerProvider';
+import PrevNextNavigation from './PrevNextNavigation';
 
 const PageBody = ({ children, active, data }) => {
   const size = useContext(ResponsiveContext);
@@ -20,7 +21,7 @@ const PageBody = ({ children, active, data }) => {
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata.title} />
+      <Header siteTitle={data.site.siteMetadata.title} narrow={size === 'small'} />
       <FlexContainer
         addContainerStyle={css`
           margin-top: ${global.headHeight};
@@ -32,7 +33,8 @@ const PageBody = ({ children, active, data }) => {
         {size === 'small' ? <SlideSideBar active={active} /> : <SectionsSideBar active={active} />}
         <ContentContainer>{children}</ContentContainer>
       </FlexContainer>
-      <Footer>
+      <PrevNextNavigation narrow={size === 'small'} {...{ active }} />
+      <Footer narrow={size === 'small'}>
         {'©'}
         {new Date().getFullYear()}
         {', Built with '}

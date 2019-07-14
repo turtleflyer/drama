@@ -1,22 +1,59 @@
-function sortKeysInObject(obj) {
-  return Object.keys(obj).sort((key1, key2) => obj[key1].orderIndex - obj[key2].orderIndex);
-}
+// prettier-ignore
+const sortKeysInObject = obj => Object.keys(obj)
+  .sort((key1, key2) => obj[key1].orderIndex - obj[key2].orderIndex);
 
-function sortSections(sections) {
-  const sortedKeys = sortKeysInObject(sections);
-  const sortedSections = {};
+const supplyFreshPromise = () => {
+  let resolver;
+  return [
+    new Promise((resolve) => {
+      resolver = resolve;
+    }),
+    resolver,
+  ];
+};
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const key of sortedKeys) {
-    const value = { ...sections[key] };
-    if (value.subsections) {
-      value.subsections = sortSections(value.subsections);
-    }
-    sortedSections[key] = value;
-  }
+const sortSections = () => {
+  let [waitSorting, finishSorting] = supplyFreshPromise();
+  let pathsOrder = {};
+  let prevEntry;
 
-  return sortedSections;
-}
+  return [
+    function sort(sections, parentPath) {
+      if (!parentPath && !finishSorting) {
+        [waitSorting, finishSorting] = supplyFreshPromise();
+        prevEntry = undefined;
+      }
+
+      const sortedKeys = sortKeysInObject(sections);
+      const sortedSections = {};
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key of sortedKeys) {
+        const value = { ...sections[key] };
+        if (!value.noContent) {
+          pathsOrder[key] = { prev: prevEntry };
+          if (prevEntry) {
+            pathsOrder[prevEntry.path].next = { path: key, title: value.title };
+          }
+          prevEntry = { path: key, title: value.title };
+        }
+        if (value.subsections) {
+          value.subsections = sort(value.subsections, key);
+        }
+        sortedSections[key] = value;
+      }
+
+      if (!parentPath) {
+        finishSorting(pathsOrder);
+        finishSorting = null;
+        pathsOrder = {};
+      }
+
+      return sortedSections;
+    },
+    path => waitSorting.then(order => ({ ...order[path] })),
+  ];
+};
 
 const deepInStructure = (data, structure, remainingPath = '/', path = '') => {
   // Extracts first fragment which has a form '/aaa/'. For
@@ -42,25 +79,39 @@ const deepInStructure = (data, structure, remainingPath = '/', path = '') => {
   };
 };
 
-function sectionsStructure(edges) {
-  const allSections = edges.reduce(
-    (
-      bringStructureMap,
-      {
-        node: {
-          frontmatter: { title, orderIndex = 0, noContent },
-          fields: { sectionPath = '/' },
-        },
-      },
-    ) => deepInStructure(
-      { title, orderIndex, noContent: noContent || false },
-      bringStructureMap,
-      sectionPath,
-    ),
-    {},
-  );
+const [sectionsStructure, siblingSections] = (() => {
+  let lastData;
+  let structure;
+  const [sort, siblings] = sortSections();
 
-  return sortSections(allSections);
-}
+  return [
+    (edges) => {
+      if (edges !== lastData) {
+        const allSections = edges.reduce(
+          (
+            bringStructureMap,
+            {
+              node: {
+                frontmatter: { title, orderIndex = 0, noContent },
+                fields: { sectionPath = '/' },
+              },
+            },
+          ) => deepInStructure(
+            { title, orderIndex, noContent: noContent || false },
+            bringStructureMap,
+            sectionPath,
+          ),
+          {},
+        );
 
-export default sectionsStructure;
+        structure = sort(allSections);
+        lastData = edges;
+      }
+
+      return structure;
+    },
+    siblings,
+  ];
+})();
+
+export { sectionsStructure, siblingSections };
