@@ -3,9 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import { global } from '../utils/uiEnvironmentConstants';
 
 const FlexBox = styled.div`
-  width: 960px;
+  width: ${global.mainWidth};
   justify-content: center;
   display: flex;
   align-items: center;

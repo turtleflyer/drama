@@ -1,4 +1,5 @@
 export const global = {
+  mainWidth: '960px',
   headerColor: 'rebeccapurple',
   headHeight: '5rem',
 };
