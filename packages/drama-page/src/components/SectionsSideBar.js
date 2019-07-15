@@ -1,6 +1,4 @@
-import React, {
-  useMemo, useState, useEffect, useRef,
-} from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
@@ -8,6 +6,7 @@ import { css } from '@emotion/core';
 import { sideBar, global, backToTopButton } from '../utils/uiEnvironmentConstants';
 import { sectionsStructure } from '../utils/sectionsStructure';
 import BackToTopButton from './BackToTopButton';
+import useScroll from '../utils/useScroll';
 
 const ParentEntryTitle = styled.span`
   text-transform: uppercase;
@@ -187,37 +186,32 @@ const SubsectionComponent = getSubsectionComponent(
 function SectionsSideBar({ data, active, fixed }) {
   const allSections = useMemo(() => sectionsStructure(data.allMarkdownRemark.edges), [data]);
   const [toggleUpButton, setToggleUpButton] = useState(false);
-  const sideBarRef = useRef(null);
+  const [containerRef, setContainerRef] = useState();
   const rem = useMemo(() => parseInt(getComputedStyle(document.documentElement).fontSize, 10), []);
 
-  useEffect(() => {
-    let detectScrollEnough;
-    if (!fixed) {
-      detectScrollEnough = () => {
-        if (
-          sideBarRef.current
-          && window.scrollY
-            > sideBarRef.current.getBoundingClientRect().height
-              - window.innerHeight
-              + backToTopButton.verticalLengthDelay * rem
-        ) {
-          setToggleUpButton(true);
-        } else {
-          setToggleUpButton(false);
-        }
-      };
-      detectScrollEnough();
-      window.addEventListener('scroll', detectScrollEnough);
+  const detectScrollEnough = useCallback(() => {
+    if (
+      !fixed
+      && containerRef
+      && window.scrollY
+        > containerRef.getBoundingClientRect().height
+          - window.innerHeight
+          + backToTopButton.verticalLengthDelay * rem
+    ) {
+      if (!toggleUpButton) {
+        setToggleUpButton(true);
+      }
+    } else if (toggleUpButton) {
+      setToggleUpButton(false);
     }
+  }, [containerRef, fixed, rem, toggleUpButton]);
 
-    return () => {
-      window.removeEventListener('scroll', detectScrollEnough);
-    };
-  }, [fixed, rem]);
+  detectScrollEnough();
+  useScroll(detectScrollEnough);
 
   return (
     <>
-      <SidebarContainer {...{ fixed }} ref={sideBarRef}>
+      <SidebarContainer {...{ fixed }} ref={setContainerRef}>
         <SubsectionComponent subsections={allSections} propagatingProps={{ active }} />
         {toggleUpButton ? <BackToTopButton /> : null}
       </SidebarContainer>

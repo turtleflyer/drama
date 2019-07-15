@@ -1,27 +1,21 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useCallback } from 'react';
 import { css } from '@emotion/core';
 import PropTypes from 'prop-types';
 import { ProvideLayoutState } from './LayoutReducerProvider';
 import { global } from '../utils/uiEnvironmentConstants';
+import useScroll from '../utils/useScroll';
 
 const ContentContainer = ({ children }) => {
   const { sideBarOpen, scrollY } = useContext(ProvideLayoutState);
   const layoutRef = useRef(null);
 
-  // eslint-disable-next-line consistent-return
-  useEffect(() => {
-    const stayOnScrollPosition = () => {
-      window.scrollTo(0, scrollY);
-    };
-
+  const stayOnScrollPosition = useCallback(() => {
     if (sideBarOpen) {
-      window.addEventListener('scroll', stayOnScrollPosition);
-      return () => {
-        window.removeEventListener('scroll', stayOnScrollPosition);
-        window.scrollTo(0, scrollY);
-      };
+      window.scrollTo(0, scrollY);
     }
-  }, [sideBarOpen, scrollY]);
+  }, [scrollY, sideBarOpen]);
+
+  useScroll(stayOnScrollPosition);
 
   return (
     <>
