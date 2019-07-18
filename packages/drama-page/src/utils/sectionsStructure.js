@@ -1,16 +1,8 @@
+import supplyFreshPromise from './supplyFreshPromise';
+
 // prettier-ignore
 const sortKeysInObject = obj => Object.keys(obj)
   .sort((key1, key2) => obj[key1].orderIndex - obj[key2].orderIndex);
-
-const supplyFreshPromise = () => {
-  let resolver;
-  return [
-    new Promise((resolve) => {
-      resolver = resolve;
-    }),
-    resolver,
-  ];
-};
 
 const sortSections = () => {
   let [waitSorting, finishSorting] = supplyFreshPromise();
