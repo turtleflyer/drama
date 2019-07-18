@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useCallback } from 'react';
+import React, { useContext, useRef } from 'react';
 import { css } from '@emotion/core';
 import PropTypes from 'prop-types';
 import { ProvideLayoutState } from './LayoutReducerProvider';
@@ -9,13 +9,11 @@ const ContentContainer = ({ children }) => {
   const { sideBarOpen, scrollY } = useContext(ProvideLayoutState);
   const layoutRef = useRef(null);
 
-  const stayOnScrollPosition = useCallback(() => {
+  useScroll(() => {
     if (sideBarOpen) {
       window.scrollTo(0, scrollY);
     }
   }, [scrollY, sideBarOpen]);
-
-  useScroll(stayOnScrollPosition);
 
   return (
     <>

@@ -26,4 +26,5 @@ export const backToTopButton = {
   size: '2.5rem',
   marginBottom: '1.5rem',
   verticalLengthDelay: 10,
+  minScrollDelayRatio: 0.4,
 };

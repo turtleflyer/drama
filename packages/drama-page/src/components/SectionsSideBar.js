@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
@@ -186,17 +186,18 @@ const SubsectionComponent = getSubsectionComponent(
 function SectionsSideBar({ data, active, fixed }) {
   const allSections = useMemo(() => sectionsStructure(data.allMarkdownRemark.edges), [data]);
   const [toggleUpButton, setToggleUpButton] = useState(false);
-  const [containerRef, setContainerRef] = useState();
+  const containerRef = useRef();
   const rem = useMemo(() => parseInt(getComputedStyle(document.documentElement).fontSize, 10), []);
 
-  const detectScrollEnough = useCallback(() => {
+  const detectScrollEnough = () => {
     if (
       !fixed
-      && containerRef
+      && containerRef.current
       && window.scrollY
-        > containerRef.getBoundingClientRect().height
+        > containerRef.current.getBoundingClientRect().height
           - window.innerHeight
           + backToTopButton.verticalLengthDelay * rem
+      && window.scrollY > window.innerHeight * backToTopButton.minScrollDelayRatio
     ) {
       if (!toggleUpButton) {
         setToggleUpButton(true);
@@ -204,14 +205,14 @@ function SectionsSideBar({ data, active, fixed }) {
     } else if (toggleUpButton) {
       setToggleUpButton(false);
     }
-  }, [containerRef, fixed, rem, toggleUpButton]);
+  };
 
   detectScrollEnough();
-  useScroll(detectScrollEnough);
+  useScroll(detectScrollEnough, [fixed, toggleUpButton]);
 
   return (
     <>
-      <SidebarContainer {...{ fixed }} ref={setContainerRef}>
+      <SidebarContainer {...{ fixed }} ref={containerRef}>
         <SubsectionComponent subsections={allSections} propagatingProps={{ active }} />
         {toggleUpButton ? <BackToTopButton /> : null}
       </SidebarContainer>
