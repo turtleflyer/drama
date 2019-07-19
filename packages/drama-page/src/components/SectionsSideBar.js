@@ -29,6 +29,7 @@ const ToggleActiveEntry = styled.span`
   width: 100%;
   ${({ activate }) => (activate
     ? css`
+          color: ${sideBar.entryColor};
           background-color: ${sideBar.activeSectionColor};
         `
     : null)}
@@ -124,6 +125,19 @@ function getSubsectionComponent(componentsOfDepth, exception = () => false) {
   return Subsection;
 }
 
+// prettier-ignore
+const Entry = ({ path, title, active }) => (
+  path === active
+    ? title
+    : <Link to={path}>{title}</Link>
+);
+
+Entry.propTypes = {
+  path: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  active: PropTypes.string.isRequired,
+};
+
 const SubsectionComponent = getSubsectionComponent(
   [
     Object.assign(({ children }) => <ul>{children}</ul>, {
@@ -139,7 +153,7 @@ const SubsectionComponent = getSubsectionComponent(
           <ul>
             <ToggleActiveEntry activate={active === path}>
               <ParentEntryTitle>
-                {noContent ? title : <Link to={path}>{title}</Link>}
+                {noContent ? title : <Entry {...{ path, title, active }} />}
               </ParentEntryTitle>
             </ToggleActiveEntry>
             {children}
@@ -163,7 +177,7 @@ const SubsectionComponent = getSubsectionComponent(
       ({ title, path, propagatingProps: { active } }) => (
         <li>
           <ToggleActiveEntry activate={active === path}>
-            <Link to={path}>{title}</Link>
+            <Entry {...{ path, title, active }} />
           </ToggleActiveEntry>
         </li>
       ),

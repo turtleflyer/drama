@@ -12,8 +12,8 @@ export const sideBar = {
   widthFixed: '220px',
   horizontalPadding: '0.5rem',
   entryColor: 'rgb(27, 30, 32)',
-  activeSectionColor: 'rgb(214, 221, 234)',
-  noContentColor: 'rgb(113, 126, 133)',
+  activeSectionColor: 'rgb(234, 235, 236)',
+  noContentColor: 'rgb(166, 173, 178)',
   icon: {
     size: '2rem',
     padding: '0.5rem',
