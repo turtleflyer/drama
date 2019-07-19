@@ -26,7 +26,7 @@ const PageBody = ({ children, active, data }) => {
   const dispatch = useContext(ProvideLayoutDispatch);
   const { sideBarOpen } = useContext(ProvideLayoutState);
 
-  if (size !== 'small') {
+  if (size !== 'small' && sideBarOpen) {
     dispatch({ type: CLOSE_SIDE_BAR });
   }
 
