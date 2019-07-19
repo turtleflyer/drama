@@ -38,7 +38,6 @@ const ContentContainer = ({ children }) => {
           ? css`
                 position: fixed;
                 width: 100%;
-                filter: blur(5px);
                 ${typeof scrollY === 'number'
             ? css`
                       top: calc(${global.headHeight} - ${scrollY}px);
