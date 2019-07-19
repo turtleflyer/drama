@@ -1,6 +1,6 @@
 export const global = {
   mainWidth: '960px',
-  headerColor: 'rebeccapurple',
+  headerColor: 'rgb(27, 30, 32)',
   headHeight: '5rem',
   footerHeight: '3rem',
   bottomNavigationHeight: '3rem',
@@ -11,9 +11,9 @@ export const sideBar = {
   widthDefault: '180px',
   widthFixed: '220px',
   horizontalPadding: '0.5rem',
-  entryColor: '#1e0075',
-  activeSectionColor: '#ebe4ff',
-  noContentColor: '#777679',
+  entryColor: 'rgb(27, 30, 32)',
+  activeSectionColor: 'rgb(214, 221, 234)',
+  noContentColor: 'rgb(113, 126, 133)',
   icon: {
     size: '2rem',
     padding: '0.5rem',
