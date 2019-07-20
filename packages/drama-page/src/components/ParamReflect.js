@@ -20,11 +20,15 @@ const ParamReflect = ({ mappedProps, point, children }) => {
 
   return (
     <>
-      {Children.map(children, (el) => {
-        if (el) {
-          return cloneElement(el, { ...actualProps });
-        }
-      })}
+      {Children.map(
+        children,
+        // eslint-disable-next-line consistent-return
+        (el) => {
+          if (el) {
+            return cloneElement(el, { ...actualProps });
+          }
+        },
+      )}
     </>
   );
 };
