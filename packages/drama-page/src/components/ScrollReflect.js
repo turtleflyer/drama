@@ -23,7 +23,7 @@ const ScrollReflect = ({ scrollRange, mappedProps, children }) => {
 ScrollReflect.propTypes = {
   scrollRange: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
   mappedProps: PropTypes.objectOf(PropTypes.array.isRequired).isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 export default ScrollReflect;

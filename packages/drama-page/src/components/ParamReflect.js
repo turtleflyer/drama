@@ -20,15 +20,17 @@ const ParamReflect = ({ mappedProps, point, children }) => {
 
   return (
     <>
-      {Children.map(
-        children,
-        // eslint-disable-next-line consistent-return
-        (el) => {
-          if (el) {
-            return cloneElement(el, { ...actualProps });
-          }
-        },
-      )}
+      {typeof children === 'function'
+        ? children({ ...actualProps })
+        : Children.map(
+          children,
+          // eslint-disable-next-line consistent-return
+          (el) => {
+            if (el) {
+              return cloneElement(el, { ...actualProps });
+            }
+          },
+        )}
     </>
   );
 };
@@ -36,7 +38,7 @@ const ParamReflect = ({ mappedProps, point, children }) => {
 ParamReflect.propTypes = {
   mappedProps: PropTypes.objectOf(PropTypes.array.isRequired).isRequired,
   point: PropTypes.number.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 export default ParamReflect;
