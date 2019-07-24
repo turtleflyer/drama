@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql, Link, StaticQuery } from 'gatsby';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import useSmartRef from '@smart-hooks/use-smart-ref';
 import { sideBar, global, backToTopButton } from '../utils/uiEnvironmentConstants';
 import { sectionsStructure } from '../utils/sectionsStructure';
 import BackToTopButton from './BackToTopButton';
@@ -221,12 +222,14 @@ function SectionsSideBar({ data, active, fixed }) {
     }
   };
 
+  const refCallback = useSmartRef(detectScrollEnough, containerRef, [fixed, toggleUpButton]);
+
   detectScrollEnough();
   useScroll(detectScrollEnough, [fixed, toggleUpButton]);
 
   return (
     <>
-      <SidebarContainer {...{ fixed }} ref={containerRef}>
+      <SidebarContainer {...{ fixed }} ref={refCallback}>
         <SubsectionComponent subsections={allSections} propagatingProps={{ active }} />
         {toggleUpButton ? <BackToTopButton /> : null}
       </SidebarContainer>
