@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.4",
   "dependencies": {
-    "@drama-examples/tic-tac-toe": "^2.0.2",
+    "@drama-examples/tic-tac-toe": "file:../../examples/tic-tac-toe",
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.12",
     "@smart-hooks/use-smart-ref": "^1.1.2",

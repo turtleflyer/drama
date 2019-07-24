@@ -40,5 +40,10 @@
     "test": "jest",
     "jest-dp-debug": "lerna run jest-debug --scope=drama-page --stream -- --",
     "test-dp": "lerna run test --scope=drama-page --stream -- -- --watch"
+  },
+  "dependencies": {
+    "@drama-examples/tic-tac-toe": "file:examples\\tic-tac-toe",
+    "drama-core": "file:packages\\drama-core",
+    "drama-page": "file:packages\\drama-page"
   }
 }
