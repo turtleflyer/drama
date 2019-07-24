@@ -6,6 +6,7 @@
     "@drama-examples/tic-tac-toe": "^2.0.2",
     "@emotion/core": "^10.0.10",
     "@emotion/styled": "^10.0.12",
+    "@smart-hooks/use-smart-ref": "^1.1.2",
     "gatsby": "^2.9.0",
     "gatsby-image": "^2.1.3",
     "gatsby-plugin-emotion": "^4.0.7",
