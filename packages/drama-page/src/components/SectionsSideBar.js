@@ -8,6 +8,7 @@ import { sideBar, global, backToTopButton } from '../utils/uiEnvironmentConstant
 import { sectionsStructure } from '../utils/sectionsStructure';
 import BackToTopButton from './BackToTopButton';
 import useScroll from '../utils/useScroll';
+import useRem from '../utils/useRem';
 
 const ParentEntryTitle = styled.span`
   text-transform: uppercase;
@@ -202,7 +203,7 @@ function SectionsSideBar({ data, active, fixed }) {
   const allSections = useMemo(() => sectionsStructure(data.allMarkdownRemark.edges), [data]);
   const [toggleUpButton, setToggleUpButton] = useState(false);
   const containerRef = useRef();
-  const rem = useMemo(() => parseInt(getComputedStyle(document.documentElement).fontSize, 10), []);
+  const rem = useRem();
 
   const detectScrollEnough = () => {
     if (
