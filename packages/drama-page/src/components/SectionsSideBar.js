@@ -214,17 +214,14 @@ function SectionsSideBar({ data, active, fixed }) {
           + backToTopButton.verticalLengthDelay * rem
       && window.scrollY > window.innerHeight * backToTopButton.minScrollDelayRatio
     ) {
-      if (!toggleUpButton) {
-        setToggleUpButton(true);
-      }
-    } else if (toggleUpButton) {
+      setToggleUpButton(true);
+    } else {
       setToggleUpButton(false);
     }
   };
 
   const refCallback = useSmartRef(detectScrollEnough, containerRef, [fixed, toggleUpButton]);
 
-  detectScrollEnough();
   useScroll(detectScrollEnough, [fixed, toggleUpButton]);
 
   return (
